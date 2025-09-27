@@ -1,8 +1,8 @@
 # Personal Portfolio Website
 
 ## TODO
-- [ ] Make it deploy (Vercel)
-- [ ] Basic UI with my data
+- [X] Make it deploy (Vercel)
+- [X] Basic UI with my data
 - [ ] Routing
 - [ ] Analytics
 - [ ] Ratelimiting

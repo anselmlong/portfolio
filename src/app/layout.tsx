@@ -16,12 +16,23 @@ const geist = Geist({
   variable: "--font-geist-sans",
 });
 
+function TopNav() {
+  return (
+    <nav className="flex items-center justify-between w-full p-4 text-xl font-bold border-b border-white/10">
+      <div>Gallery</div>
+      <div>Sign In</div>
+    </nav>
+  )
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geist.variable}`}>
+    <html lang="en" className={`${geist.variable} flex-col flex gap-4`}>
       <body>
+        
+        <TopNav />
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
