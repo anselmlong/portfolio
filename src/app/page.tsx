@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { LatestPost } from "~/app/_components/post";
 import { auth } from "~/server/auth";
+import { db } from "~/server/db";
 import { api, HydrateClient } from "~/trpc/server";
 
 const imageUrls = [
@@ -17,6 +18,7 @@ const pictures = imageUrls.map((url, index) => ({
 export default async function Home() {
   const hello = await api.post.hello({ text: "from tRPC" });
   const session = await auth();
+  const posts = await db.post.findMany();
 
   if (session?.user) {
     void api.post.getLatest.prefetch();
@@ -26,6 +28,9 @@ export default async function Home() {
     <HydrateClient>
       <main className="">
         <div className="flex flex-wrap gap-4">
+          {posts.map((post) => (
+            <div key={post.id}> {post.name} </div>
+          ))}
           {pictures.map((pic) => (
             <div key={pic.id} className="w-48">
               <img

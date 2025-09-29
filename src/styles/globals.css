@@ -6,5 +6,6 @@
 }
 
 body {
-  @apply bg-black text-white;
+  @apply text-white;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #0e4b99 100%);
 }

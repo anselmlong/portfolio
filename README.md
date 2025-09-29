@@ -3,7 +3,7 @@
 ## TODO
 - [X] Make it deploy (Vercel)
 - [X] Basic UI with my data
-- [X] Tidy up build process
+- [X] Tidy up build process 
 - [ ] Routing
 - [ ] Analytics
 - [ ] Ratelimiting
