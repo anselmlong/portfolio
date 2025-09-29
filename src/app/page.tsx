@@ -4,8 +4,8 @@ import { LatestPost } from "~/app/_components/post";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 import { api, HydrateClient } from "~/trpc/server";
-import { projects } from "../content/projects.js";
-import { pictures } from "../content/images.js";
+import { projects } from "~/content/projects";
+import { pictures } from "~/content/images";
 
 export const dynamic = "force-dynamic";
 

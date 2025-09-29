@@ -22,8 +22,6 @@ model Post {
     @@index([name])
 }
 
-model 
-
 // Necessary for Next auth
 model Account {
     id                       String  @id @default(cuid())
