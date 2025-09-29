@@ -7,6 +7,7 @@
 - [X] Set up database
 - [X] Attach database to UI
 - [X] Trying authentication with clerk
+- [] "taint" (server-only)
 - [ ] Routing
 - [ ] Analytics
 - [ ] Ratelimiting
