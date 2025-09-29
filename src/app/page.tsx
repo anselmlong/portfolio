@@ -5,6 +5,8 @@ import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 import { api, HydrateClient } from "~/trpc/server";
 
+export const dynamic = "force-dynamic";
+
 const imageUrls = [
   "https://cdwwp1j6bk.ufs.sh/f/YDTKbsayXpbwwzxlo7pnySrvfcji6sUtDQHepkYTIG1FJh3N",
   "https://cdwwp1j6bk.ufs.sh/f/YDTKbsayXpbwjECSjVZXQx9wikGsu3IvaoFqRj6fyEA1BL2Y"
