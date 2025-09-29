@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export default async function Home() {
   const hello = await api.post.hello({ text: "from tRPC" });
   const session = await auth();
-  
+
   // Use the new public route to get all posts
   const posts = await api.post.getAll();
 
@@ -20,58 +20,59 @@ export default async function Home() {
   }
 
   return (
-    <HydrateClient>
-      <main className="container mx-auto p-4">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-6">My Portfolio</h1>
-          
-          {/* Posts Section */}
+      <HydrateClient>
+        
+        <main className="container mx-auto p-4">
           <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Recent Posts</h2>
-            
-            {/* Show create post form if logged in */}
-            {session?.user && (
-              <div className="mb-6">
-                <h3 className="text-lg font-medium mb-3">Create New Post</h3>
-                <LatestPost />
-              </div>
-            )}
-            
-            {posts.length > 0 ? (
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {posts.map((post) => (
-                  <div key={post.id} className="bg-white/10 rounded-lg p-6 backdrop-blur-sm">
-                    <h3 className="text-xl font-medium mb-2">{post.name}</h3>
-                    <div className="text-sm text-gray-300">
-                      <p>By: {post.createdBy.name}</p>
-                      <p>Created: {new Date(post.createdAt).toLocaleDateString()}</p>
+            <h1 className="text-3xl font-bold mb-6">My Portfolio</h1>
+
+            {/* Posts Section */}
+            <div className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4">Recent Posts</h2>
+
+              {/* Show create post form if logged in */}
+              {session?.user && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-medium mb-3">Create New Post</h3>
+                  <LatestPost />
+                </div>
+              )}
+
+              {posts.length > 0 ? (
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {posts.map((post) => (
+                    <div key={post.id} className="bg-white/10 rounded-lg p-6 backdrop-blur-sm">
+                      <h3 className="text-xl font-medium mb-2">{post.name}</h3>
+                      <div className="text-sm text-gray-300">
+                        <p>By: {post.createdBy.name}</p>
+                        <p>Created: {new Date(post.createdAt).toLocaleDateString()}</p>
+                      </div>
                     </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-400">No posts yet.</p>
+              )}
+            </div>
+
+            {/* Images Section */}
+            <div className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
+              <div className="flex flex-wrap gap-4">
+                {pictures.map((pic) => (
+                  <div key={pic.id} className="w-48">
+                    <img
+                      src={pic.url}
+                      alt={`Picture ${pic.id}`}
+                      className="w-full h-auto rounded-lg"
+                    />
                   </div>
                 ))}
               </div>
-            ) : (
-              <p className="text-gray-400">No posts yet.</p>
-            )}
-          </div>
-
-          {/* Images Section */}
-          <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
-            <div className="flex flex-wrap gap-4">
-              {pictures.map((pic) => (
-                <div key={pic.id} className="w-48">
-                  <img
-                    src={pic.url}
-                    alt={`Picture ${pic.id}`}
-                    className="w-full h-auto rounded-lg"
-                  />
-                </div>
-              ))}
             </div>
-          </div>
 
-          {/* Projects Section */}
-          <div className ="mb-8">
+            {/* Projects Section */}
+            <div className="mb-8">
               {projects.map(p => (
                 <a key={p.title} href={p.href} className="rounded-2xl p-6 shadow hover:scale-[1.01] transition">
                   <h3 className="text-xl font-semibold">{p.title}</h3>
@@ -81,11 +82,11 @@ export default async function Home() {
                   </div>
                 </a>
               ))}
-          </div>
+            </div>
 
-          <p className="text-center text-gray-400">Hello! Work in progress :)</p>
-        </div>
-      </main>
-    </HydrateClient>
+            <p className="text-center text-gray-400">Hello! Work in progress :)</p>
+          </div>
+        </main>
+      </HydrateClient>
   );
 }

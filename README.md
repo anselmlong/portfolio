@@ -6,7 +6,7 @@
 - [X] Tidy up build process 
 - [X] Set up database
 - [X] Attach database to UI
-- [ ] Trying authentication with clerk
+- [X] Trying authentication with clerk
 - [ ] Routing
 - [ ] Analytics
 - [ ] Ratelimiting
