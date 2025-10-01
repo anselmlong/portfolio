@@ -1,4 +1,7 @@
+
 import "~/styles/globals.css";
+import "@uploadthing/react/styles.css";
+
 import { ClerkProvider } from "@clerk/nextjs";
 import { TopNav } from "./_components/topnav";
 import { type Metadata } from "next";

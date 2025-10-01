@@ -1,10 +1,11 @@
 import Link from "next/link";
+import Image from 'next/image'
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { LatestPost } from "~/app/_components/post";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 import { api, HydrateClient } from "~/trpc/server";
-import { projects, pictures } from "~/data";
+import { projects, getPictures } from "~/data";
 
 export const dynamic = "force-dynamic";
 
@@ -35,15 +36,18 @@ export default async function Home() {
     );
   }
   function Pictures() {
+    const pictures = getPictures(); // Get fresh pictures each render
     return (
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
         <div className="flex flex-wrap gap-4">
           {pictures.map((pic) => (
             <div key={pic.id} className="w-48">
-              <img
+              <Image
                 src={pic.url}
                 alt={`Picture ${pic.id}`}
+                width={192}
+                height={108}
                 className="w-full h-auto rounded-lg"
               />
             </div>
