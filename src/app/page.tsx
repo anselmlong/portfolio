@@ -5,9 +5,15 @@ import { LatestPost } from "~/app/_components/post";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 import { api, HydrateClient } from "~/trpc/server";
-import { projects, getPictures } from "~/data";
+import { projects, imageUrls } from "~/data";
 
 export const dynamic = "force-dynamic";
+
+// Create pictures array once at the module level
+const pictures = imageUrls.map((url, index) => ({
+  id: index + 1,
+  url
+}));
 
 export default async function Home() {
   const hello = await api.post.hello({ text: "from tRPC" });
@@ -36,13 +42,13 @@ export default async function Home() {
     );
   }
   function Pictures() {
-    const pictures = getPictures(); // Get fresh pictures each render
     return (
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
         <div className="flex flex-wrap gap-4">
           {pictures.map((pic) => (
             <div key={pic.id} className="w-48">
+              <Link href={`/photos/${pic.id}`}>
               <Image
                 src={pic.url}
                 alt={`Picture ${pic.id}`}
@@ -50,7 +56,9 @@ export default async function Home() {
                 height={108}
                 className="w-full h-auto rounded-lg"
               />
+              </Link>
             </div>
+
           ))}
         </div>
       </div>

@@ -8,7 +8,7 @@
       "title": "Fast Vision Inference",
       "description": "Optimized transformer pipeline with ONNX + CUDA.",
       "tech": ["TypeScript", "PyTorch", "ONNX"],
-      "href": "https://example.com/demo",
+      "href": "https://github.com/anselmlong/anselmbot",
       "repo": "https://github.com/anselmlong/anselmbot",
       "highlight": true
     }
