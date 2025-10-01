@@ -30,7 +30,9 @@ export default function RootLayout({
       <html lang="en" className={`${geist.variable} flex-col flex gap-4`}>
         <body>
           <TopNav />
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <main className="overflow-y-scroll">
+            <TRPCReactProvider>{children}</TRPCReactProvider>
+          </main>
           <div id="modal-root"/>
         </body>
       </html>
