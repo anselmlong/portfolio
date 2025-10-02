@@ -11,3 +11,5 @@
 - [ ] Analytics
 - [ ] Ratelimiting
 - [X] Error management (w/ Sentry)
+
+Removed Clerk and Sentry to try fix a bug.
