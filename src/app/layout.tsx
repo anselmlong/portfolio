@@ -2,7 +2,6 @@
 import "~/styles/globals.css";
 import "@uploadthing/react/styles.css";
 
-import { ClerkProvider } from "@clerk/nextjs";
 import { TopNav } from "./_components/topnav";
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
@@ -26,16 +25,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en" className={`${geist.variable} flex-col flex gap-4`}>
-        <body>
-          <TopNav />
-          <main className="overflow-y-scroll">
-            <TRPCReactProvider>{children}</TRPCReactProvider>
-          </main>
-          <div id="modal-root"/>
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en" className={`${geist.variable} flex-col flex gap-4`}>
+      <body>
+        <TopNav />
+        <main className="overflow-y-scroll">
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </main>
+        <div id="modal-root"/>
+      </body>
+    </html>
   );
 }

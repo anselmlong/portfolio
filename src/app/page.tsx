@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from 'next/image'
-import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { LatestPost } from "~/app/_components/post";
 import { DownloadButton } from "~/app/_components/DownloadButton";
 import { auth } from "~/server/auth";
@@ -71,12 +70,6 @@ export default async function Home() {
     <HydrateClient>
 
       <main className="container mx-auto p-4">
-        <SignedOut>
-          <div className="mb-8 text-center">
-            <h2 className="text-2xl font-semibold mb-4">Welcome to My Portfolio</h2>
-            <p className="mb-4">Please sign in to create and view posts.</p>
-          </div>
-        </SignedOut>
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
             <div>
@@ -121,10 +114,8 @@ export default async function Home() {
               <p className="text-gray-400">No posts yet.</p>
             )}
           </div>
-          <SignedIn>
-            <Projects />
-            <Pictures />
-          </SignedIn>
+          <Projects />
+          <Pictures />
         </div>
       </main>
     </HydrateClient>
