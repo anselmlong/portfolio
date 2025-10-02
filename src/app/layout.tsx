@@ -1,6 +1,5 @@
 
 import "~/styles/globals.css";
-import "@uploadthing/react/styles.css";
 
 import { TopNav } from "./_components/topnav";
 import { type Metadata } from "next";
@@ -31,7 +30,6 @@ export default function RootLayout({
         <main className="overflow-y-scroll">
           <TRPCReactProvider>{children}</TRPCReactProvider>
         </main>
-        <div id="modal-root"/>
       </body>
     </html>
   );
