@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from 'next/image'
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { LatestPost } from "~/app/_components/post";
+import { DownloadButton } from "~/app/_components/DownloadButton";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 import { api, HydrateClient } from "~/trpc/server";
@@ -77,7 +78,20 @@ export default async function Home() {
           </div>
         </SignedOut>
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-6">My Portfolio</h1>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">Anselm Long</h1>
+              <p className="text-gray-600 mb-4 md:mb-0">Software Developer & Creative Problem Solver</p>
+            </div>
+            <div className="flex gap-3 p-3">
+              <DownloadButton 
+                filePath="/resume.pdf" 
+                fileName="resume.pdf"
+                buttonText="Resume"
+                variant="primary"
+              />
+            </div>
+          </div>
 
           {/* Posts Section */}
           <div className="mb-8">
