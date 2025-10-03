@@ -24,12 +24,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} flex-col flex gap-4`}>
-      <body>
+    <html lang="en" className={`${geist.variable}`}>
+      <body className="bg-black text-white min-h-screen">
         <TopNav />
-        <main className="overflow-y-scroll">
-          <TRPCReactProvider>{children}</TRPCReactProvider>
-        </main>
+        <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
   );

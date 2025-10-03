@@ -28,108 +28,181 @@ export default async function Home() {
 
   function Projects() {
     return (
-      <div className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Projects</h2>
-        {projects.map(p => (
-          <a key={p.title} href={p.href} className="rounded-2xl p-6 shadow hover:scale-[1.01] transition">
-            <h3 className="text-xl font-semibold">{p.title}</h3>
-            <p className="mt-2 text-sm opacity-80">{p.description}</p>
-            <div className="mt-3 flex flex-wrap gap-2 text-xs opacity-70">
-              {p.tech.map(t => <span key={t} className="rounded px-2 py-1">{t}</span>)}
-            </div>
-          </a>
-        ))}
-      </div>
+      <section className="mb-12">
+        <h2 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+          Featured Projects
+        </h2>
+        <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-1">
+          {projects.map(p => (
+            <a 
+              key={p.title} 
+              href={p.href} 
+              className="group bg-white/5 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl hover:bg-white/10 transition-all duration-300 border border-white/10 hover:border-white/20"
+            >
+              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold mb-2 group-hover:text-blue-400 transition-colors">
+                    {p.title}
+                  </h3>
+                  {p.position && (
+                    <p className="text-sm font-medium text-blue-300 mb-3">{p.position}</p>
+                  )}
+                  <p className="text-base leading-relaxed text-gray-300 mb-4">
+                    {p.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {p.tech.map(t => (
+                      <span 
+                        key={t} 
+                        className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-200 px-3 py-1 rounded-full text-sm font-medium border border-blue-400/30"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="text-right opacity-60 group-hover:opacity-100 transition-opacity">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
     );
   }
   function Pictures() {
     return (
-      <div className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
-        <div className="flex flex-wrap gap-4">
+      <section className="mb-12">
+        <h2 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
+          Photography Gallery
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {pictures.map((pic) => (
-            <div key={pic.id} className="w-48">
-              <Link href={`/photos/${pic.id}`}>
+            <Link key={pic.id} href={`/photos/${pic.id}`} className="group">
+              <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300">
                 <Image
                   src={pic.url}
-                  alt={`Picture ${pic.id}`}
-                  width={192}
-                  height={108}
-                  className="w-full h-auto rounded-lg"
+                  alt={`Gallery image ${pic.id}`}
+                  width={400}
+                  height={300}
+                  className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-              </Link>
-            </div>
-
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <p className="text-white text-sm font-medium">View Details</p>
+                  </div>
+                </div>
+              </div>
+            </Link>
           ))}
         </div>
-      </div>
+      </section>
     );
   }
 
   function Experiences() {
     return (
-      <div className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Experiences</h2>
-        {experiences.map(e => (
-          <div className="container flex gradient">
-          <a key={e.title} className="rounded-2xl p-6 shadow hover:scale-[1.01] transition">
-            <h3 className="text-xl font-semibold">{e.title}</h3>
-            <h2 className="text-lg font-medium">{e.company}</h2>
-            <h2 className="text-lg font-medium">{e.start_date} - {e.end_date}</h2>
-            {e.points.map(p => (
-              <p key={p} className="mt-2 text-sm opacity-80">{p}</p>
-            ))}
-          </a>
-          </div>
-        ))}
-      </div>
+      <section className="mb-12">
+        <h2 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+          Work Experience
+        </h2>
+        <div className="space-y-8">
+          {experiences.map((e, index) => (
+            <div 
+              key={e.title} 
+              className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/10 hover:border-white/20 transition-all duration-300"
+            >
+              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-2">{e.title}</h3>
+                  <h4 className="text-xl font-semibold text-blue-300 mb-2">{e.company}</h4>
+                  <p className="text-sm font-medium text-gray-400 bg-gray-800/50 px-3 py-1 rounded-full inline-block">
+                    {e.start_date} - {e.end_date}
+                  </p>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                {e.points.map((point, pointIndex) => (
+                  <div key={pointIndex} className="flex items-start gap-3">
+                    <div className="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <p className="text-gray-300 leading-relaxed">{point}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     )
   }
 
 
   return (
     <HydrateClient>
-
-      <main className="container mx-auto p-4">
-        <div className="mb-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-            <div>
-              <p className="text-gray-600 mb-4 md:mb-0">Software Developer & Creative Problem Solver</p>
+      <main className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+        {/* Hero Section */}
+        <section className="relative py-20 px-4">
+          <div className="container mx-auto text-center">
+            <div className="mb-8">
+              <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                Anselm Long
+              </h1>
+              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Professional Nerd
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <div className="flex gap-4">
+                  <a 
+                    href="mailto:anselmpius@gmail.com" 
+                    className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  >
+                    Get In Touch
+                  </a>
+                  <a 
+                    href="#projects" 
+                    className="border border-white/20 hover:border-white/40 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 hover:bg-white/5"
+                  >
+                    View Work
+                  </a>
+                </div>
+              </div>
             </div>
-
           </div>
+          
+          {/* Animated background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
+            <div className="absolute top-3/4 right-1/4 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl"></div>
+            <div className="absolute top-1/2 left-3/4 w-24 h-24 bg-pink-500/10 rounded-full blur-3xl"></div>
+          </div>
+        </section>
 
-          {/* Posts Section */}
-          <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Recent Posts</h2>
-
-            {/* Show create post form if logged in */}
-            {session?.user && (
+        {/* Content Sections */}
+        <div className="container mx-auto px-4 pb-20">
+          {/* Admin Section - Only show if logged in */}
+          {session?.user && (
+            <section className="mb-12 bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+              <h2 className="text-2xl font-bold mb-4 text-white">Admin Panel</h2>
               <div className="mb-6">
-                <h3 className="text-lg font-medium mb-3">Create New Post</h3>
+                <h3 className="text-lg font-medium mb-3 text-gray-300">Create New Post</h3>
                 <LatestPost />
               </div>
-            )}
+            </section>
+          )}
 
-            {/* {posts.length > 0 ? (
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {posts.map((post) => (
-                  <div key={post.id} className="bg-white/10 rounded-lg p-6 backdrop-blur-sm">
-                    <h3 className="text-xl font-medium mb-2">{post.name}</h3>
-                    <div className="text-sm text-gray-300">
-                      <p>By: {post.createdBy.name}</p>
-                      <p>Created: {new Date(post.createdAt).toLocaleDateString()}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-400">No posts yet.</p>
-            )} */}
+          <div id="projects">
+            <Projects />
           </div>
-          <Projects />
-          <Experiences />
-          <Pictures />
+          <div id="experience">
+            <Experiences />
+          </div>
+          <div id="gallery">
+            <Pictures />
+          </div>
         </div>
       </main>
     </HydrateClient>
