@@ -5,12 +5,46 @@
   ],
   "projects": [
     {
-      "title": "Fast Vision Inference",
-      "description": "Optimized transformer pipeline with ONNX + CUDA.",
-      "tech": ["TypeScript", "PyTorch", "ONNX"],
+      "title": "VBook",
+      "position": "Team Lead",
+      "description": "A JavaFX-based CLI contact manager optimised for developers. Oversaw design and implementation milestones.",
+      "tech": ["Java", "JavaFX"],
       "href": "https://github.com/anselmlong/anselmbot",
-      "repo": "https://github.com/anselmlong/anselmbot",
+      "repo": "https://github.com/anselmlong/nusphere",
       "highlight": true
+    }
+  ],
+  "experiences": [
+    {
+      "title": "Machine Learning Intern",
+      "company": "IMDA",
+      "start_date": "May 2025",
+      "end_date": "Aug 2025",
+      "points": [
+        "Designed and implemented a modular machine-learning pipeline for data parsing, feature engineering, model training and explainability, enabling rapid experimentation.", 
+        "Optimised models (Isolation Forest, One-Class SVM, Half Space Trees, Random Forest, Graph Convolution Networks and Large Language Model embeddings) to classify malicious SSL/TLS certificates, achieving a 0.994 F1-score.",
+        "Applied explainable AI (LIME) to surface influential features in anomaly classification, improving interpretability and stakeholder trust."
+      ]
+    },
+    {
+      "title": "Strategic Digital Projects Intern",
+      "company": "IMDA",
+      "start_date": "May 2024",
+      "end_date": "Jul 2024",
+      "points": [
+        "Curated technical content in collaboration with Microsoft and AWS to showcase emerging technology use cases in industryfacing workshops, resulting in 25% of attendees initiating GenAI projects with real-world impact.",
+        "Proposed and led a data consolidation initiative leveraging Salesforce to streamline cluster management and cross-team decision-making, reducing time spent locating data by 35%"
+      ]
+    },
+    {
+      "title": "Freelance Photographer",
+      "company": "Self-Employed",
+      "start_date": "Oct 2019",
+      "end_date": "Aug 2025",
+      "points": [
+        "Managed end-to-end client relationships and vendor partnerships, increasing monthly revenue by 300% over 6 years.",
+        "Delivered high-quality digital photography and videography services that improved client retention and referrals"
+      ]
     }
   ]
 }
