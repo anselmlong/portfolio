@@ -59,5 +59,10 @@
   "ct3aMetadata": {
     "initVersion": "7.39.3"
   },
-  "packageManager": "npm@10.7.0"
+  "packageManager": "npm@10.7.0",
+  "trustedDependencies": [
+    "@sentry/cli",
+    "@tailwindcss/oxide",
+    "unrs-resolver"
+  ]
 }

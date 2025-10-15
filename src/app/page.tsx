@@ -140,6 +140,89 @@ export default async function Home() {
     )
   }
 
+  function Education() {
+    return (
+      <section className="mb-12">
+        <h2 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+          Education
+        </h2>
+        <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/10 hover:border-white/20 transition-all duration-300">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+            <div>
+              <h3 className="text-2xl font-bold text-white mb-2">National University of Singapore</h3>
+              <h4 className="text-xl font-semibold text-blue-300 mb-2">Bachelor of Science in Computer Science</h4>
+              <p className="text-sm font-medium text-gray-400 bg-gray-800/50 px-3 py-1 rounded-full inline-block">
+                August 2023 - April 2027
+              </p>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex-shrink-0"></div>
+              <p className="text-gray-300"><span className="font-semibold text-white">GPA:</span> 4.69/5.00</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex-shrink-0"></div>
+              <p className="text-gray-300"><span className="font-semibold text-white">Specialization:</span> Artificial Intelligence</p>
+            </div>
+            <div className="flex items-start gap-3 mt-4">
+              <div className="w-2 h-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full mt-2 flex-shrink-0"></div>
+              <div>
+                <p className="text-gray-300 font-semibold text-white mb-2">Relevant Coursework:</p>
+                <p className="text-gray-300">Artificial Intelligence and Machine Learning, Software Engineering, Object Oriented Programming, Data Structures and Algorithms, Statistics and Probability</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  function Skills() {
+    const skillCategories = [
+      {
+        title: "Languages",
+        skills: ["Python", "Java", "JavaScript", "C", "C++", "HTML/CSS", "Go", "LaTeX"],
+        gradient: "from-cyan-400 to-blue-500"
+      },
+      {
+        title: "Frameworks & Libraries",
+        skills: ["Git", "React", "JavaFX", "Node.js", "Next.js", "tRPC", "YOLOv8", "PostgreSQL", "Render", "scikit-learn", "Numpy", "Pandas"],
+        gradient: "from-green-400 to-cyan-500"
+      }
+    ];
+
+    return (
+      <section className="mb-12">
+        <h2 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+          Technical Skills
+        </h2>
+        <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
+          {skillCategories.map((category) => (
+            <div 
+              key={category.title}
+              className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/10 hover:border-white/20 transition-all duration-300"
+            >
+              <h3 className={`text-xl font-bold mb-4 bg-gradient-to-r ${category.gradient} bg-clip-text text-transparent`}>
+                {category.title}
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {category.skills.map((skill) => (
+                  <span 
+                    key={skill}
+                    className="bg-gradient-to-r from-white/10 to-white/5 text-gray-200 px-3 py-1.5 rounded-lg text-sm font-medium border border-white/10 hover:border-white/30 transition-all"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
 
   return (
     <HydrateClient>
@@ -151,24 +234,44 @@ export default async function Home() {
               <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                 Anselm Long
               </h1>
-              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-                Professional Nerd
+              <p className="text-xl md:text-2xl text-gray-300 mb-4 max-w-3xl mx-auto leading-relaxed">
+                Computer Science Student | Machine Learning & AI Specialist
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <div className="flex gap-4">
-                  <a 
-                    href="mailto:anselmpius@gmail.com" 
-                    className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 transform hover:scale-105 shadow-lg"
-                  >
-                    Get In Touch
-                  </a>
-                  <a 
-                    href="#projects" 
-                    className="border border-white/20 hover:border-white/40 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 hover:bg-white/5"
-                  >
-                    View Work
-                  </a>
-                </div>
+              <p className="text-base text-gray-400 mb-8 max-w-4xl mx-auto leading-relaxed">
+                Proactive Computer Science student specialising in machine learning and artificial intelligence. 
+                Delivered anomaly detection models that identify malicious web certificates with 96% accuracy (F1-score 0.994) at IMDA. 
+                Seeking to apply technical expertise and an empathetic mindset to build efficient solutions with positive social impact.
+              </p>
+              <div className="flex flex-wrap gap-4 justify-center items-center mb-8">
+                <a 
+                  href="mailto:anselmpius@gmail.com" 
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 transform hover:scale-105 shadow-lg"
+                >
+                  Get In Touch
+                </a>
+                <a 
+                  href="https://linkedin.com/in/anselmlong" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border border-white/20 hover:border-white/40 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 hover:bg-white/5"
+                >
+                  LinkedIn
+                </a>
+                <a 
+                  href="https://github.com/anselmlong" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border border-white/20 hover:border-white/40 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 hover:bg-white/5"
+                >
+                  GitHub
+                </a>
+                <a 
+                  href="/resume.pdf" 
+                  download
+                  className="border border-white/20 hover:border-white/40 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 hover:bg-white/5"
+                >
+                  Download Resume
+                </a>
               </div>
             </div>
           </div>
@@ -199,6 +302,12 @@ export default async function Home() {
           </div>
           <div id="experience">
             <Experiences />
+          </div>
+          <div id="education">
+            <Education />
+          </div>
+          <div id="skills">
+            <Skills />
           </div>
           <div id="gallery">
             <Pictures />

@@ -5,12 +5,30 @@
   ],
   "projects": [
     {
+      "title": "Freak-Cha",
+      "position": "Frontend & Computer Vision Developer, HackHarvard 2025",
+      "description": "A CAPTCHA-inspired challenge to distinguish humans from AI using facial expression recognition; awarded Funniest Hack at HackHarvard 2025. Built responsive frontend with Next.js, Tailwind CSS, and tRPC, integrating real-time facial recognition using MediaPipe FaceMesh and YOLOv8.",
+      "tech": ["Next.js", "Tailwind CSS", "tRPC", "MediaPipe", "YOLOv8", "Computer Vision"],
+      "href": "https://github.com/anselmlong",
+      "repo": "https://github.com/anselmlong",
+      "highlight": true
+    },
+    {
       "title": "VBook",
-      "position": "Team Lead",
-      "description": "A JavaFX-based CLI contact manager optimised for developers. Oversaw design and implementation milestones.",
-      "tech": ["Java", "JavaFX"],
+      "position": "Team Lead, NUS",
+      "description": "A JavaFX-based CLI contact manager optimised for developers. Led a team of 4 to develop and deliver a functional tool on schedule by overseeing design and implementation milestones.",
+      "tech": ["Java", "JavaFX", "CLI"],
       "href": "https://github.com/anselmlong/nusphere",
       "repo": "https://github.com/anselmlong/nusphere",
+      "highlight": true
+    },
+    {
+      "title": "MiccDrop",
+      "position": "Team Lead, Hack & Roll, NUS",
+      "description": "A humorous karaoke app that rewards off-key singing. Implemented real-time pitch detection and karaoke-style lyrics using the Spotify API.",
+      "tech": ["React Native", "Node.js", "Supabase", "Spotify API"],
+      "href": "https://github.com/anselmlong",
+      "repo": "https://github.com/anselmlong",
       "highlight": true
     }
   ],
@@ -40,7 +58,7 @@
       "title": "Freelance Photographer",
       "company": "Self-Employed",
       "start_date": "Oct 2019",
-      "end_date": "Aug 2025",
+      "end_date": "Present",
       "points": [
         "Managed end-to-end client relationships and vendor partnerships, increasing monthly revenue by 300% over 6 years.",
         "Delivered high-quality digital photography and videography services that improved client retention and referrals"
