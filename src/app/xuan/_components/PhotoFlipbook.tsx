@@ -53,9 +53,11 @@ export default function PhotoFlipbook({ photos, onComplete }: Props) {
         <div className="space-y-4">
           <div className="aspect-[4/3] w-full overflow-hidden rounded-lg bg-[#e6ddd0] flex items-center justify-center">
             {/* Placeholder image box */}
-            <span className="text-sm" style={{ color: "#5d4037" }}>
-              {photos[index]?.caption}
-            </span>
+            <img
+              src={photos[index]?.url}
+              alt={photos[index]?.caption || `Photo ${index + 1}`}
+              className="w-full h-full object-cover"
+            />
           </div>
           <div className="flex items-center justify-between">
             <button

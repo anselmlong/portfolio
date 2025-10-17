@@ -1,7 +1,35 @@
-export type SamplePhoto = { id: number; url: string; caption: string };
 
-export const samplePhotos: SamplePhoto[] = Array.from({ length: 6 }).map((_, i) => ({
-  id: i + 1,
-  url: `/xuan/photos/${i + 1}.jpg`,
-  caption: `Memory ${i + 1}`,
-}));
+export type Photo = { id: number; url: string; caption: string };
+
+export const photos: Photo[] = [
+  { id: 1, url: "/photos/xuan/0222 where it started.jpg", caption: "Where it started" },
+  { id: 2, url: "/photos/xuan/0226 we're just friends.jpg", caption: "We're just friends" },
+  { id: 3, url: "/photos/xuan/0302 hanging out as friends.jpg", caption: "Hanging out as friends" },
+  { id: 4, url: "/photos/xuan/0307 karaoke.jpg", caption: "Karaoke" },
+  { id: 5, url: "/photos/xuan/0325 second jb trip!.jpg", caption: "Second JB trip!" },
+  { id: 6, url: "/photos/xuan/0411 minecraft movie.jpg", caption: "Minecraft movie" },
+  { id: 7, url: "/photos/xuan/0417 6am studio.jpg", caption: "6am studio" },
+  { id: 8, url: "/photos/xuan/0419 official.jpg", caption: "Official" },
+  { id: 9, url: "/photos/xuan/0421 grad dinner.jpg", caption: "Grad dinner" },
+  { id: 10, url: "/photos/xuan/0422 karaoke after grad.jpg", caption: "Karaoke after grad" },
+  { id: 11, url: "/photos/xuan/0423 third jb.jpg", caption: "Third JB" },
+  { id: 12, url: "/photos/xuan/0501 club again.jpg", caption: "Club again" },
+  { id: 13, url: "/photos/xuan/0506 another jb.jpg", caption: "Another JB" },
+  { id: 14, url: "/photos/xuan/0506 ice skating.jpg", caption: "Ice skating" },
+  { id: 15, url: "/photos/xuan/0512 climba turned cycling.jpeg", caption: "Climba turned cycling" },
+  { id: 16, url: "/photos/xuan/0512 cycling.jpg", caption: "Cycling" },
+  { id: 17, url: "/photos/xuan/0512 photobooth.jpg", caption: "Photobooth" },
+  { id: 18, url: "/photos/xuan/0619 movie and launched.jpg", caption: "Movie and launched" },
+  { id: 19, url: "/photos/xuan/0620 touch grass 2.jpg", caption: "Touch grass 2" },
+  { id: 20, url: "/photos/xuan/0620 touching grass.jpg", caption: "Touching grass" },
+  { id: 21, url: "/photos/xuan/0630 cozy room.jpg", caption: "Cozy room" },
+  { id: 22, url: "/photos/xuan/0702 tiring cycling.jpg", caption: "Tiring cycling" },
+  { id: 23, url: "/photos/xuan/0704 another movie.jpg", caption: "Another movie" },
+  { id: 24, url: "/photos/xuan/0704 another room.jpg", caption: "Another room" },
+  { id: 25, url: "/photos/xuan/0711 waffles.jpg", caption: "Waffles" },
+  { id: 26, url: "/photos/xuan/0719 nice massage.jpg", caption: "Nice massage" },
+  { id: 27, url: "/photos/xuan/0729 steak dinner.jpg", caption: "Steak dinner" },
+  { id: 28, url: "/photos/xuan/0731 haus coffee.jpg", caption: "Haus coffee" },
+  { id: 29, url: "/photos/xuan/0810 oceanarium.jpg", caption: "Oceanarium" },
+  { id: 30, url: "/photos/xuan/0812 bracelets.jpg", caption: "Bracelets" },
+];

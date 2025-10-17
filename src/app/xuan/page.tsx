@@ -5,7 +5,7 @@ import LoveLetter from "./_components/LoveLetter";
 import PhotoFlipbook from "./_components/PhotoFlipbook";
 import GiftSelector, { type GiftSelections } from "./_components/GiftSelector";
 import VoucherGenerator from "./_components/VoucherGenerator";
-import { samplePhotos } from "./data/photos";
+import { photos } from "./data/photos";
 
 type Section = "landing" | "letter" | "photos" | "gifts" | "voucher";
 
@@ -34,7 +34,7 @@ export default function XuanPage() {
           <LoveLetter onNext={() => setSection("photos")} />
         )}
         {section === "photos" && (
-          <PhotoFlipbook photos={samplePhotos} onComplete={() => setSection("gifts")} />
+          <PhotoFlipbook photos={photos} onComplete={() => setSection("gifts")} />
         )}
         {section === "gifts" && (
           <GiftSelector
