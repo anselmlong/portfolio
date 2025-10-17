@@ -1,7 +1,7 @@
 
 import "~/styles/globals.css";
 
-import { TopNav } from "./_components/topnav";
+import { ConditionalTopNav } from "./_components/ConditionalTopNav";
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 
@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable}`}>
       <body className="bg-black text-white min-h-screen">
-        <TopNav />
+        <ConditionalTopNav />
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
