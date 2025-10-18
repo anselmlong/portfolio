@@ -25,26 +25,37 @@ export default function XuanPage() {
     setSelections((prev: GiftSelections) => ({ ...prev, ...partial }));
 
   return (
-    <main className="min-h-screen bg-[#d9c5b2] text-[#5d4037]">
+    <main className="min-h-screen bg-gradient-to-br from-zinc-900 via-slate-900 to-gray-950 text-[#5d4037]">
       <div className="mx-auto max-w-4xl p-6 md:p-10">
         {section === "landing" && (
           <LandingPage onNext={() => setSection("letter")} />)
         }
         {section === "letter" && (
-          <LoveLetter onNext={() => setSection("photos")} />
+          <LoveLetter 
+            onNext={() => setSection("photos")} 
+            onBack={() => setSection("landing")}
+          />
         )}
         {section === "photos" && (
-          <PhotoScroll photos={photos} onComplete={() => setSection("gifts")} />
+          <PhotoScroll 
+            photos={photos} 
+            onComplete={() => setSection("gifts")} 
+            onBack={() => setSection("letter")}
+          />
         )}
         {section === "gifts" && (
           <GiftSelector
             selections={selections}
             onUpdate={updateSelections}
             onComplete={() => setSection("voucher")}
+            onBack={() => setSection("photos")}
           />
         )}
         {section === "voucher" && (
-          <VoucherGenerator selections={selections} />
+          <VoucherGenerator 
+            selections={selections} 
+            onBack={() => setSection("gifts")}
+          />
         )}
       </div>
     </main>

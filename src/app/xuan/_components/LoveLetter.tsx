@@ -3,11 +3,21 @@ import React from "react";
 
 type Props = {
   onNext: () => void;
+  onBack?: () => void;
 };
 
-export default function LoveLetter({ onNext }: Props) {
+export default function LoveLetter({ onNext, onBack }: Props) {
   return (
     <section className="relative bg-[#f5ebe0] text-[#5d4037] rounded-xl p-6 md:p-10 shadow-lg">
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="text-[#5d4037]/60 hover:text-[#5d4037] transition-colors text-sm mb-4"
+          aria-label="Go back"
+        >
+          ← back
+        </button>
+      )}
       <div className="mb-6">
         <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: "#c17767" }}>
           a little note for you ❤️
