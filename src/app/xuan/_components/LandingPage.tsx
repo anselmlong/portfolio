@@ -7,10 +7,10 @@ type Props = {
 
 export default function LandingPage({ onNext }: Props) {
   return (
-    <section className="relative bg-[#f5ebe0] text-[#5d4037] rounded-xl p-6 md:p-10 shadow-lg">
+    <section className="relative bg-orange-50 text-[#5d4037] rounded-xl p-6 md:p-10 shadow-lg">
       <div className="mb-4">
-        <h1 className="text-3xl md:text-4xl font-bold" style={{ color: "#c17767" }}>
-          happy birthday baby!!
+        <h1 className="text-3xl md:text-4xl font-bold" style={{ color: "#5c1809ff" }}>
+          happy birthday baby!! + six months!!
         </h1>
       </div>
       <p className="text-lg leading-relaxed mb-6">

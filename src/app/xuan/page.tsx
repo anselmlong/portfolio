@@ -12,7 +12,7 @@ type Section = "landing" | "letter" | "photos" | "gifts" | "voucher";
 export default function XuanPage() {
   const [section, setSection] = useState<Section>("landing");
   const [selections, setSelections] = useState<GiftSelections>({
-    vinylPlayer: "Vinyl Player",
+    vinylPlayer: null,
     record: null,
     perfume: null,
     pants: null,

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 
 export type GiftSelections = {
-  vinylPlayer: string;
+  vinylPlayer: string | null;
   record: string | null;
   perfume: string | null;
   pants: string | null;
@@ -55,15 +55,21 @@ const pants = [
   {
     "name": "BDG barrel jeans in white",
     "url": "/elements/white jeans.png",
+  },
+  {
+    "name": "Yuan Wide-Leg Pants",
+    "url": "/elements/black pants.png",
+  },
+  {
+    "name": "Navy Jeans",
+    "url": "/elements/navy jeans.png",
   }
 ]
-
-
-const pantsOptions = ["BDG barrel jeans in white", "Yuan Wide-Leg Pants", "woman's puma navy williams polo"] as const;
+const playerUrl = "/elements/turntable.png"
+const playerName = "audio technica AT-LP60X"
 
 export default function GiftSelector({ selections, onUpdate, onComplete, onBack }: Props) {
   const [stage, setStage] = useState(1);
-
   const next = () => setStage((s) => Math.min(5, s + 1));
 
   const canProceed = () => {
@@ -79,10 +85,67 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
       return (
         <div className="space-y-4 animate-fadeIn">
           <h3 className="text-lg font-semibold text-[#5d4037]">✨ firstly: you get to redeem a vinyl player!</h3>
-          <div className="rounded-lg bg-gradient-to-br from-[#e6ddd0] to-[#d9c5b2] p-6 shadow-md border border-[#d4a574]/30">
-            <div className="text-4xl mb-2">🎵</div>
-            <div className="font-medium text-[#5d4037]">audio technica - aesthetic era!!</div>
-          </div>
+          {(() => {
+            const selected = selections.vinylPlayer === playerName;
+            return (
+              <>
+                <div className="flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onUpdate({ vinylPlayer: playerName });
+                    }}
+                    aria-pressed={selected}
+                    className={`relative w-48 text-center rounded-lg p-6 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-xl border ${
+                      selected
+                        ? "bg-[#c17767] text-white ring-2 ring-[#c17767] ring-offset-2 border-transparent"
+                        : "bg-gradient-to-br from-[#e6ddd0] to-[#d9c5b2] text-[#5d4037] border-[#d4a574]/30 shadow-md"
+                    }`}
+                  >
+                    <div className="w-full aspect-square grid place-items-center mb-3">
+                      <img
+                        src={playerUrl}
+                        alt="Vinyl Player"
+                        width={160}
+                        height={160}
+                        className="max-w-[85%] max-h-[85%] object-contain"
+                      />
+                    </div>
+                    <div className={`font-medium ${selected ? "text-white" : "text-[#5d4037]"}`}>
+                      {playerName} 
+                    </div>
+                    {selected && (
+                      <div className="absolute top-2 right-2 bg-white text-[#c17767] rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
+                        ✓
+                      </div>
+                    )}
+                  </button>
+                </div>
+                {selected && (
+                  <div className="mt-6 flex justify-center animate-fadeIn">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onUpdate({ vinylPlayer: playerName });
+                        const link = document.createElement("a");
+                        link.href = "/vouchers/vinyl.png";
+                        link.download = "vinyl.png";
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }}
+                      className="px-6 py-3 rounded-lg text-white font-medium shadow-lg transition-all transform hover:scale-105 bg-[#c17767] focus:outline-none focus:ring-2 focus:ring-[#c17767]/40"
+                    >
+                      <span className="inline-flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v12m0 0l-4-4m4 4l4-4m-4 4V4m8 16H4" /></svg>
+                        download voucher
+                      </span>
+                    </button>
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </div>
       );
     if (stage === 2)
@@ -95,21 +158,25 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                 key={record.name}
                 onClick={() => onUpdate({ record: record.name })}
                 aria-pressed={selections.record === record.name}
-                className={`group relative rounded-lg p-4 transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col h-full ${selections.record === record.name
+                className={`group relative rounded-lg p-4 transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col h-full ${
+                  selections.record === record.name
                     ? "bg-[#c17767] text-white ring-2 ring-[#c17767] ring-offset-2"
                     : "bg-white hover:bg-[#f5ebe0] shadow-md"
-                  }`}
+                }`}
               >
-                <img
-                  src={record.url}
-                  alt={`${record.name} by ${record.artist}`}
-                  width={240}
-                  height={240}
-                  className="rounded-md w-full aspect-square object-contain mb-3 group-hover:opacity-90 transition-opacity"
-                />
+                <div className="w-full aspect-square grid place-items-center mb-3">
+                  <img
+                    src={record.url}
+                    alt={`${record.name} by ${record.artist}`}
+                    width={240}
+                    height={240}
+                    className="max-w-[85%] max-h-[85%] object-contain group-hover:opacity-90 transition-opacity"
+                  />
+                </div>
                 <div
-                  className={`mt-auto font-medium text-center ${selections.record === record.name ? "text-white" : "text-[#5d4037]"
-                    }`}
+                  className={`mt-auto font-medium text-center ${
+                    selections.record === record.name ? "text-white" : "text-[#5d4037]"
+                  }`}
                 >
                   <div className="font-bold text-center">{record.name}</div>
                   <div className="text-sm font-medium text-center">by {record.artist}</div>
@@ -139,13 +206,15 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                     : "bg-white hover:bg-[#f5ebe0] shadow-md"
                   }`}
               >
-                <img
-                  src={perfume.url}
-                  alt={`${perfume.name} by ${perfume.perfumer}`}
-                  width={240}
-                  height={240}
-                  className="rounded-md w-full aspect-square object-contain mb-3 group-hover:opacity-90 transition-opacity"
-                />
+                <div className="w-full aspect-square grid place-items-center mb-3">
+                  <img
+                    src={perfume.url}
+                    alt={`${perfume.name} by ${perfume.perfumer}`}
+                    width={240}
+                    height={240}
+                    className="max-w-[85%] max-h-[85%] object-contain group-hover:opacity-90 transition-opacity"
+                  />
+                </div>
                 <div className="mt-auto font-bold text-center">{perfume.name}</div>
                 <div className="text-sm font-medium text-center">by {perfume.perfumer}</div>
                 {selections.perfume === perfume.name && (
@@ -163,18 +232,26 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
         <div className="space-y-4 animate-fadeIn">
           <h3 className="text-lg font-semibold text-[#5d4037]">👖 some wardrobe upgrades: pick what looks good!</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {pantsOptions.map((opt) => (
+            {pants.map((opt) => (
               <button
-                key={opt}
-                onClick={() => onUpdate({ pants: opt })}
-                className={`relative rounded-lg p-4 text-left transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${selections.pants === opt
+                key={opt.name}
+                onClick={() => onUpdate({ pants: opt.name })}
+                className={`relative rounded-lg p-4 text-left transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${selections.pants === opt.name
                     ? "bg-[#c17767] text-white ring-2 ring-[#c17767] ring-offset-2"
                     : "bg-white hover:bg-[#f5ebe0] shadow-md"
                   }`}
               >
-                <div className="text-2xl mb-2">👖</div>
-                <div className="font-medium">{opt}</div>
-                {selections.pants === opt && (
+                <div className="w-full aspect-square grid place-items-center mb-3">
+                  <img
+                    src={opt.url}
+                    alt={`${opt.name}`}
+                    width={240}
+                    height={240}
+                    className="max-w-[85%] max-h-[85%] object-contain group-hover:opacity-90 transition-opacity"
+                  />
+                </div>
+                <div className="font-medium">{opt.name}</div>
+                {selections.pants === opt.name && (
                   <div className="absolute top-2 right-2 bg-white text-[#c17767] rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
                     ✓
                   </div>
@@ -188,31 +265,80 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
       <div className="space-y-4 animate-fadeIn">
         <h3 className="text-lg font-semibold text-[#5d4037]">💰 all these gifts won't reach you now... but CASH IS KING!!!</h3>
         <div className="space-y-3">
+          {/* Shopping voucher */}
           <div className="rounded-lg bg-gradient-to-br from-[#f5ebe0] to-[#e6ddd0] p-4 shadow-md border border-[#d4a574]/30">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">🎁</span>
-              <span className="font-medium text-[#5d4037]">$150 shopping voucher for you ❤️</span>
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">🎁</span>
+                <span className="font-medium text-[#5d4037]">$150 shopping voucher for you ❤️</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  const link = document.createElement("a");
+                  link.href = "/vouchers/shopping.png";
+                  link.download = "shopping.png";
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+                className="px-3 py-2 rounded-md text-white bg-[#c17767] hover:opacity-95 text-sm font-medium shadow inline-flex items-center gap-1"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v12m0 0l-4-4m4 4l4-4m-4 4V4m8 16H4" /></svg>
+                download
+              </button>
             </div>
           </div>
+          {/* Dinner voucher */}
           <div className="rounded-lg bg-gradient-to-br from-[#f5ebe0] to-[#e6ddd0] p-4 shadow-md border border-[#d4a574]/30">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">�️</span>
-              <span className="font-medium text-[#5d4037]">redeem for a nice dinner in prague!</span>
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">🍽️</span>
+                <span className="font-medium text-[#5d4037]">redeem for a nice dinner in prague!</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  const link = document.createElement("a");
+                  link.href = "/vouchers/dinner.png";
+                  link.download = "dinner.png";
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+                className="px-3 py-2 rounded-md text-white bg-[#c17767] hover:opacity-95 text-sm font-medium shadow inline-flex items-center gap-1"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v12m0 0l-4-4m4 4l4-4m-4 4V4m8 16H4" /></svg>
+                download
+              </button>
+            </div>
+          </div>
+          {/* Massage voucher */}
+          <div className="rounded-lg bg-gradient-to-br from-[#f5ebe0] to-[#e6ddd0] p-4 shadow-md border border-[#d4a574]/30">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">💆</span>
+                <span className="font-medium text-[#5d4037]">free massage voucher</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  const link = document.createElement("a");
+                  link.href = "/vouchers/massage.png";
+                  link.download = "massage.png";
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+                className="px-3 py-2 rounded-md text-white bg-[#c17767] hover:opacity-95 text-sm font-medium shadow inline-flex items-center gap-1"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v12m0 0l-4-4m4 4l4-4m-4 4V4m8 16H4" /></svg>
+                download
+              </button>
             </div>
           </div>
         </div>
-        <div className="mt-6">
-          <label className="block text-sm font-medium text-[#5d4037] mb-2">
-            add a personal message (optional)
-          </label>
-          <textarea
-            value={selections.personalMessage}
-            onChange={(e) => onUpdate({ personalMessage: e.target.value })}
-            placeholder="write something sweet here..."
-            className="w-full rounded-lg border-2 border-[#d4a574]/30 focus:border-[#c17767] focus:ring-2 focus:ring-[#c17767]/20 bg-white p-4 text-[#5d4037] transition-all"
-            rows={4}
-          />
-        </div>
+        {/* Personal message removed as requested */}
       </div>
     );
   };
