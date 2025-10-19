@@ -6,8 +6,8 @@ export type GiftSelections = {
   record: string | null;
   perfume: string | null;
   pants: string | null;
+  f1: string | null;
   voucher: "$150 Shopping Voucher";
-  personalMessage: string;
 };
 
 type Props = {
@@ -65,6 +65,28 @@ const pants = [
     "url": "/elements/navy jeans.png",
   }
 ]
+const f1 = [
+  {
+    "name": "ferrari polo",
+    "url": "/elements/f1_ferrari.png"
+  },
+  {
+    "name": "mercedes polo",
+    "url": "/elements/f1_mercedes.png"
+  },
+  {
+    "name": "red bull polo",
+    "url": "/elements/f1_redbull.png"
+  },
+  {
+    "name": "williams polo",
+    "url": "/elements/f1_williams.png"
+  },
+  {
+    "name": "mercedes hoodie",
+    "url": "/elements/f1_mercedes_hoodie.png"
+  }
+]
 const playerUrl = "/elements/turntable.png"
 const playerName = "audio technica AT-LP60X"
 
@@ -77,6 +99,7 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
     if (stage === 2) return selections.record != null;
     if (stage === 3) return selections.perfume != null;
     if (stage === 4) return selections.pants != null;
+    if (stage === 5) return selections.f1 != null
     return true;
   };
 
@@ -261,6 +284,40 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
           </div>
         </div>
       );
+    if (stage === 5)
+      return (
+        <div className="space-y-4 animate-fadeIn">
+          <h3 className="text-lg font-semibold text-[#5d4037]">vroom vroom! some f1 merch for you!!</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {f1.map((opt) => (
+              <button
+                key={opt.name}
+                onClick={() => onUpdate({ f1: opt.name })}
+                className={`relative rounded-lg p-4 text-left transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${selections.f1 === opt.name
+                    ? "bg-[#c17767] text-white ring-2 ring-[#c17767] ring-offset-2"
+                    : "bg-white hover:bg-[#f5ebe0] shadow-md"
+                  }`}
+              >
+                <div className="w-full aspect-square grid place-items-center mb-3">
+                  <img
+                    src={opt.url}
+                    alt={`${opt.name}`}
+                    width={240}
+                    height={240}
+                    className="max-w-[85%] max-h-[85%] object-contain group-hover:opacity-90 transition-opacity"
+                  />
+                </div>
+                <div className="font-medium">{opt.name}</div>
+                {selections.f1 === opt.name && (
+                  <div className="absolute top-2 right-2 bg-white text-[#c17767] rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
+                    ✓
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      );
     return (
       <div className="space-y-4 animate-fadeIn">
         <h3 className="text-lg font-semibold text-[#5d4037]">💰 all these gifts won't reach you now... but CASH IS KING!!!</h3>
@@ -344,7 +401,7 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
   };
 
   return (
-    <section className="bg-[#f5ebe0] rounded-xl p-6 md:p-10 shadow-2xl border border-[#d4a574]/20">
+    <section className="bg-gradient-to-br from-[#232946] via-[#1a1a2e] to-[#121629] rounded-xl p-6 md:p-10 shadow-2xl border border-[#232946]/30 font-sans">
       {onBack && (
         <button
           onClick={onBack}
@@ -355,38 +412,38 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
         </button>
       )}
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#5d4037]">
+        <h2 className="text-3xl md:text-4xl font-bold text-[#fff] drop-shadow mb-2 font-sans">
           build your own gift package! 🎁
         </h2>
-        <div className="bg-white px-3 py-1 rounded-full text-sm font-medium text-[#5d4037] shadow-sm">
-          {stage} / 5
+  <div className="bg-[#fff] px-3 py-1 rounded-full text-sm font-medium text-[#232946] shadow-sm">
+          {stage} / 6
         </div>
       </div>
 
-      <div className="mb-8">{renderStage()}</div>
+  <div className="mb-8">{renderStage()}</div>
 
       <div className="flex justify-between items-center gap-3">
         {stage > 1 && (
           <button
             onClick={() => setStage((s) => Math.max(1, s - 1))}
-            className="px-4 py-2 rounded-lg text-[#5d4037] bg-white hover:bg-[#e6ddd0] transition-all shadow-sm"
+            className="px-4 py-2 rounded-lg text-[#232946] bg-[#eebbc3] hover:bg-[#b8c1ec] transition-all shadow-sm font-sans"
           >
             ← previous
           </button>
         )}
         <div className="flex-1" />
-        {stage < 5 ? (
+        {stage < 6 ? (
           <button
             onClick={() => canProceed() && next()}
             disabled={!canProceed()}
-            className="px-6 py-3 rounded-lg text-white font-medium disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:shadow-lg transition-all transform enabled:hover:scale-105 bg-[#c17767]"
+            className="px-6 py-3 rounded-lg text-[#232946] font-medium disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:shadow-lg transition-all transform enabled:hover:scale-105 bg-gradient-to-br from-[#eebbc3] to-[#b8c1ec] font-sans"
           >
             next →
           </button>
         ) : (
           <button
             onClick={onComplete}
-            className="px-6 py-3 rounded-lg text-white font-medium hover:shadow-lg transition-all transform hover:scale-105 bg-[#c17767]"
+            className="px-6 py-3 rounded-lg text-[#232946] font-medium hover:shadow-lg transition-all transform hover:scale-105 bg-gradient-to-br from-[#eebbc3] to-[#b8c1ec] font-sans"
           >
             generate voucher →
           </button>

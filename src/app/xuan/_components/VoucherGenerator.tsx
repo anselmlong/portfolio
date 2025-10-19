@@ -11,7 +11,7 @@ export default function VoucherGenerator({ selections, onBack }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
 
   return (
-    <section className="bg-[#f5ebe0] rounded-xl p-6 md:p-8 shadow-lg">
+    <section className="bg-gradient-to-br from-[#232946] via-[#1a1a2e] to-[#121629] rounded-xl p-6 md:p-8 shadow-2xl border border-[#232946]/30 font-sans">
       {onBack && (
         <button
           onClick={onBack}
@@ -21,28 +21,22 @@ export default function VoucherGenerator({ selections, onBack }: Props) {
           ← back
         </button>
       )}
-      <h2 className="text-xl font-semibold mb-4" style={{ color: "#5d4037" }}>
+      <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#fff] drop-shadow font-sans">
         your birthday gifts are ready! 🎉
       </h2>
-      <div ref={ref} className="rounded-lg bg-white p-4 text-[#5d4037]">
-        <ul className="list-disc pl-5 space-y-1">
+  <div ref={ref} className="rounded-lg bg-[#fff] p-4 text-[#232946] font-sans">
+  <ul className="list-disc pl-5 space-y-1">
           <li>🎵 {selections.vinylPlayer}</li>
           <li>💿 {selections.record ?? "(record)"}</li>
           <li>🌸 {selections.perfume ?? "(perfume)"}</li>
           <li>👖 {selections.pants ?? "(pants)"}</li>
           <li>🎁 {selections.voucher}</li>
         </ul>
-        {selections.personalMessage && (
-          <div className="mt-4">
-            <h3 className="font-semibold mb-1">personal message</h3>
-            <p>{selections.personalMessage}</p>
-          </div>
-        )}
+        {/* personal message removed */}
       </div>
       <div className="mt-4">
         <button
-          className="px-5 py-3 rounded-md text-white opacity-60 cursor-not-allowed hover:cursor-auto"
-          style={{ backgroundColor: "#c17767" }}
+          className="px-5 py-3 rounded-lg font-semibold text-[#232946] bg-gradient-to-br from-[#eebbc3] to-[#b8c1ec] shadow-lg hover:scale-105 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-[#eebbc3]/40 font-sans opacity-60 cursor-not-allowed"
           title="Download will be enabled in full implementation"
         >
           download voucher (stub)

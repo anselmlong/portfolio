@@ -9,14 +9,12 @@ interface PhotoScrollProps {
 }
 
 export const PhotoScroll: React.FC<PhotoScrollProps> = ({ photos, onComplete, onBack }) => {
-  // Store intersectionRatio for each photo by id
   const [ratios, setRatios] = useState<{ [id: number]: number }>({});
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const photoElements = containerRef.current?.querySelectorAll("figure");
     if (!photoElements) return;
-
     const observer = new window.IntersectionObserver(
       (entries) => {
         setRatios((prev) => {
@@ -31,48 +29,36 @@ export const PhotoScroll: React.FC<PhotoScrollProps> = ({ photos, onComplete, on
           return next;
         });
       },
-      { threshold: Array.from({ length: 21 }, (_, i) => i / 20) } // 0, 0.05, ..., 1
+      { threshold: Array.from({ length: 21 }, (_, i) => i / 20) }
     );
-
     photoElements.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, [photos]);
 
-  // Consider a photo "viewed" if its intersectionRatio >= 0.5
-  const total = photos.length;
-  const viewedCount = photos.filter((p) => (ratios[p.id] ?? 0) >= 0.5).length;
-  const percent = Math.round((viewedCount / total) * 100);
-  const allViewed = viewedCount === total;
-
   return (
-    <div ref={containerRef} className="w-full max-w-3xl mx-auto py-2">
+    <div ref={containerRef} className="w-full max-w-3xl mx-auto py-2 font-sans">
       {onBack && (
         <button
           onClick={onBack}
-          className="text-neutral-500 hover:text-neutral-300 transition-colors text-sm mb-4"
+          className="text-[#b8c1ec] hover:text-[#eebbc3] transition-colors text-sm mb-4"
           aria-label="Go back"
         >
           ← back
         </button>
       )}
       <div className="mb-8 text-center">
-        <h2 className="text-2xl text-slate-400 mb-1 mt-1">a walk 🚶 down memory lane</h2>
+        <h2 className="text-3xl font-bold text-[#fff] mb-1 mt-1 drop-shadow animate-fadeIn">a walk 🚶 down memory lane</h2>
       </div>
       <div className="flex flex-col gap-16">
         {photos.map((photo, idx) => {
           const isLeft = idx % 2 === 0;
           const ratio = ratios[photo.id] ?? 0;
-          // Opacity: 1 if any part is visible, else 0.3
           const opacity = ratio > 0 ? 1 : 0.3;
-          // TranslateY from 32px (hidden) to 0 (visible)
           const translateY = 32 * (1 - Math.min(ratio, 1));
           return (
             <figure
               key={photo.id}
-              className={[
-                "flex flex-col md:items-center gap-8 scrapbook-border transition-all duration-700 ease-out will-change-transform",
-                isLeft ? "md:flex-row" : "md:flex-row-reverse"
-              ].join(" ")}
+              className={`flex flex-col md:items-center gap-8 scrapbook-border transition-all duration-700 ease-out will-change-transform bg-gradient-to-br from-[#232946] via-[#1a1a2e] to-[#121629] rounded-xl shadow-lg border border-[#232946]/30 p-4 ${isLeft ? "md:flex-row" : "md:flex-row-reverse"}`}
               style={{
                 opacity,
                 transform: `translateY(${translateY}px)`,
@@ -84,31 +70,24 @@ export const PhotoScroll: React.FC<PhotoScrollProps> = ({ photos, onComplete, on
                 alt={photo.caption}
                 width={400}
                 height={600}
-                className={[
-                  "w-60 h-96 object-cover rounded-sm border",
-                  isLeft ? "md:mr-6" : "md:ml-6"
-                ].join(" ")}
+                className={`w-60 h-96 object-cover rounded-lg border-2 border-[#b8c1ec] ${isLeft ? "md:mr-6" : "md:ml-6"}`}
                 loading="lazy"
                 placeholder="empty"
                 unoptimized={false}
               />
               <figcaption
-                className={[
-                  "text-lg font-medium text-neutral-400 max-w-xs",
-                  isLeft ? "text-left" : "text-right"
-                ].join(" ")}
+                className={`text-lg font-medium text-[#fff] max-w-xs font-sans ${isLeft ? "text-left" : "text-right"}`}
               >
-                <div className="text-sm text-neutral-500 mb-1">{photo.date}</div>
-                {photo.caption}
+                <div className="text-sm text-[#f6f6f6] mb-1">{photo.date}</div>
+                <span className="text-[#f6f6f6]">{photo.caption}</span>
               </figcaption>
-              
             </figure>
           );
         })}
       </div>
       <div className="flex justify-center mt-8">
         <button
-          className={`px-6 py-3 rounded-lg font-bold text-white bg-[#bfae9e] shadow transition-opacity "}`}
+          className="px-6 py-3 rounded-lg font-bold text-[#232946] bg-gradient-to-br from-[#eebbc3] to-[#b8c1ec] shadow-lg hover:scale-105 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-[#eebbc3]/40 font-sans"
           onClick={onComplete}
         >
           next
