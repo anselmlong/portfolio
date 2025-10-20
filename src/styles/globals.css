@@ -1,13 +1,19 @@
 @import "tailwindcss";
+@import "./theme.css";
+@import "./tokens.css";
 
-@theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-}
+/* Font family token is defined in theme.css as --font-sans */
 
 body {
-  @apply text-white;
-  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #0e4b99 100%);
+  color: var(--color-white);
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-start) 0%,
+    var(--color-bg-mid-1) 25%,
+    var(--color-bg-mid-2) 50%,
+    var(--color-bg-mid-3) 75%,
+    var(--color-bg-end) 100%
+  );
 }
 
 @keyframes fadeIn {

@@ -59,8 +59,7 @@ export default function XuanPage() {
               <button
                 type="button"
                 onClick={handleSubmit}
-                className="w-full px-4 py-3 rounded-lg font-medium text-[#232946] bg-gradient-to-br from-white to-blue-200/80 hover:to-blue-200 shadow-lg transition-colors"
-              >
+                className="w-full px-4 py-3 rounded-lg font-medium text-[#232946] bg-gradient-to-br from-white to-blue-200/80 hover:to-blue-200 shadow-lg transition-colors">
                 Continue
               </button>
             </div>

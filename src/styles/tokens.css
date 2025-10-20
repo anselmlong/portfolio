@@ -1,0 +1,49 @@
+@layer utilities {
+  /* Text */
+  .text-primary { color: var(--color-primary); }
+  .text-secondary { color: var(--color-secondary); }
+  .text-accent { color: var(--color-accent); }
+  .text-ink { color: var(--color-ink); }
+  .text-white-soft { color: var(--color-white-soft); }
+
+  /* Backgrounds */
+  .bg-surface-deep { background-color: var(--color-surface-deep); }
+  .bg-surface-deeper { background-color: var(--color-surface-deeper); }
+  .bg-surface-deepest { background-color: var(--color-surface-deepest); }
+  .bg-surface-1 { background-color: var(--color-surface-1); }
+  .bg-surface-2 { background-color: var(--color-surface-2); }
+  .bg-primary { background-color: var(--color-primary); }
+  .bg-secondary { background-color: var(--color-secondary); }
+  .bg-accent { background-color: var(--color-accent); }
+
+  /* Borders */
+  .border-warm { border-color: var(--color-border-warm); }
+  .border-surface-deep { border-color: var(--color-surface-deep); }
+  .border-primary { border-color: var(--color-primary); }
+  .border-secondary { border-color: var(--color-secondary); }
+  .border-accent { border-color: var(--color-accent); }
+
+  /* Gradient stops */
+  .from-surface-deep {
+    --tw-gradient-from: var(--color-surface-deep) var(--tw-gradient-from-position);
+    --tw-gradient-to: color-mix(in srgb, var(--color-surface-deep) 0%, transparent) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  .via-surface-deeper {
+    --tw-gradient-to: color-mix(in srgb, var(--color-surface-deeper) 0%, transparent) var(--tw-gradient-to-position);
+    --tw-gradient-via: var(--color-surface-deeper) var(--tw-gradient-via-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to);
+  }
+  .to-surface-deepest {
+    --tw-gradient-to: var(--color-surface-deepest) var(--tw-gradient-to-position);
+  }
+  .from-primary {
+    --tw-gradient-from: var(--color-primary) var(--tw-gradient-from-position);
+    --tw-gradient-to: color-mix(in srgb, var(--color-primary) 0%, transparent) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  .to-secondary {
+    --tw-gradient-to: var(--color-secondary) var(--tw-gradient-to-position);
+  }
+ 
+}

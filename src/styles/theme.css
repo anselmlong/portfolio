@@ -1,0 +1,38 @@
+:root {
+  /* Fonts */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* App background gradient stops */
+  --color-bg-start: #0f0f0f;
+  --color-bg-mid-1: #1a1a2e;
+  --color-bg-mid-2: #16213e;
+  --color-bg-mid-3: #0f3460;
+  --color-bg-end: #0e4b99;
+
+  /* Xuan surfaces (cards/sections) */
+  --color-surface-deep: #232946;
+  --color-surface-deeper: #1a1a2e;
+  --color-surface-deepest: #121629;
+
+  /* Brand accents */
+  --color-primary: #eebbc3;      /* soft pink */
+  --color-secondary: #b8c1ec;    /* muted blue */
+  --color-accent: #c17767;       /* rose accent */
+
+  /* Text ink and warm accents */
+  --color-ink: #5d4037;          /* warm brown ink */
+
+  /* Warm paper-like surfaces and border */
+  --color-surface-1: #f5ebe0;
+  --color-surface-2: #e6ddd0;
+  --color-border-warm: #d4a574;
+
+  /* Neutrals */
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Derived with opacity using color-mix for convenient usage */
+  --color-secondary-70: color-mix(in srgb, var(--color-secondary) 70%, transparent);
+  --color-primary-40: color-mix(in srgb, var(--color-primary) 40%, transparent);
+  --color-surface-deep-30: color-mix(in srgb, var(--color-surface-deep) 30%, transparent);
+}

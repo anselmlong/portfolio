@@ -92,7 +92,7 @@ const playerName = "audio technica AT-LP60X"
 
 export default function GiftSelector({ selections, onUpdate, onComplete, onBack }: Props) {
   const [stage, setStage] = useState(1);
-  const next = () => setStage((s) => Math.min(5, s + 1));
+  const next = () => setStage((s) => Math.min(6, s + 1));
 
   const canProceed = () => {
     if (stage === 1) return true; // vinylPlayer pre-selected
@@ -107,7 +107,7 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
     if (stage === 1)
       return (
         <div className="space-y-4 animate-fadeIn">
-          <h3 className="text-lg font-semibold text-[#5d4037]">✨ firstly: you get to redeem a vinyl player!</h3>
+          <h3 className="text-lg font-semibold text-stone-200">✨ firstly: you get to redeem a vinyl player!</h3>
           {(() => {
             const selected = selections.vinylPlayer === playerName;
             return (
@@ -119,11 +119,7 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                       onUpdate({ vinylPlayer: playerName });
                     }}
                     aria-pressed={selected}
-                    className={`relative w-48 text-center rounded-lg p-6 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-xl border ${
-                      selected
-                        ? "bg-[#c17767] text-white ring-2 ring-[#c17767] ring-offset-2 border-transparent"
-                        : "bg-gradient-to-br from-[#e6ddd0] to-[#d9c5b2] text-[#5d4037] border-[#d4a574]/30 shadow-md"
-                    }`}
+                    className={`relative w-48 text-center rounded-lg p-6 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-xl border bg-white text-slate-800 border-slate-300 shadow-md`}
                   >
                     <div className="w-full aspect-square grid place-items-center mb-3">
                       <img
@@ -134,11 +130,11 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                         className="max-w-[85%] max-h-[85%] object-contain"
                       />
                     </div>
-                    <div className={`font-medium ${selected ? "text-white" : "text-[#5d4037]"}`}>
+                    <div className="font-medium text-slate-800">
                       {playerName} 
                     </div>
                     {selected && (
-                      <div className="absolute top-2 right-2 bg-white text-[#c17767] rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
+                      <div className="absolute top-2 right-2 bg-white text-stone-500 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
                         ✓
                       </div>
                     )}
@@ -157,7 +153,7 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                         link.click();
                         document.body.removeChild(link);
                       }}
-                      className="px-6 py-3 rounded-lg text-white font-medium shadow-lg transition-all transform hover:scale-105 bg-[#c17767] focus:outline-none focus:ring-2 focus:ring-[#c17767]/40"
+                      className="px-6 py-3 rounded-lg text-white font-medium shadow-lg transition-all transform hover:scale-105 bg-stone-700 focus:outline-none focus:ring-2 focus:ring-stone-200/40"
                     >
                       <span className="inline-flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v12m0 0l-4-4m4 4l4-4m-4 4V4m8 16H4" /></svg>
@@ -174,18 +170,14 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
     if (stage === 2)
       return (
         <div className="space-y-4 animate-fadeIn">
-          <h3 className="text-lg font-semibold text-[#5d4037]">💿 secondly: with a player, you need more records! choose 1!</h3>
+          <h3 className="text-lg font-semibold text-stone-200">💿 secondly: with a player, you need more records! choose 1!</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {records.map((record) => (
               <button
                 key={record.name}
                 onClick={() => onUpdate({ record: record.name })}
                 aria-pressed={selections.record === record.name}
-                className={`group relative rounded-lg p-4 transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col h-full ${
-                  selections.record === record.name
-                    ? "bg-[#c17767] text-white ring-2 ring-[#c17767] ring-offset-2"
-                    : "bg-white hover:bg-[#f5ebe0] shadow-md"
-                }`}
+                className={`group relative rounded-lg p-4 transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col h-full bg-white shadow-md`}
               >
                 <div className="w-full aspect-square grid place-items-center mb-3">
                   <img
@@ -197,15 +189,13 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                   />
                 </div>
                 <div
-                  className={`mt-auto font-medium text-center ${
-                    selections.record === record.name ? "text-white" : "text-[#5d4037]"
-                  }`}
+                  className={`mt-auto font-medium text-center text-slate-800`}
                 >
                   <div className="font-bold text-center">{record.name}</div>
                   <div className="text-sm font-medium text-center">by {record.artist}</div>
                 </div>
                 {selections.record === record.name && (
-                  <div className="absolute top-2 right-2 bg-white text-[#c17767] rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
+                  <div className="absolute top-2 right-2 bg-white text-stone-500 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
                     ✓
                   </div>
                 )}
@@ -217,17 +207,14 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
     if (stage === 3)
       return (
         <div className="space-y-4 animate-fadeIn">
-          <h3 className="text-lg font-semibold text-[#5d4037]">🌸 now, to up your scent game! pick one!</h3>
+          <h3 className="text-lg font-semibold text-stone-200">🌸 now, to up your scent game! pick one!</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {perfumes.map((perfume) => (
               <button
                 key={perfume.name}
                 onClick={() => onUpdate({ perfume: perfume.name })}
                 aria-pressed={selections.perfume === perfume.name}
-                className={`relative rounded-lg p-4 text-left transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col h-full ${selections.perfume === perfume.name
-                    ? "bg-[#c17767] text-white ring-2 ring-[#c17767] ring-offset-2"
-                    : "bg-white hover:bg-[#f5ebe0] shadow-md"
-                  }`}
+                className={`relative rounded-lg p-4 text-left transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col h-full bg-white shadow-md`}
               >
                 <div className="w-full aspect-square grid place-items-center mb-3">
                   <img
@@ -241,7 +228,7 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                 <div className="mt-auto font-bold text-center">{perfume.name}</div>
                 <div className="text-sm font-medium text-center">by {perfume.perfumer}</div>
                 {selections.perfume === perfume.name && (
-                  <div className="absolute top-2 right-2 bg-white text-[#c17767] rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
+                  <div className="absolute top-2 right-2 bg-white text-stone-500 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
                     ✓
                   </div>
                 )}
@@ -253,16 +240,13 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
     if (stage === 4)
       return (
         <div className="space-y-4 animate-fadeIn">
-          <h3 className="text-lg font-semibold text-[#5d4037]">👖 some wardrobe upgrades: pick what looks good!</h3>
+          <h3 className="text-lg font-semibold text-stone-200">👖 some wardrobe upgrades: pick what looks good!</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {pants.map((opt) => (
               <button
                 key={opt.name}
                 onClick={() => onUpdate({ pants: opt.name })}
-                className={`relative rounded-lg p-4 text-left transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${selections.pants === opt.name
-                    ? "bg-[#c17767] text-white ring-2 ring-[#c17767] ring-offset-2"
-                    : "bg-white hover:bg-[#f5ebe0] shadow-md"
-                  }`}
+                className={`relative rounded-lg p-4 text-left transition-all duration-300 transform hover:scale-105 hover:shadow-xl bg-white shadow-md`}
               >
                 <div className="w-full aspect-square grid place-items-center mb-3">
                   <img
@@ -275,7 +259,7 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                 </div>
                 <div className="font-medium">{opt.name}</div>
                 {selections.pants === opt.name && (
-                  <div className="absolute top-2 right-2 bg-white text-[#c17767] rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
+                  <div className="absolute top-2 right-2 bg-white text-stone-500 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
                     ✓
                   </div>
                 )}
@@ -287,16 +271,13 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
     if (stage === 5)
       return (
         <div className="space-y-4 animate-fadeIn">
-          <h3 className="text-lg font-semibold text-[#5d4037]">vroom vroom! some f1 merch for you!!</h3>
+          <h3 className="text-lg font-semibold text-stone-200">vroom vroom! some f1 merch for you!!</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {f1.map((opt) => (
               <button
                 key={opt.name}
                 onClick={() => onUpdate({ f1: opt.name })}
-                className={`relative rounded-lg p-4 text-left transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${selections.f1 === opt.name
-                    ? "bg-[#c17767] text-white ring-2 ring-[#c17767] ring-offset-2"
-                    : "bg-white hover:bg-[#f5ebe0] shadow-md"
-                  }`}
+                className={`relative rounded-lg p-4 text-left transition-all duration-300 transform hover:scale-105 hover:shadow-xl bg-white shadow-md`}
               >
                 <div className="w-full aspect-square grid place-items-center mb-3">
                   <img
@@ -309,7 +290,7 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                 </div>
                 <div className="font-medium">{opt.name}</div>
                 {selections.f1 === opt.name && (
-                  <div className="absolute top-2 right-2 bg-white text-[#c17767] rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
+                  <div className="absolute top-2 right-2 bg-white text-stone-500 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
                     ✓
                   </div>
                 )}
@@ -320,14 +301,14 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
       );
     return (
       <div className="space-y-4 animate-fadeIn">
-        <h3 className="text-lg font-semibold text-[#5d4037]">💰 all these gifts won't reach you now... but CASH IS KING!!!</h3>
+  <h3 className="text-lg font-semibold text-stone-200">💰 all these gifts won&#39;t reach you now... but CASH IS KING!!!</h3>
         <div className="space-y-3">
           {/* Shopping voucher */}
-          <div className="rounded-lg bg-gradient-to-br from-[#f5ebe0] to-[#e6ddd0] p-4 shadow-md border border-[#d4a574]/30">
+          <div className="rounded-lg bg-white p-4 shadow-md border border-slate-300">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <span className="text-2xl">🎁</span>
-                <span className="font-medium text-[#5d4037]">$150 shopping voucher for you ❤️</span>
+                <span className="font-medium text-slate-800">$150 shopping voucher for you ❤️</span>
               </div>
               <button
                 type="button"
@@ -339,7 +320,7 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                   link.click();
                   document.body.removeChild(link);
                 }}
-                className="px-3 py-2 rounded-md text-white bg-[#c17767] hover:opacity-95 text-sm font-medium shadow inline-flex items-center gap-1"
+                className="px-3 py-2 rounded-md text-white bg-stone-700 hover:opacity-95 text-sm font-medium shadow inline-flex items-center gap-1"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v12m0 0l-4-4m4 4l4-4m-4 4V4m8 16H4" /></svg>
                 download
@@ -347,11 +328,11 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
             </div>
           </div>
           {/* Dinner voucher */}
-          <div className="rounded-lg bg-gradient-to-br from-[#f5ebe0] to-[#e6ddd0] p-4 shadow-md border border-[#d4a574]/30">
+          <div className="rounded-lg bg-white p-4 shadow-md border border-slate-300">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <span className="text-2xl">🍽️</span>
-                <span className="font-medium text-[#5d4037]">redeem for a nice dinner in prague!</span>
+                <span className="font-medium text-slate-800">redeem for a nice dinner in prague!</span>
               </div>
               <button
                 type="button"
@@ -363,7 +344,7 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                   link.click();
                   document.body.removeChild(link);
                 }}
-                className="px-3 py-2 rounded-md text-white bg-[#c17767] hover:opacity-95 text-sm font-medium shadow inline-flex items-center gap-1"
+                className="px-3 py-2 rounded-md text-white bg-stone-700 hover:opacity-95 text-sm font-medium shadow inline-flex items-center gap-1"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v12m0 0l-4-4m4 4l4-4m-4 4V4m8 16H4" /></svg>
                 download
@@ -371,11 +352,11 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
             </div>
           </div>
           {/* Massage voucher */}
-          <div className="rounded-lg bg-gradient-to-br from-[#f5ebe0] to-[#e6ddd0] p-4 shadow-md border border-[#d4a574]/30">
+          <div className="rounded-lg bg-white p-4 shadow-md border border-slate-300">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <span className="text-2xl">💆</span>
-                <span className="font-medium text-[#5d4037]">free massage voucher</span>
+                <span className="font-medium text-slate-800">free massage voucher</span>
               </div>
               <button
                 type="button"
@@ -387,7 +368,7 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                   link.click();
                   document.body.removeChild(link);
                 }}
-                className="px-3 py-2 rounded-md text-white bg-[#c17767] hover:opacity-95 text-sm font-medium shadow inline-flex items-center gap-1"
+                className="px-3 py-2 rounded-md text-white bg-stone-700 hover:opacity-95 text-sm font-medium shadow inline-flex items-center gap-1"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v12m0 0l-4-4m4 4l4-4m-4 4V4m8 16H4" /></svg>
                 download
@@ -401,21 +382,21 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
   };
 
   return (
-    <section className="bg-gradient-to-br from-[#232946] via-[#1a1a2e] to-[#121629] rounded-xl p-6 md:p-10 shadow-2xl border border-[#232946]/30 font-sans">
+    <section className="bg-gradient-to-br from-slate-800 via-slate-900 to-gray-950 rounded-xl p-6 md:p-10 shadow-2xl border border-slate-800/30 font-sans">
       {onBack && (
         <button
           onClick={onBack}
-          className="text-[#5d4037]/60 hover:text-[#5d4037] transition-colors text-sm mb-6 flex items-center gap-1"
+          className="text-indigo-300 hover:text-stone-200 transition-colors text-sm mb-6 flex items-center gap-1"
           aria-label="Go back"
         >
           ← back
         </button>
       )}
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-3xl md:text-4xl font-bold text-[#fff] drop-shadow mb-2 font-sans">
+        <h2 className="text-3xl md:text-4xl font-bold text-white drop-shadow mb-2 font-sans">
           build your own gift package! 🎁
         </h2>
-  <div className="bg-[#fff] px-3 py-1 rounded-full text-sm font-medium text-[#232946] shadow-sm">
+  <div className="bg-white px-3 py-1 rounded-full text-sm font-medium text-slate-900 shadow-sm">
           {stage} / 6
         </div>
       </div>
@@ -426,7 +407,7 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
         {stage > 1 && (
           <button
             onClick={() => setStage((s) => Math.max(1, s - 1))}
-            className="px-4 py-2 rounded-lg text-[#232946] bg-[#eebbc3] hover:bg-[#b8c1ec] transition-all shadow-sm font-sans"
+            className="px-4 py-2 rounded-lg text-slate-900 bg-stone-200 hover:bg-indigo-300 transition-all shadow-sm font-sans"
           >
             ← previous
           </button>
@@ -436,14 +417,14 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
           <button
             onClick={() => canProceed() && next()}
             disabled={!canProceed()}
-            className="px-6 py-3 rounded-lg text-[#232946] font-medium disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:shadow-lg transition-all transform enabled:hover:scale-105 bg-gradient-to-br from-[#eebbc3] to-[#b8c1ec] font-sans"
+            className="px-6 py-3 rounded-lg text-slate-900 font-medium disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:shadow-lg transition-all transform enabled:hover:scale-105 bg-gradient-to-br from-stone-200 to-indigo-300 font-sans"
           >
             next →
           </button>
         ) : (
           <button
             onClick={onComplete}
-            className="px-6 py-3 rounded-lg text-[#232946] font-medium hover:shadow-lg transition-all transform hover:scale-105 bg-gradient-to-br from-[#eebbc3] to-[#b8c1ec] font-sans"
+            className="px-6 py-3 rounded-lg text-slate-900 font-medium hover:shadow-lg transition-all transform hover:scale-105 bg-gradient-to-br from-stone-200 to-indigo-300 font-sans"
           >
             generate voucher →
           </button>
