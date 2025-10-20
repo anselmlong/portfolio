@@ -29,7 +29,7 @@ export const SelectionGrid: React.FC<Props> = ({
   centerSingle = false,
 }) => {
   const mdColsClass = `md:grid-cols-${columnsMd}` as const;
-  const gridBase = `grid grid-cols-1 ${mdColsClass} gap-4`;
+  const gridBase = `grid grid-cols-3 ${mdColsClass} gap-4`;
   const gridClass = centerSingle && items.length === 1 ? `${gridBase} place-items-center` : gridBase;
 
   return (

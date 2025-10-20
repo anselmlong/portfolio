@@ -1,11 +1,55 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
+import confetti from "canvas-confetti";
 
 type Props = {
   onNext: () => void;
 };
 
 export default function LandingPage({ onNext }: Props) {
+  // Trigger confetti rain when page loads
+  useEffect(() => {
+    const duration = 3000; // 3 seconds
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+    function randomInRange(min: number, max: number) {
+      return Math.random() * (max - min) + min;
+    }
+
+    const interval = setInterval(() => {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      const particleCount = 50 * (timeLeft / duration);
+      
+      // Fire confetti from random positions along the top
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: 0 }
+      });
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: 0 }
+      });
+    }, 250);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleConfetti = () => {
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 },
+    });
+  }
+
   return (
   <section className="relative bg-gradient-to-br from-slate-800 via-slate-900 to-gray-950 text-stone-200 rounded-xl p-6 md:p-10 shadow-2xl border border-slate-800/30 animate-fadeIn font-sans">
       <div className="mb-4">

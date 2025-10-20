@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import confetti from "canvas-confetti";
 
 type Props = {
   onBuild: () => void;
@@ -7,6 +8,18 @@ type Props = {
 };
 
 export default function BuildIntro({ onBuild, onBack }: Props) {
+  const handleBuild = () => {
+    // Trigger confetti burst
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+    
+    // Call the original onBuild after a brief delay to let confetti start
+    setTimeout(() => onBuild(), 300);
+  };
+
   return (
     <section className="relative bg-gradient-to-br from-slate-800 via-slate-900 to-gray-950 text-stone-200 rounded-xl p-6 md:p-10 shadow-2xl border border-slate-800/30 animate-fadeIn font-sans">
       {onBack && (
@@ -39,7 +52,7 @@ export default function BuildIntro({ onBuild, onBack }: Props) {
 
       <div className="flex justify-center">
         <button
-          onClick={onBuild}
+          onClick={handleBuild}
           className="inline-flex items-center px-6 py-3 rounded-lg font-semibold text-slate-900 bg-gradient-to-br from-stone-200 to-indigo-300 shadow-lg hover:scale-105 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-stone-200/40"
         >
           build!
