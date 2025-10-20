@@ -1,12 +1,18 @@
 "use client";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import { SelectionGrid, type SelectionItem } from "./SelectionGrid";
 
 export type GiftSelections = {
   vinylPlayer: string | null;
+  vinylPlayerCustom: string | null;
   record: string | null;
+  recordCustom: string | null;
   perfume: string | null;
+  perfumeCustom: string | null;
   pants: string | null;
+  pantsCustom: string | null;
   f1: string | null;
+  f1Custom: string | null;
   voucher: "$150 Shopping Voucher";
 };
 
@@ -32,7 +38,7 @@ const records = [
     "artist": "lana del rey",
     "url": "/elements/lana del rey.png"
   }
-]
+];
 
 const perfumes = [
   {
@@ -50,10 +56,10 @@ const perfumes = [
     "perfumer": "d'Annam",
     "url": "/elements/white rice.png"
   }
-]
+];
 const pants = [
   {
-    "name": "BDG barrel jeans in white",
+    "name": "BDG Barrel Jeans in White",
     "url": "/elements/white jeans.png",
   },
   {
@@ -61,10 +67,10 @@ const pants = [
     "url": "/elements/black pants.png",
   },
   {
-    "name": "Navy Jeans",
+    "name": "Gen Heavy Washed Wide Cut Jeans",
     "url": "/elements/navy jeans.png",
   }
-]
+];
 const f1 = [
   {
     "name": "ferrari polo",
@@ -85,8 +91,12 @@ const f1 = [
   {
     "name": "mercedes hoodie",
     "url": "/elements/f1_mercedes_hoodie.png"
+  },
+  {
+    "name": "ferrari jacket",
+    "url": "/elements/f1_ferrari_jacket.png"
   }
-]
+];
 const playerUrl = "/elements/turntable.png"
 const playerName = "audio technica AT-LP60X"
 
@@ -96,10 +106,10 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
 
   const canProceed = () => {
     if (stage === 1) return true; // vinylPlayer pre-selected
-    if (stage === 2) return selections.record != null;
-    if (stage === 3) return selections.perfume != null;
-    if (stage === 4) return selections.pants != null;
-    if (stage === 5) return selections.f1 != null
+    if (stage === 2) return (selections.record != null) || (selections.recordCustom && selections.recordCustom.trim().length > 0) || false;
+    if (stage === 3) return (selections.perfume != null) || (selections.perfumeCustom && selections.perfumeCustom.trim().length > 0) || false;
+    if (stage === 4) return (selections.pants != null) || (selections.pantsCustom && selections.pantsCustom.trim().length > 0) || false;
+    if (stage === 5) return (selections.f1 != null) || (selections.f1Custom && selections.f1Custom.trim().length > 0) || false;
     return true;
   };
 
@@ -107,7 +117,7 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
     if (stage === 1)
       return (
         <div className="space-y-4 animate-fadeIn">
-          <h3 className="text-lg font-semibold text-stone-200">✨ firstly: you get to redeem a vinyl player!</h3>
+          <h3 className="text-lg font-semibold text-neutral-400">✨ firstly: i know you've been wanting this! this is included - you get to redeem a vinyl player! but because it's only practical in singapore, i'll give you a voucher now that promises i'll get it to you when you're back!</h3>
           {(() => {
             const selected = selections.vinylPlayer === playerName;
             return (
@@ -122,13 +132,7 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                     className={`relative w-48 text-center rounded-lg p-6 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-xl border bg-white text-slate-800 border-slate-300 shadow-md`}
                   >
                     <div className="w-full aspect-square grid place-items-center mb-3">
-                      <img
-                        src={playerUrl}
-                        alt="Vinyl Player"
-                        width={160}
-                        height={160}
-                        className="max-w-[85%] max-h-[85%] object-contain"
-                      />
+                      <img src={playerUrl} alt="Vinyl Player" width={160} height={160} className="max-w-[85%] max-h-[85%] object-contain" />
                     </div>
                     <div className="font-medium text-slate-800">
                       {playerName} 
@@ -140,6 +144,16 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                     )}
                   </button>
                 </div>
+                <div className="mt-4 max-w-md mx-auto">
+                  <label className="block text-sm text-neutral-300 mb-1">or suggest a different player:</label>
+                  <input
+                    type="text"
+                    value={selections.vinylPlayerCustom ?? ""}
+                    onChange={(e) => onUpdate({ vinylPlayerCustom: e.target.value })}
+                    placeholder="e.g. another model you like"
+                    className="w-full rounded-md bg-white/10 text-white placeholder-white/50 px-3 py-2 outline-none border border-white/10 focus:border-indigo-300/60 transition-colors"
+                  />
+                </div>
                 {selected && (
                   <div className="mt-6 flex justify-center animate-fadeIn">
                     <button
@@ -147,8 +161,8 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                       onClick={() => {
                         onUpdate({ vinylPlayer: playerName });
                         const link = document.createElement("a");
-                        link.href = "/vouchers/vinyl.png";
-                        link.download = "vinyl.png";
+                        link.href = "/vouchers/voucher_vinyl.png";
+                        link.download = "voucher_vinyl.png";
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);
@@ -170,138 +184,90 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
     if (stage === 2)
       return (
         <div className="space-y-4 animate-fadeIn">
-          <h3 className="text-lg font-semibold text-stone-200">💿 secondly: with a player, you need more records! choose 1!</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {records.map((record) => (
-              <button
-                key={record.name}
-                onClick={() => onUpdate({ record: record.name })}
-                aria-pressed={selections.record === record.name}
-                className={`group relative rounded-lg p-4 transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col h-full bg-white shadow-md`}
-              >
-                <div className="w-full aspect-square grid place-items-center mb-3">
-                  <img
-                    src={record.url}
-                    alt={`${record.name} by ${record.artist}`}
-                    width={240}
-                    height={240}
-                    className="max-w-[85%] max-h-[85%] object-contain group-hover:opacity-90 transition-opacity"
-                  />
-                </div>
-                <div
-                  className={`mt-auto font-medium text-center text-slate-800`}
-                >
-                  <div className="font-bold text-center">{record.name}</div>
-                  <div className="text-sm font-medium text-center">by {record.artist}</div>
-                </div>
-                {selections.record === record.name && (
-                  <div className="absolute top-2 right-2 bg-white text-stone-500 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
-                    ✓
-                  </div>
-                )}
-              </button>
-            ))}
+          <h3 className="text-lg font-semibold text-neutral-400">💿 secondly: with a player, you need more records! choose 1!</h3>
+          <SelectionGrid
+            items={records.map((r) => ({ key: r.name, title: r.name, subtitle: `by ${r.artist}` , imgSrc: r.url }))}
+            selectedKey={selections.record}
+            onSelect={(k) => onUpdate({ record: k })}
+          />
+          <div className="max-w-md mx-auto">
+            <label className="block text-sm text-neutral-300 mb-1">or suggest your own record:</label>
+            <input
+              type="text"
+              value={selections.recordCustom ?? ""}
+              onChange={(e) => onUpdate({ recordCustom: e.target.value })}
+              placeholder="album + artist"
+              className="w-full rounded-md bg-white/10 text-white placeholder-white/50 px-3 py-2 outline-none border border-white/10 focus:border-indigo-300/60 transition-colors"
+            />
           </div>
         </div>
       );
     if (stage === 3)
       return (
         <div className="space-y-4 animate-fadeIn">
-          <h3 className="text-lg font-semibold text-stone-200">🌸 now, to up your scent game! pick one!</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {perfumes.map((perfume) => (
-              <button
-                key={perfume.name}
-                onClick={() => onUpdate({ perfume: perfume.name })}
-                aria-pressed={selections.perfume === perfume.name}
-                className={`relative rounded-lg p-4 text-left transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col h-full bg-white shadow-md`}
-              >
-                <div className="w-full aspect-square grid place-items-center mb-3">
-                  <img
-                    src={perfume.url}
-                    alt={`${perfume.name} by ${perfume.perfumer}`}
-                    width={240}
-                    height={240}
-                    className="max-w-[85%] max-h-[85%] object-contain group-hover:opacity-90 transition-opacity"
-                  />
-                </div>
-                <div className="mt-auto font-bold text-center">{perfume.name}</div>
-                <div className="text-sm font-medium text-center">by {perfume.perfumer}</div>
-                {selections.perfume === perfume.name && (
-                  <div className="absolute top-2 right-2 bg-white text-stone-500 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
-                    ✓
-                  </div>
-                )}
-              </button>
-            ))}
+          <h3 className="text-lg font-semibold text-neutral-400">🌸 now, to up your scent game! pick one!</h3>
+          <SelectionGrid
+            items={perfumes.map((p) => ({ key: p.name, title: p.name, subtitle: `by ${p.perfumer}`, imgSrc: p.url }))}
+            selectedKey={selections.perfume}
+            onSelect={(k) => onUpdate({ perfume: k })}
+          />
+          <div className="max-w-md mx-auto">
+            <label className="block text-sm text-neutral-300 mb-1">or suggest your own perfume:</label>
+            <input
+              type="text"
+              value={selections.perfumeCustom ?? ""}
+              onChange={(e) => onUpdate({ perfumeCustom: e.target.value })}
+              placeholder="scent name + brand"
+              className="w-full rounded-md bg-white/10 text-white placeholder-white/50 px-3 py-2 outline-none border border-white/10 focus:border-indigo-300/60 transition-colors"
+            />
           </div>
         </div>
       );
     if (stage === 4)
       return (
         <div className="space-y-4 animate-fadeIn">
-          <h3 className="text-lg font-semibold text-stone-200">👖 some wardrobe upgrades: pick what looks good!</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {pants.map((opt) => (
-              <button
-                key={opt.name}
-                onClick={() => onUpdate({ pants: opt.name })}
-                className={`relative rounded-lg p-4 text-left transition-all duration-300 transform hover:scale-105 hover:shadow-xl bg-white shadow-md`}
-              >
-                <div className="w-full aspect-square grid place-items-center mb-3">
-                  <img
-                    src={opt.url}
-                    alt={`${opt.name}`}
-                    width={240}
-                    height={240}
-                    className="max-w-[85%] max-h-[85%] object-contain group-hover:opacity-90 transition-opacity"
-                  />
-                </div>
-                <div className="font-medium">{opt.name}</div>
-                {selections.pants === opt.name && (
-                  <div className="absolute top-2 right-2 bg-white text-stone-500 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
-                    ✓
-                  </div>
-                )}
-              </button>
-            ))}
+          <h3 className="text-lg font-semibold text-neutral-400">👖 some wardrobe upgrades: pick what looks good!</h3>
+          <SelectionGrid
+            items={pants.map((p) => ({ key: p.name, title: p.name, imgSrc: p.url }))}
+            selectedKey={selections.pants}
+            onSelect={(k) => onUpdate({ pants: k })}
+          />
+          <div className="max-w-md mx-auto">
+            <label className="block text-sm text-neutral-300 mb-1">or suggest your own pants:</label>
+            <input
+              type="text"
+              value={selections.pantsCustom ?? ""}
+              onChange={(e) => onUpdate({ pantsCustom: e.target.value })}
+              placeholder="brand + model"
+              className="w-full rounded-md bg-white/10 text-white placeholder-white/50 px-3 py-2 outline-none border border-white/10 focus:border-indigo-300/60 transition-colors"
+            />
           </div>
         </div>
       );
     if (stage === 5)
       return (
         <div className="space-y-4 animate-fadeIn">
-          <h3 className="text-lg font-semibold text-stone-200">vroom vroom! some f1 merch for you!!</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {f1.map((opt) => (
-              <button
-                key={opt.name}
-                onClick={() => onUpdate({ f1: opt.name })}
-                className={`relative rounded-lg p-4 text-left transition-all duration-300 transform hover:scale-105 hover:shadow-xl bg-white shadow-md`}
-              >
-                <div className="w-full aspect-square grid place-items-center mb-3">
-                  <img
-                    src={opt.url}
-                    alt={`${opt.name}`}
-                    width={240}
-                    height={240}
-                    className="max-w-[85%] max-h-[85%] object-contain group-hover:opacity-90 transition-opacity"
-                  />
-                </div>
-                <div className="font-medium">{opt.name}</div>
-                {selections.f1 === opt.name && (
-                  <div className="absolute top-2 right-2 bg-white text-stone-500 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
-                    ✓
-                  </div>
-                )}
-              </button>
-            ))}
+          <h3 className="text-lg font-semibold text-neutral-400">vroom vroom! some f1 merch for you!!</h3>
+          <SelectionGrid
+            items={f1.map((p) => ({ key: p.name, title: p.name, imgSrc: p.url }))}
+            selectedKey={selections.f1}
+            onSelect={(k) => onUpdate({ f1: k })}
+          />
+          <div className="max-w-md mx-auto">
+            <label className="block text-sm text-neutral-300 mb-1">or suggest your own F1 merch:</label>
+            <input
+              type="text"
+              value={selections.f1Custom ?? ""}
+              onChange={(e) => onUpdate({ f1Custom: e.target.value })}
+              placeholder="team + item"
+              className="w-full rounded-md bg-white/10 text-white placeholder-white/50 px-3 py-2 outline-none border border-white/10 focus:border-indigo-300/60 transition-colors"
+            />
           </div>
         </div>
       );
     return (
       <div className="space-y-4 animate-fadeIn">
-  <h3 className="text-lg font-semibold text-stone-200">💰 all these gifts won&#39;t reach you now... but CASH IS KING!!!</h3>
+  <h3 className="text-lg font-semibold text-neutral-400">💰 all these gifts won&#39;t reach you now... so i'm giving you the chance to go on your own shopping spree!!!</h3>
         <div className="space-y-3">
           {/* Shopping voucher */}
           <div className="rounded-lg bg-white p-4 shadow-md border border-slate-300">
@@ -314,8 +280,8 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                 type="button"
                 onClick={() => {
                   const link = document.createElement("a");
-                  link.href = "/vouchers/shopping.png";
-                  link.download = "shopping.png";
+                  link.href = "/vouchers/voucher_150.png";
+                  link.download = "voucher_150.png";
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);
@@ -338,8 +304,8 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                 type="button"
                 onClick={() => {
                   const link = document.createElement("a");
-                  link.href = "/vouchers/dinner.png";
-                  link.download = "dinner.png";
+                  link.href = "/vouchers/voucher_dinner.png";
+                  link.download = "voucher_dinner.png";
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);
@@ -362,8 +328,8 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
                 type="button"
                 onClick={() => {
                   const link = document.createElement("a");
-                  link.href = "/vouchers/massage.png";
-                  link.download = "massage.png";
+                  link.href = "/vouchers/voucher_massage.png";
+                  link.download = "voucher_massage.png";
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);
@@ -376,7 +342,6 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
             </div>
           </div>
         </div>
-        {/* Personal message removed as requested */}
       </div>
     );
   };
@@ -426,7 +391,7 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
             onClick={onComplete}
             className="px-6 py-3 rounded-lg text-slate-900 font-medium hover:shadow-lg transition-all transform hover:scale-105 bg-gradient-to-br from-stone-200 to-indigo-300 font-sans"
           >
-            generate voucher →
+            generate bundle →
           </button>
         )}
       </div>

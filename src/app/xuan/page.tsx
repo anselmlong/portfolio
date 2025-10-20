@@ -5,9 +5,10 @@ import LoveLetter from "./_components/LoveLetter";
 import { PhotoScroll } from "./_components/PhotoScroll";
 import GiftSelector, { type GiftSelections } from "./_components/GiftSelector";
 import VoucherGenerator from "./_components/VoucherGenerator";
+import BuildIntro from "./_components/BuildIntro";
 import { photos } from "./data/photos";
 
-type Section = "landing" | "letter" | "photos" | "gifts" | "voucher";
+type Section = "landing" | "letter" | "photos" | "build-intro" | "gifts" | "voucher";
 
 export default function XuanPage() {
   const [section, setSection] = useState<Section>("landing");
@@ -17,10 +18,15 @@ export default function XuanPage() {
   const [error, setError] = useState<string>("");
   const [selections, setSelections] = useState<GiftSelections>({
     vinylPlayer: null,
+    vinylPlayerCustom: null,
     record: null,
+    recordCustom: null,
     perfume: null,
+    perfumeCustom: null,
     pants: null,
+    pantsCustom: null,
     f1: null,
+    f1Custom: null,
     voucher: "$150 Shopping Voucher",
   });
 
@@ -84,8 +90,14 @@ export default function XuanPage() {
         {section === "photos" && (
           <PhotoScroll 
             photos={photos} 
-            onComplete={() => setSection("gifts")} 
+            onComplete={() => setSection("build-intro")} 
             onBack={() => setSection("letter")}
+          />
+        )}
+        {section === "build-intro" && (
+          <BuildIntro 
+            onBuild={() => setSection("gifts")} 
+            onBack={() => setSection("photos")} 
           />
         )}
         {section === "gifts" && (
