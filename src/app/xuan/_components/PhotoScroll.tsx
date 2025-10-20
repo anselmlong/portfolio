@@ -6,9 +6,10 @@ interface PhotoScrollProps {
   photos: Photo[];
   onComplete?: () => void;
   onBack?: () => void;
+  accessLevel?: "full" | "admin";
 }
 
-export const PhotoScroll: React.FC<PhotoScrollProps> = ({ photos, onComplete, onBack }) => {
+export const PhotoScroll: React.FC<PhotoScrollProps> = ({ photos, onComplete, onBack, accessLevel = "full" }) => {
   const [ratios, setRatios] = useState<Record<number, number>>({});
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -75,12 +76,18 @@ export const PhotoScroll: React.FC<PhotoScrollProps> = ({ photos, onComplete, on
                 placeholder="empty"
                 unoptimized={false}
               />
-              <figcaption
-                className={`text-lg font-medium text-white max-w-xs font-sans ${isLeft ? "text-left" : "text-right"}`}
-              >
-                <div className="text-sm text-slate-400 mb-1">{photo.date}</div>
-                <span className="text-white/90 text-medium font-serif font-normal">{photo.caption}</span>
-              </figcaption>
+              {accessLevel === "full" ? (
+                <figcaption
+                  className={`text-lg font-medium text-white max-w-xs font-sans ${isLeft ? "text-left" : "text-right"}`}
+                >
+                  <div className="text-sm text-slate-400 mb-1">{photo.date}</div>
+                  <span className="text-white/90 text-medium font-serif font-normal">{photo.caption}</span>
+                </figcaption>
+              ) : (
+                <figcaption className={`text-sm text-slate-400 max-w-xs font-sans ${isLeft ? "text-left" : "text-right"}`}>
+                  captions hidden in admin mode
+                </figcaption>
+              )}
             </figure>
           );
         })}

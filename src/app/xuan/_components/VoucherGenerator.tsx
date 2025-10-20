@@ -287,22 +287,51 @@ export default function VoucherGenerator({ selections, onBack }: Props) {
     }
   };
 
+  // Confetti burst handler
+  const handleConfetti = () => {
+    import("canvas-confetti").then(mod => {
+      mod.default({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.5 }
+      });
+    });
+  };
+
   return (
     <section className="bg-gradient-to-br from-slate-800 via-slate-900 to-gray-950 rounded-xl p-6 md:p-8 shadow-2xl border border-slate-800/30 font-sans">
-      {onBack && (
-        <button
-          onClick={onBack}
-          className="text-indigo-300 hover:text-stone-200 transition-colors text-sm mb-4"
-          aria-label="Go back"
-        >
-          ← back
-        </button>
-      )}
+      <div className="flex items-center justify-between mb-4">
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="text-indigo-300 hover:text-stone-200 transition-colors text-sm"
+            aria-label="Go back"
+          >
+            ← back
+          </button>
+        )}
+        <div className="flex gap-2">
+          <a
+            href="/"
+            className="px-3 py-2 rounded-lg bg-white text-slate-900 font-semibold shadow hover:bg-indigo-100 transition-colors text-sm"
+            title="Go to portfolio home"
+          >
+            home
+          </a>
+          <button
+            onClick={handleConfetti}
+            className="px-3 py-2 rounded-lg bg-gradient-to-br from-indigo-300 to-stone-200 text-slate-900 font-semibold shadow hover:scale-105 transition-transform text-sm"
+            title="Confetti burst!"
+          >
+            🎉 confetti
+          </button>
+        </div>
+      </div>
       <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white drop-shadow font-sans">
         your birthday gifts are ready! 🎉
       </h2>
-  <div ref={ref} className="rounded-lg bg-white p-4 text-slate-900 font-sans">
-  <ul className="list-disc pl-5 space-y-1">
+      <div ref={ref} className="rounded-lg bg-white p-4 text-slate-900 font-sans">
+        <ul className="list-disc pl-5 space-y-1">
           <li>
             🎵 {selections.vinylPlayerCustom && selections.vinylPlayerCustom.trim().length > 0
               ? selections.vinylPlayerCustom

@@ -117,7 +117,7 @@ export default function GiftSelector({ selections, onUpdate, onComplete, onBack 
     if (stage === 1)
       return (
         <div className="space-y-4 animate-fadeIn">
-          <h3 className="text-lg font-semibold text-neutral-400">✨ firstly: i know you've been wanting this! this is included - you get to redeem a vinyl player! but because it's only practical in singapore, i'll give you a voucher now that promises i'll get it to you when you're back!</h3>
+          <h3 className="text-lg font-semibold text-neutral-400">✨ firstly: i know you've been wanting this! this is included - you get to redeem a vinyl player! but because it's only practical in singapore, i'll give you a voucher now that promises i'll get it to you when you're back! (click to select)</h3>
           {(() => {
             const selected = selections.vinylPlayer === playerName;
             return (

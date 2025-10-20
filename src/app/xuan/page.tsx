@@ -10,12 +10,15 @@ import { photos } from "./data/photos";
 
 type Section = "landing" | "letter" | "photos" | "build-intro" | "gifts" | "voucher";
 
+type AccessLevel = "full" | "admin";
+
 export default function XuanPage() {
   const [section, setSection] = useState<Section>("landing");
   const expectedPassword = process.env.NEXT_PUBLIC_XUAN_PASSWORD ?? "xuan";
   const [authorized, setAuthorized] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [accessLevel, setAccessLevel] = useState<AccessLevel>("full");
   const [selections, setSelections] = useState<GiftSelections>({
     vinylPlayer: null,
     vinylPlayerCustom: null,
@@ -35,8 +38,14 @@ export default function XuanPage() {
     setSelections((prev: GiftSelections) => ({ ...prev, ...partial }));
 
   const handleSubmit = () => {
-    if (password.trim() === expectedPassword) {
+    const pw = password.trim();
+    if (pw === expectedPassword) {
       setAuthorized(true);
+      setAccessLevel("full");
+      setError("");
+    } else if (pw === "admin") {
+      setAuthorized(true);
+      setAccessLevel("admin");
       setError("");
     } else {
       setError("Incorrect password. Try again.");
@@ -79,10 +88,11 @@ export default function XuanPage() {
     <main className="min-h-screen bg-gradient-to-br from-zinc-900 via-slate-900 to-gray-950 text-[#5d4037]">
       <div className="mx-auto max-w-4xl p-6 md:p-10">
         {section === "landing" && (
-          <LandingPage onNext={() => setSection("letter")} />)
+          <LandingPage accessLevel={accessLevel} onNext={() => setSection("letter")} />)
         }
         {section === "letter" && (
           <LoveLetter 
+            accessLevel={accessLevel}
             onNext={() => setSection("photos")} 
             onBack={() => setSection("landing")}
           />
@@ -90,12 +100,14 @@ export default function XuanPage() {
         {section === "photos" && (
           <PhotoScroll 
             photos={photos} 
+            accessLevel={accessLevel}
             onComplete={() => setSection("build-intro")} 
             onBack={() => setSection("letter")}
           />
         )}
         {section === "build-intro" && (
           <BuildIntro 
+            accessLevel={accessLevel}
             onBuild={() => setSection("gifts")} 
             onBack={() => setSection("photos")} 
           />

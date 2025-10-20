@@ -5,9 +5,10 @@ import confetti from "canvas-confetti";
 type Props = {
   onBuild: () => void;
   onBack?: () => void;
+  accessLevel?: "full" | "admin";
 };
 
-export default function BuildIntro({ onBuild, onBack }: Props) {
+export default function BuildIntro({ onBuild, onBack, accessLevel = "full" }: Props) {
   const handleBuild = () => {
     // Trigger confetti burst
     confetti({
@@ -35,20 +36,26 @@ export default function BuildIntro({ onBuild, onBack }: Props) {
 	<h2 className="text-3xl md:text-4xl font-bold text-white drop-shadow mb-6">
 	  you get to build your own birthday gifts! 🎁
 	</h2>
-	<div className="max-w-prose text-white/85 font-serif leading-relaxed space-y-4">
-	  <p>
-		long distance sucks! i can't give you presents in person, so i wanted to let you choose your perfect birthday gifts from a curated selection of things i think you'd like!
-	  </p>
-	  <p>
-		hopefully some of them surprise you! there are a few stages that correspond to your interests - so i tried to get you something from every part of your life that makes you, you!
-	  </p>
-	  <p>
-		whatever you select, i'll procure and pass you in prague/singapore :) if you don't like any of the options, there'll be a text box where you can hint what you're eyeing at the particular moment, and i'll make it happen ;)
-	  </p>
-	  <p>
-		without further ado!! let's build!!!
-	  </p>
-	</div>
+  {accessLevel === "full" ? (
+    <div className="max-w-prose text-white/85 font-serif leading-relaxed space-y-4">
+      <p>
+      	long distance sucks! i can't give you presents in person, so i wanted to let you choose your perfect birthday gifts from a curated selection of things i think you'd like!
+      </p>
+      <p>
+      	hopefully some of them surprise you! there are a few stages that correspond to your interests - so i tried to get you something from every part of your life that makes you, you!
+      </p>
+      <p>
+      	whatever you select, i'll procure and pass you in prague/singapore :) if you don't like any of the options, there'll be a text box where you can hint what you're eyeing at the particular moment, and i'll make it happen ;)
+      </p>
+      <p>
+      	without further ado!! let's build!!!
+      </p>
+    </div>
+  ) : (
+    <div className="rounded-lg border border-white/10 bg-white/5 text-white/80 px-4 py-3 mb-4 font-sans">
+      intro hidden in admin mode
+    </div>
+  )}
 
       <div className="flex justify-center">
         <button

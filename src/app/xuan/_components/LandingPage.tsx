@@ -4,9 +4,10 @@ import confetti from "canvas-confetti";
 
 type Props = {
   onNext: () => void;
+  accessLevel?: "full" | "admin";
 };
 
-export default function LandingPage({ onNext }: Props) {
+export default function LandingPage({ onNext, accessLevel = "full" }: Props) {
   // Trigger confetti rain when page loads
   useEffect(() => {
     const duration = 3000; // 3 seconds
@@ -61,11 +62,15 @@ export default function LandingPage({ onNext }: Props) {
         heyyy pookie!! love you so much and i hope you have a gr88 birthday!! here's a little
         coder boyfriend thing i cooked up for you !! hope you enjoy teehee...!
       </p>
-      <div className="mb-8 grid grid-cols-3 place-items-center">
-        <img src="/photos/landing/xuan_2.png" alt="Xuan 2" className="w-48 max-w-md mb-4 rounded-lg shadow-lg" />
-        <img src="/photos/landing/xuan_dick.png" alt="Xuan Dick" className="w-48 max-w-md mb-4 rounded-lg shadow-lg" />
-        <img src="/photos/landing/xuan_1.png" alt="Xuan 1" className="w-48 max-w-md mb-4 rounded-lg shadow-lg" />
-      </div>
+      {accessLevel === "full" ? (
+        <div className="mb-8 grid grid-cols-3 place-items-center">
+          <img src="/photos/landing/xuan_2.png" alt="Xuan 2" className="w-48 max-w-md mb-4 rounded-lg shadow-lg" />
+          <img src="/photos/landing/xuan_dick.png" alt="Xuan Dick" className="w-48 max-w-md mb-4 rounded-lg shadow-lg" />
+          <img src="/photos/landing/xuan_1.png" alt="Xuan 1" className="w-48 max-w-md mb-4 rounded-lg shadow-lg" />
+        </div>
+      ) : (
+        <div className="mb-8 rounded-lg border border-white/10 bg-white/5 text-white/80 px-4 py-3 font-sans">photos hidden in admin mode</div>
+      )}
       <div className="flex justify-center">
         <button
           onClick={onNext}

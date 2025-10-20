@@ -4,6 +4,7 @@ import React from "react";
 type Props = {
   onNext: () => void;
   onBack?: () => void;
+  accessLevel?: "full" | "admin";
 };
 
 const message = (
@@ -36,7 +37,7 @@ const message = (
   </div>
 )
 
-export default function LoveLetter({ onNext, onBack }: Props) {
+export default function LoveLetter({ onNext, onBack, accessLevel = "full" }: Props) {
   const [revealLetter, setRevealLetter] = React.useState(false);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
   // Configure playback
@@ -156,11 +157,17 @@ export default function LoveLetter({ onNext, onBack }: Props) {
       >
         {revealLetter ? "hide letter" : "reveal letter"}
       </button>
-      {revealLetter && (
+      
+      {accessLevel === "full" && revealLetter && (
         <div className="space-y-4 text-lg md:text-xl leading-relaxed mb-8 text-white animate-fadeIn font-sans">
           <div className="rounded-xl bg-white/5 border border-white/10 p-6 md:p-8 shadow-xl backdrop-blur-sm">
             {message}
           </div>
+        </div>
+      )}
+      {accessLevel === "admin" && (
+        <div className="rounded-xl bg-white/5 border border-white/10 p-6 md:p-8 shadow-xl backdrop-blur-sm mb-8 text-white/80">
+          <p className="font-sans">Love letter hidden in admin mode.</p>
         </div>
       )}
       <div className="flex justify-center">
