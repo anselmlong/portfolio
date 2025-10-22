@@ -8,7 +8,9 @@ export function TopNav() {
 	// Secret 5-click easter egg on logo within 3 seconds
 	const clickCountRef = useRef(0);
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
+	const fileName = "resume.pdf",
+		filePath = "/resume.pdf",
+		variant = "primary";
 	useEffect(() => {
 		return () => {
 			if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -31,6 +33,15 @@ export function TopNav() {
 			timeoutRef.current = null;
 			router.push('/xuan');
 		}
+	};
+	const handleDownload = () => {
+		// Create a temporary link element
+		const link = document.createElement('a');
+		link.href = filePath;
+		link.download = fileName;
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
 	};
 
 	return (
@@ -84,12 +95,16 @@ export function TopNav() {
 									<path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z" />
 								</svg>
 							</a>
-						<DownloadButton
-							filePath="/resume.pdf"
-							fileName="Anselm_Long_Resume.pdf"
-							buttonText="Resume"
-							variant="outline"
-						/>
+							<a
+								onClick={handleDownload}
+								className="group text-gray-300 hover:text-gray-100 transition-all duration-300 transform hover:scale-110"
+								aria-label={`Download ${fileName}`}
+							>
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+									<path d="m55.707 11.293-10-10A1.115 1.115 0 0 0 45 1H9a1 1 0 0 0-1 1v60a1 1 0 0 0 1 1h46a1 1 0 0 0 1-1V12a1.092 1.092 0 0 0-.293-.707zM52.586 11H46V4.414zM10 61V3h34v9a1 1 0 0 0 1 1h9v48z" style={{ fill: "#28282b" }} />
+									<path d="M34 8h7a1 1 0 0 0 0-2h-7a1 1 0 0 0 0 2zM34 13h7a1 1 0 0 0 0-2h-7a1 1 0 0 0 0 2zM50 16H34a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2zM50 21H34a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2zM50 26H34a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2zM50 31H14a1 1 0 0 0 0 2h36a1 1 0 0 0 0-2zM50 36H14a1 1 0 0 0 0 2h36a1 1 0 0 0 0-2zM50 41H14a1 1 0 0 0 0 2h36a1 1 0 0 0 0-2zM50 46H14a1 1 0 0 0 0 2h36a1 1 0 0 0 0-2zM50 51H14a1 1 0 0 0 0 2h36a1 1 0 0 0 0-2zM50 56H14a1 1 0 0 0 0 2h36a1 1 0 0 0 0-2zM22 19a5 5 0 1 0-5-5 5.006 5.006 0 0 0 5 5zm0-8a3 3 0 1 1-3 3 3 3 0 0 1 3-3z" style={{ fill: "#28282b" }} /><path d="M14 28h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H14a1 1 0 0 0-1 1v20a1 1 0 0 0 1 1zm1.473-2a7.325 7.325 0 0 1 13.054 0zM29 8v15.164a9.325 9.325 0 0 0-14 0V8z" style={{ fill: "#28282b" }} />
+								</svg>
+							</a>
 						</div>
 					</div>
 				</header>

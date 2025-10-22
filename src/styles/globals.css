@@ -26,6 +26,18 @@ body {
   animation: fadeIn 0.4s ease-out;
 }
 
+/* Text vertical slide used on hero "i'm a ..." */
+@keyframes text-slide {
+  /* Move up by the UL's full height across 6 equal steps */
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+.animate-text-slide {
+  animation: text-slide 10s steps(6) infinite;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -140,4 +152,74 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* ===== Scrollbar styling =====
+   How to use:
+   1) Global (applies to page scrollbars): body rules below already set a neutral thin scrollbar.
+   2) Per-element: add class "scrollbar-neutral" to any scrollable container.
+      Example: <div class="overflow-y-auto scrollbar-neutral">...</div>
+*/
+
+/* Define theme-aware scrollbar colors */
+:root {
+  /* Lighter, thinner by default */
+  --scrollbar-thumb: oklch(0.8 0 0 / 0.35);
+  --scrollbar-thumb-hover: oklch(0.75 0 0 / 0.55);
+  --scrollbar-track: oklch(1 0 0 / 0.03);
+  --scrollbar-size: 6px;
+}
+
+.dark {
+  --scrollbar-thumb: oklch(0.7 0 0 / 0.35);
+  --scrollbar-thumb-hover: oklch(0.65 0 0 / 0.55);
+  --scrollbar-track: oklch(1 0 0 / 0.04);
+}
+
+/* Global (page) scrollbar: Firefox */
+html, body {
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: thin;
+  /* Avoid layout shift when scrollbar appears */
+  scrollbar-gutter: stable both-edges;
+}
+
+/* Global (page) scrollbar: WebKit (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 9999px;
+  border: 2px solid transparent; /* inner padding for a thinner visual */
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+/* Per-element utility: apply to any scrollable container */
+.scrollbar-neutral {
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: thin;
+}
+.scrollbar-neutral::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+.scrollbar-neutral::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+.scrollbar-neutral::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.scrollbar-neutral::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
 }

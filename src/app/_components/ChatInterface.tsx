@@ -24,6 +24,7 @@ import {
 
 const ChatInterface = () => {
   const [input, setInput] = useState('');
+  const [expanded, setExpanded] = useState(false);
   const { messages, sendMessage, regenerate, status, error } = useChat({
     transport: new TextStreamChatTransport({
       api: '/api/chat',
@@ -53,6 +54,8 @@ const ChatInterface = () => {
     }
     
     console.log('Calling sendMessage...');
+    // Expand chat area when the user sends a message
+    setExpanded(true);
     sendMessage({
       text: message.text,
     });
@@ -60,10 +63,18 @@ const ChatInterface = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 relative size-full h-screen">
-      <div className="flex flex-col h-full">
-        <Conversation className="h-full">
-          <ConversationContent>
+    <div className="max-w-4xl mx-auto p-6 relative w-full">
+      <div className="flex flex-col">
+        {/* History area that expands downward above the input */}
+        <div
+          className={`overflow-hidden transition-all duration-300 ease-out ${
+            expanded ? 'max-h-[60vh] mt-2' : 'max-h-0'
+          }`}
+          aria-hidden={!expanded}
+        >
+          <div className="max-h-[60vh] overflow-y-auto pr-1 scrollbar-neutral">
+            <Conversation>
+              <ConversationContent>
             {messages.map((message: UIMessage) => (
               <Fragment key={message.id}>
                 <Message from={message.role}>
@@ -102,21 +113,26 @@ const ChatInterface = () => {
               </Fragment>
             ))}
             {status === 'submitted' && <Loader />}
-          </ConversationContent>
-          <ConversationScrollButton />
-        </Conversation>
+              </ConversationContent>
+              <ConversationScrollButton />
+            </Conversation>
+          </div>
+        </div>
 
-        <PromptInput onSubmit={handleSubmit} className="mt-4">
+        {/* Input stays visible; focusing expands the history above and pushes this down */}
+        <PromptInput onSubmit={handleSubmit} className="mt-2">
           <PromptInputBody>
             <PromptInputTextarea
+              className="min-h-10 max-h-20 py-3 text-medium"
               onChange={(e) => setInput(e.target.value)}
               value={input}
-              placeholder="Ask about Anselm's background..."
+              placeholder="ask me anything..."
+              onFocus={() => setExpanded(true)}
             />
           </PromptInputBody>
           <PromptInputFooter>
             <div className="flex-1" />
-            <PromptInputSubmit disabled={!input.trim()} status={status} />
+            <PromptInputSubmit disabled={!input.trim()} status={status} variant="ghost"/>
           </PromptInputFooter>
         </PromptInput>
       </div>
