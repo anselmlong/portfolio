@@ -1,7 +1,6 @@
 "use client"
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { DownloadButton } from './DownloadButton';
 
 export function TopNav() {
 	const router = useRouter();
@@ -9,8 +8,7 @@ export function TopNav() {
 	const clickCountRef = useRef(0);
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const fileName = "resume.pdf",
-		filePath = "/resume.pdf",
-		variant = "primary";
+		filePath = "/resume.pdf";
 	useEffect(() => {
 		return () => {
 			if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -21,6 +19,7 @@ export function TopNav() {
 		clickCountRef.current += 1;
 		if (clickCountRef.current === 1) {
 			// Start/reset 3s window on first click
+			router.push('/');
 			if (timeoutRef.current) clearTimeout(timeoutRef.current);
 			timeoutRef.current = setTimeout(() => {
 				clickCountRef.current = 0;
@@ -34,8 +33,8 @@ export function TopNav() {
 			router.push('/xuan');
 		}
 	};
+	// Optional programmatic download (not needed when using anchor with download)
 	const handleDownload = () => {
-		// Create a temporary link element
 		const link = document.createElement('a');
 		link.href = filePath;
 		link.download = fileName;
@@ -96,13 +95,13 @@ export function TopNav() {
 								</svg>
 							</a>
 							<a
-								onClick={handleDownload}
+								href={filePath}
+								download={fileName}
 								className="group text-gray-300 hover:text-gray-100 transition-all duration-300 transform hover:scale-110"
 								aria-label={`Download ${fileName}`}
 							>
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-									<path d="m55.707 11.293-10-10A1.115 1.115 0 0 0 45 1H9a1 1 0 0 0-1 1v60a1 1 0 0 0 1 1h46a1 1 0 0 0 1-1V12a1.092 1.092 0 0 0-.293-.707zM52.586 11H46V4.414zM10 61V3h34v9a1 1 0 0 0 1 1h9v48z" style={{ fill: "#28282b" }} />
-									<path d="M34 8h7a1 1 0 0 0 0-2h-7a1 1 0 0 0 0 2zM34 13h7a1 1 0 0 0 0-2h-7a1 1 0 0 0 0 2zM50 16H34a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2zM50 21H34a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2zM50 26H34a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2zM50 31H14a1 1 0 0 0 0 2h36a1 1 0 0 0 0-2zM50 36H14a1 1 0 0 0 0 2h36a1 1 0 0 0 0-2zM50 41H14a1 1 0 0 0 0 2h36a1 1 0 0 0 0-2zM50 46H14a1 1 0 0 0 0 2h36a1 1 0 0 0 0-2zM50 51H14a1 1 0 0 0 0 2h36a1 1 0 0 0 0-2zM50 56H14a1 1 0 0 0 0 2h36a1 1 0 0 0 0-2zM22 19a5 5 0 1 0-5-5 5.006 5.006 0 0 0 5 5zm0-8a3 3 0 1 1-3 3 3 3 0 0 1 3-3z" style={{ fill: "#28282b" }} /><path d="M14 28h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H14a1 1 0 0 0-1 1v20a1 1 0 0 0 1 1zm1.473-2a7.325 7.325 0 0 1 13.054 0zM29 8v15.164a9.325 9.325 0 0 0-14 0V8z" style={{ fill: "#28282b" }} />
+								<svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+									<path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z" />
 								</svg>
 							</a>
 						</div>
