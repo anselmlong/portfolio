@@ -3,6 +3,9 @@
     "Sentry": {
       "url": "https://mcp.sentry.dev/mcp/anselm-sj/javascript-nextjs",
       "type": "http"
+    },
+    "docs-langchain": {
+      "url": "https://docs.langchain.com/mcp"
     }
   }
 }

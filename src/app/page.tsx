@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from 'next/image'
 import { LatestPost } from "~/app/_components/post";
 import { DownloadButton } from "~/app/_components/DownloadButton";
+import ChatInterface from "~/app/_components/ChatInterface";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 import { api, HydrateClient } from "~/trpc/server";
@@ -232,87 +233,31 @@ export default async function Home() {
           <div className="container mx-auto text-center">
             <div className="mb-8">
               <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                Anselm Long
+                hi, i'm anselm.
               </h1>
               <p className="text-xl md:text-2xl text-gray-300 mb-4 max-w-3xl mx-auto leading-relaxed">
-                Computer Science Student | Machine Learning & AI Specialist
+                Year 3 Computer Science @ NUS
               </p>
               <p className="text-base text-gray-400 mb-8 max-w-4xl mx-auto leading-relaxed">
-                Proactive Computer Science student specialising in machine learning and artificial intelligence. 
-                Delivered anomaly detection models that identify malicious web certificates with 96% accuracy (F1-score 0.994) at IMDA. 
-                Seeking to apply technical expertise and an empathetic mindset to build efficient solutions with positive social impact.
+                what else do i do? just ask below.
               </p>
-              <div className="flex flex-wrap gap-4 justify-center items-center mb-8">
-                <a 
-                  href="mailto:anselmpius@gmail.com" 
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 transform hover:scale-105 shadow-lg"
-                >
-                  Get In Touch
-                </a>
-                <a 
-                  href="https://linkedin.com/in/anselmlong" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="border border-white/20 hover:border-white/40 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 hover:bg-white/5"
-                >
-                  LinkedIn
-                </a>
-                <a 
-                  href="https://github.com/anselmlong" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="border border-white/20 hover:border-white/40 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 hover:bg-white/5"
-                >
-                  GitHub
-                </a>
-                <a 
-                  href="/resume.pdf" 
-                  download
-                  className="border border-white/20 hover:border-white/40 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 hover:bg-white/5"
-                >
-                  Download Resume
-                </a>
-              </div>
+              
             </div>
+            
           </div>
+              {/* Chatbot Interface */}
+              <ChatInterface />
+          
+          
           
           {/* Animated background elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
-            <div className="absolute top-3/4 right-1/4 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl"></div>
-            <div className="absolute top-1/2 left-3/4 w-24 h-24 bg-pink-500/10 rounded-full blur-3xl"></div>
+            <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute top-3/4 right-1/4 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute top-1/2 left-3/4 w-24 h-24 bg-pink-500/10 rounded-full blur-3xl animate-pulse"></div>
           </div>
         </section>
 
-        {/* Content Sections */}
-        <div className="container mx-auto px-4 pb-20">
-          {/* Admin Section - Only show if logged in */}
-          {session?.user && (
-            <section className="mb-12 bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-              <h2 className="text-2xl font-bold mb-4 text-white">Admin Panel</h2>
-              <div className="mb-6">
-                <h3 className="text-lg font-medium mb-3 text-gray-300">Create New Post</h3>
-                <LatestPost />
-              </div>
-            </section>
-          )}
-
-          <div id="projects">
-            <Projects />
-          </div>
-          <div id="experience">
-            <Experiences />
-          </div>
-          <div id="education">
-            <Education />
-          </div>
-          <div id="skills">
-            <Skills />
-          </div>
-          <div id="gallery">
-            <Pictures />
-          </div>
-        </div>
       </main>
     </HydrateClient>
   );
