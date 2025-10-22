@@ -38,14 +38,14 @@ export function TopNav() {
 			<div className="container mx-auto px-4">
 				<header className="flex justify-between items-center py-4">
 					<div className="flex items-center gap-8">
-						<h1 onClick={handleSecretClick} className="cursor-pointer select-none text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+						<h1 onClick={handleSecretClick} className="cursor-pointer select-none text-2xl font-bold bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">
 							AL
 						</h1>
 						<nav className="hidden md:flex gap-6">
-							<a href="#blog" className="text-gray-300 hover:text-white transition-colors">
+							<a href="/blog" className="text-gray-300 hover:text-white transition-colors">
 								blog
 							</a>
-							<a href="#blog" className="text-gray-300 hover:text-white transition-colors">
+							<a href="/photos-gallery" className="text-gray-300 hover:text-white transition-colors">
 								photos
 							</a>
 						</nav>
@@ -55,7 +55,7 @@ export function TopNav() {
 						<div className="flex gap-6 justify-center items-center">
 							<a
 								href="mailto:anselmpius@gmail.com"
-								className="group text-gray-300 hover:text-blue-400 transition-all duration-300 transform hover:scale-110"
+								className="group text-gray-300 hover:text-gray-100 transition-all duration-300 transform hover:scale-110"
 								aria-label="Email"
 							>
 								<svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
@@ -66,7 +66,7 @@ export function TopNav() {
 								href="https://linkedin.com/in/anselmlong"
 								target="_blank"
 								rel="noopener noreferrer"
-								className="group text-gray-300 hover:text-blue-400 transition-all duration-300 transform hover:scale-110"
+								className="group text-gray-300 hover:text-gray-100 transition-all duration-300 transform hover:scale-110"
 								aria-label="LinkedIn"
 							>
 								<svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
@@ -77,7 +77,7 @@ export function TopNav() {
 								href="https://github.com/anselmlong"
 								target="_blank"
 								rel="noopener noreferrer"
-								className="group text-gray-300 hover:text-blue-400 transition-all duration-300 transform hover:scale-110"
+								className="group text-gray-300 hover:text-gray-100 transition-all duration-300 transform hover:scale-110"
 								aria-label="GitHub"
 							>
 								<svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
