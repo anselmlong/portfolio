@@ -21,10 +21,28 @@ import {
   PromptInputSubmit,
   type PromptInputMessage,
 } from '~/components/ai-elements/prompt-input';
+import { EXAMPLE_PROMPTS } from '~/constants/example-prompts';
+
+const examplePrompts = EXAMPLE_PROMPTS;
+
+// Helper to get random prompts
+const getRandomPrompts = (prompts: string[], count: number = 3) => {
+  const shuffled = [...prompts];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = shuffled[i];
+    shuffled[i] = shuffled[j]!;
+    shuffled[j] = temp!;
+  }
+  return shuffled.slice(0, count);
+};
 
 const ChatInterface = () => {
   const [input, setInput] = useState('');
   const [expanded, setExpanded] = useState(false);
+  const [displayedPrompts, setDisplayedPrompts] = useState(() => 
+    getRandomPrompts(examplePrompts, 3)
+  );
   const { messages, sendMessage, regenerate, status, error } = useChat({
     transport: new TextStreamChatTransport({
       api: '/api/chat',
@@ -43,6 +61,35 @@ const ChatInterface = () => {
   console.log('Messages:', JSON.stringify(messages, null, 2));
   console.log('Status:', status);
   console.log('Error:', error);
+
+  // Handle example prompt clicks
+  const handleExampleClick = (prompt: string) => {
+    console.log('=== EXAMPLE CLICK ===');
+    console.log('Clicked prompt:', prompt);
+    console.log('Current displayed prompts:', displayedPrompts);
+    
+    setInput(prompt);
+    setExpanded(true);
+    sendMessage({
+      text: prompt,
+    });
+    setInput('');
+    
+    // Remove clicked prompt and add a new random one
+    setDisplayedPrompts(prev => {
+      const remaining = prev.filter(p => p !== prompt);
+      const unused = examplePrompts.filter(p => !prev.includes(p));
+      
+      if (unused.length > 0) {
+        // Pick a random unused prompt
+        const newPrompt = unused[Math.floor(Math.random() * unused.length)];
+        return [...remaining, newPrompt!];
+      }
+      
+      // If all prompts have been shown, just keep the remaining ones
+      return remaining;
+    });
+  };
 
   const handleSubmit = (message: PromptInputMessage) => {
     console.log('=== SUBMITTING MESSAGE ===');
@@ -67,13 +114,12 @@ const ChatInterface = () => {
       <div className="flex flex-col">
         {/* History area that expands downward above the input */}
         <div
-          className={`overflow-hidden transition-all duration-300 ease-out ${
-            expanded ? 'max-h-[60vh] mt-2' : 'max-h-0'
+          className={`transition-all duration-300 ease-out ${
+            expanded ? 'h-[60vh] mt-2' : 'h-0'
           }`}
           aria-hidden={!expanded}
         >
-          <div className="max-h-[60vh] overflow-y-auto pr-1 scrollbar-neutral">
-            <Conversation>
+            <Conversation className="h-full scrollbar-neutral">
               <ConversationContent>
             {messages.map((message: UIMessage) => (
               <Fragment key={message.id}>
@@ -116,7 +162,6 @@ const ChatInterface = () => {
               </ConversationContent>
               <ConversationScrollButton />
             </Conversation>
-          </div>
         </div>
 
         {/* Input stays visible; focusing expands the history above and pushes this down */}
@@ -135,6 +180,20 @@ const ChatInterface = () => {
             <PromptInputSubmit disabled={!input.trim()} status={status} variant="ghost"/>
           </PromptInputFooter>
         </PromptInput>
+
+        {/* Example prompts - always visible, rotate on click */}
+        <div className="mt-4 flex flex-wrap gap-2 justify-center">
+          {displayedPrompts.map((prompt) => (
+            <button
+              key={prompt}
+              onClick={() => handleExampleClick(prompt)}
+              className="px-4 py-2 text-sm bg-gray-800 hover:bg-gray-700 rounded-full border border-gray-700 transition-colors text-gray-300 hover:text-white"
+              disabled={status === 'submitted'}
+            >
+              {prompt}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

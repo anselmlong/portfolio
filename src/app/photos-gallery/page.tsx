@@ -2,8 +2,18 @@ import Link from "next/link";
 
 export default function PhotosPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
-      <div className="container mx-auto px-4 py-20">
+  <main className="fixed inset-0 z-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 font-serif flex items-center justify-center overflow-hidden">
+      {/* Video background */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover z-0"
+        src="/videos/legacy_cropped.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+      />
+      {/* Content above video */}
+      <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-gray-100 via-gray-300 to-gray-400 bg-clip-text text-transparent">
             photos
@@ -12,7 +22,7 @@ export default function PhotosPage() {
             coming soon...
           </p>
           <p className="text-base text-gray-400 mb-12 max-w-2xl mx-auto">
-            A curated collection of photography and visual moments will be showcased here.
+            in the meantime, enjoy legacy - a video i made for my school a few years back.
           </p>
           <Link
             href="/"

@@ -1,10 +1,14 @@
 TODOs:
-- [X] Optimise RAG pipeline
+- [ ] Optimise RAG pipeline
 - [X] Prettify landing page
 - [X] Add blog posts (need more)
 - [ ] Add photography gallery
 - [ ] Add example prompts
 - [X] Add text switching feature to show my different roles.
+
+bugs
+- blog doesn't show up on phone
+- landing page
 
 ---
 

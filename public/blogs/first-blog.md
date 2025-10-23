@@ -26,7 +26,7 @@ i'm going to try write a blog for every experience!
 - [X] ml intern at imda
 - [ ] making a telegram bot for my gf
 - [ ] freakcha at hackharvard
-- [ ] making personal portfolio website
+- [X] making personal portfolio website
 - [ ] making gift chooser for gf
-- [ ] making RAG pipeline for portfolio website
+- [ ] making RAG (Retrieval Augmented Generation) pipeline for portfolio website
 

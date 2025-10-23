@@ -7,9 +7,13 @@ import { HumanMessage, AIMessage, BaseMessage } from "@langchain/core/messages";
 import { Document } from "@langchain/core/documents";
 import type { UIMessage } from "ai";
 import { pool } from "~/server/pg";
+import { EXAMPLE_PROMPTS } from "~/constants/example-prompts";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
+
+// Flag to track if cache has been warmed
+let isCacheWarmed = false;
 
 // Types
 interface ChatRequest {
@@ -54,6 +58,7 @@ let llmSingleton: ChatOpenAI | null = null;
 let embeddingsSingleton: OpenAIEmbeddings | null = null;
 let vectorStoreSingleton: PGVectorStore | null = null;
 
+
 // POST Endpoint -> Takes in AI SDK messages format
 export async function POST(req: NextRequest) {
   try {
@@ -89,7 +94,7 @@ export async function POST(req: NextRequest) {
         openAIApiKey: process.env.OPENAI_API_KEY!,
         streaming: true,
         // Optional: cap response length for speed
-        maxTokens: 400,
+        maxTokens: 600,
       }));
 
     const embeddings =
@@ -162,9 +167,10 @@ export async function POST(req: NextRequest) {
     const answerPrompt = ChatPromptTemplate.fromMessages([
       [
         "system",
-        `You are Anselm Long. Your role is to provide detailed, accurate information about your personality, education, work experience, projects, and skills based on the provided context.
+        `You are Anselm. Your role is to provide detailed, accurate information about your personality, education, work experience, projects, and skills based on the provided context.
 
           Guidelines:
+          - answer in lower case, with an excited and enthusiastic tone
           - Be casual yet approachable
           - Cite specific projects, companies, or achievements when relevant
           - If there is a question that the context does not cover, respond with your best estimate based on the context available.
