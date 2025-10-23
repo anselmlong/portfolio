@@ -20,12 +20,13 @@ i am a year 3 computer science major at nus. i'm interested in machine learning 
 i am STRUGGLING to find an internship. over the past 2 years, i've been focused on school work and student life, yet i've been neglecting to do personal projects and extracurriculars... and i think i am finding out the hard way that those are the tickets to get an internship in this day and age. so - creating a personal portfolio seems like a great way to explore web dev, along with showing off what i've done in the process!
 
 ## list of my experiences (in chronological order):
-- strategic digital project intern at imda
-- vbook - nus cs2103t
-- ml intern at imda
-- making a telegram bot for my gf
-- freakcha at hackharvard
-- making personal portfolio website
-- making gift chooser for gf
-- making RAG pipeline for portfolio website
+i'm going to try write a blog for every experience!
+- [X] strategic digital project intern at imda
+- [X] vbook - nus cs2103t
+- [X] ml intern at imda
+- [ ] making a telegram bot for my gf
+- [ ] freakcha at hackharvard
+- [ ] making personal portfolio website
+- [ ] making gift chooser for gf
+- [ ] making RAG pipeline for portfolio website
 

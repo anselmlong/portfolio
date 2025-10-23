@@ -1,6 +1,12 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getBlogPost, getAllBlogSlugs } from '~/lib/blog';
+import { Geist } from 'next/font/google';
+
+const geist = Geist({
+  subsets: ['latin'],
+  variable: '--font-geist-sans',
+});
 
 export async function generateStaticParams() {
   const slugs = getAllBlogSlugs();
@@ -20,9 +26,9 @@ export default async function BlogPostPage({
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className={`min-h-screen bg-black text-white ${geist.variable}`}>
       <main className="container mx-auto px-4 py-16">
-        <article className="max-w-3xl mx-auto">
+        <article className="max-w-3xl mx-auto font-mono">
           {/* Back button */}
           <Link
             href="/blog"

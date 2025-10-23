@@ -29,15 +29,15 @@ export default async function Home() {
   }
 
   const roles = [
-    'computer science student at NUS.',
-    'innovator.',
+    'student.',
+    'coffee lover.',
     'machine learning enthusiast.',
     'software engineer.',
     'data analyst.',
     'web developer.',
     'storyteller.',
     'photographer.',
-    'avid rock climber.'
+    'rock toucher.'
   ];
 
 
