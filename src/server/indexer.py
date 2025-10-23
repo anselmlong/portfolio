@@ -14,8 +14,9 @@ EMBED_MODEL = os.getenv("EMBED_MODEL")
 # Load your portfolio documents
 loader_txt = DirectoryLoader("../../public/data/", glob="**/*.txt", loader_cls=TextLoader)
 loader_md = DirectoryLoader("../../public/data/", glob="**/*.md", loader_cls=TextLoader)
+loader_md_blogs = DirectoryLoader("../../public/blogs/", glob="**/*.md", loader_cls=TextLoader)
 documents_txt = loader_txt.load()
-documents_md = loader_md.load()
+documents_md = loader_md.load() + loader_md_blogs.load()
 print(f"📂 Loaded {len(documents_txt)} .txt and {len(documents_md)} .md documents")
 headers_to_split_on = [
     ("#", "Header 1"),
