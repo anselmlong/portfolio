@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 @import "./theme.css";
 @import "./tokens.css";
 @import "tw-animate-css";
@@ -217,6 +218,13 @@ html, body {
 .scrollbar-neutral::-webkit-scrollbar-thumb {
   background-color: var(--scrollbar-thumb);
   border-radius: 9999px;
+
+/* Blog captions: use <figcaption> or any element with .caption inside .prose */
+.prose figcaption,
+.prose .caption {
+  /* Tailwind v4 @apply for consistent caption styling */
+  @apply mt-2 text-sm text-gray-500 text-center;
+}
   border: 2px solid transparent;
   background-clip: content-box;
 }

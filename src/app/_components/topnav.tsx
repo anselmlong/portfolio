@@ -48,9 +48,9 @@ export function TopNav() {
 			<div className="container mx-auto px-4">
 				<header className="flex justify-between items-center py-4">
 					<div className="flex items-center gap-8">
-						<h1 onClick={handleSecretClick} className="cursor-pointer select-none text-2xl font-bold bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">
+						<a href="/" onClick={handleSecretClick} className="cursor-pointer select-none text-2xl font-bold bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent hover:from-gray-100 hover:to-gray-300 transition-all">
 							AL
-						</h1>
+						</a>
 						<nav className="hidden md:flex gap-6">
 							<a href="/blog" className="text-gray-300 hover:text-white transition-colors">
 								blog

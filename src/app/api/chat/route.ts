@@ -6,6 +6,7 @@ import { StringOutputParser } from "@langchain/core/output_parsers";
 import { HumanMessage, AIMessage, BaseMessage } from "@langchain/core/messages";
 import { Document } from "@langchain/core/documents";
 import type { UIMessage } from "ai";
+import { pool } from "~/server/pg";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -27,6 +28,31 @@ function extractText(message: UIMessage): string {
     .map(p => (p.type === 'text' ? p.text : ''))
     .join('');
 }
+
+// Simple LRU-ish cache for retrieval results (per-process)
+const RETRIEVAL_CACHE_LIMIT = 100;
+const retrievalCache = new Map<string, string>(); // key: rewritten question, value: formatted context
+
+function cacheGet(key: string) {
+  return retrievalCache.get(key);
+}
+
+function cacheSet(key: string, value: string) {
+  if (retrievalCache.has(key)) {
+    retrievalCache.delete(key);
+  }
+  retrievalCache.set(key, value);
+  if (retrievalCache.size > RETRIEVAL_CACHE_LIMIT) {
+    // delete oldest
+    const firstKey = retrievalCache.keys().next().value;
+    if (firstKey) retrievalCache.delete(firstKey);
+  }
+}
+
+// Singletons for LLM, embeddings, and vector store
+let llmSingleton: ChatOpenAI | null = null;
+let embeddingsSingleton: OpenAIEmbeddings | null = null;
+let vectorStoreSingleton: PGVectorStore | null = null;
 
 // POST Endpoint -> Takes in AI SDK messages format
 export async function POST(req: NextRequest) {
@@ -51,41 +77,50 @@ export async function POST(req: NextRequest) {
       return Response.json({ error: "Question is required" }, { status: 400 });
     }
 
-    // Initialize LLM and embeddings
-    const llm = new ChatOpenAI({
-      modelName: process.env.CHAT_MODEL || "gpt-4o-mini",
-      temperature: 0.5,
-      openAIApiKey: process.env.OPENAI_API_KEY!,
-      streaming: true,
-    });
+    // --- Timing: start request ---
+    const t0 = Date.now();
 
-    const embeddings = new OpenAIEmbeddings({
-      modelName: process.env.EMBED_MODEL || "text-embedding-3-small",
-      openAIApiKey: process.env.OPENAI_API_KEY!,
-    });
+    // Initialize/reuse singletons
+    const llm =
+      llmSingleton ??
+      (llmSingleton = new ChatOpenAI({
+        modelName: process.env.CHAT_MODEL || "gpt-4o-mini",
+        temperature: 0.5,
+        openAIApiKey: process.env.OPENAI_API_KEY!,
+        streaming: true,
+        // Optional: cap response length for speed
+        maxTokens: 400,
+      }));
 
-    // Initialize vector store with dynamic import of pg Pool
-    const { Pool } = await import("pg");
-    const pool = new Pool({
-      connectionString: process.env.DATABASE_URL!,
-    });
+    const embeddings =
+      embeddingsSingleton ??
+      (embeddingsSingleton = new OpenAIEmbeddings({
+        modelName: process.env.EMBED_MODEL || "text-embedding-3-small",
+        openAIApiKey: process.env.OPENAI_API_KEY!,
+      }));
 
-    const vectorStore = await PGVectorStore.initialize(embeddings, {
-      pool,
-      tableName: "langchain_pg_embedding",
-      columns: {
-        idColumnName: "id",
-        vectorColumnName: "embedding",
-        contentColumnName: "document",
-        metadataColumnName: "cmetadata",
-      },
-    });
+    const vectorStore =
+      vectorStoreSingleton ??
+      (vectorStoreSingleton = await PGVectorStore.initialize(embeddings, {
+        pool,
+        tableName: "langchain_pg_embedding",
+        columns: {
+          idColumnName: "id",
+          vectorColumnName: "embedding",
+          contentColumnName: "document",
+          metadataColumnName: "cmetadata",
+        },
+      }));
 
-    const retriever = vectorStore.asRetriever({ k: 3 });
+    // Small dataset: fewer docs are usually sufficient and faster
+    const retriever = vectorStore.asRetriever({ k: 2 });
+    const t1 = Date.now();
 
-    // Convert AI SDK messages to LangChain format (excluding the last user message)
+    // Convert AI SDK messages to LangChain format (limit history for speed)
+    const historyWindow = 6; // last N messages before the latest
+    const startIdx = Math.max(0, messages.length - 1 - historyWindow);
     const historyMessages: BaseMessage[] = messages
-      .slice(0, -1)
+      .slice(startIdx, -1)
       .map((msg: UIMessage) => {
         const text = extractText(msg);
         return msg.role === 'user' 
@@ -105,30 +140,37 @@ export async function POST(req: NextRequest) {
 
     const rewriteChain = contextualizePrompt.pipe(llm).pipe(new StringOutputParser());
 
-    // Smart rewrite: skip if no meaningful history
+    // --- Timing: rewrite phase ---
     let rewrittenQuestion = question;
-    if (historyMessages.length >= 2) {
+    const needsRewrite =
+      historyMessages.length >= 2 &&
+      /\b(it|that|this|they|them|those|he|she|there|former|latter|previous|above)\b/i.test(
+        question
+      );
+    let rewriteMs = 0;
+    if (needsRewrite) {
+      const tRewriteStart = Date.now();
       rewrittenQuestion = await rewriteChain.invoke({
         input: question,
         history: historyMessages,
       });
+      rewriteMs = Date.now() - tRewriteStart;
     }
+    const t2 = Date.now();
 
-    // Answer prompt
+    // System Prompt!
     const answerPrompt = ChatPromptTemplate.fromMessages([
       [
         "system",
         `You are Anselm Long's portfolio assistant. Your role is to provide detailed, accurate information about his education, work experience, projects, and skills based on the provided context.
 
-Guidelines:
-- Be professional yet approachable
-- Cite specific projects, companies, or achievements when relevant
-- If the context doesn't contain the answer, politely say so
-- If there is a question that the context does not cover, respond with "I'm sorry, I don't have that information available."
-- Use bullet points for lists of skills or responsibilities
-
-Context:
-{context}`,
+          Guidelines:
+          - Be professional yet approachable
+          - Cite specific projects, companies, or achievements when relevant
+          - If there is a question that the context does not cover, respond with your best estimate based on the context available.
+          - If the question is not about Anselm Long, answer to the best of your ability but indicate that you are primarily knowledgeable about Anselm Long.
+          Context:
+          {context}`,
       ],
       new MessagesPlaceholder("history"),
       ["human", "{input}"],
@@ -139,11 +181,22 @@ Context:
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          // Retrieve documents
-          const docs = await retriever.invoke(rewrittenQuestion);
-          const context = formatDocs(docs);
+          // --- Timing: retrieval phase ---
+          const tRetrievalStart = Date.now();
+          let context = cacheGet(rewrittenQuestion);
+          let retrievalMs = 0;
+          if (!context) {
+            const docs = await retriever.invoke(rewrittenQuestion);
+            context = formatDocs(docs);
+            cacheSet(rewrittenQuestion, context);
+            retrievalMs = Date.now() - tRetrievalStart;
+          } else {
+            retrievalMs = Date.now() - tRetrievalStart; // cache hit, should be near zero
+          }
+          const t3 = Date.now();
 
-          // Stream LLM response
+          // --- Timing: LLM phase ---
+          const tLLMStart = Date.now();
           const answerChain = answerPrompt.pipe(llm).pipe(new StringOutputParser());
 
           const answerStream = await answerChain.stream({
@@ -152,14 +205,25 @@ Context:
             input: question,
           });
 
-          // Stream chunks to client
+          let firstTokenMs = 0;
+          let firstChunk = true;
           for await (const chunk of answerStream) {
             if (chunk) {
+              if (firstChunk) {
+                firstTokenMs = Date.now() - tLLMStart;
+                firstChunk = false;
+              }
               controller.enqueue(encoder.encode(chunk));
             }
           }
 
           controller.close();
+
+          // --- Timing: log all phases ---
+          const t4 = Date.now();
+          console.log(
+            `[RAG Timing] Total: ${t4-t0}ms | Init: ${t1-t0}ms | Rewrite: ${rewriteMs}ms | Retrieval: ${retrievalMs}ms | LLM first token: ${firstTokenMs}ms | LLM total: ${t4-tLLMStart}ms`
+          );
         } catch (error) {
           console.error("Error during streaming:", error);
           controller.enqueue(
