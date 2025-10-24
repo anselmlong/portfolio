@@ -3,7 +3,7 @@ TODOs:
 - [X] Prettify landing page
 - [X] Add blog posts (need more)
 - [ ] Add photography gallery
-- [ ] Add example prompts
+- [X] Add example prompts
 - [X] Add text switching feature to show my different roles.
 
 bugs

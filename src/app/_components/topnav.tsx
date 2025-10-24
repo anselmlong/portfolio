@@ -51,7 +51,7 @@ export function TopNav() {
 						<a href="/" onClick={handleSecretClick} className="cursor-pointer select-none text-2xl font-bold bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent hover:from-gray-100 hover:to-gray-300 transition-all">
 							AL
 						</a>
-						<nav className="hidden md:flex gap-6">
+						<nav className="flex flex-row md:flex-row gap-1 md:gap-6 md:mt-0">
 							<a href="/blog" className="text-gray-300 hover:text-white transition-colors">
 								blog
 							</a>
@@ -70,7 +70,7 @@ export function TopNav() {
 					</div>
 
 					<div className="flex items-center ">
-						<div className="flex gap-6 justify-center items-center">
+						<div className="flex gap-2 md:gap-6 justify-center items-center">
 							<a
 								href="mailto:anselmpius@gmail.com"
 								className="group text-gray-300 hover:text-gray-100 transition-all duration-300 transform hover:scale-110"
@@ -102,7 +102,7 @@ export function TopNav() {
 									<path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z" />
 								</svg>
 							</a>
-							
+
 						</div>
 					</div>
 				</header>
