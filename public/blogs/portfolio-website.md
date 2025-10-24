@@ -32,3 +32,7 @@ had to do a paypal online assessment where they asked me to build a RAG pipeline
 ### how i built rag
 
 langchain
+
+### building photos with gsap
+
+learning about the various gsap things

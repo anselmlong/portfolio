@@ -2,6 +2,7 @@
   /* Fonts */
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-secondary: var(--font-bg-sans)
   /* App background gradient stops */
   --color-bg-start: #0f0f0f;
   --color-bg-mid-1: #1a1a2e;

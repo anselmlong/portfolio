@@ -3,7 +3,7 @@ import "~/styles/globals.css";
 
 import { ConditionalTopNav } from "./_components/ConditionalTopNav";
 import { type Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Geist, Bricolage_Grotesque } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next"
 import { TRPCReactProvider } from "~/trpc/react";
 
@@ -18,13 +18,18 @@ const geist = Geist({
   variable: "--font-geist-sans",
 });
 
+const bricolageGrotesque = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-bg-sans"
+})
+
 export default function RootLayout({
   children,
 }: Readonly<{ 
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geist.variable}`}>
+     <html lang="en" className={`${geist.variable} ${bricolageGrotesque.variable}`}>
       <body className="bg-black text-white min-h-screen">
         <ConditionalTopNav />
         <TRPCReactProvider>{children}</TRPCReactProvider>

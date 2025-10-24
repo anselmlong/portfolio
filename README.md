@@ -69,7 +69,7 @@ A modern, fast, AI-powered portfolio built with Next.js, TypeScript, Bun, and La
 ## Customization
 
 - Add blog posts to `/blog`
-- Add photos to `/photos-gallery`
+- Add photos to `/photos`
 - Update hero text and roles in `page.tsx`
 - Replace resume in `public/resume.pdf`
 

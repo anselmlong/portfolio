@@ -1,14 +1,14 @@
 TODOs:
-- [ ] Optimise RAG pipeline
+- [ ] Optimise RAG pipeline - cache common prompts (semantic caching?)
 - [X] Prettify landing page
 - [X] Add blog posts (need more)
-- [ ] Add photography gallery
+- [ ] Add photography gallery (disabled for now)
 - [X] Add example prompts
 - [X] Add text switching feature to show my different roles.
 
 bugs
-- blog doesn't show up on phone
-- landing page
+- [X] blog doesn't show up on phone
+- [X] landing page
 
 ---
 

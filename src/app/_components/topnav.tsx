@@ -55,8 +55,8 @@ export function TopNav() {
 							<a href="/blog" className="text-gray-300 hover:text-white transition-colors">
 								blog
 							</a>
-							<a href="/photos-gallery" className="text-gray-300 hover:text-white transition-colors">
-								photos
+							<a href="/photos" className="text-gray-300 hover:text-white transition-colors">
+								{/*photos*/}
 							</a>
 							<a
 								href={filePath}
