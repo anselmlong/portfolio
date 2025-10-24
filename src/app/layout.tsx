@@ -4,7 +4,7 @@ import "~/styles/globals.css";
 import { ConditionalTopNav } from "./_components/ConditionalTopNav";
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
-
+import { Analytics } from "@vercel/analytics/next"
 import { TRPCReactProvider } from "~/trpc/react";
 
 export const metadata: Metadata = {
@@ -28,6 +28,7 @@ export default function RootLayout({
       <body className="bg-black text-white min-h-screen">
         <ConditionalTopNav />
         <TRPCReactProvider>{children}</TRPCReactProvider>
+        <Analytics />
       </body>
     </html>
   );
