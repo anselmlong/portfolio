@@ -56,7 +56,7 @@ class Typing extends React.Component<Props> {
 			return (
 				<span
 					className={this.props.className}
-					style={{ whiteSpace: "pre" }}
+					style={{ whiteSpace: "normal" }}
 					ref={(el) => {
 						this.el = el;
 					}}

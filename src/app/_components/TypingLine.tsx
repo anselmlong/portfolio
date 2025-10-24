@@ -23,8 +23,8 @@ export default function TypingLine({
     "inline-block align-baseline ml-2 bg-gradient-to-r from-purple-500 via-fuchsia-500 to-orange-400 bg-clip-text text-transparent";
 
   return (
-    <h3 className="text-2xl md:text-3xl text-gray-300 mb-4 max-w-3xl mx-auto leading-relaxed">
-      i'm {article}{""}
+    <h3 className="text-2xl md:text-3xl text-gray-300 mb-4 max-w-3xl mx-auto leading-normal">
+      i'm {article}{" "}
       <Typing
         strings={strings}
         typeSpeed={60}

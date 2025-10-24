@@ -9,6 +9,7 @@ TODOs:
 bugs
 - [X] blog doesn't show up on phone
 - [X] landing page
+- [] fix mobile compatibility with blog
 
 ---
 

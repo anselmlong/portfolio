@@ -30,7 +30,7 @@ export default function ClientHome({ hello }: { hello: any }) {
   ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+    <main className="font-mono py-20 min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
       <section className="relative py-20 px-4">
         <div className="container mx-auto text-center">
           <div className="mb-8">
