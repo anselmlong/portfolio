@@ -6,5 +6,5 @@ export const EXAMPLE_PROMPTS = [
   "what do you do for fun?",
   "what are your technical skills?",
   "what is your education background?",
-  "tell me about the malicious certificate detection project",
+  "tell me about your web experience",
 ];
