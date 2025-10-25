@@ -4,11 +4,11 @@ import ClientHome from "./ClientHome";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
+  await api.blog.list.prefetch();
 
   return (
     <HydrateClient>
-      <ClientHome hello={hello} />
+      <ClientHome />
     </HydrateClient>
   );
 }

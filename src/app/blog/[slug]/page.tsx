@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getBlogPost, getAllBlogSlugs } from '~/lib/blog';
+import { getAllBlogSlugs } from '~/lib/blog';
 import { Geist } from 'next/font/google';
+import { api } from '~/trpc/server';
 
 const geist = Geist({
   subsets: ['latin'],
@@ -19,7 +20,7 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = await getBlogPost(slug);
+  const post = await api.blog.bySlug({ slug });
 
   if (!post) {
     notFound();
@@ -27,7 +28,7 @@ export default async function BlogPostPage({
 
   return (
     <div className={`min-h-screen bg-black text-white ${geist.variable}`}>
-      <main className="container mx-auto px-4 py-16">
+      <main className="container mx-auto px-4 pt-28 pb-16 md:pt-36">
         <article className="max-w-3xl mx-auto font-mono">
           {/* Back button */}
           <Link
@@ -93,7 +94,7 @@ export default async function BlogPostPage({
 
           {/* Content */}
           <div
-            className="prose prose-invert prose-lg max-w-none
+            className="blog-content prose prose-invert prose-lg max-w-none
               prose-headings:font-bold prose-headings:tracking-tight
               prose-h1:text-4xl prose-h1:mb-4 prose-h1:text-white
               prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:text-white prose-h2:border-b prose-h2:border-gray-800 prose-h2:pb-2

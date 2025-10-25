@@ -78,7 +78,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
     const { data, content } = matter(fileContents);
     
     // Convert markdown to HTML
-    const htmlContent = await marked(content);
+    const htmlContent = enhanceHtmlContent(await marked(content));
     
     const excerpt = data.excerpt || content.split('\n\n')[0]?.substring(0, 200) || '';
     
@@ -103,4 +103,15 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
 function extractTitleFromContent(content: string, fallback: string): string {
   const match = content.match(/^#\s+(.+)$/m);
   return match?.[1] ?? fallback.replace(/-/g, ' ');
+}
+
+function enhanceHtmlContent(html: string): string {
+  const wrappedTables = html
+    .replace(/<table(\s[^>]*)?>/g, (_match, attrs = '') => {
+      const normalizedAttrs = attrs || '';
+      return `<div class="blog-table-wrapper" role="region" aria-label="Scrollable table"><table${normalizedAttrs}>`;
+    })
+    .replace(/<\/table>/g, '</table></div>');
+
+  return wrappedTables;
 }

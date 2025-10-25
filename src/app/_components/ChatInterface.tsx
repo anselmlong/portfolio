@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect, useRef } from 'react';
 import { useChat } from '@ai-sdk/react';
 import { TextStreamChatTransport, type UIMessage } from 'ai';
 import { CopyIcon, RefreshCcwIcon } from 'lucide-react';
@@ -26,7 +26,7 @@ import { EXAMPLE_PROMPTS } from '~/constants/example-prompts';
 const examplePrompts = EXAMPLE_PROMPTS;
 
 // Helper to get random prompts
-const getRandomPrompts = (prompts: string[], count: number = 3) => {
+const getRandomPrompts = (prompts: string[], count: number = 2) => {
   const shuffled = [...prompts];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -41,8 +41,10 @@ const ChatInterface = () => {
   const [input, setInput] = useState('');
   const [expanded, setExpanded] = useState(false);
   const [displayedPrompts, setDisplayedPrompts] = useState(() => 
-    getRandomPrompts(examplePrompts, 3)
+    getRandomPrompts(examplePrompts, 2)
   );
+  // ref to the expanding history area so we can scroll it into view when opened
+  const historyRef = useRef<HTMLDivElement | null>(null);
   const { messages, sendMessage, regenerate, status, error } = useChat({
     transport: new TextStreamChatTransport({
       api: '/api/chat',
@@ -91,6 +93,10 @@ const ChatInterface = () => {
     });
   };
 
+  
+
+  
+
   const handleSubmit = (message: PromptInputMessage) => {
     console.log('=== SUBMITTING MESSAGE ===');
     console.log('Input text:', message.text);
@@ -110,12 +116,13 @@ const ChatInterface = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 relative w-full">
+    <div className="max-w-3xl mx-auto p-4 relative w-full">
       <div className="flex flex-col">
         {/* History area that expands downward above the input */}
         <div
+          ref={historyRef}
           className={`transition-all duration-300 ease-out ${
-            expanded ? 'h-[60vh] mt-2' : 'h-0'
+            expanded ? 'h-[40vh] mt-2' : 'h-0'
           }`}
           aria-hidden={!expanded}
         >
@@ -173,6 +180,7 @@ const ChatInterface = () => {
               value={input}
               placeholder="ask me anything..."
               onFocus={() => setExpanded(true)}
+              rows={1}
             />
           </PromptInputBody>
           <PromptInputFooter>
