@@ -1,6 +1,6 @@
 ---
-title: "detecting malicious ssl/tls certificates with machine learning"
-date: "2025-10-23"
+title: "data and a dream"
+date: "2025-08-01"
 author: "Anselm Long"
 tags:
   - python
@@ -74,4 +74,4 @@ this internship laid the foundation for everything i want to do in ai. it taught
 
 it’s also what sparked my interest in explainable ai and semi-supervised learning, which i’ve been exploring through side projects ever since.  
 
-so yeah — it started with data and a dream. and it’s still going.
+so yeah — it started with data and a dream. and it’s still going!

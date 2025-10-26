@@ -32,6 +32,8 @@ had to do a paypal online assessment where they asked me to build a RAG pipeline
 ### how i built rag
 
 langchain
+7 secs for a full response of the prompt "what is your artificial intelligence experience?"
+15 secs upon restarting the server with the same prompt
 
 ### building photos with gsap
 
