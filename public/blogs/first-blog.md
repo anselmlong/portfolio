@@ -23,10 +23,10 @@ i am STRUGGLING to find an internship. over the past 2 years, i've been focused 
 i'm going to try write a blog for every experience/project i had!
 - [X] [strategic digital project intern at imda](/blog/sdp-intern)
 - [X] [vbook - nus cs2103t](/blog/vbook)
+- [X] [miccdrop - hack and roll 2025](/blog/miccdrop)
 - [X] [ml intern at imda](/blog/machine-learning-intern)
-- [ ] making a telegram bot for my long distance relationship
-- [ ] freakcha at hackharvard
-- [X] making personal portfolio website
-- [ ] making gift chooser for gf
-- [ ] making RAG (Retrieval Augmented Generation) pipeline for portfolio website
+- [X] [making a telegram bot for my long distance relationship](/blog/ldr-bot)
+- [X] [freakcha at hackharvard](/blog/freak-cha)
+- [X] [making personal portfolio website](/blog/portfolio-website)
+- [X] [making gift chooser for gf](/blog/birthday-website)
 

@@ -1,12 +1,14 @@
 ---
-title: "miccdrop"
-date: "2025-10-24"
+title: "miccdrop: a shitty karaoke app"
+date: "2025-01-20"
 author: "Anselm Long"
 tags:
-  - personal
-  - portfolio
-  - intro
-excerpt: "hack and roll 2024"
+  - hackathon
+  - supabase
+  - react native
+excerpt: "hack and roll 2025"
 ---
 
-# to be written...
+## check out
+
+checkout the repo [here](https://github.com/leroytan/miccdrop)
