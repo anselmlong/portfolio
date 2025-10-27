@@ -118,6 +118,24 @@ export default function ClientHome() {
         },
         { autoAlpha: 1, opacity: 1, y: 0, duration: 0.6, stagger: 0.15, ease: "power2.out" }
       );
+      // Fade the hero arrow out as the user scrolls past the header.
+      // Using fromTo + scrub maps scroll progress to the opacity/position.
+      gsap.fromTo(
+        ".hero-arrow",
+        { autoAlpha: 1, y: 0 },
+        {
+          autoAlpha: 0,
+          y: -20,
+          ease: "none",
+          scrollTrigger: {
+            trigger: headerRef.current,
+            start: "top top",
+            end: "bottom 50%",
+            scrub: true,
+            // markers: true, // enable while tuning start/end
+          },
+        }
+      );
     }, headerRef);
 
     return () => ctx.revert();
@@ -203,6 +221,19 @@ export default function ClientHome() {
           <ChatInterface />
         </div>
 
+        <div className="flex justify-center fade-in hero-arrow mt-30">
+          <svg
+            className="ml-2 w-6 h-6 text-gray-400 animate-bounce"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+
         <div className="absolute inset-0 overflow pointer-events-none">
           <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-gray-500/10 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute top-3/4 right-1/4 w-48 h-48 bg-gray-400/10 rounded-full blur-3xl animate-pulse"></div>
@@ -236,7 +267,7 @@ export default function ClientHome() {
       <ProjectsGrid projects={projects} />
 
       <section ref={bottomRef}>
-        <div className="animate-up mt-40 mb-20 px-6">
+        <div className="animate-up mt-50 mb-20 px-6">
           <h1 className="text-3xl md:text-5xl font-bold mb-8 bg-gradient-to-r from-gray-100 via-gray-300 to-gray-400 bg-clip-text text-transparent text-center">
             still have more questions? ask!
           </h1>

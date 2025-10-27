@@ -9,6 +9,15 @@ const geist = Geist({
   variable: '--font-geist-sans',
 });
 
+function computeReadingTime(html: string) {
+  // Strip HTML tags and count words
+  const text = html.replace(/<[^>]*>/g, ' ');
+  const words = (text.match(/\w+/g) || []).length;
+  const wpm = 200;
+  const minutes = Math.max(1, Math.ceil(words / wpm));
+  return `${minutes} min read`;
+}
+
 export async function generateStaticParams() {
   const slugs = getAllBlogSlugs();
   return slugs.map((slug) => ({ slug }));
@@ -56,7 +65,11 @@ export default async function BlogPostPage({
             <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-gray-100 via-gray-300 to-gray-400 bg-clip-text text-transparent">
               {post.title}
             </h1>
-            
+            {/* Excerpt (lead) */}
+            {post.excerpt && (
+              <p className="text-lg text-gray-400 max-w-prose mb-4">{post.excerpt}</p>
+            )}
+
             {/* Metadata */}
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
               <time dateTime={post.date}>
@@ -66,6 +79,9 @@ export default async function BlogPostPage({
                   day: 'numeric',
                 })}
               </time>
+              {/* reading time */}
+              <span>•</span>
+              <span>{computeReadingTime(post.content)}</span>
               
               {post.author && (
                 <>
@@ -94,7 +110,7 @@ export default async function BlogPostPage({
 
           {/* Content */}
           <div
-            className="blog-content prose prose-invert prose-lg max-w-none
+            className="blog-content prose prose-invert prose-lg max-w-prose mx-auto
               prose-headings:font-bold prose-headings:tracking-tight
               prose-h1:text-4xl prose-h1:mb-4 prose-h1:text-white
               prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:text-white prose-h2:border-b prose-h2:border-gray-800 prose-h2:pb-2
