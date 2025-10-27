@@ -221,7 +221,8 @@ export default function ClientHome() {
           <ChatInterface />
         </div>
 
-        <div className="flex justify-center fade-in hero-arrow mt-30">
+        <div className="flex flex-col items-center fade-in hero-arrow mt-20">
+          <h6 className="text-gray-400 mb-2 ml-3 animate-bounce">scroll</h6>
           <svg
             className="ml-2 w-6 h-6 text-gray-400 animate-bounce"
             fill="none"
