@@ -48,6 +48,7 @@
     "@types/pg": "^8.15.5",
     "@uploadthing/react": "^7.3.3",
     "@vercel/analytics": "^1.5.0",
+    "@vercel/kv": "^3.0.0",
     "@xyflow/react": "^12.9.0",
     "ai": "^5.0.76",
     "canvas-confetti": "^1.9.3",

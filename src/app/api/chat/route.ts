@@ -7,13 +7,10 @@ import { HumanMessage, AIMessage, BaseMessage } from "@langchain/core/messages";
 import { Document } from "@langchain/core/documents";
 import type { UIMessage } from "ai";
 import { pool } from "~/server/pg";
-import { EXAMPLE_PROMPTS } from "~/constants/example-prompts";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
-// Flag to track if cache has been warmed
-let isCacheWarmed = false;
 
 // Types
 interface ChatRequest {
@@ -33,25 +30,7 @@ function extractText(message: UIMessage): string {
     .join('');
 }
 
-// Simple LRU-ish cache for retrieval results (per-process)
-const RETRIEVAL_CACHE_LIMIT = 100;
-const retrievalCache = new Map<string, string>(); // key: rewritten question, value: formatted context
-
-function cacheGet(key: string) {
-  return retrievalCache.get(key);
-}
-
-function cacheSet(key: string, value: string) {
-  if (retrievalCache.has(key)) {
-    retrievalCache.delete(key);
-  }
-  retrievalCache.set(key, value);
-  if (retrievalCache.size > RETRIEVAL_CACHE_LIMIT) {
-    // delete oldest
-    const firstKey = retrievalCache.keys().next().value;
-    if (firstKey) retrievalCache.delete(firstKey);
-  }
-}
+// Note: in-memory retrieval cache removed to avoid stale per-process state.
 
 // Singletons for LLM, embeddings, and vector store
 let llmSingleton: ChatOpenAI | null = null;
@@ -122,7 +101,7 @@ export async function POST(req: NextRequest) {
     const t1 = Date.now();
 
     // Convert AI SDK messages to LangChain format (limit history for speed)
-    const historyWindow = 6; // last N messages before the latest
+    const historyWindow = 5; // last N messages before the latest
     const startIdx = Math.max(0, messages.length - 1 - historyWindow);
     const historyMessages: BaseMessage[] = messages
       .slice(startIdx, -1)
@@ -189,16 +168,9 @@ export async function POST(req: NextRequest) {
         try {
           // --- Timing: retrieval phase ---
           const tRetrievalStart = Date.now();
-          let context = cacheGet(rewrittenQuestion);
-          let retrievalMs = 0;
-          if (!context) {
-            const docs = await retriever.invoke(rewrittenQuestion);
-            context = formatDocs(docs);
-            cacheSet(rewrittenQuestion, context);
-            retrievalMs = Date.now() - tRetrievalStart;
-          } else {
-            retrievalMs = Date.now() - tRetrievalStart; // cache hit, should be near zero
-          }
+          const docs = await retriever.invoke(rewrittenQuestion);
+          const context = formatDocs(docs);
+          const retrievalMs = Date.now() - tRetrievalStart;
           const t3 = Date.now();
 
           // --- Timing: LLM phase ---

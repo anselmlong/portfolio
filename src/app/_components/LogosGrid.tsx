@@ -61,7 +61,7 @@ export default function LogosGrid({ logos }: { logos: Logo[] }) {
                 <img
                   src={logo.src}
                   alt={logo.alt}
-                  className="h-10 w-10 md:h-16 md:w-16 object-contain drop-shadow-xl transition-transform duration-300 group-hover:scale-110"
+                  className="h-10 w-10 md:h-16 md:w-16 object-contain rounded-full drop-shadow-xl transition-transform duration-300 group-hover:scale-110"
                 />
               </div>
               <span className="text-sm uppercase tracking-wide text-gray-400 group-hover:text-gray-100">

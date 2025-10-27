@@ -1,4 +1,6 @@
-Education
+# Education
+
+## University 
 
 National University of Singapore
 Bachelor’s Degree in Computer Science (Aug 2023 – Apr 2027)
@@ -12,24 +14,27 @@ I'm currently doing my Semester Exchange Programme at Tulane University, New Orl
 Ridge View Residential College
 (Aug 2023 – Apr 2025)
 Activities and Societies:
+	Senior Student Leader (AY25/26)
 
-Senior Student Leader (AY25/26)
+	Publicity Team for Peer Student Supporters (PSS)
 
-Publicity Team for Peer Student Supporters (PSS)
+	Video Production Head for RVRC Open House 2025
 
-Video Production Head for RVRC Open House 2025
+	Publicity Team for RVRC Coffee Club
 
-Publicity Team for RVRC Coffee Club
+	Participant, Inter College Games 2023
 
-Participant, Inter College Games 2023
+	Captain, Ridge View Bouldering Team
+	Skills: Video Production, Leadership
 
-Captain, Ridge View Bouldering Team
-Skills: Video Production, Leadership
+## Junior College
 
 Eunoia Junior College
 A Levels (2019 – 2020)
 Grade: AAAA/AB
 Activities and Societies: Member of the Media Club
+
+## Secondary
 
 Catholic High School (公教中学)
 Secondary School (Integrated Programme) (2015 – 2018)
