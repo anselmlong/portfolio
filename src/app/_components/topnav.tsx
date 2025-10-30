@@ -7,7 +7,7 @@ export function TopNav() {
 	// Secret 5-click easter egg on logo within 3 seconds
 	const clickCountRef = useRef(0);
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-	const fileName = "resume.pdf",
+	const fileName = "Anselm_Long_Resume.pdf",
 		filePath = "/resume.pdf";
 	useEffect(() => {
 		return () => {
@@ -45,13 +45,13 @@ export function TopNav() {
 
 	return (
 		<nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-black/30 border-b border-white/10">
-			<div className="container mx-auto px-4">
+			<div className="container mx-auto px-0">
 				<header className="flex justify-between items-center py-4">
 					<div className="flex items-center gap-8">
 						<a href="/" onClick={handleSecretClick} className="cursor-pointer select-none text-2xl font-bold bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent hover:from-gray-100 hover:to-gray-300 transition-all">
 							AL
 						</a>
-						<nav className="flex flex-row md:flex-row gap-1 md:gap-6 md:mt-0">
+						<nav className="flex flex-row md:flex-row gap-4 md:gap-6 md:mt-0">
 							<a href="/blog" className="text-gray-300 hover:text-white transition-colors">
 								blog
 							</a>

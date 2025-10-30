@@ -144,6 +144,7 @@ body {
     @apply border-border outline-ring/50;
   }
   body {
+    margin: 0;
     @apply bg-background text-foreground;
   }
 }
@@ -176,6 +177,7 @@ html, body {
   scrollbar-width: thin;
   /* Avoid layout shift when scrollbar appears */
   scrollbar-gutter: stable both-edges;
+  
 }
 
 /* Global (page) scrollbar: WebKit (Chrome, Edge, Safari) */

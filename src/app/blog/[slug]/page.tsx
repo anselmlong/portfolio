@@ -112,9 +112,12 @@ export default async function BlogPostPage({
           <div
             className="blog-content prose prose-invert prose-lg max-w-prose mx-auto
               prose-headings:font-bold prose-headings:tracking-tight
-              prose-h1:text-4xl prose-h1:mb-4 prose-h1:text-white
-              prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:text-white prose-h2:border-b prose-h2:border-gray-800 prose-h2:pb-2
-              prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-gray-200
+              prose-h1:text-4xl prose-h1:mb-4 prose-h1:bg-gradient-to-b prose-h1:from-[#FE4E00]/30 prose-h1:to-[#55433F]/30 prose-h1:bg-clip-text prose-h1:text-transparent
+              prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:bg-gradient-to-b prose-h2:from-[#FE4E00]/30 prose-h2:to-[#55433F]/30 prose-h2:bg-clip-text prose-h2:text-transparent prose-h2:border-b prose-h2:border-gray-800 prose-h2:pb-2
+              prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-h3:bg-gradient-to-b prose-h3:from-[#FE4E00]/30 prose-h3:to-[#55433F]/30 prose-h3:bg-clip-text prose-h3:text-transparent
+                prose-h1:bg-gradient-to-b prose-h1:from-[#FF9900]/70 prose-h1:to-[#FFD700]/70 prose-h1:bg-clip-text prose-h1:text-transparent
+                prose-h2:bg-gradient-to-b prose-h2:from-[#FF9900]/70 prose-h2:to-[#FFD700]/70 prose-h2:bg-clip-text prose-h2:text-transparent prose-h2:border-b prose-h2:border-gray-800 prose-h2:pb-2
+                prose-h3:bg-gradient-to-b prose-h3:from-[#FF9900]/70 prose-h3:to-[#FFD700]/70 prose-h3:bg-clip-text prose-h3:text-transparent
               prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-4
               prose-a:text-gray-400 prose-a:underline prose-a:decoration-gray-600 hover:prose-a:text-gray-300 hover:prose-a:decoration-gray-500
               prose-strong:text-gray-200 prose-strong:font-semibold

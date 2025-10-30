@@ -32,10 +32,16 @@ const roles = [
 
 const experiences = [
   {
-    name: "eunoia junior college",
-    period: "2019-2020",
-    description: "joined ejc media",
-    url: ""
+    name: "machine learning intern @ imda",
+    period: "may 2025 - aug 2025",
+    description: "machine learning for cybersecurity use cases - detecting malicious certificates!",
+    url: "/blog/machine-learning-intern"
+  },
+  {
+    name: "strategic digital projects intern @ imda",
+    period: "may 2024 - aug 2024",
+    description: "technical research on emerging technologies applied to companies.",
+    url: "/blog/sdp-intern"
   },
   {
     name: "national university of singapore",
@@ -44,16 +50,10 @@ const experiences = [
     url: ""
   },
   {
-    name: "strategic digital projects intern @ imda",
-    period: "may 2024 - aug 2024",
-    description: "technical research on emerging technologies applied to companies. read more below!",
-    url: "/blog/sdp-intern"
-  },
-  {
-    name: "machine learning intern @ imda",
-    period: "may 2025 - aug 2025",
-    description: "machine learning for cybersecurity use cases - detecting malicious certificates!",
-    url: "/blog/machine-learning-intern"
+    name: "eunoia junior college",
+    period: "2019-2020",
+    description: "joined ejc media",
+    url: ""
   }
 ]
 
@@ -205,7 +205,7 @@ export default function ClientHome() {
   return (
     <main className="font-mono py-20 min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
       <section ref={headerRef} className="relative py-20">
-        <div className="container mx-auto text-center">
+  <div className="mx-auto text-center">
           <div className="mb-8">
             <h1 className="stagger-in text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-gray-100 via-gray-300 to-gray-400 bg-clip-text text-transparent">
               hi, i&apos;m anselm.
@@ -236,15 +236,15 @@ export default function ClientHome() {
         </div>
 
         <div className="absolute inset-0 overflow pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-gray-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-1/4 left-0 w-32 h-32 bg-gray-500/10 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute top-3/4 right-1/4 w-48 h-48 bg-gray-400/10 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute top-1/2 left-3/4 w-24 h-24 bg-gray-500/10 rounded-full blur-3xl animate-pulse"></div>
         </div>
 
       </section>
 
-      <section ref={aboutRef} className="px-4 md:px-40 mt-40 pb-10 vh-50">
-        <div className="stagger-in pl-30 container mx-auto flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12 justify-center">
+  <section ref={aboutRef} className="px-0 md:px-40 mt-40 pb-10 vh-50">
+        <div className="stagger-in pl-30 container mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
           <img
             src="/photos/main/portrait.jpeg"
             alt="Anselm Long"

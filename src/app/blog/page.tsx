@@ -6,7 +6,7 @@ export default async function BlogPage() {
 
   return (
     <div className="min-h-screen bg-black text-white font-mono">
-      <main className="container mx-auto pt-28 pb-16 md:pt-36">
+  <main className="container mx-auto px-0 pt-28 pb-16 md:pt-36">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="mb-12">
@@ -48,7 +48,7 @@ export default async function BlogPage() {
                             {post.tags.slice(0, 3).map((tag) => (
                               <span
                                 key={tag}
-                                className="px-2 py-1 text-xs rounded-full bg-gray-800 text-gray-400"
+                                className="px-2 py-1 text-xs rounded-full bg-gradient-to-b from-[#FE4E00]/30 to-[#55433F]/30 text-orange-200 font-semibold shadow-sm"
                               >
                                 {tag}
                               </span>
