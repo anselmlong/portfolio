@@ -1,7 +1,7 @@
 TODOs:
-- [ ] Optimise RAG pipeline - cache common prompts (semantic caching?)
-- [ ] Finish writing blog posts
-- [ ] Fix scrolling and cosmetics
+- [X] Optimise RAG pipeline - cache common prompts (semantic caching?)
+- [X] Finish writing blog posts
+- [X] Fix scrolling and cosmetics
 - [X] Polish up frontend
 - [X] Prettify landing page
 - [X] Add blog posts (need more)
@@ -11,6 +11,9 @@ TODOs:
 - [X] Add skills section below
 - [X] Add timeline with education + experience
 - [X] Add projects
+
+Potential Optimizations:
+- [ ] Add agent to determine intent
 
 
 bugs
