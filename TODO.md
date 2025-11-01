@@ -14,6 +14,7 @@ TODOs:
 
 Potential Optimizations:
 - [ ] Add agent to determine intent
+- [ ] Add rate limiter
 
 
 bugs
