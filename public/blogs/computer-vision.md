@@ -15,7 +15,7 @@ excerpt: "recognising gestures with YOLOv8 and pulling up brainrot images based 
 </video>
 <figcaption>my computer vision debut</figcaption>
 
-lowkey, I seem to have a knack for useless projects: while I was always thinking about dipping my toes in Computer Vision, I was always struggling to find a project I'd have fun working on, and which uses my webcam. inspired by a TikTok, I decided to train a pre-trained YOLO model on gesture and facial recognition. 
+lowkey, I seem to have a knack for useless projects: while I was always thinking about dipping my toes in Computer Vision, I was always struggling to find a project I'd have fun working on, and which uses my webcam. inspired by a TikTok, I decided to train a pre-trained YOLO model on gesture and facial recognition. here's my GitHub [repository](https://github.com/anselmlong/six-seven) (don't ask why it's named that way).
 
 ## 1. Getting started with YOLOv8  
 I decided to use YOLOv8 because it’s the more stable and mature version of the YOLO family. 
