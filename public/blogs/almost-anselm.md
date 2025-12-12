@@ -17,6 +17,9 @@ excerpt: "I fine-tuned Mistral-7b with Axolotl on Telegram messages."
 # What dumb project did I do again?
 Hey everyone, welcome to another useless side project of mine. I've been getting a lot of Telegram messages lately. Sometimes - it just gets annoying to reply... so why not create a model to reply like me? This was a fun but very painful project that took me over three weeks to debug and iterate through model training and inference. Working with the NUS SoC Compute Cluster was a major pain, and I kept running into out of memory errors. But without Further Ado - here's how I did it.
 
+Check out my GitHub repo [here](https://github.com/anselmlong/almost-anselm) for code and scripts!
+
+
 # TL:DR
 I fine-tuned Mistral-7b with Axolotl on Telegram messages, containerizing with Docker, and hosting on my friend's GPU.
 
