@@ -109,15 +109,6 @@ export default function ClientHome() {
   // Header/stagger animations (stagger-in)
   useGSAP(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".stagger-in",
-        {
-          autoAlpha: 0,
-          opacity: 0,
-          y: 20
-        },
-        { autoAlpha: 1, opacity: 1, y: 0, duration: 0.6, stagger: 0.15, ease: "power2.out" }
-      );
       // Fade the hero arrow out as the user scrolls past the header.
       // Using fromTo + scrub maps scroll progress to the opacity/position.
       gsap.fromTo(
