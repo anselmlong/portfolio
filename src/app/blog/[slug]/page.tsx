@@ -38,7 +38,7 @@ export default async function BlogPostPage({
   return (
     <div className={`min-h-screen bg-black text-white ${geist.variable}`}>
       <main className="container mx-auto px-4 pt-28 pb-16 md:pt-36">
-        <article className="max-w-3xl mx-auto font-mono">
+        <article className="max-w-7xl mx-auto font-mono">
           {/* Back button */}
           <Link
             href="/blog"
@@ -110,7 +110,7 @@ export default async function BlogPostPage({
 
           {/* Content */}
           <div
-            className="blog-content prose prose-invert prose-lg max-w-prose mx-auto
+            className="blog-content prose prose-invert prose-lg max-w-6xl mx-auto
               prose-headings:font-bold prose-headings:tracking-tight
               prose-h1:text-4xl prose-h1:mb-4 prose-h1:bg-gradient-to-b prose-h1:from-[#FE4E00]/30 prose-h1:to-[#55433F]/30 prose-h1:bg-clip-text prose-h1:text-transparent
               prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:bg-gradient-to-b prose-h2:from-[#FE4E00]/30 prose-h2:to-[#55433F]/30 prose-h2:bg-clip-text prose-h2:text-transparent prose-h2:border-b prose-h2:border-gray-800 prose-h2:pb-2

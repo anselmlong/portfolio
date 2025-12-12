@@ -15,24 +15,7 @@ export function TopNav() {
 		};
 	}, []);
 
-	const handleSecretClick = () => {
-		clickCountRef.current += 1;
-		if (clickCountRef.current === 1) {
-			// Start/reset 3s window on first click
-			router.push('/');
-			if (timeoutRef.current) clearTimeout(timeoutRef.current);
-			timeoutRef.current = setTimeout(() => {
-				clickCountRef.current = 0;
-				timeoutRef.current = null;
-			}, 3000);
-		}
-		if (clickCountRef.current >= 5) {
-			if (timeoutRef.current) clearTimeout(timeoutRef.current);
-			clickCountRef.current = 0;
-			timeoutRef.current = null;
-			router.push('/xuan');
-		}
-	};
+
 	// Optional programmatic download (not needed when using anchor with download)
 	const handleDownload = () => {
 		const link = document.createElement('a');
@@ -48,7 +31,7 @@ export function TopNav() {
 			<div className="container mx-auto px-0">
 				<header className="flex justify-between items-center py-4">
 					<div className="flex items-center gap-8">
-						<a href="/" onClick={handleSecretClick} className="cursor-pointer select-none text-2xl font-bold bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent hover:from-gray-100 hover:to-gray-300 transition-all">
+						<a href="/"  className="cursor-pointer select-none text-2xl font-bold bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent hover:from-gray-100 hover:to-gray-300 transition-all">
 							AL
 						</a>
 						<nav className="flex flex-row md:flex-row gap-4 md:gap-6 md:mt-0">

@@ -1,5 +1,5 @@
 ---
-title: "data and a dream"
+title: "Data and a Dream"
 date: "2025-08-01"
 author: "Anselm Long"
 tags:
@@ -7,22 +7,22 @@ tags:
   - machine learning
   - scikit-learn
   - anomaly detection
-excerpt: "probably my most tech-focused experience to date. i had 3 months and 1 priority - to detect which web certificates were malicious and which weren't. all i had was data and a dream..."
+excerpt: "Probably my most tech-focused experience to date. I had 3 months and 1 priority - to detect which web certificates were malicious and which weren't. All I had was data and a dream..."
 ---
 
 ![me final presenting](/blogs/images/machine-learning-intern.png)
-<figcaption>my final presentation for this internship</figcaption>
+<figcaption>My final presentation for this internship</figcaption>
 
-read my full report [here](/blog/detecting-malicious-certificates)!
+Read my full report [here](/blog/detecting-malicious-certificates)!
 
-## context
+## Context
 
-this was my second internship at imda — and unlike my first, it was fully technical. there wasn’t a fixed guidebook or daily hand-holding; i had a goal, a dataset, and the freedom (and pressure) to make something real.  
+This was my second internship at IMDA — and unlike my first, it was fully technical. There wasn't a fixed guidebook or daily hand-holding; I had a goal, a dataset, and the freedom (and pressure) to make something real.  
 
-my task: detect **malicious SSL/TLS certificates** using machine learning.  
-that meant sifting through millions of certificate records, engineering useful features, training anomaly detection models, and eventually explaining *why* the models made certain predictions.  
+My task: Detect **malicious SSL/TLS certificates** using machine learning.  
+That meant sifting through millions of certificate records, engineering useful features, training anomaly detection models, and eventually explaining *why* the models made certain predictions.  
 
-it was my first deep dive into applied machine learning, and it ended up being the experience that solidified my interest in ai.
+It was my first deep dive into applied machine learning, and it ended up being the experience that solidified my interest in AI.
 
 ---
 
@@ -49,29 +49,29 @@ by the end, i also performed **data analysis on model outputs** to uncover behav
 
 ---
 
-## reflections
+## Reflections
 
-i actually finished the initial model early — and that gave me time to explore the “why” behind it. i spent days trying to visualise decision boundaries, interpret tree structures, and trace feature interactions.  
+I actually finished the initial model early — and that gave me time to explore the "why" behind it. I spent days trying to visualise decision boundaries, interpret tree structures, and trace feature interactions.  
 
-the hardest part wasn’t training the model; it was explaining it. communicating *how* it worked to people who weren’t data scientists forced me to simplify without oversimplifying.  
+The hardest part wasn't training the model; it was explaining it. Communicating *how* it worked to people who weren't data scientists forced me to simplify without oversimplifying.  
 
-one of my favourite moments was finding the original source code for the feature pipeline and refactoring it to make everything modular and reproducible — a small change that made future iterations so much easier.
-
----
-
-## what i learned
-
-- explainability isn’t optional — it’s what makes ai trustworthy  
-- most of machine learning is about **data**: cleaning it, understanding it, and extracting the right features  
-- reproducibility and documentation matter just as much as model performance  
-- cybersecurity is genuinely fascinating — there’s so much overlap with ml, and it’s all about patterns, anomalies, and context  
+One of my favourite moments was finding the original source code for the feature pipeline and refactoring it to make everything modular and reproducible — a small change that made future iterations so much easier.
 
 ---
 
-## what’s next
+## What I Learned
 
-this internship laid the foundation for everything i want to do in ai. it taught me how to move from theory to practice — from “training a model” to **building a system that solves a real-world problem**.  
+- Explainability isn't optional — it's what makes AI trustworthy  
+- Most of machine learning is about **data**: cleaning it, understanding it, and extracting the right features  
+- Reproducibility and documentation matter just as much as model performance  
+- Cybersecurity is genuinely fascinating — there's so much overlap with ML, and it's all about patterns, anomalies, and context
 
-it’s also what sparked my interest in explainable ai and semi-supervised learning, which i’ve been exploring through side projects ever since.  
+---
 
-so yeah — it started with data and a dream. and it’s still going!
+## What's Next
+
+This internship laid the foundation for everything I want to do in AI. It taught me how to move from theory to practice — from "training a model" to **building a system that solves a real-world problem**.  
+
+It's also what sparked my interest in explainable AI and semi-supervised learning, which I've been exploring through side projects ever since.  
+
+So yeah — it started with data and a dream. And it's still going!

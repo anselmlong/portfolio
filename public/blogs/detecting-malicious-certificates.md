@@ -7,10 +7,10 @@ tags:
   - cybersecurity
   - internship
   - data-science
-excerpt: "my final report for my machine learning intern! i think i was quite comprehensive here. recreated it in markdown for easier reading but i'll attach the pdf version inside too!"
+excerpt: "My final report for my machine learning intern! I think I was quite comprehensive here. Recreated it in markdown for easier reading but I'll attach the PDF version inside too!"
 ---
 
-pdf version can be downloaded [here](/blogs/images/SIP_Final_Report.pdf)
+PDF version can be downloaded [here](/blogs/images/SIP_Final_Report.pdf)
 
 ## Summary
 
