@@ -21,16 +21,18 @@ Check out my GitHub repo [here](https://github.com/anselmlong/almost-anselm) for
 
 
 # TL:DR
-I fine-tuned Mistral-7b with Axolotl on Telegram messages, containerizing with Docker, and hosting on my friend's GPU.
+I fine-tuned Mistral-7b with Axolotl on my Telegram messages. It was fun... but painful.
 
 # First Step: Pulling messages from Telegram
 
 The most important step was the data that I was using to train the model. I wanted the model to reply like me, so I had to use training data from my personal messages. Using Telethon, a Python library to interact with Telegram, I wrote a simple Python script to pull all my messages from Telegram and store them in a JSON file.
+
 At first, it was pulling everything, including other people's channels, so I had to find a way to restrict what it can pull. Eventually, I selected about 120 chats, with this criteria:
 - No channels
 - No group chats with more than 20 members because I won't be speaking much
 - Must have a minimum of 100 messages from me for robust training data
 - Only content from this year to avoid concept drift
+
 For each chat, I extracted a maximum of 5000 messages. Needless to say, this took a long time to process, but it was luckily a one time thing.
 
 # Second - building dataset from messages
