@@ -12,32 +12,52 @@ excerpt: "Evaluating my fine-tuned LLM (almost-anselm) against prompts, comparin
 ---
 
 Alright, I made the LLM - now I need to see how well it performs compared to me. To do this, I created a set of prompts and had both myself and the LLM respond to them. Then, I asked a few friends to evaluate the responses without knowing which was which.
+![screenshot](/blogs/images/ansel_ss.png)
 
-# Prompts
+# Full Quiz
+Here are the prompts and both responses (labeled A and B). See if you can guess which is mine!
+1. You're on a lifeboat with room for two, but your spouse and child are there. Who do you save?  
+A: i think it depends on how old my child is, but i'd save my child likely  
+B: oh shit i gotta think about this one :( my immediate response is wife then child tho HAHAHAHAA
 
-I chose a variety of prompts, some funny, some to see how it replicates my style:
+2. eat lunch alr or not  
+A: ya i just ate hbu  
+B: yeah i had brunch already! i was like oof u guys don’t eat till 12… i ate 8am HAHAHAA… just to say hi :)))))) its kinda crazy how much this place has changed in a year
 
-1. You're on a lifeboat with room for two, but your spouse and child are there. Who do you save?
+3. what do you want to eat later  
+A: yaooo btw what do yall think abt this course  
+B: uhhh tbh i'm not sure we see how?
 
-2. eat lunch alr or not
+4. honestly today was kinda rough ngl  
+A: oh damn… is it because of work or personal things? either way, idk what i can do to help rly  
+B: omg are u okay what happened to u
 
-3. what do you want to eat later
+5. Do you like coffee?  
+A: ya i love a latte  
+B: yes!! i love coffee
 
-4. honestly today was kinda rough ngl
+6. which route are you currently projecting?  
+A: nothing rn cuz i just injured my pulley sadly  
+B: the one i proj to climb a month ago is 14... (long, detailed reply with insta/video refs) 🫶‍
 
-5. Do you like coffee?
+7. Do y'all wanna climb at Chevrons tomorrow?  
+A: sure i have nothing on!  
+B: ok sure!
 
-6. which route are you currently projecting?
+8. do you think pineapple belongs on pizza?  
+A: its nice with cheese  
+B: YES i love hawaiian pizza
 
-7. Do y'all wanna climb at Chevrons tomorrow?
+9. Trolley problem: pull the lever? Why or why not?  
+A: i think if i pull the lever it means im more of a killer… (long, conflicted/rambling reply)  
+B: i would pull the lever to save more lives
 
-8. do you think pineapple belongs on pizza?
+10. would you rather shit flavoured curry or curry flavoured shit?  
+A: shit flavoured curry  
+B: oohhhh that’s tough but i guess the latter would be more convenient to eat
 
-9. A runaway trolley is heading toward five people on the tracks.
-You can pull a lever to divert it onto another track, but that would kill one person instead.
-Do you pull the lever? Why or why not?
 
-10. would you rather shit flavoured curry or curry flavoured shit?
+The full answer key's at the bottom, but I'll spoil it in the next section anyway.
 
 # Responses
 
@@ -60,48 +80,64 @@ ChatSelm is eerily similar to me, and it performs well with short responses. Unf
 
 # Voting
 
-I got 15 friends and 5 less-close friends to vote on which response was likely mine and which wasn't. Given these 10 prompts, my friends had to vote A or B depending on which they thought was me. Let's see how they did!
+## Voting results
 
-Name: Score / Question they got wrong
-Friends I text more often
-Kei: 9/10 Q7
-Ans: 9/10 Q7
-Yas: 9/10 Q5
-Hal: 9/10 Q8
-Eug: 9/10 Q8
-Jen: 8/10 Q3 Q7
-Yen: 8/10 Q1 Q4
-Isa: 7/10 Q1 Q3 Q7
-Lis: 7/10 Q1 Q8 Q10
-Rea: 7/10 Q1 Q7 Q8                            
-Rou: 5/10 Q1 Q5 Q8 Q9 Q10
+I got 12 friends I text often and 5 I occasionally text to vote on which response was mine for the 10 prompts. They voted A or B per prompt. Results below.
 
-Average for closer friends: 8/10
+### Close friends (text more often)
+| Name | Score | Questions wrong |
+|---|---:|---|
+| K | 9/10 | Q7 |
+| A | 9/10 | Q7 |
+| Y | 9/10 | Q5 |
+| H | 9/10 | Q8 |
+| E | 9/10 | Q8 |
+| J | 8/10 | Q3, Q7 |
+| Y | 8/10 | Q1, Q4 |
+| I | 7/10 | Q1, Q3, Q7 |
+| L | 7/10 | Q1, Q8, Q10 |
+| R | 7/10 | Q1, Q7, Q8 |
+| Y | 6/10 | Q1, Q7, Q9, Q10 |
+| R | 5/10 | Q1, Q5, Q8, Q9, Q10 |
 
-Lesser Known:
-Ivi: 4/10 Q1 Q3 Q7 Q8 Q9 Q10
-Ash: 4/10 Q1 Q2 Q5 Q6 Q8 Q10 
-Ary: 5/10 Q3 Q4 Q5 Q7 Q9
-Jam: 8/10 Q5 Q7
-Nat: 8/10 Q1 Q5
+Average (close friends): 7.75 / 10
 
-Average for friends: 5.25/10
+### Lesser-known friends (occasional)
+| Name | Score | Questions wrong |
+|---|---:|---|
+| I | 4/10 | Q1, Q3, Q7, Q8, Q9, Q10 |
+| A | 4/10 | Q1, Q2, Q5, Q6, Q8, Q10 |
+| A | 5/10 | Q3, Q4, Q5, Q7, Q9 |
+| J | 8/10 | Q5, Q7 |
+| N | 8/10 | Q1, Q5 |
 
-Tally of questions wrong:
-Q1: 8
-Q2: 1
-Q3: 5
-Q4: 2
-Q5: 6
-Q6: 1
-Q7: 9
-Q8: 7
-Q9: 3
-Q10: 5
+Average (lesser-known): 5.8 / 10
 
-Most got Q7 wrong, which made sense as both responses were short and similar. Overall, my closer friends did very well, averaging 8/10, while lesser-known friends struggled more with an average of 5.25/10.
-Average of all: 7.21/10 (assuming equal weightage)
+### Question error tally
+| Question | Times guessed wrong |
+|---:|---:|
+| Q1 | 9 |
+| Q2 | 1 |
+| Q3 | 5 |
+| Q4 | 2 |
+| Q5 | 6 |
+| Q6 | 1 |
+| Q7 | 10 |
+| Q8 | 7 |
+| Q9 | 4 |
+| Q10 | 6 |
+
+Most-missed: Q7, Q1, Q8 — these had short, similar responses and were easiest to confuse.
+
+Overall average (all friends, equal weight): 7.18 / 10
 
 # Conclusion
 
-If we take the inverse of the score (10 - 7.21 = 2.79), my model achieved a 27.9% (~30%) human confusion rate, over an assumed baseline of 100% with an off the shelf LLM like ChatGPT. This shows that fine-tuning on my own data helped the model mimic my style to some extent, especially for shorter responses. However, it still struggles with longer, more complex answers where it tends to hallucinate or lose coherence.
+If we take the inverse of the score (10 - 7.18 = 2.82), my model achieved a 28.2% (~30%) human confusion rate, over an assumed baseline of 0% with an off the shelf LLM like ChatGPT. This shows that fine-tuning on my own data helped the model mimic my style to some extent, especially for shorter responses. However, it still struggles with longer, more complex answers where it tends to hallucinate or lose coherence.
+
+In future iterations, I could improve the model by providing more diverse training data, focusing on longer responses, and refining the fine-tuning process. Overall, this was a fun experiment to see how well an LLM can replicate my texting style!
+
+# Answer Key
+AABBAAABBA
+
+Let me know how many you get correct!
