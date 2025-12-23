@@ -69,10 +69,10 @@ Ans: 9/10 Q7
 Yas: 9/10 Q5
 Hal: 9/10 Q8
 Eug: 9/10 Q8
-
 Jen: 8/10 Q3 Q7
 Yen: 8/10 Q1 Q4
 Isa: 7/10 Q1 Q3 Q7
+Lis: 7/10 Q1 Q8 Q10
 Rea: 7/10 Q1 Q7 Q8                            
 Rou: 5/10 Q1 Q5 Q8 Q9 Q10
 
@@ -83,24 +83,25 @@ Ivi: 4/10 Q1 Q3 Q7 Q8 Q9 Q10
 Ash: 4/10 Q1 Q2 Q5 Q6 Q8 Q10 
 Ary: 5/10 Q3 Q4 Q5 Q7 Q9
 Jam: 8/10 Q5 Q7
+Nat: 8/10 Q1 Q5
 
 Average for friends: 5.25/10
 
 Tally of questions wrong:
-Q1: 6
+Q1: 8
 Q2: 1
 Q3: 5
 Q4: 2
-Q5: 5
+Q5: 6
 Q6: 1
 Q7: 9
-Q8: 6
+Q8: 7
 Q9: 3
-Q10: 4
+Q10: 5
 
 Most got Q7 wrong, which made sense as both responses were short and similar. Overall, my closer friends did very well, averaging 8/10, while lesser-known friends struggled more with an average of 5.25/10.
 Average of all: 7.21/10 (assuming equal weightage)
 
 # Conclusion
 
-My model achieved a 30% human confusion rate, over an assumed baseline of 100% with an off the shelf LLM like ChatGPT. This shows that fine-tuning on my own data helped the model mimic my style to some extent, especially for shorter responses. However, it still struggles with longer, more complex answers where it tends to hallucinate or lose coherence.
+If we take the inverse of the score (10 - 7.21 = 2.79), my model achieved a 27.9% (~30%) human confusion rate, over an assumed baseline of 100% with an off the shelf LLM like ChatGPT. This shows that fine-tuning on my own data helped the model mimic my style to some extent, especially for shorter responses. However, it still struggles with longer, more complex answers where it tends to hallucinate or lose coherence.
