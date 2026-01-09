@@ -5,15 +5,15 @@ export default async function BlogPage() {
   const posts = await api.blog.list();
 
   return (
-    <div className="min-h-screen bg-black text-white font-mono">
-  <main className="container mx-auto px-0 pt-28 pb-16 md:pt-36">
+    <div className="min-h-screen bg-background text-foreground font-sans">
+      <main className="container mx-auto px-6 pt-28 pb-16 md:pt-36">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="mb-12">
-            <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-gray-100 via-gray-300 to-gray-400 bg-clip-text text-transparent">
+          <div className="mb-12 border-b border-border pb-8">
+            <h1 className="text-5xl md:text-6xl font-light mb-4 text-foreground-high tracking-tight">
               blog
             </h1>
-            <p className="text-gray-400 text-lg">
+            <p className="text-muted-foreground text-lg font-light">
               thoughts, projects, and experiences
             </p>
           </div>
@@ -21,7 +21,7 @@ export default async function BlogPage() {
           {/* Blog Posts Grid */}
           {posts.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-gray-500 text-lg">No blog posts yet. Check back soon!</p>
+              <p className="text-muted-foreground text-lg font-light">No blog posts yet. Check back soon!</p>
             </div>
           ) : (
             <div className="grid gap-8">
@@ -29,12 +29,12 @@ export default async function BlogPage() {
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className="group block p-6 rounded-lg border border-gray-800 bg-gradient-to-br from-gray-900/50 to-black/50 hover:border-gray-700 transition-all duration-300 hover:shadow-xl hover:shadow-gray-900/50"
+                  className="group block p-8 rounded-none border-b border-border hover:bg-card/30 transition-all duration-500"
                 >
                   <article>
                     {/* Date and tags */}
-                    <div className="flex items-center gap-3 mb-3 text-sm">
-                      <time className="text-gray-500" dateTime={post.date}>
+                    <div className="flex items-center gap-3 mb-4 text-sm font-light tracking-wider uppercase text-muted-foreground">
+                      <time dateTime={post.date}>
                         {new Date(post.date).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'long',
@@ -43,12 +43,12 @@ export default async function BlogPage() {
                       </time>
                       {post.tags && post.tags.length > 0 && (
                         <>
-                          <span className="text-gray-700">•</span>
+                          <span>•</span>
                           <div className="flex gap-2">
                             {post.tags.slice(0, 3).map((tag) => (
                               <span
                                 key={tag}
-                                className="px-2 py-1 text-xs rounded-full bg-gradient-to-b from-[#FE4E00]/30 to-[#55433F]/30 text-orange-200 font-semibold shadow-sm"
+                                className="text-primary font-medium"
                               >
                                 {tag}
                               </span>
@@ -59,20 +59,20 @@ export default async function BlogPage() {
                     </div>
 
                     {/* Title */}
-                    <h2 className="text-2xl md:text-3xl font-bold mb-3 group-hover:text-gray-300 transition-colors">
+                    <h2 className="text-3xl md:text-4xl font-light mb-4 text-foreground group-hover:text-primary transition-colors tracking-tight">
                       {post.title}
                     </h2>
 
                     {/* Excerpt */}
-                    <p className="text-gray-400 line-clamp-3 leading-relaxed">
+                    <p className="text-muted-foreground line-clamp-3 leading-relaxed font-light text-lg">
                       {post.excerpt}
                     </p>
 
                     {/* Read more indicator */}
-                    <div className="mt-4 flex items-center text-gray-500 group-hover:text-gray-400 transition-colors">
-                      <span className="text-sm font-medium">Read more</span>
+                    <div className="mt-6 flex items-center text-primary opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                      <span className="text-sm font-medium uppercase tracking-widest">Read Article</span>
                       <svg
-                        className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform"
+                        className="ml-2 w-4 h-4"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -80,8 +80,8 @@ export default async function BlogPage() {
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
+                          strokeWidth={1.5}
+                          d="M17 8l4 4m0 0l-4 4m4-4H3"
                         />
                       </svg>
                     </div>
@@ -92,10 +92,10 @@ export default async function BlogPage() {
           )}
 
           {/* Back to home */}
-          <div className="mt-12 text-center">
+          <div className="mt-20 text-center">
             <Link
               href="/"
-              className="inline-flex items-center text-gray-400 hover:text-gray-300 transition-colors"
+              className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors font-light tracking-widest uppercase text-sm"
             >
               <svg
                 className="mr-2 w-4 h-4"
@@ -106,8 +106,8 @@ export default async function BlogPage() {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
+                  strokeWidth={1.5}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
                 />
               </svg>
               back to home

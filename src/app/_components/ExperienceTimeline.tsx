@@ -62,32 +62,32 @@ export default function ExperienceTimeline({ experiences }: { experiences: Exper
   return (
     <section ref={sectionRef} className="mt-40 px-6">
       <div className="animate-right max-w-5xl mx-auto text-center">
-        <p className="text-sm uppercase tracking-[0.3em] text-gray-400">experience</p>
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-gray-100 via-gray-300 to-gray-400 bg-clip-text text-transparent">
+        <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground font-sans">experience</p>
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium mb-4 text-foreground tracking-tight">
           my journey so far
         </h2>
-        <p className="text-base md:text-lg text-gray-400">
+        <p className="text-base md:text-lg text-muted-foreground">
           internships, schools, and programs that have shaped how i build.
         </p>
       </div>
       <div className="relative mx-auto mt-14 max-w-5xl">
-        <span className="pointer-events-none absolute left-4 top-0 hidden h-full w-px bg-gradient-to-b from-white/20 via-white/5 to-transparent md:block"></span>
+        <span className="pointer-events-none absolute left-4 top-0 hidden h-full w-px bg-border md:block"></span>
         <div className="space-y-8 md:space-y-10">
           {experiences.map((exp) => (
             <article
               key={exp.name}
-              className="timeline-item relative rounded-3xl border border-white/5 bg-slate-900/40 p-6 md:pl-12"
+              className="timeline-item relative rounded-xl border border-border bg-card p-6 md:pl-12 shadow-sm"
             >
-              <span className="absolute -left-[0.4rem] top-8 hidden h-4 w-4 rounded-full bg-white shadow-lg md:block"></span>
-              <div className="flex flex-wrap items-center gap-3 text-sm uppercase tracking-[0.25em] text-gray-400">
+              <span className="absolute -left-[0.4rem] top-8 hidden h-4 w-4 rounded-full bg-primary shadow-sm md:block outline outline-4 outline-background"></span>
+              <div className="flex flex-wrap items-center gap-3 text-sm uppercase tracking-[0.25em] text-muted-foreground font-sans">
                 <span>{exp.period}</span>
               </div>
-              <h3 className="mt-3 text-2xl font-semibold text-gray-100">{exp.name}</h3>
-              <p className="mt-3 text-gray-300">{exp.description}</p>
+              <h3 className="mt-3 text-2xl font-medium text-card-foreground tracking-tight">{exp.name}</h3>
+              <p className="mt-3 text-muted-foreground leading-relaxed">{exp.description}</p>
               {exp.url && (
                 <a
                   href={exp.url}
-                  className="mt-4 inline-flex items-center text-sm font-semibold text-sky-300 hover:text-white"
+                  className="mt-4 inline-flex items-center text-sm font-semibold text-primary hover:text-foreground transition-colors font-sans"
                 >
                   read more →
                 </a>

@@ -194,15 +194,15 @@ export default function ClientHome() {
   // Projects grid extracted to ProjectsGrid component
 
   return (
-    <main className="font-mono py-20 min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+    <main className="py-20 min-h-screen bg-background text-foreground selection:bg-primary/20">
       <section ref={headerRef} className="relative py-20">
-  <div className="mx-auto text-center">
+        <div className="mx-auto text-center">
           <div className="mb-8">
-            <h1 className="stagger-in text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-gray-100 via-gray-300 to-gray-400 bg-clip-text text-transparent">
+            <h1 className="stagger-in text-5xl md:text-7xl font-light mb-6 text-foreground-high tracking-tight">
               hi, i&apos;m anselm.
             </h1>
             <TypingLine strings={roles} />
-            <p className="stagger-in text-base text-gray-400 mb-3 max-w-4xl mx-auto leading-relaxed">
+            <p className="stagger-in text-lg text-muted-foreground mb-3 max-w-2xl mx-auto leading-relaxed font-light">
               i'm currently studying computer science @ nus, with an interest in AI and ML. ask me anything!
             </p>
           </div>
@@ -213,12 +213,12 @@ export default function ClientHome() {
         </div>
 
         <div className="flex flex-col items-center fade-in hero-arrow mt-20">
-          <h6 className="text-gray-400 mb-2 ml-3 animate-bounce">scroll</h6>
+          <h6 className="text-muted-foreground mb-2 ml-3 animate-bounce font-sans text-xs tracking-[0.3em] uppercase opacity-70">scroll</h6>
           <svg
-            className="ml-2 w-6 h-6 text-gray-400 animate-bounce"
+            className="ml-2 w-6 h-6 text-muted-foreground animate-bounce opacity-70"
             fill="none"
             stroke="currentColor"
-            strokeWidth={2}
+            strokeWidth={1}
             viewBox="0 0 24 24"
             aria-hidden="true"
           >
@@ -226,26 +226,20 @@ export default function ClientHome() {
           </svg>
         </div>
 
-        <div className="absolute inset-0 overflow pointer-events-none">
-          <div className="absolute top-1/4 left-0 w-32 h-32 bg-gray-500/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-3/4 right-1/4 w-48 h-48 bg-gray-400/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-1/2 left-3/4 w-24 h-24 bg-gray-500/10 rounded-full blur-3xl animate-pulse"></div>
-        </div>
-
       </section>
 
-  <section ref={aboutRef} className="px-0 md:px-40 mt-40 pb-10 vh-50">
+      <section ref={aboutRef} className="px-0 md:px-40 mt-40 pb-10 vh-50">
         <div className="stagger-in container mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
           <img
             src="/photos/main/portrait.jpeg"
             alt="Anselm Long"
-            className="animate-left flex-none pt-4 w-48 h-48 md:w-64 md:h-64 rounded-full object-cover"
+            className="animate-left flex-none pt-4 w-48 h-48 md:w-64 md:h-64 rounded-full object-cover grayscale opacity-90 hover:grayscale-0 hover:opacity-100 transition-all duration-700 ease-out border-2 border-white/5"
           />
           <div className="animate-right text-left md:text-left max-w-2xl">
-            <h2 className=" text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-gray-100 via-gray-300 to-gray-400 bg-clip-text text-transparent">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-4 md:mb-6 text-foreground-high tracking-tight">
               welcome to my portfolio!
             </h2>
-            <p className=" text-base text-justify md:text-lg leading-relaxed text-gray-300 max-w-prose">
+            <p className="text-lg text-justify md:text-xl leading-relaxed text-muted-foreground max-w-prose font-light">
               i am a year 3 computer science major at nus. i'm interested in machine learning and how computers can do cool stuff. i love all things bouldering, exploring new things, as well as photography and videography! other than that, i have small interests in doing latte art, and i love a good matcha!
             </p>
           </div>
@@ -260,7 +254,7 @@ export default function ClientHome() {
 
       <section ref={bottomRef}>
         <div className="animate-up mt-50 mb-20 px-6">
-          <h1 className="text-3xl md:text-5xl font-bold mb-8 bg-gradient-to-r from-gray-100 via-gray-300 to-gray-400 bg-clip-text text-transparent text-center">
+          <h1 className="text-3xl md:text-5xl font-light mb-8 text-foreground-high text-center tracking-tight">
             still have more questions? ask!
           </h1>
           <ChatInterface />

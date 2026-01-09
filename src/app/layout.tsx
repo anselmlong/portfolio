@@ -3,7 +3,7 @@ import "~/styles/globals.css";
 
 import { ConditionalTopNav } from "./_components/ConditionalTopNav";
 import { type Metadata } from "next";
-import { Geist, Bricolage_Grotesque } from "next/font/google";
+import { Geist, Bricolage_Grotesque, Source_Serif_4 } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next"
 import { TRPCReactProvider } from "~/trpc/react";
 
@@ -23,14 +23,20 @@ const bricolageGrotesque = Bricolage_Grotesque({
   variable: "--font-bg-sans"
 })
 
+const sourceSerif = Source_Serif_4({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
+})
+
 export default function RootLayout({
   children,
-}: Readonly<{ 
+}: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-     <html lang="en" className={`${geist.variable} ${bricolageGrotesque.variable}`}>
-      <body className="bg-black text-white min-h-screen">
+    <html lang="en" className={`${geist.variable} ${bricolageGrotesque.variable} ${sourceSerif.variable}`}>
+      <body className="bg-background text-foreground min-h-screen antialiased">
         <ConditionalTopNav />
         <TRPCReactProvider>{children}</TRPCReactProvider>
         <Analytics />
