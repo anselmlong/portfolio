@@ -27,6 +27,8 @@ const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
   variable: "--font-serif",
   display: "swap",
+  // Ensure variable axes are loaded, standard for Source Serif 4
+  axes: ["opsz"],
 })
 
 export default function RootLayout({

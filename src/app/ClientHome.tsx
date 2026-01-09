@@ -233,7 +233,7 @@ export default function ClientHome() {
           <img
             src="/photos/main/portrait.jpeg"
             alt="Anselm Long"
-            className="animate-left flex-none pt-4 w-48 h-48 md:w-64 md:h-64 rounded-full object-cover grayscale opacity-90 hover:grayscale-0 hover:opacity-100 transition-all duration-700 ease-out border-2 border-white/5"
+            className="animate-left flex-none pt-4 w-48 h-48 md:w-64 md:h-64 rounded-full object-cover opacity-90 hover:opacity-100 transition-all duration-700 ease-out border-2 border-white/5"
           />
           <div className="animate-right text-left md:text-left max-w-2xl">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-4 md:mb-6 text-foreground-high tracking-tight">
