@@ -235,7 +235,7 @@ export default function ClientHome() {
       </section>
 
   <section ref={aboutRef} className="px-0 md:px-40 mt-40 pb-10 vh-50">
-        <div className="stagger-in pl-30 container mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
+        <div className="stagger-in container mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
           <img
             src="/photos/main/portrait.jpeg"
             alt="Anselm Long"

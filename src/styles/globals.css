@@ -175,8 +175,6 @@ body {
 html, body {
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
   scrollbar-width: thin;
-  /* Avoid layout shift when scrollbar appears */
-  scrollbar-gutter: stable both-edges;
   
 }
 
