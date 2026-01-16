@@ -19,8 +19,8 @@ export default function TypingLine({
 }) {
   const [article, setArticle] = useState(() => chooseArticle(strings?.[0]));
 
-  const gradientClass =
-    "inline-block align-baseline ml-2 bg-gradient-to-b from-[#FE4E00] to-[#55433F] bg-clip-text text-transparent";
+  const accentClass =
+    "inline-block align-baseline ml-2 text-primary";
 
   return (
     <h3 className="text-2xl md:text-3xl text-gray-300 mb-4 max-w-3xl mx-auto leading-normal">
@@ -30,7 +30,7 @@ export default function TypingLine({
         typeSpeed={60}
         backSpeed={40}
         backDelay={800}
-        className={gradientClass}
+        className={accentClass}
         onPreStringTyped={(_, value) => setArticle(chooseArticle(value))}
       />
     </h3>

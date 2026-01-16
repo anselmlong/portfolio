@@ -236,6 +236,16 @@ html, body {
   width: 100%;
 }
 
+/* Blog prose headings use display font */
+.blog-content h1,
+.blog-content h2,
+.blog-content h3,
+.blog-content h4,
+.blog-content h5,
+.blog-content h6 {
+  font-family: var(--font-display), ui-serif, Georgia, serif;
+}
+
 .blog-content pre {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;

@@ -1,7 +1,10 @@
 import { NextRequest } from "next/server";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { PGVectorStore } from "@langchain/community/vectorstores/pgvector";
-import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
+import {
+  ChatPromptTemplate,
+  MessagesPlaceholder,
+} from "@langchain/core/prompts";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { HumanMessage, AIMessage, BaseMessage } from "@langchain/core/messages";
 import { Document } from "@langchain/core/documents";
@@ -10,7 +13,6 @@ import { pool } from "~/server/pg";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
-
 
 // Types
 interface ChatRequest {
@@ -25,9 +27,9 @@ function formatDocs(docs: Document[]): string {
 // Helper: Extract text from UIMessage parts
 function extractText(message: UIMessage): string {
   return message.parts
-    .filter(p => p.type === 'text')
-    .map(p => (p.type === 'text' ? p.text : ''))
-    .join('');
+    .filter((p) => p.type === "text")
+    .map((p) => (p.type === "text" ? p.text : ""))
+    .join("");
 }
 
 // Note: in-memory retrieval cache removed to avoid stale per-process state.
@@ -36,7 +38,6 @@ function extractText(message: UIMessage): string {
 let llmSingleton: ChatOpenAI | null = null;
 let embeddingsSingleton: OpenAIEmbeddings | null = null;
 let vectorStoreSingleton: PGVectorStore | null = null;
-
 
 // POST Endpoint -> Takes in AI SDK messages format
 export async function POST(req: NextRequest) {
@@ -53,10 +54,10 @@ export async function POST(req: NextRequest) {
     if (!lastMessage) {
       return Response.json({ error: "No message provided" }, { status: 400 });
     }
-    
+
     const question = extractText(lastMessage);
     console.log("Question:", question);
-    
+
     if (!question) {
       return Response.json({ error: "Question is required" }, { status: 400 });
     }
@@ -83,18 +84,37 @@ export async function POST(req: NextRequest) {
         openAIApiKey: process.env.OPENAI_API_KEY!,
       }));
 
+    let dbHost = "unknown";
+    try {
+      dbHost = new URL(process.env.DATABASE_URL!).host;
+    } catch {
+      // ignore
+    }
+
     const vectorStore =
       vectorStoreSingleton ??
-      (vectorStoreSingleton = await PGVectorStore.initialize(embeddings, {
-        pool,
-        tableName: "langchain_pg_embedding",
-        columns: {
-          idColumnName: "id",
-          vectorColumnName: "embedding",
-          contentColumnName: "document",
-          metadataColumnName: "cmetadata",
-        },
-      }));
+      (vectorStoreSingleton = await (async () => {
+        const tInitStart = Date.now();
+        try {
+          return await PGVectorStore.initialize(embeddings, {
+            pool,
+            tableName: "langchain_pg_embedding",
+            columns: {
+              idColumnName: "id",
+              vectorColumnName: "embedding",
+              contentColumnName: "document",
+              metadataColumnName: "cmetadata",
+            },
+          });
+        } catch (err) {
+          const initMs = Date.now() - tInitStart;
+          console.error(
+            `[RAG] PGVectorStore.initialize failed after ${initMs}ms (dbHost=${dbHost})`,
+            err,
+          );
+          throw err;
+        }
+      })());
 
     // Small dataset: fewer docs are usually sufficient and faster
     const retriever = vectorStore.asRetriever({ k: 2 });
@@ -107,7 +127,7 @@ export async function POST(req: NextRequest) {
       .slice(startIdx, -1)
       .map((msg: UIMessage) => {
         const text = extractText(msg);
-        return msg.role === 'user' 
+        return msg.role === "user"
           ? new HumanMessage(text)
           : new AIMessage(text);
       });
@@ -122,14 +142,16 @@ export async function POST(req: NextRequest) {
       ["human", "{input}"],
     ]);
 
-    const rewriteChain = contextualizePrompt.pipe(llm).pipe(new StringOutputParser());
+    const rewriteChain = contextualizePrompt
+      .pipe(llm)
+      .pipe(new StringOutputParser());
 
     // --- Timing: rewrite phase ---
     let rewrittenQuestion = question;
     const needsRewrite =
       historyMessages.length >= 2 &&
       /\b(it|that|this|they|them|those|he|she|there|former|latter|previous|above)\b/i.test(
-        question
+        question,
       );
     let rewriteMs = 0;
     if (needsRewrite) {
@@ -175,7 +197,9 @@ export async function POST(req: NextRequest) {
 
           // --- Timing: LLM phase ---
           const tLLMStart = Date.now();
-          const answerChain = answerPrompt.pipe(llm).pipe(new StringOutputParser());
+          const answerChain = answerPrompt
+            .pipe(llm)
+            .pipe(new StringOutputParser());
 
           const answerStream = await answerChain.stream({
             context,
@@ -200,14 +224,14 @@ export async function POST(req: NextRequest) {
           // --- Timing: log all phases ---
           const t4 = Date.now();
           console.log(
-            `[RAG Timing] Total: ${t4-t0}ms | Init: ${t1-t0}ms | Rewrite: ${rewriteMs}ms | Retrieval: ${retrievalMs}ms | LLM first token: ${firstTokenMs}ms | LLM total: ${t4-tLLMStart}ms`
+            `[RAG Timing] Total: ${t4 - t0}ms | Init: ${t1 - t0}ms | Rewrite: ${rewriteMs}ms | Retrieval: ${retrievalMs}ms | LLM first token: ${firstTokenMs}ms | LLM total: ${t4 - tLLMStart}ms`,
           );
         } catch (error) {
           console.error("Error during streaming:", error);
           controller.enqueue(
             encoder.encode(
-              "I'm sorry, I encountered an error processing your request. Please try again later."
-            )
+              "I'm sorry, I encountered an error processing your request. Please try again later.",
+            ),
           );
           controller.close();
         }
@@ -222,9 +246,6 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error("Error in chat API:", error);
-    return Response.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }

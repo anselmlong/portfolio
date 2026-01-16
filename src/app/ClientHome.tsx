@@ -8,7 +8,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import type { RouterOutputs } from "~/trpc/react";
 import { useRef } from "react";
-import { log } from "console";
 import LogosGrid from "~/app/_components/LogosGrid";
 import ExperienceTimeline from "~/app/_components/ExperienceTimeline";
 import ProjectsGrid from "~/app/_components/ProjectsGrid";
@@ -198,11 +197,11 @@ export default function ClientHome() {
       <section ref={headerRef} className="relative py-20">
         <div className="mx-auto text-center">
           <div className="mb-8">
-            <h1 className="stagger-in text-5xl md:text-7xl font-light mb-6 text-foreground-high tracking-tight">
+            <h1 className="stagger-in text-5xl md:text-7xl font-light mb-6 text-foreground-high text-balance">
               hi, i&apos;m anselm.
             </h1>
             <TypingLine strings={roles} />
-            <p className="stagger-in text-lg text-muted-foreground mb-3 max-w-2xl mx-auto leading-relaxed font-light">
+            <p className="stagger-in text-lg text-muted-foreground mb-3 max-w-2xl mx-auto leading-relaxed font-light text-pretty">
               i'm currently studying computer science @ nus, with an interest in AI and ML. ask me anything!
             </p>
           </div>
@@ -213,9 +212,9 @@ export default function ClientHome() {
         </div>
 
         <div className="flex flex-col items-center fade-in hero-arrow mt-20">
-          <h6 className="text-muted-foreground mb-2 ml-3 animate-bounce font-sans text-xs tracking-[0.3em] uppercase opacity-70">scroll</h6>
+          <h6 className="text-muted-foreground mb-2 ml-3 animate-bounce font-sans text-xs uppercase opacity-70">scroll</h6>
           <svg
-            className="ml-2 w-6 h-6 text-muted-foreground animate-bounce opacity-70"
+            className="ml-2 size-6 text-muted-foreground animate-bounce opacity-70"
             fill="none"
             stroke="currentColor"
             strokeWidth={1}
@@ -233,13 +232,13 @@ export default function ClientHome() {
           <img
             src="/photos/main/portrait.jpeg"
             alt="Anselm Long"
-            className="animate-left flex-none pt-4 w-48 h-48 md:w-64 md:h-64 rounded-full object-cover opacity-90 hover:opacity-100 transition-all duration-700 ease-out border-2 border-white/5"
+            className="animate-left flex-none pt-4 size-48 md:size-64 rounded-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-200 ease-out border-2 border-white/5"
           />
           <div className="animate-right text-left md:text-left max-w-2xl">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-4 md:mb-6 text-foreground-high tracking-tight">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-4 md:mb-6 text-foreground-high text-balance">
               welcome to my portfolio!
             </h2>
-            <p className="text-lg text-justify md:text-xl leading-relaxed text-muted-foreground max-w-prose font-light">
+            <p className="text-lg text-justify md:text-xl leading-relaxed text-muted-foreground max-w-prose font-light text-pretty">
               i am a year 3 computer science major at nus. i'm interested in machine learning and how computers can do cool stuff. i love all things bouldering, exploring new things, as well as photography and videography! other than that, i have small interests in doing latte art, and i love a good matcha!
             </p>
           </div>
@@ -254,7 +253,7 @@ export default function ClientHome() {
 
       <section ref={bottomRef}>
         <div className="animate-up mt-50 mb-20 px-6">
-          <h1 className="text-3xl md:text-5xl font-light mb-8 text-foreground-high text-center tracking-tight">
+          <h1 className="text-3xl md:text-5xl font-light mb-8 text-foreground-high text-center text-balance">
             still have more questions? ask!
           </h1>
           <ChatInterface />

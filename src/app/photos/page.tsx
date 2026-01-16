@@ -1,97 +1,133 @@
-"use client"
+"use client";
 
+import { useRef } from "react";
 import Link from "next/link";
-import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
-
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import PhotoGallery, { type Photo } from "~/app/_components/PhotoGallery";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const galleryPhotos = [
-  "/photos/gallery/cbtr.png",
-  "/photos/gallery/wedding.png",
-  "/photos/gallery/cbtr.png",
-  "/photos/gallery/wedding.png",
-  "/photos/gallery/cbtr.png",
-  "/photos/gallery/wedding.png"
+// Define your photos here - add your images to public/photos/
+const photos: Photo[] = [
+  {
+    src: "/photos/gallery/cbtr.png",
+    alt: "CBTR",
+    category: "events",
+    caption: "Capturing the moment",
+  },
+  {
+    src: "/photos/gallery/wedding.png",
+    alt: "Wedding",
+    category: "portraits",
+    caption: "A beautiful celebration",
+  },
+  // Add more photos as needed
+  // {
+  //   src: "/photos/gallery/your-image.jpg",
+  //   alt: "Description",
+  //   category: "landscape",
+  //   caption: "Your caption here",
+  // },
 ];
 
+// Extract unique categories from photos
+const categories = [...new Set(photos.map((p) => p.category).filter(Boolean))] as string[];
+
 export default function PhotosPage() {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    const container = scrollRef.current;
-    if (!container) return;
+  // Header animations
+  useGSAP(
+    () => {
+      const ctx = gsap.context(() => {
+        gsap.fromTo(
+          ".header-text",
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power2.out",
+          }
+        );
+      }, headerRef);
 
-    // Calculate the total width to scroll (container width minus viewport width)
-    const totalWidth = container.scrollWidth - window.innerWidth;
-
-    gsap.to(container, {
-      x: -totalWidth,
-      ease: "none",
-      scrollTrigger: {
-        trigger: container,
-        start: "top 20%",
-        end: () => `+=${window.innerHeight * 2}`, // Scroll for 2 viewport heights
-        scrub: 1,
-        pin: true,
-        markers: false, // Set to true for debugging
-        onLeave: () => {
-          // Ensure the container stays at the final position when leaving
-          gsap.set(container, { x: -totalWidth });
-        },
-        onEnterBack: () => {
-          // Reset position when scrolling back up
-          gsap.set(container, { x: 0 });
-        }
-      }
-    });
-  });
+      return () => ctx.revert();
+    },
+    { scope: headerRef }
+  );
 
   return (
-    <main className="relative min-h-screen z-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 font-sans flex items-center justify-center overflow-hidden">
-      {/* Video background */}
-      <video
-        className="absolute inset-0 w-full h-full object-cover z-0"
-        src="/videos/legacy_cropped.mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-      />
-      {/* Content above video */}
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 id="gsap-text" className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-gray-100 via-gray-300 to-gray-400 bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-bg-sans)' }}>
-            photos
+    <main className="min-h-screen bg-background text-foreground selection:bg-primary/20">
+      {/* Hero Section */}
+      <section ref={headerRef} className="relative py-24 md:py-32">
+        <div className="container mx-auto px-6 text-center">
+          {/* Back link */}
+          <Link
+            href="/"
+            className="header-text inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-200 mb-8"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.5}
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+            <span className="text-sm font-light tracking-wide uppercase">Back</span>
+          </Link>
+
+          <h1 className="header-text text-5xl md:text-7xl lg:text-8xl font-light mb-6 text-foreground-high tracking-tight">
+            photography
           </h1>
 
-          {/* Horizontal scrolling photos */}
-          <div className="overflow-hidden">
-            <div ref={scrollRef} className="flex gap-4 pb-4">
-              {galleryPhotos.map((src, i) => (
-                <img key={i} src={src} alt={`Gallery photo ${i + 1}`} className="w-auto h-auto object-cover rounded flex-shrink-0" />
-              ))}
-            </div>
-          </div>
+          <p className="header-text text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-light mb-4">
+            a collection of moments captured through my lens. i enjoy telling stories through images,
+            from events to portraits to landscapes.
+          </p>
 
-          <div className="flex flex-col items-center mt-8">
-            {["explore", "my", "photography"].map((word, idx) => (
-              <span
-                key={word}
-                className="text-2xl md:text-4xl font-semibold text-gray-200 opacity-0"
-                id={`stagger-text-${idx}`}
-                style={{ fontFamily: 'var(--font-bg-sans)' }}
-              >
-                {word}
-              </span>
-            ))}
+          <div className="header-text flex items-center justify-center gap-4 text-sm text-muted-foreground/60">
+            <span>{photos.length} photos</span>
+            {categories.length > 0 && (
+              <>
+                <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
+                <span>{categories.length} categories</span>
+              </>
+            )}
           </div>
-
         </div>
-      </div>
+
+        {/* Decorative line */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-px h-16 bg-gradient-to-b from-border to-transparent" />
+      </section>
+
+      {/* Gallery Section */}
+      <section ref={galleryRef} className="pb-24 px-6 md:px-12 lg:px-20">
+        <div className="max-w-7xl mx-auto">
+          <PhotoGallery photos={photos} categories={categories} />
+        </div>
+      </section>
+
+      {/* Footer CTA */}
+      <section className="py-20 border-t border-border">
+        <div className="container mx-auto px-6 text-center">
+          <p className="text-muted-foreground font-light mb-6">
+            interested in working together?
+          </p>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full text-sm font-light tracking-wide uppercase hover:opacity-90 transition-opacity duration-200"
+          >
+            get in touch
+          </Link>
+        </div>
+      </section>
     </main>
   );
 }

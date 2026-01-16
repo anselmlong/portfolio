@@ -20,7 +20,6 @@ export default function ExperienceTimeline({ experiences }: { experiences: Exper
   useGSAP(
     () => {
       const ctx = gsap.context(() => {
-        // Animate headline / intro elements that use .animate-right inside this section
         gsap.utils.toArray<HTMLElement>(".animate-right").forEach((elem) => {
           gsap.from(elem, {
             x: 100,
@@ -36,7 +35,6 @@ export default function ExperienceTimeline({ experiences }: { experiences: Exper
           });
         });
 
-        // Timeline items
         gsap.utils.toArray<HTMLElement>(".timeline-item").forEach((elem, index) => {
           gsap.from(elem, {
             opacity: 0,
@@ -62,11 +60,11 @@ export default function ExperienceTimeline({ experiences }: { experiences: Exper
   return (
     <section ref={sectionRef} className="mt-40 px-6">
       <div className="animate-right max-w-5xl mx-auto text-center">
-        <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground font-sans">experience</p>
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium mb-4 text-foreground tracking-tight">
+        <p className="text-sm uppercase text-muted-foreground font-sans">experience</p>
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium mb-4 text-foreground text-balance">
           my journey so far
         </h2>
-        <p className="text-base md:text-lg text-muted-foreground">
+        <p className="text-base md:text-lg text-muted-foreground text-pretty">
           internships, schools, and programs that have shaped how i build.
         </p>
       </div>
@@ -78,16 +76,16 @@ export default function ExperienceTimeline({ experiences }: { experiences: Exper
               key={exp.name}
               className="timeline-item relative rounded-xl border border-border bg-card p-6 md:pl-12 shadow-sm"
             >
-              <span className="absolute -left-[0.4rem] top-8 hidden h-4 w-4 rounded-full bg-primary shadow-sm md:block outline outline-4 outline-background"></span>
-              <div className="flex flex-wrap items-center gap-3 text-sm uppercase tracking-[0.25em] text-muted-foreground font-sans">
+              <span className="absolute -left-[0.4rem] top-8 hidden size-4 rounded-full bg-primary shadow-sm md:block outline outline-4 outline-background"></span>
+              <div className="flex flex-wrap items-center gap-3 text-sm uppercase text-muted-foreground font-sans">
                 <span>{exp.period}</span>
               </div>
-              <h3 className="mt-3 text-2xl font-medium text-card-foreground tracking-tight">{exp.name}</h3>
-              <p className="mt-3 text-muted-foreground leading-relaxed">{exp.description}</p>
+              <h3 className="mt-3 text-2xl font-medium text-card-foreground">{exp.name}</h3>
+              <p className="mt-3 text-muted-foreground leading-relaxed text-pretty">{exp.description}</p>
               {exp.url && (
                 <a
                   href={exp.url}
-                  className="mt-4 inline-flex items-center text-sm font-semibold text-primary hover:text-foreground transition-colors font-sans"
+                  className="mt-4 inline-flex items-center text-sm font-semibold text-primary hover:text-foreground transition-colors duration-200 font-sans"
                 >
                   read more →
                 </a>
