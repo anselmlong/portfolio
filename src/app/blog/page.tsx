@@ -62,82 +62,73 @@ export default async function BlogPage() {
                 </Link>
               </div>
             ) : (
-              /* Posts Grid */
-              <div className="space-y-0">
-                {posts.map((post, index) => (
+              /* Posts Grid (cards) */
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
+                {posts.map((post) => (
                   <Link
                     key={post.slug}
                     href={`/blog/${post.slug}`}
-                    className="group block relative"
-                    style={{ animationDelay: `${index * 100}ms` }}
+                    className="group"
                   >
-                    <article className="grid grid-cols-12 gap-4 md:gap-8 py-12 md:py-16 border-t border-border/50 hover:border-primary/30 transition-colors duration-200">
-                      {/* Post Number */}
-                      <div className="col-span-2 md:col-span-1">
-                        <span className="text-4xl md:text-5xl font-light text-muted-foreground/30 group-hover:text-primary/50 transition-colors duration-200 tabular-nums" style={{ fontFamily: 'var(--font-display)' }}>
-                          {String(index + 1).padStart(2, '0')}
+                    <article className="h-full border border-border/50 bg-card/20 hover:bg-card/30 hover:border-primary/40 transition-colors duration-200 p-6 md:p-7 flex flex-col">
+                      {/* Meta */}
+                      <div className="flex items-center justify-between gap-4 mb-4">
+                        <time
+                          dateTime={post.date}
+                          className="text-xs tracking-[0.12em] uppercase text-muted-foreground/70"
+                        >
+                          {new Date(post.date).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                          })}
+                        </time>
+
+                        <span className="text-xs tracking-[0.15em] uppercase text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-2">
+                          Read
+                          <svg className="size-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                          </svg>
                         </span>
                       </div>
 
-                      {/* Content */}
-                      <div className="col-span-10 md:col-span-11 flex flex-col md:flex-row md:items-start gap-6 md:gap-12">
-                        {/* Main Content */}
-                        <div className="flex-1 min-w-0">
-                          {/* Title */}
-                          <h2 className="text-2xl md:text-3xl lg:text-4xl font-normal mb-4 text-foreground group-hover:text-primary transition-colors duration-200 tracking-tight text-balance leading-snug" style={{ fontFamily: 'var(--font-display)' }}>
-                            {post.title}
-                          </h2>
+                      {/* Title */}
+                      <h2
+                        className="text-2xl md:text-3xl font-normal mb-3 text-foreground group-hover:text-primary transition-colors duration-200 tracking-tight text-balance leading-snug"
+                        style={{ fontFamily: 'var(--font-display)' }}
+                      >
+                        {post.title}
+                      </h2>
 
-                          {/* Excerpt */}
-                          <p className="text-muted-foreground line-clamp-2 leading-relaxed font-light text-base md:text-lg text-pretty max-w-2xl">
-                            {post.excerpt}
-                          </p>
+                      {/* Excerpt */}
+                      <p className="text-muted-foreground line-clamp-3 leading-relaxed font-light text-base text-pretty">
+                        {post.excerpt}
+                      </p>
 
-                          {/* Tags */}
-                          {post.tags && post.tags.length > 0 && (
-                            <div className="flex flex-wrap gap-3 mt-5">
-                              {post.tags.slice(0, 3).map((tag) => (
-                                <span
-                                  key={tag}
-                                  className="text-xs tracking-[0.1em] uppercase text-primary/70 border-b border-primary/30"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
-                            </div>
-                          )}
+                      {/* Tags */}
+                      {post.tags && post.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-3 mt-5">
+                          {post.tags.slice(0, 4).map((tag) => (
+                            <span
+                              key={tag}
+                              className="text-xs tracking-[0.1em] uppercase text-primary/70 border-b border-primary/30"
+                            >
+                              {tag}
+                            </span>
+                          ))}
                         </div>
+                      )}
 
-                        {/* Metadata Column */}
-                        <div className="md:w-40 flex md:flex-col items-center md:items-end gap-4 md:gap-2 text-right">
-                          <time
-                            dateTime={post.date}
-                            className="text-xs tracking-[0.1em] uppercase text-muted-foreground/70"
-                          >
-                            {new Date(post.date).toLocaleDateString('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                              year: 'numeric',
-                            })}
-                          </time>
+                      {/* Spacer */}
+                      <div className="flex-1" />
 
-                          {/* Read indicator */}
-                          <span className="text-xs tracking-[0.15em] uppercase text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-2">
-                            Read
-                            <svg className="size-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-                            </svg>
-                          </span>
-                        </div>
+                      {/* Bottom flourish */}
+                      <div className="mt-6 pt-4 border-t border-border/40 text-muted-foreground/40 text-xs tracking-[0.2em] uppercase">
+                        Open
                       </div>
                     </article>
                   </Link>
                 ))}
-
-                {/* End marker */}
-                <div className="border-t border-border/50 pt-12 flex items-center justify-center">
-                  <span className="text-2xl text-muted-foreground/20" style={{ fontFamily: 'var(--font-display)' }}>※</span>
-                </div>
               </div>
             )}
           </div>
