@@ -1,7 +1,7 @@
 ---
 title: "Canvas Scraper: A 3-Hour Prototype That Turned Into A Daily Tool"
 date: "2026-01-26"
-author: "Anselm Long"
+author: "Anselm Long (Co-authored by Ava)"
 tags:
   - nus
   - automation

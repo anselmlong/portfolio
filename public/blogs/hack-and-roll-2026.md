@@ -1,7 +1,7 @@
 ---
 title: "Hack & Roll 2026: Building Optifiner, a Multi-Agent, Evolutionary Framework"
 date: "2026-01-26"
-author: "Anselm Long"
+author: "Anselm Long (Co-authored by Ava)"
 tags:
   - hackathon
   - agents

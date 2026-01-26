@@ -1,7 +1,7 @@
 ---
 title: "NUS Aircon Checker: Reverse Engineering A Flutter Portal (With Opencode)"
 date: "2026-01-26"
-author: "Anselm Long"
+author: "Anselm Long (Co-authored by Ava)"
 tags:
   - nus
   - automation
