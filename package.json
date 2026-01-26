@@ -25,6 +25,7 @@
     "@auth/prisma-adapter": "^2.7.2",
     "@gsap/react": "^2.1.2",
     "@langchain/community": "^1.0.0",
+    "@langchain/core": "^1.1.17",
     "@langchain/openai": "^1.0.0",
     "@prisma/client": "^6.5.0",
     "@radix-ui/react-avatar": "^1.1.10",
