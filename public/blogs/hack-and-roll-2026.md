@@ -1,115 +1,115 @@
 ---
-title: "Hack & Roll 2026"
+title: "Hack & Roll 2026: Building Optifiner, a Multi-Agent, Evolutionary Framework"
 date: "2026-01-26"
 author: "Anselm Long"
 tags:
   - hackathon
   - agents
+  - evolutionary
   - product
   - teamwork
-excerpt: "we built a self-evolving agentic code optimizer. also: i slept. and the welfare was insane." 
+excerpt: "We built a self-evolving agentic code optimizer. Also: the welfare was insane." 
 ---
 
 ## TL;DR
 
-hack & roll 2026 was (1) chaotic, (2) surprisingly well taken care of, and (3) the best hackathon i’ve been to in terms of welfare.
+Hack & Roll 2026 was chaotic in the best way possible.
 
-we built **optifiner** — an *evolutionary, agentic ai code optimizer* that spawns parallel agents to propose changes, runs benchmarks/tests, and only keeps improvements that **measurably** make the code better.
+We built **Optifiner** — an evolutionary, multi-agent AI code optimizer that:
 
-- website: https://optifiner.ai
-- repo: *(private for now)*
+- spawns parallel agents to propose code changes
+- runs benchmarks/tests to score those changes
+- only keeps improvements that measurably beat the baseline
 
-## the backstory
+Website: https://optifiner.ai
 
-i came in with the usual hackathon fear:
+## Context
 
-> i’m about to embarrass myself next to people who ship faster than i can open vscode.
+I came into this hackathon with the usual fear:
 
-turns out, building with people way smarter than you is… actually great?
+> I’m about to embarrass myself next to people who ship faster than I can open VS Code.
 
-- you get exposed to how they think
-- you learn what “good taste” in engineering looks like
-- and you stop pretending you’re the main character (very healthy)
+Turns out building with people way smarter than you is… kind of amazing.
 
-## our project: optifiner
+Not because they do everything for you, but because you get dragged into a higher bar:
 
-optifiner is basically a darwinian loop for code.
+- sharper product decisions
+- cleaner engineering taste
+- less “let’s build a platform” and more “ship one good demo path”
 
-instead of “one agent edits files and hopes for the best”, it does:
+## What Is Optifiner?
 
-1. **spawn multiple agents in parallel** (analyzer/refactorer/optimizer/etc)
-2. each agent proposes changes in a sandbox workspace
-3. run a **benchmark evaluator** that outputs a score + a test gate
-4. **keep only improvements** that beat the baseline
-5. repeat for multiple generations until convergence
+Optifiner is basically a Darwinian loop for code.
 
-what i really liked about this approach is that it forces you to answer:
+Instead of “one agent edits files and hopes for the best”, it works like:
 
-- what does “better” even mean?
-- what metric do we optimize?
-- what’s our safety check to prevent breaking everything?
+1. Spawn multiple agents in parallel (analyzer / refactorer / optimizer / etc)
+2. Each agent proposes changes in an isolated workspace
+3. Run an evaluator (benchmark + test gate) to produce a score
+4. Keep only the changes that improve the score
+5. Repeat across generations until it converges
 
-because without that, “ai code optimizer” becomes: *random code edits with vibes*.
+The part I liked most is that it forces you to define what “better” means.
 
-## what we actually shipped
+Because without a metric, “AI optimizer” becomes: random refactors with vibes.
 
-- multi-agent evolution loop (parallel agents)
-- benchmark-driven acceptance (score improves or we revert)
+## What We Shipped
+
+Basing this off our repo write-up (which is way more put-together than my sleep schedule), we shipped:
+
+- a multi-agent evolution loop (parallel runs)
+- benchmark-driven acceptance (improve score or revert)
 - git-integrated history (every improvement is a commit)
-- a web dashboard to watch the evolution progress
-- multi-model support (claude/gpt/gemini)
+- a dashboard to watch evolution progress
+- multi-model support (Claude / GPT / Gemini)
 
-*(i’m basing this on our repo readme, which is way more put-together than my sleep schedule.)*
+## The Hackathon Experience
 
-## the hackathon part
+### Best Welfare I’ve Seen At A Hackathon
 
-### welfare was insane
+I’m used to hackathons that are like:
 
-i’m used to hackathons that are like:
+- “Here’s a banana.”
+- “Good luck.”
+- “Sleep on concrete if you want.”
 
-- “here’s a banana”
-- “good luck”
-- “sleep on concrete if you want”
+Hack & Roll 2026 was the opposite. Legit the best hackathon I’ve been to in terms of welfare.
 
-this one was the opposite. genuinely the best hackathon i’ve been to **in terms of welfare**.
+And yes, it changes the entire experience. Suffering builds character, but so does… not suffering.
 
-(and yes, that changes the entire experience. suffering builds character, but so does… not suffering.)
+### We Won A Tiny Prize (And It Leaks)
 
-### we won a tiny prize (and it leaks)
+We won a small prize from **Marshall Wace** — a **Stanley bottle**.
 
-we also won a small prize from **marshall wace** — a **stanley bottle**.
+It leaks sadly. But it’s the thought that counts.
 
-it leaks sadly. but it’s the thought that counts.
+### Building With Cracked People
 
-### building with cracked people
+Biggest reflection:
 
-most valuable reflection for me:
+> Building with people way smarter than you is a cheat code.
 
-> building with people smarter than you is a cheat code.
+You end up asking better questions:
 
-not because they do everything for you — but because you get pulled into a higher bar.
+- Is this the simplest thing that works?
+- How do we make the demo robust?
+- What’s the metric? What’s the failure mode?
 
-you start asking:
+## Reflections
 
-- “is this the simplest thing that works?”
-- “how do we make this demo robust?”
-- “what’s the metric? what’s the failure mode?”
+- **Benchmarks > vibes.** If you can’t measure it, you’re doing interpretive dance.
+- **Parallelism is your friend.** Letting agents explore different approaches feels like the AI version of splitting tasks.
+- **Shipping a demo is a separate skill.** “It works locally” is not a demo.
 
-## thanks
+## Thanks
 
-huge thanks to my teammates: **philippe**, **verity**, and **leroy**.
+Huge thanks to my teammates: **Philippe**, **Verity**, and **Leroy**.
 
-## what’s next
+## What’s Next
 
-we’re going to keep working on this after the hackathon too (because apparently we enjoy pain).
+We’re going to keep working on this after the hackathon too (because apparently we enjoy pain).
 
-## what i learned
+## Links
 
-- **benchmarks > vibes.** if you can’t measure it, you’re just doing interpretive dance.
-- **parallelism is your friend.** letting agents explore different approaches simultaneously is oddly similar to letting humans split tasks.
-- **shipping a demo is a separate skill.** “it works locally” is not a demo.
-
-## links
-
-- optifiner website: https://optifiner.ai
-- optifiner repo: *(private for now)*
+- Optifiner: https://optifiner.ai
+- Repo: (Private for now)

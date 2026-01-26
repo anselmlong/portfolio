@@ -1,82 +1,84 @@
 ---
-title: "Canvas Scraper (because i’m lazy)"
+title: "Canvas Scraper: A 3-Hour Prototype That Turned Into A Daily Tool"
 date: "2026-01-26"
 author: "Anselm Long"
 tags:
-  - scraping
-  - automation
   - nus
+  - automation
+  - scraping
   - python
-excerpt: "i prototyped a personal canvas file sync tool in ~3 hours. now i use it all the time." 
+excerpt: "I was lazy to click buttons, so I built a Canvas file sync tool. Now I actually use it." 
 ---
 
 ## TL;DR
 
-canvas is great until you have **too many modules** and everything is scattered.
+Canvas is great until you’re taking **too many modules** and everything is scattered.
 
-so i built a personal tool that:
+So I built a personal tool that:
 
 - syncs course files to my laptop
-- filters out giant junk (videos/textbooks)
-- emails me a daily summary of announcements/assignments/files
+- filters out giant junk (videos / textbooks)
+- emails me a daily summary of announcements / assignments / downloads
 
-and the funniest part is: the prototype was built in **~3 hours**.
+The funniest part: the prototype was built in **~3 hours**.
 
-repo: https://github.com/anselmlong/canvas-scraper
+Repo: https://github.com/anselmlong/canvas-scraper
 
-## the problem
+## The Problem
 
-what i wanted was simple:
+What I wanted was simple:
 
-- “give me all my module files locally”
-- “tell me what changed”
-- “stop making me click 800 buttons”
+- “Give me all my module files locally.”
+- “Tell me what changed.”
+- “Stop making me click 800 buttons.”
 
-canvas *can* do a lot, but it’s not optimized for *my brain*, which wants:
+Canvas *can* do a lot, but it’s not optimized for my brain, which wants:
 
-> one folder, searchable, always up to date.
+> One folder. Searchable. Always up-to-date.
 
-## the solution (what it does)
+## What The Tool Does
 
-features i ended up adding (because i kept getting annoyed by new edge cases):
+This started small and slowly became a “keep adding features because I keep getting annoyed” project.
 
-- **smart filtering**: skip huge files (>50mb), videos, and textbook-like pdfs
-- **course selection** with fuzzy matching
-- **incremental sync**: only download new/updated files
-- **email reports** (html) so i can scan what changed without opening canvas
-- **skipped file review**: email includes links for anything skipped
-- **scheduled runs** via cron / task scheduler
-- sqlite db to track downloads + skipped items
+Current features (high-level):
 
-## why personal tools are so easy to build (and so worth it)
+- **Smart filtering**: skip huge files (>50MB), videos, and textbook-like PDFs
+- **Course selection** with fuzzy matching
+- **Incremental sync**: only downloads new/updated files
+- **Email reports** (HTML) so I can scan updates without opening Canvas
+- **Skipped file review** with direct links
+- **Scheduling** via cron / Task Scheduler
+- SQLite database to track downloaded + skipped files
 
-this project is the perfect example of “small tool, huge quality-of-life”.
+## Why Personal Tools Are So Easy (And So Worth It)
+
+This is the best kind of project because:
 
 - it doesn’t need product-market-fit
-- it doesn’t need a fancy ui
-- it just needs to solve *my* annoying problem
+- it doesn’t need a UI
+- it just needs to solve *my* annoying daily problem
 
-and because the feedback loop is immediate (i use it daily), it’s ridiculously motivating.
+And the feedback loop is instant: I either use it tomorrow… or I don’t.
 
-## what i actively use it for
+## What I Actually Use It For
 
 - grabbing lecture slides/handouts without thinking
 - catching new announcements/assignments
-- making sure i don’t miss some random file the night before a lab
+- avoiding the “oh my god this file existed??” moment the night before a lab
 
-## next step: even more automation
+## Next Step: Even More Automation
 
-i’m planning to push it further:
+I want to take it further by:
 
-- upload newly downloaded files into **claude** automatically (so i can ask “what’s due next week” and it actually knows)
-- add a “what changed since yesterday” diff that’s even more concise
+- auto-uploading newly downloaded files into **Claude** (so I can ask “what’s due next week?” and it actually knows)
+- generating an even more concise “what changed since yesterday” summary
 
-## some learning points!
+## Some Learning Points!
 
-- auth is always the boss fight
-- deterministic outputs make debugging 10x easier
-- personal tools are underrated as a way to practice shipping
+- Auth is always the boss fight.
+- Deterministic outputs make debugging 10x easier.
+- Personal tools are underrated as a way to practice shipping.
 
-## links
+## Links
 
-- repo: https://github.com/anselmlong/canvas-scraper
+- Repo: https://github.com/anselmlong/canvas-scraper

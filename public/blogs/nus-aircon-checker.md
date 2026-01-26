@@ -1,5 +1,5 @@
 ---
-title: "NUS Aircon Checker"
+title: "NUS Aircon Checker: Reverse Engineering A Flutter Portal (With Opencode)"
 date: "2026-01-26"
 author: "Anselm Long"
 tags:
@@ -7,65 +7,71 @@ tags:
   - automation
   - reverse-engineering
   - telegram
-excerpt: "reverse engineering an api from a website was weirdly thrilling. also, opencode is cracked." 
+excerpt: "Reverse engineering an API from a website was weirdly thrilling. Also, opencode is cracked." 
 ---
 
 ## TL;DR
 
-i got tired of forgetting to top up my aircon credits and waking up sweaty.
+I got tired of forgetting to top up my aircon credits and waking up sweaty.
 
-so i built a telegram bot that checks your EVS2 portal aircon credits in one command.
+So I built a Telegram bot that checks your EVS2 portal aircon credits in one command.
 
-repo: https://github.com/anselmlong/nus-aircon-checker
+Repo: https://github.com/anselmlong/nus-aircon-checker
 
-## the fun part: reverse engineering the api
+## The Fun Part: Reverse Engineering The API
 
-this was *weirdly thrilling*.
+This was weirdly thrilling.
 
-the EVS2 consumer portal is a flutter web app, which usually means:
+The EVS2 consumer portal is a Flutter web app, which usually means:
 
-- the ui is annoying to scrape
-- but the network requests are actually very consistent
+- the UI is annoying to scrape
+- but the network requests are pretty consistent
 
-so instead of doing brittle dom scraping, i just… watched the network calls and copied the backend endpoints.
+So instead of doing brittle DOM scraping, I just watched the network calls and copied the backend endpoints.
 
-it calls the same backend endpoints as the portal.
+It calls the same backend endpoints as the portal.
 
-## “i just had to guide opencode”
+If you’ve never done this before, it feels like cheating:
 
-honestly, a big part of why this was fast is that i used **opencode**.
+> The website is just a UI. The real product is the API behind it.
 
-it’s one of those tools where you feel like:
+## I Just Had To Guide Opencode
 
-> wait… why is this allowed?
+A big reason this shipped quickly is that I used **opencode**.
 
-my workflow was basically:
+It’s one of those tools where you feel like:
 
-- i do the thinking / decide the plan
+> Wait… why is this allowed?
+
+My workflow was basically:
+
+- I do the thinking / decide the plan
 - opencode does the boring implementation
-- i keep it on a leash so it doesn’t hallucinate an entire new architecture
+- I keep it on a leash so it doesn’t hallucinate a whole new architecture
 
-this is also why i’m bullish on **oh-my-opencode** — it’s genuinely insane how much leverage you get when you have a decent “agentic” workflow + good prompts.
+This is also why I’m bullish on **oh-my-opencode** — it’s genuinely insane leverage if you have decent taste + a clear plan.
 
-## what the bot does
+## What The Bot Does
 
-- `/login <user> <pass>` (dm only; stored in-memory)
-- `/balance` to check current credits
-- `/usage`, `/avg`, `/predict` for breakdowns + run-out estimation
+Commands:
+
+- `/login <user> <pass>` (DM only; stored in-memory)
+- `/balance` for current credits
+- `/usage`, `/avg`, `/predict` for breakdowns and run-out estimation
 - optional low-balance reminders
 
-## security notes
+## Security Notes
 
-- login only works in private dms
-- credentials are in-memory only (cleared on restart)
-- optional allowlist via `TELEGRAM_ALLOWED_USER_IDS`
+- Login only works in private DMs
+- Credentials are stored in-memory only (cleared on restart)
+- Optional allowlist via `TELEGRAM_ALLOWED_USER_IDS`
 
-## some learning points!
+## Some Learning Points!
 
-- the best “scraping” is not scraping. it’s copying the api.
-- backend permissions are a puzzle (sometimes “read” works where “list” is forbidden)
-- building small utility bots is ridiculously fun
+- The best “scraping” is not scraping. It’s copying the API.
+- Backend permissions are a puzzle (sometimes “read” works where “list” is forbidden)
+- Building small utility bots is ridiculously fun
 
-## links
+## Links
 
-- repo: https://github.com/anselmlong/nus-aircon-checker
+- Repo: https://github.com/anselmlong/nus-aircon-checker
