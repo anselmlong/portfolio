@@ -5,68 +5,67 @@ author: "Anselm Long"
 tags:
   - nus
   - automation
-  - quality-of-life
-excerpt: "the fastest way to become a builder is to get mildly annoyed by something daily."
+  - reverse-engineering
+  - telegram
+excerpt: "reverse engineering an api from a website was weirdly thrilling. also, opencode is cracked." 
 ---
 
 ## TL;DR
 
-i got tired of guessing whether a room’s aircon would be on (or whether i’d be sweating in 10 minutes).
+i got tired of forgetting to top up my aircon credits and waking up sweaty.
 
-so i built a tiny “aircon checker” tool.
+so i built a telegram bot that checks your EVS2 portal aircon credits in one command.
 
-## the problem
+repo: https://github.com/anselmlong/nus-aircon-checker
 
-this is one of those problems that’s not *important*, but it’s *frequent*.
+## the fun part: reverse engineering the api
 
-- you walk somewhere
-- you sit down
-- the aircon is either freezing or nonexistent
-- you regret your life choices
+this was *weirdly thrilling*.
 
-i wanted a quick way to check *(whatever signal is available)* before committing to a location.
+the EVS2 consumer portal is a flutter web app, which usually means:
 
-## what the tool does
+- the ui is annoying to scrape
+- but the network requests are actually very consistent
 
-- pulls the current status from a source *(todo: specify source)*
-- shows a simple output:
-  - on/off (or “unknown”)
-  - last updated time
-  - optional: room/location
+so instead of doing brittle dom scraping, i just… watched the network calls and copied the backend endpoints.
 
-bonus goal: make it usable in <10 seconds.
+it calls the same backend endpoints as the portal.
 
-## design notes
+## “i just had to guide opencode”
 
-### keep the interface stupid
+honestly, a big part of why this was fast is that i used **opencode**.
 
-the best utility tools:
+it’s one of those tools where you feel like:
 
-- one command
-- one screen
-- one answer
+> wait… why is this allowed?
 
-### handle uncertainty explicitly
+my workflow was basically:
 
-real-world data is messy.
+- i do the thinking / decide the plan
+- opencode does the boring implementation
+- i keep it on a leash so it doesn’t hallucinate an entire new architecture
 
-so rather than pretending we know, i prefer:
+this is also why i’m bullish on **oh-my-opencode** — it’s genuinely insane how much leverage you get when you have a decent “agentic” workflow + good prompts.
 
-- `ON`
-- `OFF`
-- `UNKNOWN` (and why)
+## what the bot does
 
-## what i learned
+- `/login <user> <pass>` (dm only; stored in-memory)
+- `/balance` to check current credits
+- `/usage`, `/avg`, `/predict` for breakdowns + run-out estimation
+- optional low-balance reminders
 
-- “small” projects are great practice for shipping
-- most real problems are integration + data quality, not code
-- a clear output format beats a fancy ui
+## security notes
 
-## next steps
+- login only works in private dms
+- credentials are in-memory only (cleared on restart)
+- optional allowlist via `TELEGRAM_ALLOWED_USER_IDS`
 
-- add a simple dashboard view
-- add notifications (e.g. “aircon is on now”) if there’s a reliable signal
+## some learning points!
+
+- the best “scraping” is not scraping. it’s copying the api.
+- backend permissions are a puzzle (sometimes “read” works where “list” is forbidden)
+- building small utility bots is ridiculously fun
 
 ## links
 
-- repo: *(todo)*
+- repo: https://github.com/anselmlong/nus-aircon-checker

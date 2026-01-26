@@ -7,96 +7,76 @@ tags:
   - automation
   - nus
   - python
-excerpt: "i wanted my canvas stuff in one place, so i made a scraper."
+excerpt: "i prototyped a personal canvas file sync tool in ~3 hours. now i use it all the time." 
 ---
 
 ## TL;DR
 
 canvas is great until you have **too many modules** and everything is scattered.
 
-i wanted a way to pull my course content + deadlines into something i control (and can query/search).
+so i built a personal tool that:
 
-so i wrote a canvas scraper.
+- syncs course files to my laptop
+- filters out giant junk (videos/textbooks)
+- emails me a daily summary of announcements/assignments/files
+
+and the funniest part is: the prototype was built in **~3 hours**.
+
+repo: https://github.com/anselmlong/canvas-scraper
 
 ## the problem
 
-canvas has all the information i need, but it’s:
+what i wanted was simple:
 
-- spread across pages
-- annoying to export cleanly
-- hard to “see everything at a glance”
+- “give me all my module files locally”
+- “tell me what changed”
+- “stop making me click 800 buttons”
 
-what i actually wanted:
+canvas *can* do a lot, but it’s not optimized for *my brain*, which wants:
 
-- a local folder of content i can search
-- a list of upcoming deadlines
-- a single “what changed since last sync” view
+> one folder, searchable, always up to date.
 
-## constraints (aka: things that make scraping painful)
+## the solution (what it does)
 
-- auth (cookies, tokens, redirects)
-- rate limits / “please stop botting”
-- html that changes when you look at it funny
+features i ended up adding (because i kept getting annoyed by new edge cases):
 
-also: i didn’t want to maintain a million brittle selectors.
+- **smart filtering**: skip huge files (>50mb), videos, and textbook-like pdfs
+- **course selection** with fuzzy matching
+- **incremental sync**: only download new/updated files
+- **email reports** (html) so i can scan what changed without opening canvas
+- **skipped file review**: email includes links for anything skipped
+- **scheduled runs** via cron / task scheduler
+- sqlite db to track downloads + skipped items
 
-## what it does (current)
+## why personal tools are so easy to build (and so worth it)
 
-- logs in *(method depends on your setup)*
-- crawls course pages
-- downloads/normalizes content into a local structure
-- optionally emits a summary (new/updated items)
+this project is the perfect example of “small tool, huge quality-of-life”.
 
-*(i’ll add exact commands + screenshots once i clean it up a bit.)*
+- it doesn’t need product-market-fit
+- it doesn’t need a fancy ui
+- it just needs to solve *my* annoying problem
 
-## high-level design
+and because the feedback loop is immediate (i use it daily), it’s ridiculously motivating.
 
-### 1) fetch layer
+## what i actively use it for
 
-- keeps a session alive
-- retries on flaky requests
-- respects pacing (sleep/backoff)
+- grabbing lecture slides/handouts without thinking
+- catching new announcements/assignments
+- making sure i don’t miss some random file the night before a lab
 
-### 2) parse + normalize
+## next step: even more automation
 
-i prefer saving “good enough” structured artifacts:
+i’m planning to push it further:
 
-- raw html (for debugging)
-- markdown/text (for searching)
-- json metadata (ids, timestamps, urls)
-
-### 3) storage
-
-i kept it simple:
-
-- filesystem as the source of truth
-- deterministic paths so diffs are meaningful
-
-## what went wrong
-
-### auth is the boss fight
-
-if you take only one thing away:
-
-> scraping is easy. authentication is the real feature.
-
-### attachments are messy
-
-some files have:
-
-- weird filenames
-- duplicates
-- broken links
-
-so you need content-addressing or de-duping eventually.
+- upload newly downloaded files into **claude** automatically (so i can ask “what’s due next week” and it actually knows)
+- add a “what changed since yesterday” diff that’s even more concise
 
 ## some learning points!
 
-- build the smallest successful sync first
-- save raw responses so you can debug later
-- make outputs deterministic so `git diff` tells you what changed
+- auth is always the boss fight
+- deterministic outputs make debugging 10x easier
+- personal tools are underrated as a way to practice shipping
 
 ## links
 
-- repo: *(todo)*
-- writeup / docs: *(todo)*
+- repo: https://github.com/anselmlong/canvas-scraper

@@ -4,95 +4,98 @@ date: "2026-01-26"
 author: "Anselm Long"
 tags:
   - hackathon
+  - agents
   - product
   - teamwork
-excerpt: "what i built, what broke, and what i’d do differently next time."
+excerpt: "we built a self-evolving agentic code optimizer. also: i slept. and the welfare was insane." 
 ---
 
 ## TL;DR
 
-hack & roll 2026 was (1) chaotic, (2) sleep-deprived, (3) weirdly fun.
+hack & roll 2026 was (1) chaotic, (2) surprisingly well taken care of, and (3) the best hackathon i’ve been to in terms of welfare.
 
-i went in wanting to ship something that was **actually demo-able**, not just “we have an idea” + a figma.
+we built **optifiner** — an *evolutionary, agentic ai code optimizer* that spawns parallel agents to propose changes, runs benchmarks/tests, and only keeps improvements that **measurably** make the code better.
 
-## why i joined
+- website: https://optifiner.dev
+- repo: *(private for now, because we are cowards)*
 
-i’ve done enough projects where i overthink architecture and end up with nothing shipped.
+## the backstory
 
-hackathons are great because they force one thing:
+i came in with the usual hackathon fear:
 
-> make something real enough to show a stranger in 2 minutes.
+> i’m about to embarrass myself next to people who ship faster than i can open vscode.
 
-## what we built
+turns out, building with people way smarter than you is… actually great?
 
-**project:** *(add 1-liner here once you’re happy with the description)*
+- you get exposed to how they think
+- you learn what “good taste” in engineering looks like
+- and you stop pretending you’re the main character (very healthy)
 
-- the “user problem” we tried to solve: *(todo)*
-- what we shipped for the demo: *(todo)*
-- what we cut last minute (and should probably add later): *(todo)*
+## our project: optifiner
 
-## process (aka: how we didn’t die)
+optifiner is basically a darwinian loop for code.
 
-### 1) pick the smallest possible demo
+instead of “one agent edits files and hopes for the best”, it does:
 
-the main hackathon trap: trying to build *a platform*.
+1. **spawn multiple agents in parallel** (analyzer/refactorer/optimizer/etc)
+2. each agent proposes changes in a sandbox workspace
+3. run a **benchmark evaluator** that outputs a score + a test gate
+4. **keep only improvements** that beat the baseline
+5. repeat for multiple generations until convergence
 
-we instead aimed for:
+what i really liked about this approach is that it forces you to answer:
 
-- 1 user flow
-- 1 wow moment
-- 0 “please imagine this works” slides
+- what does “better” even mean?
+- what metric do we optimize?
+- what’s our safety check to prevent breaking everything?
 
-### 2) split the work by risk, not by feature
+because without that, “ai code optimizer” becomes: *random code edits with vibes*.
 
-we divided tasks into:
+## what we actually shipped
 
-- **high risk / unknown** (do first)
-- **boring but necessary** (do later)
+- multi-agent evolution loop (parallel agents)
+- benchmark-driven acceptance (score improves or we revert)
+- git-integrated history (every improvement is a commit)
+- a web dashboard to watch the evolution progress
+- multi-model support (claude/gpt/gemini)
 
-this saved us from the classic “frontend looks nice but backend is fake” situation.
+*(i’m basing this on our repo readme, which is way more put-together than my sleep schedule.)*
 
-### 3) keep the scope aggressively violent
+## the hackathon part
 
-things we rejected mid-way:
+### welfare was insane
 
-- adding more pages
-- supporting every edge case
-- polishing animations
+i’m used to hackathons that are like:
 
-we only cared about: *does the main path work?*
+- “here’s a banana”
+- “good luck”
+- “sleep on concrete if you want”
 
-## what broke (and what we learned)
+this one was the opposite. genuinely the best hackathon i’ve been to **in terms of welfare**.
 
-### “it works on my laptop” is real
+(and yes, that changes the entire experience. suffering builds character, but so does… not suffering.)
 
-the demo environment is always different:
+### building with cracked people
 
-- auth breaks
-- network is slow
-- someone clicks the one button you didn’t test
+most valuable reflection for me:
 
-**lesson:** have a “demo mode” fallback if possible.
+> building with people smarter than you is a cheat code.
 
-### integration is where time goes to die
+not because they do everything for you — but because you get pulled into a higher bar.
 
-each piece works alone.
+you start asking:
 
-the moment you connect them, you discover:
+- “is this the simplest thing that works?”
+- “how do we make this demo robust?”
+- “what’s the metric? what’s the failure mode?”
 
-- mismatched data shapes
-- missing env vars
-- weird CORS / deployment issues
+## what i learned
 
-**lesson:** integrate early, even if ugly.
-
-## what i’d do differently next time
-
-- write a 5-line demo script early (so we don’t improvise the pitch)
-- start deployment earlier than feels reasonable
-- keep one person “on call” to debug integration issues
+- **benchmarks > vibes.** if you can’t measure it, you’re just doing interpretive dance.
+- **parallelism is your friend.** letting agents explore different approaches simultaneously is oddly similar to letting humans split tasks.
+- **shipping a demo is a separate skill.** “it works locally” is not a demo.
 
 ## links
 
-- repo: *(todo)*
-- demo / slides: *(todo)*
+- optifiner website: https://optifiner.dev
+- optifiner repo: *(private for now)*
