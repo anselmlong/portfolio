@@ -16,8 +16,8 @@ hack & roll 2026 was (1) chaotic, (2) surprisingly well taken care of, and (3) t
 
 we built **optifiner** — an *evolutionary, agentic ai code optimizer* that spawns parallel agents to propose changes, runs benchmarks/tests, and only keeps improvements that **measurably** make the code better.
 
-- website: https://optifiner.dev
-- repo: *(private for now, because we are cowards)*
+- website: https://optifiner.ai
+- repo: *(private for now)*
 
 ## the backstory
 
@@ -75,6 +75,12 @@ this one was the opposite. genuinely the best hackathon i’ve been to **in term
 
 (and yes, that changes the entire experience. suffering builds character, but so does… not suffering.)
 
+### we won a tiny prize (and it leaks)
+
+we also won a small prize from **marshall wace** — a **stanley bottle**.
+
+it leaks sadly. but it’s the thought that counts.
+
 ### building with cracked people
 
 most valuable reflection for me:
@@ -89,6 +95,14 @@ you start asking:
 - “how do we make this demo robust?”
 - “what’s the metric? what’s the failure mode?”
 
+## thanks
+
+huge thanks to my teammates: **philippe**, **verity**, and **leroy**.
+
+## what’s next
+
+we’re going to keep working on this after the hackathon too (because apparently we enjoy pain).
+
 ## what i learned
 
 - **benchmarks > vibes.** if you can’t measure it, you’re just doing interpretive dance.
@@ -97,5 +111,5 @@ you start asking:
 
 ## links
 
-- optifiner website: https://optifiner.dev
+- optifiner website: https://optifiner.ai
 - optifiner repo: *(private for now)*
