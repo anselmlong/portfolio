@@ -9,12 +9,23 @@ load_dotenv()
 # Load environment variables
 CONNECTION_STRING = os.getenv("DATABASE_URL")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-EMBED_MODEL = os.getenv("EMBED_MODEL")
+EMBED_MODEL = os.getenv("EMBED_MODEL") or "text-embedding-3-small"
 
-# Load your portfolio documents
-loader_txt = DirectoryLoader("../../public/data/", glob="**/*.txt", loader_cls=TextLoader)
-loader_md = DirectoryLoader("../../public/data/", glob="**/*.md", loader_cls=TextLoader)
-loader_md_blogs = DirectoryLoader("../../public/blogs/", glob="**/*.md", loader_cls=TextLoader)
+if not CONNECTION_STRING:
+    raise SystemExit("DATABASE_URL missing; set to a Postgres connection string for PGVector.")
+if CONNECTION_STRING.startswith("file:"):
+    raise SystemExit("DATABASE_URL points to sqlite. PGVector requires Postgres; set DATABASE_URL to a postgres connection.")
+if not OPENAI_API_KEY:
+    raise SystemExit("OPENAI_API_KEY missing; set it to run embeddings.")
+
+# Load your portfolio documents (resolve from repo root)
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+DATA_DIR = os.path.join(REPO_ROOT, "public", "data")
+BLOG_DIR = os.path.join(REPO_ROOT, "public", "blogs")
+
+loader_txt = DirectoryLoader(DATA_DIR, glob="**/*.txt", loader_cls=TextLoader)
+loader_md = DirectoryLoader(DATA_DIR, glob="**/*.md", loader_cls=TextLoader)
+loader_md_blogs = DirectoryLoader(BLOG_DIR, glob="**/*.md", loader_cls=TextLoader)
 documents_txt = loader_txt.load()
 documents_md = loader_md.load() + loader_md_blogs.load()
 print(f"📂 Loaded {len(documents_txt)} .txt and {len(documents_md)} .md documents")
