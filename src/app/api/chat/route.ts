@@ -99,6 +99,8 @@ export async function POST(req: NextRequest) {
           return await PGVectorStore.initialize(embeddings, {
             pool,
             tableName: "langchain_pg_embedding",
+            collectionName: "portfolio_docs_v2",
+            collectionTableName: "langchain_pg_collection",
             columns: {
               idColumnName: "id",
               vectorColumnName: "embedding",
