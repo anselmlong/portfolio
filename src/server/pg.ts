@@ -13,6 +13,8 @@ export const pool: Pool =
   globalForPg.pgPool ??
   new Pool({
     connectionString: process.env.DATABASE_URL!,
+    // Supabase pooler requires SSL but uses a certificate that needs relaxed verification
+    ssl: { rejectUnauthorized: false },
     // Fail fast when the DB is unreachable (prevents multi-minute hangs)
     connectionTimeoutMillis: Number.isFinite(connectionTimeoutMillis)
       ? connectionTimeoutMillis
