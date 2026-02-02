@@ -39,7 +39,9 @@ if (enableIvfflatProbes) {
       .query(
         `SET ivfflat.probes = ${Number.isFinite(probesVal) ? probesVal : 10};`,
       )
-      .catch(() => {});
+      .catch(() => {
+        // Ignore probe setting errors - not critical for operation
+      });
   });
 }
 
