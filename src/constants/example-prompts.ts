@@ -7,4 +7,5 @@ export const EXAMPLE_PROMPTS = [
   "what are your technical skills?",
   "what is your education background?",
   "tell me about your web experience",
+  "arrange a time slot for a quick call?",
 ];

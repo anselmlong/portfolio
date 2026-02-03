@@ -1,5 +1,5 @@
 """
-Blog Indexer for Neon PGVector
+Blog Indexer for Supabase PGVector
 
 Usage:
     python src/server/indexer.py

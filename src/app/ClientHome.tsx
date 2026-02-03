@@ -26,6 +26,8 @@ const roles = [
   "storyteller.",
   "photographer.",
   "rock toucher.",
+  "creator.",
+  "builder.",
 ];
 
 

@@ -118,8 +118,10 @@ export async function POST(req: NextRequest) {
         }
       })());
 
+    // Change Top K to 3 for more context
+    const TOP_K = 3;
     // Small dataset: fewer docs are usually sufficient and faster
-    const retriever = vectorStore.asRetriever({ k: 2 });
+    const retriever = vectorStore.asRetriever({ k: TOP_K });
     const t1 = Date.now();
 
     // Convert AI SDK messages to LangChain format (limit history for speed)
@@ -192,6 +194,7 @@ export async function POST(req: NextRequest) {
         try {
           // --- Timing: retrieval phase ---
           const tRetrievalStart = Date.now();
+          // Retrieve top K documents from vector store
           const docs = await retriever.invoke(rewrittenQuestion);
           const context = formatDocs(docs);
           const retrievalMs = Date.now() - tRetrievalStart;
@@ -199,10 +202,12 @@ export async function POST(req: NextRequest) {
 
           // --- Timing: LLM phase ---
           const tLLMStart = Date.now();
+          // Piping in the prompt to the chain
           const answerChain = answerPrompt
             .pipe(llm)
             .pipe(new StringOutputParser());
 
+          // Actual streaming of the answer
           const answerStream = await answerChain.stream({
             context,
             history: historyMessages,
