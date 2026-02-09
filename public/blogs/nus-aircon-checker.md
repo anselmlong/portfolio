@@ -7,7 +7,7 @@ tags:
   - automation
   - reverse-engineering
   - telegram
-excerpt: "Reverse engineering an API from a website was weirdly thrilling. Also, opencode is cracked." 
+excerpt: "I reverse engineered an API from a website with oh-my-opencode." 
 ---
 
 ## TL;DR
@@ -15,6 +15,8 @@ excerpt: "Reverse engineering an API from a website was weirdly thrilling. Also,
 I got tired of forgetting to top up my aircon credits and waking up sweaty.
 
 So I built a Telegram bot that checks your EVS2 portal aircon credits in one command.
+
+Check it out on Telegram @aircon_checker_bot!
 
 Repo: https://github.com/anselmlong/nus-aircon-checker
 
@@ -27,21 +29,11 @@ The EVS2 consumer portal is a Flutter web app, which usually means:
 - the UI is annoying to scrape
 - but the network requests are pretty consistent
 
-So instead of doing brittle DOM scraping, I just watched the network calls and copied the backend endpoints.
-
-It calls the same backend endpoints as the portal.
-
-If you’ve never done this before, it feels like cheating:
-
-> The website is just a UI. The real product is the API behind it.
+The website is just a UI. The real product is the API behind it.
 
 ## I Just Had To Guide Opencode
 
 A big reason this shipped quickly is that I used **opencode**.
-
-It’s one of those tools where you feel like:
-
-> Wait… why is this allowed?
 
 My workflow was basically:
 
@@ -49,7 +41,11 @@ My workflow was basically:
 - opencode does the boring implementation
 - I keep it on a leash so it doesn’t hallucinate a whole new architecture
 
-This is also why I’m bullish on **oh-my-opencode** — it’s genuinely insane leverage if you have decent taste + a clear plan.
+oh-my-opencode is opencode on steroids - it creates multiple agents that do your work super fast.
+
+There were some bugs here and there - it didn't work for certain rooms because the API requests were different. There was once I had to inspect the network calls and feed that into opencode manually so it could change its own API calls. Otherwise, it managed to one shot the most important feature - checking the balance.
+
+> Building small utility bots is ridiculously fun
 
 ## What The Bot Does
 
@@ -60,18 +56,6 @@ Commands:
 - `/usage`, `/avg`, `/predict` for breakdowns and run-out estimation
 - optional low-balance reminders
 
-## Security Notes
+## Build your own personal tool!
 
-- Login only works in private DMs
-- Credentials are stored in-memory only (cleared on restart)
-- Optional allowlist via `TELEGRAM_ALLOWED_USER_IDS`
-
-## Some Learning Points!
-
-- The best “scraping” is not scraping. It’s copying the API.
-- Backend permissions are a puzzle (sometimes “read” works where “list” is forbidden)
-- Building small utility bots is ridiculously fun
-
-## Links
-
-- Repo: https://github.com/anselmlong/nus-aircon-checker
+It's easier than ever to build something for a very specific use case. Even if no one else uses this - it still saves me time and effort. So it's worth the build!
