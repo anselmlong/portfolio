@@ -8,8 +8,10 @@ An AI-powered chatbot embedded in the portfolio site, acting as a recruitment po
 
 ### 1. Agentic Chatbot with RAG
 - LangGraph-based conversational agent with retrieval-augmented generation
+- Already exists.    
 - Corpus: blog posts, project READMEs, resume, experience docs
 - Visitors can ask natural language questions about Anselm's work, skills, and experience
+- Automatically pull new information from LinkedIn (extension)
 
 ### 2. Calendar Integration
 - Google Calendar API integration (via GoG)
@@ -19,6 +21,7 @@ An AI-powered chatbot embedded in the portfolio site, acting as a recruitment po
 
 ### 3. Email Integration
 - Gmail API integration (via GoG)
+- Send email to Anselm to inquire
 - Confirmation emails for scheduled interviews
 - Follow-up emails after recruiter interactions (with approval)
 
@@ -75,13 +78,31 @@ An AI-powered chatbot embedded in the portfolio site, acting as a recruitment po
 
 ## Architecture (TBD)
 - **Agent framework:** LangGraph
-- **Vector store:** Pinecone / Chroma (TBD)
-- **LLM:** OpenAI GPT-4o / Claude (TBD)
-- **Frontend:** Embedded chat widget on portfolio site
-- **Backend:** Python API (FastAPI or similar)
+- **Vector store:** Postgres PGVector
+- **LLM:** OpenAI GPT-4o
 - **Integrations:** Google Calendar, Gmail, Telegram Bot API, GitHub API
 
 ---
+
+## Graph
+
+          [ Input from User ]
+                   |
+                   v
+          [  Intent Model  ]
+                   |
+          +--------+-----------------------+
+          |                                |
+          +--> [ RAG (Base) ]              +--> [ Tailor Resume ]
+          |                                |
+          +--> [ Calendar Integration ]    +--> [ GitHub Integration ]
+          |                                |
+          +--> [ Email Integration ]       |
+          |                                |
+          +--> [ Telegram Integration ]    +--> [ Skill Matching ]
+          |                                |
+          +--------------------------------+--> [ Mock Interview ]
+
 
 *Created: 2026-02-04*
 *Status: Planning*
