@@ -1,0 +1,3 @@
+- 2026-02-12: LangGraph is already available transitively via `langchain@1.0.1`, so `@langchain/langgraph` imports work without adding new dependencies.
+- 2026-02-12: A simple `START -> detectIntent -> END` graph is enough for a sprint baseline and keeps the router easy to evolve.
+- 2026-02-12: Combining deterministic keyword checks with LLM structured output gives fast and predictable calendar intent detection while still handling ambiguous prompts.

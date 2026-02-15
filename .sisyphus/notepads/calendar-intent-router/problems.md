@@ -1,0 +1,1 @@
+- 2026-02-12: No unresolved blocker for this task; remaining problems are pre-existing repo-wide lint/type debt outside this change.

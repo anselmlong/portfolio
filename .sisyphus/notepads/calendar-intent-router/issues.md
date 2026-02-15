@@ -1,0 +1,2 @@
+- 2026-02-12: Workspace already has many unrelated lint/type errors, so full `bun run check` fails before/independent of this feature.
+- 2026-02-12: TypeScript LSP diagnostics could not run in this environment because `typescript-language-server` is not installed.

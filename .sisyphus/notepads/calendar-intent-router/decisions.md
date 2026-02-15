@@ -1,0 +1,3 @@
+- 2026-02-12: Kept scope to two intents only (`calendar`, `general`) to match weekend sprint constraints.
+- 2026-02-12: Used `gpt-4o-mini` with `temperature: 0` for low-cost and stable intent classification.
+- 2026-02-12: Added a standalone test endpoint at `src/app/api/chat/intent/route.ts` and did not modify the existing streaming RAG chat route.
