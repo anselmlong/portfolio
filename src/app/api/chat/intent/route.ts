@@ -1,6 +1,6 @@
 import { type NextRequest } from "next/server";
 import { z } from "zod";
-import { routeIntent } from "~/server/agents/intent-graph";
+import { detectIntent } from "~/server/agents/intent";
 
 const intentRequestSchema = z.object({
   query: z.string().trim().min(1, "Query is required"),
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const decision = await routeIntent({ query: parsed.data.query });
+    const decision = await detectIntent(parsed.data.query);
     return Response.json(decision, { status: 200 });
   } catch (error) {
     console.error("Error in intent route:", error);
