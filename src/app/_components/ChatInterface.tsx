@@ -46,6 +46,10 @@ const ChatInterface = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   // ref to the expanding history area so we can scroll it into view when opened
   const historyRef = useRef<HTMLDivElement | null>(null);
+  
+  // Track touch/pointer position to differentiate scroll from tap
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  
   const { messages, sendMessage, regenerate, status, error } = useChat({
     transport: new TextStreamChatTransport({
       api: "/api/chat",
@@ -115,18 +119,48 @@ const ChatInterface = () => {
   useEffect(() => {
     if (!expanded) return;
 
+    // Track pointer/touch start position
+    const onPointerStart = (event: PointerEvent) => {
+      touchStartRef.current = {
+        x: event.clientX,
+        y: event.clientY,
+      };
+    };
+
+    // Only close if the pointer didn't move significantly (i.e., not a scroll)
     const onPointerDown = (event: PointerEvent) => {
       const container = containerRef.current;
       if (!container) return;
 
-      if (!container.contains(event.target as Node)) {
-        setExpanded(false);
+      // Don't close if clicking inside the chat container
+      if (container.contains(event.target as Node)) {
+        return;
       }
+
+      // Check if this is a scroll/drag gesture by comparing start and end positions
+      const touchStart = touchStartRef.current;
+      if (touchStart) {
+        const deltaX = Math.abs(event.clientX - touchStart.x);
+        const deltaY = Math.abs(event.clientY - touchStart.y);
+        const SCROLL_THRESHOLD = 10; // pixels
+
+        // If pointer moved more than threshold, it's a scroll gesture - don't close
+        if (deltaX > SCROLL_THRESHOLD || deltaY > SCROLL_THRESHOLD) {
+          return;
+        }
+      }
+
+      // Only close if it's a genuine tap/click outside
+      setExpanded(false);
     };
 
-    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("pointerdown", onPointerStart);
+    document.addEventListener("pointerup", onPointerDown);
+    
     return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("pointerdown", onPointerStart);
+      document.removeEventListener("pointerup", onPointerDown);
+      touchStartRef.current = null;
     };
   }, [expanded]);
 
