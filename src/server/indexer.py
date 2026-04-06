@@ -16,6 +16,12 @@ import sys
 from pathlib import Path
 from urllib.parse import urlparse, urlunparse
 from dotenv import load_dotenv
+
+# Load .env from project root
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = SCRIPT_DIR.parent.parent
+load_dotenv(PROJECT_ROOT / ".env")
+
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_text_splitters import (
     RecursiveCharacterTextSplitter,
@@ -24,10 +30,6 @@ from langchain_text_splitters import (
 from langchain_openai import OpenAIEmbeddings
 from langchain_postgres import PGVector
 
-load_dotenv()
-
-SCRIPT_DIR = Path(__file__).resolve().parent
-PROJECT_ROOT = SCRIPT_DIR.parent.parent
 DATA_DIR = PROJECT_ROOT / "public" / "data"
 BLOGS_DIR = PROJECT_ROOT / "public" / "blogs"
 
@@ -47,6 +49,7 @@ def get_connection_string() -> str | None:
     params = parse_qs(parsed.query)
 
     params.pop("pgbouncer", None)
+    params.pop("sslaccept", None)
 
     if "connect_timeout" not in params:
         params["connect_timeout"] = ["30"]

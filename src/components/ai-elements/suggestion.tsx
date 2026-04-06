@@ -1,10 +1,7 @@
 "use client";
 
 import { Button } from "~/components/ui/button";
-import {
-  ScrollArea,
-  ScrollBar,
-} from "~/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { cn } from "~/lib/utils";
 import type { ComponentProps } from "react";
 
@@ -50,7 +47,7 @@ export const Suggestion = ({
       variant={variant}
       {...props}
     >
-      {children || suggestion}
+      {children ?? suggestion}
     </Button>
   );
 };

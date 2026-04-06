@@ -29,20 +29,20 @@ export default function LogosGrid({ logos }: { logos: Logo[] }) {
               start: "top 70%",
               toggleActions: "play none none reverse",
             },
-          }
+          },
         );
       }, sectionRef);
 
       return () => ctx.revert();
     },
-    { dependencies: [], scope: sectionRef }
+    { dependencies: [], scope: sectionRef },
   );
 
   return (
     <section ref={sectionRef} className="mt-40 mb-20 px-6">
-      <div className="max-w-5xl mx-auto text-center">
-        <h1 className="animate-right text-5xl md:text-7xl font-bold mb-4 text-foreground-high text-balance">
-          what i've worked with
+      <div className="mx-auto max-w-5xl text-center">
+        <h1 className="animate-right text-foreground-high mb-4 text-5xl font-bold text-balance md:text-7xl">
+          what i&apos;ve worked with
         </h1>
       </div>
 
@@ -51,16 +51,16 @@ export default function LogosGrid({ logos }: { logos: Logo[] }) {
           {logos.map((logo) => (
             <div
               key={logo.alt}
-              className="logo-item group flex flex-col items-center gap-3 rounded-2xl bg-card p-5 border border-border transition-colors duration-200 hover:border-primary/40 hover:bg-card/80"
+              className="logo-item group bg-card border-border hover:border-primary/40 hover:bg-card/80 flex flex-col items-center gap-3 rounded-2xl border p-5 transition-all duration-300 hover:-translate-y-1"
             >
-              <div className="flex size-16 md:size-20 items-center justify-center rounded-full bg-white text-slate-900 shadow-sm ring-1 ring-black/5">
+              <div className="flex size-16 items-center justify-center rounded-full bg-white text-slate-900 shadow-sm ring-1 ring-black/5 md:size-20">
                 <img
                   src={logo.src}
                   alt={logo.alt}
-                  className="size-10 md:size-16 object-contain rounded-full"
+                  className="size-10 rounded-full object-contain grayscale transition-all duration-300 group-hover:scale-110 group-hover:grayscale-0 md:size-16"
                 />
               </div>
-              <span className="text-sm uppercase text-muted-foreground group-hover:text-foreground transition-colors duration-200">
+              <span className="text-muted-foreground group-hover:text-foreground text-sm uppercase transition-colors duration-200">
                 {logo.alt}
               </span>
             </div>

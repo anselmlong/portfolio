@@ -38,7 +38,7 @@ export default function Lightbox({
           break;
       }
     },
-    [isOpen, onClose, onNavigate]
+    [isOpen, onClose, onNavigate],
   );
 
   useEffect(() => {
@@ -62,23 +62,27 @@ export default function Lightbox({
 
   const lightboxContent = (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm animate-fadeIn"
+      className="animate-fadeIn fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm"
       onClick={onClose}
     >
       {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-6 right-6 p-2 text-white/70 hover:text-white transition-colors duration-200 z-10"
+        className="absolute top-6 right-6 z-10 p-2 text-white/70 transition-colors duration-200 hover:text-white"
         aria-label="Close lightbox"
       >
         <svg
-          className="w-8 h-8"
+          className="h-8 w-8"
           fill="none"
           stroke="currentColor"
           strokeWidth={1.5}
           viewBox="0 0 24 24"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
         </svg>
       </button>
 
@@ -89,17 +93,21 @@ export default function Lightbox({
             e.stopPropagation();
             onNavigate("prev");
           }}
-          className="absolute left-4 md:left-8 p-3 text-white/70 hover:text-white transition-colors duration-200 z-10"
+          className="absolute left-4 z-10 p-3 text-white/70 transition-colors duration-200 hover:text-white md:left-8"
           aria-label="Previous photo"
         >
           <svg
-            className="w-8 h-8 md:w-10 md:h-10"
+            className="h-8 w-8 md:h-10 md:w-10"
             fill="none"
             stroke="currentColor"
             strokeWidth={1.5}
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15.75 19.5L8.25 12l7.5-7.5"
+            />
           </svg>
         </button>
       )}
@@ -111,44 +119,51 @@ export default function Lightbox({
             e.stopPropagation();
             onNavigate("next");
           }}
-          className="absolute right-4 md:right-8 p-3 text-white/70 hover:text-white transition-colors duration-200 z-10"
+          className="absolute right-4 z-10 p-3 text-white/70 transition-colors duration-200 hover:text-white md:right-8"
           aria-label="Next photo"
         >
           <svg
-            className="w-8 h-8 md:w-10 md:h-10"
+            className="h-8 w-8 md:h-10 md:w-10"
             fill="none"
             stroke="currentColor"
             strokeWidth={1.5}
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M8.25 4.5l7.5 7.5-7.5 7.5"
+            />
           </svg>
         </button>
       )}
 
       {/* Image container */}
       <div
-        className="relative max-w-[90vw] max-h-[85vh] flex flex-col items-center"
+        className="relative flex max-h-[85vh] max-w-[90vw] flex-col items-center"
         onClick={(e) => e.stopPropagation()}
       >
         <img
+          key={currentPhoto.src}
           src={currentPhoto.src}
           alt={currentPhoto.alt}
-          className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl"
+          className="animate-fadeIn max-h-[75vh] max-w-full rounded-lg object-contain shadow-2xl"
         />
 
         {/* Caption and info */}
         <div className="mt-4 text-center">
           {currentPhoto.caption && (
-            <p className="text-white/90 text-lg font-light mb-1">{currentPhoto.caption}</p>
+            <p className="mb-1 text-lg font-light text-white/90">
+              {currentPhoto.caption}
+            </p>
           )}
           {currentPhoto.category && (
-            <span className="text-white/50 text-sm uppercase tracking-wider">
+            <span className="text-sm tracking-wider text-white/50 uppercase">
               {currentPhoto.category}
             </span>
           )}
           {photos.length > 1 && (
-            <p className="text-white/40 text-sm mt-2 font-light">
+            <p className="mt-2 text-sm font-light text-white/40">
               {currentIndex + 1} / {photos.length}
             </p>
           )}
@@ -157,7 +172,7 @@ export default function Lightbox({
 
       {/* Thumbnail strip */}
       {photos.length > 1 && (
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 max-w-[90vw] overflow-x-auto px-4 py-2">
+        <div className="absolute bottom-6 left-1/2 flex max-w-[90vw] -translate-x-1/2 gap-2 overflow-x-auto px-4 py-2">
           {photos.map((photo, index) => (
             <button
               key={`thumb-${index}`}
@@ -166,16 +181,16 @@ export default function Lightbox({
                 onNavigate(index > currentIndex ? "next" : "prev");
                 // Direct navigation to index would be better, but using existing interface
               }}
-              className={`flex-shrink-0 w-12 h-12 md:w-16 md:h-16 rounded overflow-hidden transition-all duration-200 ${
+              className={`h-12 w-12 flex-shrink-0 overflow-hidden rounded transition-all duration-200 md:h-16 md:w-16 ${
                 index === currentIndex
-                  ? "ring-2 ring-primary opacity-100"
+                  ? "ring-primary opacity-100 ring-2"
                   : "opacity-40 hover:opacity-70"
               }`}
             >
               <img
                 src={photo.src}
                 alt={photo.alt}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
               />
             </button>
           ))}

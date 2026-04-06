@@ -21,7 +21,10 @@ interface PhotoGalleryProps {
   categories?: string[];
 }
 
-export default function PhotoGallery({ photos, categories = [] }: PhotoGalleryProps) {
+export default function PhotoGallery({
+  photos,
+  categories = [],
+}: PhotoGalleryProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -42,9 +45,13 @@ export default function PhotoGallery({ photos, categories = [] }: PhotoGalleryPr
 
   const navigateLightbox = (direction: "prev" | "next") => {
     if (direction === "prev") {
-      setLightboxIndex((prev) => (prev === 0 ? filteredPhotos.length - 1 : prev - 1));
+      setLightboxIndex((prev) =>
+        prev === 0 ? filteredPhotos.length - 1 : prev - 1,
+      );
     } else {
-      setLightboxIndex((prev) => (prev === filteredPhotos.length - 1 ? 0 : prev + 1));
+      setLightboxIndex((prev) =>
+        prev === filteredPhotos.length - 1 ? 0 : prev + 1,
+      );
     }
   };
 
@@ -69,23 +76,23 @@ export default function PhotoGallery({ photos, categories = [] }: PhotoGalleryPr
             start: "top 80%",
             toggleActions: "play none none none",
           },
-        }
+        },
       );
     },
-    { dependencies: [filteredPhotos], scope: galleryRef }
+    { dependencies: [filteredPhotos], scope: galleryRef },
   );
 
   return (
     <>
       {/* Category Filter */}
       {categories.length > 0 && (
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
+        <div className="mb-12 flex flex-wrap justify-center gap-3">
           <button
             onClick={() => setSelectedCategory(null)}
-            className={`px-4 py-2 text-sm font-light tracking-wide uppercase transition-all duration-300 border rounded-full ${
+            className={`rounded-full border px-4 py-2 text-sm font-light tracking-wide uppercase transition-all duration-300 ${
               selectedCategory === null
                 ? "bg-primary text-primary-foreground border-primary"
-                : "bg-transparent text-muted-foreground border-border hover:border-primary hover:text-foreground"
+                : "text-muted-foreground border-border hover:border-primary hover:text-foreground bg-transparent"
             }`}
           >
             All
@@ -94,10 +101,10 @@ export default function PhotoGallery({ photos, categories = [] }: PhotoGalleryPr
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-4 py-2 text-sm font-light tracking-wide uppercase transition-all duration-300 border rounded-full ${
+              className={`rounded-full border px-4 py-2 text-sm font-light tracking-wide uppercase transition-all duration-300 ${
                 selectedCategory === category
                   ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-transparent text-muted-foreground border-border hover:border-primary hover:text-foreground"
+                  : "text-muted-foreground border-border hover:border-primary hover:text-foreground bg-transparent"
               }`}
             >
               {category}
@@ -109,38 +116,40 @@ export default function PhotoGallery({ photos, categories = [] }: PhotoGalleryPr
       {/* Masonry Grid */}
       <div
         ref={galleryRef}
-        className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4"
+        className="columns-1 gap-4 space-y-4 sm:columns-2 lg:columns-3"
       >
         {filteredPhotos.map((photo, index) => (
           <div
             key={`${photo.src}-${index}`}
-            className="gallery-item break-inside-avoid group cursor-pointer"
+            className="gallery-item group cursor-pointer break-inside-avoid"
             onClick={() => openLightbox(index)}
           >
-            <div className="relative overflow-hidden rounded-lg bg-card">
+            <div className="bg-card relative overflow-hidden rounded-lg">
               <img
                 src={photo.src}
                 alt={photo.alt}
-                className="w-full h-auto object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-90"
+                className="ken-burns h-auto w-full object-cover group-hover:opacity-90"
                 loading="lazy"
               />
               {/* Overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="absolute bottom-0 left-0 right-0 p-4">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <div className="absolute right-0 bottom-0 left-0 p-4">
                   {photo.caption && (
-                    <p className="text-sm text-white/90 font-light">{photo.caption}</p>
+                    <p className="translate-y-2 text-sm font-light text-white/90 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                      {photo.caption}
+                    </p>
                   )}
                   {photo.category && (
-                    <span className="inline-block mt-2 text-xs text-white/60 uppercase tracking-wider">
+                    <span className="mt-2 inline-block translate-y-2 text-xs tracking-wider text-white/60 uppercase opacity-0 transition-all delay-75 duration-300 group-hover:translate-y-0 group-hover:opacity-100">
                       {photo.category}
                     </span>
                   )}
                 </div>
               </div>
               {/* Expand icon */}
-              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute top-4 right-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <svg
-                  className="w-6 h-6 text-white/80"
+                  className="h-6 w-6 text-white/80 transition-transform duration-300 group-hover:rotate-90"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth={1.5}
@@ -160,8 +169,10 @@ export default function PhotoGallery({ photos, categories = [] }: PhotoGalleryPr
 
       {/* Empty state */}
       {filteredPhotos.length === 0 && (
-        <div className="text-center py-20">
-          <p className="text-muted-foreground font-light">No photos in this category yet.</p>
+        <div className="py-20 text-center">
+          <p className="text-muted-foreground font-light">
+            No photos in this category yet.
+          </p>
         </div>
       )}
 

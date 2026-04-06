@@ -37,9 +37,17 @@ const getRandomPrompts = (prompts: string[], count = 2) => {
   return shuffled.slice(0, count);
 };
 
+const loadingMessages = [
+  "searching my notes...",
+  "putting together an answer...",
+  "thinking...",
+  "digging through context...",
+];
+
 const ChatInterface = () => {
   const [input, setInput] = useState("");
   const [expanded, setExpanded] = useState(false);
+  const [loadingMsgIndex, setLoadingMsgIndex] = useState(0);
   const [displayedPrompts, setDisplayedPrompts] = useState(() =>
     getRandomPrompts(examplePrompts, 2),
   );
@@ -113,6 +121,17 @@ const ChatInterface = () => {
   };
 
   useEffect(() => {
+    if (status !== "submitted") {
+      setLoadingMsgIndex(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setLoadingMsgIndex((prev) => (prev + 1) % loadingMessages.length);
+    }, 1500);
+    return () => clearInterval(interval);
+  }, [status]);
+
+  useEffect(() => {
     if (!expanded) return;
 
     const onPointerDown = (event: PointerEvent) => {
@@ -184,7 +203,23 @@ const ChatInterface = () => {
                       )}
                   </Fragment>
                 ))}
-                {status === "submitted" && <Loader />}
+                {status === "submitted" && (
+                  <div className="flex items-center gap-3 px-4 py-3">
+                    <Loader />
+                    <span className="text-muted-foreground animate-pulse text-sm font-light">
+                      {loadingMessages[loadingMsgIndex]}
+                    </span>
+                  </div>
+                )}
+                {messages.length === 0 && (
+                  <div className="flex flex-col items-center justify-center py-8 text-center">
+                    <div className="bg-primary/30 mb-4 h-px w-12" />
+                    <p className="text-muted-foreground/60 text-sm font-light text-pretty">
+                      go ahead, ask me anything — i don&apos;t bite
+                    </p>
+                    <div className="bg-primary/30 mt-4 h-px w-12" />
+                  </div>
+                )}
               </ConversationContent>
               <ConversationScrollButton />
             </Conversation>

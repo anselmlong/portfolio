@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { type NextRequest } from "next/server";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { PGVectorStore } from "@langchain/community/vectorstores/pgvector";
 import {
@@ -6,8 +6,12 @@ import {
   MessagesPlaceholder,
 } from "@langchain/core/prompts";
 import { StringOutputParser } from "@langchain/core/output_parsers";
-import { HumanMessage, AIMessage, BaseMessage } from "@langchain/core/messages";
-import { Document } from "@langchain/core/documents";
+import {
+  HumanMessage,
+  AIMessage,
+  type BaseMessage,
+} from "@langchain/core/messages";
+import { type Document } from "@langchain/core/documents";
 import type { UIMessage } from "ai";
 import { pool } from "~/server/pg";
 
@@ -42,7 +46,7 @@ let vectorStoreSingleton: PGVectorStore | null = null;
 // POST Endpoint -> Takes in AI SDK messages format
 export async function POST(req: NextRequest) {
   try {
-    const body: ChatRequest = await req.json();
+    const body: ChatRequest = (await req.json()) as ChatRequest;
     const { messages } = body;
 
     if (!messages || messages.length === 0) {
@@ -69,7 +73,7 @@ export async function POST(req: NextRequest) {
     const llm =
       llmSingleton ??
       (llmSingleton = new ChatOpenAI({
-        modelName: process.env.CHAT_MODEL || "gpt-4o-mini",
+        modelName: process.env.CHAT_MODEL ?? "gpt-4o-mini",
         temperature: 0.5,
         openAIApiKey: process.env.OPENAI_API_KEY!,
         streaming: true,
@@ -80,7 +84,7 @@ export async function POST(req: NextRequest) {
     const embeddings =
       embeddingsSingleton ??
       (embeddingsSingleton = new OpenAIEmbeddings({
-        modelName: process.env.EMBED_MODEL || "text-embedding-3-small",
+        modelName: process.env.EMBED_MODEL ?? "text-embedding-3-small",
         openAIApiKey: process.env.OPENAI_API_KEY!,
       }));
 

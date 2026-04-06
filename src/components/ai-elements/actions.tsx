@@ -35,8 +35,8 @@ export const Action = ({
   const button = (
     <Button
       className={cn(
-        "relative size-9 p-1.5 text-muted-foreground hover:text-foreground",
-        className
+        "text-muted-foreground hover:text-foreground relative size-9 p-1.5",
+        className,
       )}
       size={size}
       type="button"
@@ -44,7 +44,7 @@ export const Action = ({
       {...props}
     >
       {children}
-      <span className="sr-only">{label || tooltip}</span>
+      <span className="sr-only">{label ?? tooltip}</span>
     </Button>
   );
 

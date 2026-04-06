@@ -1,9 +1,9 @@
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
-import { marked } from 'marked';
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+import { marked } from "marked";
 
-const blogsDirectory = path.join(process.cwd(), 'public/blogs');
+const blogsDirectory = path.join(process.cwd(), "public/blogs");
 
 export interface BlogPost {
   slug: string;
@@ -24,94 +24,99 @@ export interface BlogPostMetadata {
   tags?: string[];
 }
 
-/**
- * Get all blog post slugs
- */
+interface MatterData {
+  title?: string;
+  date?: string;
+  excerpt?: string;
+  author?: string;
+  tags?: string[];
+  [key: string]: unknown;
+}
+
+function safeData(data: unknown): MatterData {
+  return data as MatterData;
+}
+
 export function getAllBlogSlugs(): string[] {
   if (!fs.existsSync(blogsDirectory)) {
     return [];
   }
-  
+
   const fileNames = fs.readdirSync(blogsDirectory);
   return fileNames
-    .filter((fileName) => fileName.endsWith('.md'))
-    .map((fileName) => fileName.replace(/\.md$/, ''));
+    .filter((fileName) => fileName.endsWith(".md"))
+    .map((fileName) => fileName.replace(/\.md$/, ""));
 }
 
-/**
- * Get metadata for all blog posts (for listing page)
- */
 export function getAllBlogPosts(): BlogPostMetadata[] {
   const slugs = getAllBlogSlugs();
-  
+
   const posts = slugs.map((slug) => {
     const fullPath = path.join(blogsDirectory, `${slug}.md`);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
+    const fileContents = fs.readFileSync(fullPath, "utf8");
     const { data, content } = matter(fileContents);
-    
-    // Extract first paragraph as excerpt if not provided
-    const excerpt = data.excerpt || content.split('\n\n')[0]?.substring(0, 200) || '';
-    
+    const d = safeData(data);
+
+    const excerpt =
+      d.excerpt ?? content.split("\n\n")[0]?.substring(0, 200) ?? "";
+
+    const date = d.date ?? new Date().toISOString().split("T")[0];
+
     return {
       slug,
-      title: data.title || extractTitleFromContent(content, slug),
-      date: data.date || new Date().toISOString().split('T')[0],
-      excerpt: excerpt.replace(/^#+ /, '').trim(),
-      author: data.author,
-      tags: data.tags || [],
-    };
+      title: d.title ?? extractTitleFromContent(content, slug),
+      date,
+      excerpt: excerpt.replace(/^#+ /, "").trim(),
+      author: d.author,
+      tags: d.tags ?? [],
+    } as BlogPostMetadata;
   });
-  
-  // Sort by date, newest first
+
   return posts.sort((a, b) => {
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 }
 
-/**
- * Get full blog post by slug
- */
 export async function getBlogPost(slug: string): Promise<BlogPost | null> {
   try {
     const fullPath = path.join(blogsDirectory, `${slug}.md`);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
+    const fileContents = fs.readFileSync(fullPath, "utf8");
     const { data, content } = matter(fileContents);
-    
-    // Convert markdown to HTML
-    const htmlContent = enhanceHtmlContent(await marked(content));
-    
-    const excerpt = data.excerpt || content.split('\n\n')[0]?.substring(0, 200) || '';
-    
+    const d = safeData(data);
+
+    const htmlContent = enhanceHtmlContent(await marked.parse(content));
+
+    const excerpt =
+      d.excerpt ?? content.split("\n\n")[0]?.substring(0, 200) ?? "";
+
+    const date = d.date ?? new Date().toISOString().split("T")[0];
+
     return {
       slug,
-      title: data.title || extractTitleFromContent(content, slug),
-      date: data.date || new Date().toISOString().split('T')[0],
-      excerpt: excerpt.replace(/^#+ /, '').trim(),
+      title: d.title ?? extractTitleFromContent(content, slug),
+      date,
+      excerpt: excerpt.replace(/^#+ /, "").trim(),
       content: htmlContent,
-      author: data.author,
-      tags: data.tags || [],
-    };
-  } catch (error) {
-    console.error(`Error reading blog post ${slug}:`, error);
+      author: d.author,
+      tags: d.tags ?? [],
+    } as BlogPost;
+  } catch {
     return null;
   }
 }
 
-/**
- * Extract title from markdown content (first H1)
- */
 function extractTitleFromContent(content: string, fallback: string): string {
-  const match = content.match(/^#\s+(.+)$/m);
-  return match?.[1] ?? fallback.replace(/-/g, ' ');
+  const match = /^#\s+(.+)$/m.exec(content);
+  return match?.[1] ?? fallback.replace(/-/g, " ");
 }
 
 function enhanceHtmlContent(html: string): string {
   const wrappedTables = html
-    .replace(/<table(\s[^>]*)?>/g, (_match, attrs = '') => {
-      const normalizedAttrs = attrs || '';
+    .replace(/<table(\s[^>]*)?>/g, (_match: string, attrs?: string) => {
+      const normalizedAttrs = attrs ?? "";
       return `<div class="blog-table-wrapper" role="region" aria-label="Scrollable table"><table${normalizedAttrs}>`;
     })
-    .replace(/<\/table>/g, '</table></div>');
+    .replace(/<\/table>/g, "</table></div>");
 
   return wrappedTables;
 }

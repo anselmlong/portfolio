@@ -5,19 +5,29 @@ export default async function BlogPage() {
   const posts = await api.blog.list();
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="bg-background text-foreground min-h-screen">
       <main className="pt-32 pb-24 md:pt-40">
         {/* Editorial Header */}
-        <header className="container mx-auto px-6 md:px-12 lg:px-20 mb-20">
-          <div className="max-w-6xl mx-auto">
+        <header className="container mx-auto mb-20 px-6 md:px-12 lg:px-20">
+          <div className="mx-auto max-w-6xl">
             {/* Back link - subtle */}
             <Link
               href="/"
-              className="inline-flex items-center text-muted-foreground/60 hover:text-muted-foreground transition-colors duration-200 mb-12 group"
+              className="text-muted-foreground/60 hover:text-muted-foreground group mb-12 inline-flex items-center transition-colors duration-200"
             >
-              <span className="size-6 border border-current rounded-full flex items-center justify-center mr-3 group-hover:border-foreground transition-colors duration-200">
-                <svg className="size-3" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+              <span className="group-hover:border-foreground mr-3 flex size-6 items-center justify-center rounded-full border border-current transition-colors duration-200">
+                <svg
+                  className="size-3"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 19.5L8.25 12l7.5-7.5"
+                  />
                 </svg>
               </span>
               <span className="text-xs tracking-[0.2em] uppercase">Home</span>
@@ -26,17 +36,23 @@ export default async function BlogPage() {
             {/* Main title with decorative elements */}
             <div className="relative">
               {/* Issue number - decorative */}
-              <span className="absolute -left-4 md:-left-16 top-0 text-[8rem] md:text-[12rem] font-thin text-foreground/[0.03] leading-none select-none pointer-events-none" style={{ fontFamily: 'var(--font-display)' }}>
+              <span
+                className="text-foreground/[0.03] pointer-events-none absolute top-0 -left-4 text-[8rem] leading-none font-thin select-none md:-left-16 md:text-[12rem]"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
                 №
               </span>
 
-              <h1 className="text-6xl md:text-8xl lg:text-9xl font-light tracking-tight text-foreground-high text-balance leading-[0.9]" style={{ fontFamily: 'var(--font-display)' }}>
+              <h1
+                className="text-foreground-high text-6xl leading-[0.9] font-light tracking-tight text-balance md:text-8xl lg:text-9xl"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
                 Journal
               </h1>
 
               <div className="mt-6 flex items-center gap-6">
-                <div className="h-px bg-primary/40 w-16" />
-                <p className="text-muted-foreground text-sm tracking-[0.15em] uppercase text-pretty">
+                <div className="bg-primary/40 h-px w-16" />
+                <p className="text-muted-foreground text-sm tracking-[0.15em] text-pretty uppercase">
                   Thoughts, projects & experiences
                 </p>
               </div>
@@ -46,72 +62,87 @@ export default async function BlogPage() {
 
         {/* Posts Section */}
         <section className="container mx-auto px-6 md:px-12 lg:px-20">
-          <div className="max-w-6xl mx-auto">
+          <div className="mx-auto max-w-6xl">
             {posts.length === 0 ? (
               /* Empty State */
               <div className="py-32 text-center">
-                <p className="text-6xl mb-8 text-muted-foreground/20" style={{ fontFamily: 'var(--font-display)' }}>∅</p>
-                <p className="text-muted-foreground text-lg font-light text-pretty mb-8">
+                <p
+                  className="text-muted-foreground/20 mb-8 text-6xl"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  ∅
+                </p>
+                <p className="text-muted-foreground mb-8 text-lg font-light text-pretty">
                   No entries yet. The first chapter awaits.
                 </p>
                 <Link
                   href="/"
-                  className="inline-flex items-center px-8 py-4 border border-primary text-primary text-sm tracking-[0.15em] uppercase hover:bg-primary hover:text-primary-foreground transition-colors duration-200"
+                  className="border-primary text-primary hover:bg-primary hover:text-primary-foreground inline-flex items-center border px-8 py-4 text-sm tracking-[0.15em] uppercase transition-colors duration-200"
                 >
                   Return Home
                 </Link>
               </div>
             ) : (
               /* Posts Grid (cards) */
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 xl:grid-cols-3">
                 {posts.map((post) => (
                   <Link
                     key={post.slug}
                     href={`/blog/${post.slug}`}
-                    className="group"
+                    className="group block"
                   >
-                    <article className="h-full border border-border/50 bg-card/20 hover:bg-card/30 hover:border-primary/40 transition-colors duration-200 p-6 md:p-7 flex flex-col">
+                    <article className="border-border/50 bg-card/20 hover:bg-card/30 hover:border-primary/40 hover:shadow-primary/5 flex h-full flex-col border p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg md:p-7">
                       {/* Meta */}
-                      <div className="flex items-center justify-between gap-4 mb-4">
+                      <div className="mb-4 flex items-center justify-between gap-4">
                         <time
                           dateTime={post.date}
-                          className="text-xs tracking-[0.12em] uppercase text-muted-foreground/70"
+                          className="text-muted-foreground/70 text-xs tracking-[0.12em] uppercase"
                         >
-                          {new Date(post.date).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric',
+                          {new Date(post.date).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
                           })}
                         </time>
 
-                        <span className="text-xs tracking-[0.15em] uppercase text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-2">
+                        <span className="text-primary flex translate-x-2 items-center gap-2 text-xs tracking-[0.15em] uppercase opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100">
                           Read
-                          <svg className="size-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                          <svg
+                            className="size-3"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
+                            />
                           </svg>
                         </span>
                       </div>
 
                       {/* Title */}
                       <h2
-                        className="text-2xl md:text-3xl font-normal mb-3 text-foreground group-hover:text-primary transition-colors duration-200 tracking-tight text-balance leading-snug"
-                        style={{ fontFamily: 'var(--font-display)' }}
+                        className="text-foreground group-hover:text-primary mb-3 text-2xl leading-snug font-normal tracking-tight text-balance transition-colors duration-200 md:text-3xl"
+                        style={{ fontFamily: "var(--font-display)" }}
                       >
                         {post.title}
                       </h2>
 
                       {/* Excerpt */}
-                      <p className="text-muted-foreground line-clamp-3 leading-relaxed font-light text-base text-pretty">
+                      <p className="text-muted-foreground line-clamp-3 text-base leading-relaxed font-light text-pretty">
                         {post.excerpt}
                       </p>
 
                       {/* Tags */}
                       {post.tags && post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-3 mt-5">
+                        <div className="mt-5 flex flex-wrap gap-3">
                           {post.tags.slice(0, 4).map((tag) => (
                             <span
                               key={tag}
-                              className="text-xs tracking-[0.1em] uppercase text-primary/70 border-b border-primary/30"
+                              className="text-primary/70 border-primary/30 hover:bg-primary/10 hover:text-primary hover:border-primary -mx-1 inline-block cursor-default rounded border-b px-1 text-xs tracking-[0.1em] uppercase transition-all duration-200 hover:scale-105"
                             >
                               {tag}
                             </span>
@@ -123,7 +154,7 @@ export default async function BlogPage() {
                       <div className="flex-1" />
 
                       {/* Bottom flourish */}
-                      <div className="mt-6 pt-4 border-t border-border/40 text-muted-foreground/40 text-xs tracking-[0.2em] uppercase">
+                      <div className="border-border/40 text-muted-foreground/40 mt-6 border-t pt-4 text-xs tracking-[0.2em] uppercase">
                         Open
                       </div>
                     </article>
@@ -135,10 +166,15 @@ export default async function BlogPage() {
         </section>
 
         {/* Footer */}
-        <footer className="container mx-auto px-6 md:px-12 lg:px-20 mt-24">
-          <div className="max-w-6xl mx-auto flex items-center justify-between text-xs text-muted-foreground/50 tracking-[0.1em] uppercase">
-            <span>{posts.length} {posts.length === 1 ? 'Entry' : 'Entries'}</span>
-            <Link href="/" className="hover:text-muted-foreground transition-colors duration-200">
+        <footer className="container mx-auto mt-24 px-6 md:px-12 lg:px-20">
+          <div className="text-muted-foreground/50 mx-auto flex max-w-6xl items-center justify-between text-xs tracking-[0.1em] uppercase">
+            <span>
+              {posts.length} {posts.length === 1 ? "Entry" : "Entries"}
+            </span>
+            <Link
+              href="/"
+              className="hover:text-muted-foreground transition-colors duration-200"
+            >
               Back to Portfolio
             </Link>
           </div>

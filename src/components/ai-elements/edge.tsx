@@ -29,7 +29,7 @@ const Temporary = ({
 
   return (
     <BaseEdge
-      className="stroke-1 stroke-ring"
+      className="stroke-ring stroke-1"
       id={id}
       path={edgePath}
       style={{
@@ -41,13 +41,13 @@ const Temporary = ({
 
 const getHandleCoordsByPosition = (
   node: InternalNode<Node>,
-  handlePosition: Position
+  handlePosition: Position,
 ) => {
   // Choose the handle type based on position - Left is for target, Right is for source
   const handleType = handlePosition === Position.Left ? "target" : "source";
 
   const handle = node.internals.handleBounds?.[handleType]?.find(
-    (h) => h.position === handlePosition
+    (h) => h.position === handlePosition,
   );
 
   if (!handle) {
@@ -74,7 +74,7 @@ const getHandleCoordsByPosition = (
       offsetY = handle.height;
       break;
     default:
-      throw new Error(`Invalid handle position: ${handlePosition}`);
+      throw new Error(`Invalid handle position: ${String(handlePosition)}`);
   }
 
   const x = node.internals.positionAbsolute.x + handle.x + offsetX;
@@ -85,7 +85,7 @@ const getHandleCoordsByPosition = (
 
 const getEdgeParams = (
   source: InternalNode<Node>,
-  target: InternalNode<Node>
+  target: InternalNode<Node>,
 ) => {
   const sourcePos = Position.Right;
   const [sx, sy] = getHandleCoordsByPosition(source, sourcePos);
@@ -112,15 +112,15 @@ const Animated = ({ id, source, target, markerEnd, style }: EdgeProps) => {
 
   const { sx, sy, tx, ty, sourcePos, targetPos } = getEdgeParams(
     sourceNode,
-    targetNode
+    targetNode,
   );
 
   const [edgePath] = getBezierPath({
-    sourceX: sx,
-    sourceY: sy,
+    sourceX: sx ?? 0,
+    sourceY: sy ?? 0,
     sourcePosition: sourcePos,
-    targetX: tx,
-    targetY: ty,
+    targetX: tx ?? 0,
+    targetY: ty ?? 0,
     targetPosition: targetPos,
   });
 
