@@ -162,25 +162,83 @@ def test_connection():
         return False
 
 
-def index_to_pgvector(docs):
-    print("🤖 Creating embeddings with OpenAI...")
+def get_existing_doc_paths() -> set[str]:
+    print("🔍 Checking for existing embeddings...")
+
     embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY, model=EMBED_MODEL)
+
+    try:
+        vectorstore = PGVector(
+            connection=CONNECTION_STRING,
+            collection_name="portfolio_docs_v2",
+            embedding_function=embeddings,
+        )
+
+        existing_docs = vectorstore.get()
+
+        existing_paths: set[str] = set()
+        if existing_docs and "metadatas" in existing_docs:
+            for meta in existing_docs["metadatas"]:
+                if meta and "source" in meta:
+                    existing_paths.add(meta["source"])
+
+        print(f"   Found {len(existing_paths)} existing documents in DB")
+        return existing_paths
+
+    except Exception as e:
+        print(f"   No existing collection found (first run): {type(e).__name__}")
+        return set()
+
+
+def filter_existing_docs(docs, existing_paths: set[str]) -> list:
+    new_docs = []
+
+    for doc in docs:
+        source = doc.metadata.get("source", "") if doc.metadata else ""
+        if source and source in existing_paths:
+            continue
+        new_docs.append(doc)
+
+    return new_docs
+
+
+def index_to_pgvector(docs, incremental: bool = True):
+    embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY, model=EMBED_MODEL)
+
+    docs_to_index = docs
+    if incremental:
+        existing_paths = get_existing_doc_paths()
+        docs_to_index = filter_existing_docs(docs, existing_paths)
+
+        skipped = len(docs) - len(docs_to_index)
+        if skipped > 0:
+            print(f"⏭️  Skipping {skipped} already-indexed documents")
+        print(f"📝 Will index {len(docs_to_index)} new documents")
+    else:
+        print(f"📝 Full re-index: {len(docs)} documents")
+
+    if not docs_to_index:
+        print("✅ No new documents to index!")
+        return
+
+    print("🤖 Creating embeddings with OpenAI...")
 
     print(
         "📤 Uploading to PGVector (this may take a few minutes for large datasets)..."
     )
     print(f"   Collection: portfolio_docs_v2")
-    print(f"   Documents: {len(docs)}")
+    print(f"   Documents: {len(docs_to_index)}")
 
     PGVector.from_documents(
-        documents=docs,
+        documents=docs_to_index,
         embedding=embeddings,
         connection=CONNECTION_STRING,
         collection_name="portfolio_docs_v2",
-        pre_delete_collection=True,
+        pre_delete_collection=not incremental,
     )
 
-    print("✅ Successfully indexed documents into Neon PGVector!")
+    action = "indexed" if incremental else "re-indexed"
+    print(f"✅ Successfully {action} documents into Neon PGVector!")
 
 
 def main():

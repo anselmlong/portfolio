@@ -2,6 +2,10 @@
 
 > Portfolio website with AI-powered RAG chat, built with Next.js 15, React 19, TypeScript, and LangChain.
 
+## Wiki-First Lookup
+
+Before reading source code, check the **Obsidian LLM Wiki** at `C:/Users/ansel/OneDrive/Documents/Obsidian Vault/Portfolio Website/`. Start with `index.md` for navigation. See `CLAUDE.md` Rule 1 for the full lookup protocol.
+
 ## Quick Reference
 
 | Command                | Description                              |

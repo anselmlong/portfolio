@@ -3,6 +3,7 @@
 
 import ChatInterface from "~/app/_components/ChatInterface";
 import TypingLine from "~/app/_components/TypingLine";
+import AuroraBackground from "~/app/_components/AuroraBackground";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -215,6 +216,7 @@ export default function ClientHome() {
   return (
     <main className="bg-background text-foreground selection:bg-primary/20 min-h-screen py-20">
       <section ref={headerRef} className="relative py-20">
+        <AuroraBackground />
         <div className="mx-auto text-center">
           <div className="mb-8">
             <h1 className="stagger-in font-bricolage text-foreground-high mb-6 text-5xl leading-none font-extralight tracking-tight text-balance md:text-7xl">

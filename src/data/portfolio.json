@@ -8,7 +8,14 @@
       "title": "Freak-Cha",
       "position": "Frontend & Computer Vision Developer, HackHarvard 2025",
       "description": "A CAPTCHA-inspired challenge to distinguish humans from AI using facial expression recognition; awarded Funniest Hack at HackHarvard 2025. Built responsive frontend with Next.js, Tailwind CSS, and tRPC, integrating real-time facial recognition using MediaPipe FaceMesh and YOLOv8.",
-      "tech": ["Next.js", "Tailwind CSS", "tRPC", "MediaPipe", "YOLOv8", "Computer Vision"],
+      "tech": [
+        "Next.js",
+        "Tailwind CSS",
+        "tRPC",
+        "MediaPipe",
+        "YOLOv8",
+        "Computer Vision"
+      ],
       "href": "https://github.com/anselmlong",
       "repo": "https://github.com/anselmlong",
       "highlight": true
@@ -30,16 +37,62 @@
       "href": "https://github.com/anselmlong",
       "repo": "https://github.com/anselmlong",
       "highlight": true
+    },
+    {
+      "title": "LinkedIn Shitpost Generator",
+      "position": "Personal project",
+      "description": "A satirical web app that generates absurd LinkedIn-style posts powered by AI. Enter a topic and get 6 different comedic personas — from tech-bro earnestness to Singapore uncle vibes. Built with Next.js, React, and Google Gemini via OpenRouter.",
+      "tech": [
+        "Next.js",
+        "React",
+        "Tailwind CSS",
+        "Google Gemini",
+        "OpenRouter"
+      ],
+      "href": "https://shitpost.anselmlong.com",
+      "repo": "https://github.com/anselmlong/linkedin-shitpost",
+      "highlight": true
+    },
+    {
+      "title": "Canvas Scraper",
+      "position": "Personal project",
+      "description": "A CLI tool that syncs Canvas course files to your laptop, filters junk (videos/textbooks), and emails daily summaries of announcements and assignments.",
+      "tech": ["Python", "SQLite", "Beautiful Soup"],
+      "href": "https://github.com/anselmlong/canvas-scraper",
+      "repo": "https://github.com/anselmlong/canvas-scraper",
+      "highlight": false
+    },
+    {
+      "title": "NUS Aircon Checker",
+      "position": "Personal project",
+      "description": "A Telegram bot that checks your NUS aircon credits by reverse-engineering the EVS2 portal API. Type /balance and get your balance instantly.",
+      "tech": ["Python", "Telegram Bot API", "Reverse Engineering"],
+      "href": "https://t.me/aircon_checker_bot",
+      "repo": "https://github.com/anselmlong/nus-aircon-checker",
+      "highlight": false
     }
   ],
   "experiences": [
+    {
+      "title": "Lead Developer, Project Aegis",
+      "company": "National Cybersecurity Olympiad",
+      "start_date": "Jan 2025",
+      "end_date": "Mar 2025",
+      "points": [
+        "Led full-stack development of a controlled AI-access platform for CTF competitions, enabling ~90 participants to query LLMs within admin-enforced rate limits and usage policies to preserve competition integrity, based off a RAG system, and secured by LLM-guard as middleware to prevent jailbreak.",
+        "Owned Docker containerisation, authoring multi-service Compose configurations for reproducible builds and consistent environments across local dev and production.",
+        "Built an automated E2E test suite consisting of 130 tests with Playwright, covering critical participant and admin workflows to gate deployments and prevent regressions ahead of the live event.",
+        "Reviewed and merged ~200 of 316 total PRs across a 4-person team, enforcing code quality, security standards, and architectural consistency as the primary gatekeeper for the codebase.",
+        "Drove product decisions as PM — scoped features around organiser requirements, prioritised the backlog, and coordinated a team of 3 contributors to ship on time for the CTF event."
+      ]
+    },
     {
       "title": "Machine Learning Intern",
       "company": "IMDA",
       "start_date": "May 2025",
       "end_date": "Aug 2025",
       "points": [
-        "Designed and implemented a modular machine-learning pipeline for data parsing, feature engineering, model training and explainability, enabling rapid experimentation.", 
+        "Designed and implemented a modular machine-learning pipeline for data parsing, feature engineering, model training and explainability, enabling rapid experimentation.",
         "Optimised models (Isolation Forest, One-Class SVM, Half Space Trees, Random Forest, Graph Convolution Networks and Large Language Model embeddings) to classify malicious SSL/TLS certificates, achieving a 0.994 F1-score.",
         "Applied explainable AI (LIME) to surface influential features in anomaly classification, improving interpretability and stakeholder trust."
       ]
