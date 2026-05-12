@@ -38,6 +38,13 @@ const experiences = [
     url: "/blog/machine-learning-intern",
   },
   {
+    name: "lead developer, project aegis @ national cybersecurity olympiad",
+    period: "jan 2025 - mar 2025",
+    description:
+      "led full-stack development of an ai-access platform for ~90 ctf participants, with rate limiting, llm-guard middleware, playwright e2e tests, and docker containerisation.",
+    url: "",
+  },
+  {
     name: "strategic digital projects intern @ imda",
     period: "may 2024 - aug 2024",
     description:
@@ -75,6 +82,13 @@ const projects = [
     url: "/blog/freak-cha",
   },
   {
+    name: "linkedin shitpost generator",
+    tech: "Next.js, React, Tailwind CSS, Google Gemini, OpenRouter",
+    description:
+      "a satirical web app that generates absurd linkedin-style posts powered by ai. enter a topic, get 6 comedic personas — from tech-bro earnestness to singapore uncle vibes.",
+    url: "https://shitpost.anselmlong.com",
+  },
+  {
     name: "miccdrop",
     tech: "React Native, Node.js, Supabase, Spotify API",
     description:
@@ -85,7 +99,7 @@ const projects = [
     name: "vbook",
     tech: "Java, JavaFX",
     description:
-      "a fast and efficient contact manager for developers, with empahsis on keyboard shortcuts and productivity.",
+      "a fast and efficient contact manager for developers, with emphasis on keyboard shortcuts and productivity.",
     url: "/blog/vbook",
   },
 ];
