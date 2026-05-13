@@ -93,3 +93,49 @@ class TestRagNode:
         assert len(messages) == 1
         assert isinstance(messages[0], AIMessage)
         assert "Anselm" in messages[0].content
+
+
+class TestTelegramNode:
+    def test_sends_message_and_confirms(self):
+        with patch("nodes.telegram.httpx.post") as mock_post:
+            mock_post.return_value.raise_for_status = MagicMock()
+
+            from nodes.telegram import telegram_node
+
+            state = _make_state(
+                messages=[HumanMessage(content="hey, I'd love to connect")],
+                visitor_name="Jane Recruiter",
+            )
+
+            with (
+                patch.dict(
+                    "os.environ",
+                    {"TELEGRAM_BOT_TOKEN": "fake-token", "TELEGRAM_CHAT_ID": "12345"},
+                )
+            ):
+                result = telegram_node(state)
+
+        # Verify the Telegram API was called with the correct chat_id
+        call_kwargs = mock_post.call_args
+        assert "12345" in str(call_kwargs)
+        assert "Jane Recruiter" in str(call_kwargs)
+
+        # Verify a confirmation message is returned
+        assert len(result["messages"]) == 1
+        assert isinstance(result["messages"][0], AIMessage)
+        assert "Anselm" in result["messages"][0].content
+
+    def test_returns_fallback_on_api_failure(self):
+        with patch("nodes.telegram.httpx.post") as mock_post:
+            mock_post.side_effect = Exception("network error")
+
+            from nodes.telegram import telegram_node
+
+            with patch.dict(
+                "os.environ",
+                {"TELEGRAM_BOT_TOKEN": "bad-token", "TELEGRAM_CHAT_ID": "12345"},
+            ):
+                result = telegram_node(_make_state())
+
+        assert isinstance(result["messages"][0], AIMessage)
+        assert "couldn't be delivered" in result["messages"][0].content
