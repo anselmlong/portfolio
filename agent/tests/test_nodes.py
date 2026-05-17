@@ -312,3 +312,49 @@ class TestResumeNode:
         msg = result["messages"][0]
         assert isinstance(msg, AIMessage)
         assert "anselmpius@gmail.com" in msg.content
+
+
+class TestGithubNode:
+    _FAKE_EVENTS = [
+        {
+            "type": "PushEvent",
+            "repo": {"name": "anselmlong/portfolio"},
+            "created_at": "2026-05-15T10:00:00Z",
+            "payload": {"commits": [{"message": "feat: add calendar node"}]},
+        },
+        {
+            "type": "PullRequestEvent",
+            "repo": {"name": "anselmlong/portfolio"},
+            "created_at": "2026-05-14T10:00:00Z",
+            "payload": {
+                "action": "merged",
+                "pull_request": {"title": "Add telegram integration"},
+            },
+        },
+    ]
+
+    def test_returns_recent_activity(self):
+        with patch("nodes.github.httpx.get") as mock_get:
+            mock_get.return_value.raise_for_status = MagicMock()
+            mock_get.return_value.json.return_value = self._FAKE_EVENTS
+
+            from nodes.github import github_node
+
+            result = github_node(_make_state())
+
+        msg = result["messages"][0]
+        assert isinstance(msg, AIMessage)
+        assert "portfolio" in msg.content
+        assert "github.com/anselmlong" in msg.content
+
+    def test_returns_fallback_on_api_failure(self):
+        with patch("nodes.github.httpx.get") as mock_get:
+            mock_get.side_effect = Exception("rate limited")
+
+            from nodes.github import github_node
+
+            result = github_node(_make_state())
+
+        msg = result["messages"][0]
+        assert isinstance(msg, AIMessage)
+        assert "github.com/anselmlong" in msg.content

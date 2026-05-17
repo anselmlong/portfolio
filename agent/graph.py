@@ -1,6 +1,7 @@
 from langgraph.graph import END, StateGraph
 
 from nodes.calendar import calendar_node
+from nodes.github import github_node
 from nodes.gmail import gmail_node
 from nodes.rag import rag_node
 from nodes.resume import resume_node
@@ -9,7 +10,6 @@ from nodes.telegram import telegram_node
 from state import AgentState
 
 _STUB_NODES = [
-    "github",
     "skill_match",
     "mock_interview",
 ]
@@ -38,6 +38,7 @@ def build_graph() -> StateGraph:
     g.add_node("calendar", calendar_node)
     g.add_node("gmail", gmail_node)
     g.add_node("resume", resume_node)
+    g.add_node("github", github_node)
     for name in _STUB_NODES:
         g.add_node(name, _stub_node(name))
 
@@ -49,11 +50,12 @@ def build_graph() -> StateGraph:
         "calendar": "calendar",
         "gmail": "gmail",
         "resume": "resume",
+        "github": "github",
         **{n: n for n in _STUB_NODES},
     }
     g.add_conditional_edges("intent_router", route_by_intent, routing_map)
 
-    for name in ["rag", "telegram", "calendar", "gmail", "resume", *_STUB_NODES]:
+    for name in ["rag", "telegram", "calendar", "gmail", "resume", "github", *_STUB_NODES]:
         g.add_edge(name, END)
 
     return g
