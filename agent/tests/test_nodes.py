@@ -358,3 +358,43 @@ class TestGithubNode:
         msg = result["messages"][0]
         assert isinstance(msg, AIMessage)
         assert "github.com/anselmlong" in msg.content
+
+
+class TestSkillMatchNode:
+    def _make_report(self, score: int = 8):
+        report = MagicMock()
+        report.match_score = score
+        report.recommendation = "Strong fit"
+        report.strengths = ["Python expertise", "ML pipeline experience", "FastAPI"]
+        report.gaps = ["No Go experience"]
+        report.summary = "Anselm is a strong candidate for this ML engineering role."
+        return report
+
+    def test_returns_formatted_match_report(self):
+        with patch("nodes.skill_match._assess") as mock_assess:
+            mock_assess.return_value = self._make_report(score=8)
+
+            from nodes.skill_match import skill_match_node
+
+            state = _make_state(
+                messages=[HumanMessage(content="We need a Python ML engineer with FastAPI experience")]
+            )
+            result = skill_match_node(state)
+
+        msg = result["messages"][0]
+        assert isinstance(msg, AIMessage)
+        assert "8/10" in msg.content
+        assert "Strong fit" in msg.content
+        assert "Python expertise" in msg.content
+
+    def test_returns_fallback_on_llm_failure(self):
+        with patch("nodes.skill_match._assess") as mock_assess:
+            mock_assess.side_effect = Exception("OpenAI error")
+
+            from nodes.skill_match import skill_match_node
+
+            result = skill_match_node(_make_state())
+
+        msg = result["messages"][0]
+        assert isinstance(msg, AIMessage)
+        assert "anselmpius@gmail.com" in msg.content

@@ -6,11 +6,11 @@ from nodes.gmail import gmail_node
 from nodes.rag import rag_node
 from nodes.resume import resume_node
 from nodes.router import intent_router_node, route_by_intent
+from nodes.skill_match import skill_match_node
 from nodes.telegram import telegram_node
 from state import AgentState
 
 _STUB_NODES = [
-    "skill_match",
     "mock_interview",
 ]
 
@@ -39,6 +39,7 @@ def build_graph() -> StateGraph:
     g.add_node("gmail", gmail_node)
     g.add_node("resume", resume_node)
     g.add_node("github", github_node)
+    g.add_node("skill_match", skill_match_node)
     for name in _STUB_NODES:
         g.add_node(name, _stub_node(name))
 
@@ -51,11 +52,12 @@ def build_graph() -> StateGraph:
         "gmail": "gmail",
         "resume": "resume",
         "github": "github",
+        "skill_match": "skill_match",
         **{n: n for n in _STUB_NODES},
     }
     g.add_conditional_edges("intent_router", route_by_intent, routing_map)
 
-    for name in ["rag", "telegram", "calendar", "gmail", "resume", "github", *_STUB_NODES]:
+    for name in ["rag", "telegram", "calendar", "gmail", "resume", "github", "skill_match", *_STUB_NODES]:
         g.add_edge(name, END)
 
     return g
