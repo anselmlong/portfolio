@@ -36,12 +36,15 @@ class IntentOutput(BaseModel):
     intent: Intent
 
 
-_router_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0).with_structured_output(
-    IntentOutput
-)
+_router_llm = None
 
 
 def intent_router_node(state: AgentState) -> dict:
+    global _router_llm
+    if _router_llm is None:
+        _router_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0).with_structured_output(
+            IntentOutput
+        )
     result = _router_llm.invoke(
         [SystemMessage(content=ROUTER_SYSTEM), *state["messages"][-5:]]
     )

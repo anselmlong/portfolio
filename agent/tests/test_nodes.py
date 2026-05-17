@@ -139,3 +139,117 @@ class TestTelegramNode:
 
         assert isinstance(result["messages"][0], AIMessage)
         assert "couldn't be delivered" in result["messages"][0].content
+
+
+class TestCalendarNode:
+    _GOOGLE_ENV = {
+        "GOOGLE_CLIENT_ID": "fake-id",
+        "GOOGLE_CLIENT_SECRET": "fake-secret",
+        "GOOGLE_REFRESH_TOKEN": "fake-refresh",
+    }
+
+    def _make_mock_service(self, busy: list | None = None):
+        mock_svc = MagicMock()
+        mock_svc.freebusy.return_value.query.return_value.execute.return_value = {
+            "calendars": {"primary": {"busy": busy or []}}
+        }
+        mock_svc.events.return_value.insert.return_value.execute.return_value = {
+            "htmlLink": "https://calendar.google.com/event/fake"
+        }
+        return mock_svc
+
+    def test_returns_available_slots(self):
+        with (
+            patch("nodes.calendar._get_service") as mock_get_svc,
+            patch.dict("os.environ", self._GOOGLE_ENV),
+        ):
+            mock_get_svc.return_value = self._make_mock_service()
+            from nodes.calendar import calendar_node
+
+            result = calendar_node(_make_state())
+
+        msg = result["messages"][0]
+        assert isinstance(msg, AIMessage)
+        assert "slot" in msg.content.lower() or any(
+            day in msg.content for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+        )
+
+    def test_books_slot_when_visitor_info_present(self):
+        with (
+            patch("nodes.calendar._get_service") as mock_get_svc,
+            patch.dict("os.environ", self._GOOGLE_ENV),
+        ):
+            mock_svc = self._make_mock_service()
+            mock_get_svc.return_value = mock_svc
+            from nodes.calendar import calendar_node
+
+            state = _make_state(
+                messages=[HumanMessage(content="I'd like slot 1 please")],
+                visitor_name="Jane Recruiter",
+                visitor_email="jane@example.com",
+            )
+            result = calendar_node(state)
+
+        assert mock_svc.events.return_value.insert.called
+        msg = result["messages"][0]
+        assert isinstance(msg, AIMessage)
+        assert "booked" in msg.content.lower() or "Done" in msg.content
+
+    def test_returns_fallback_on_api_failure(self):
+        with (
+            patch("nodes.calendar._get_service") as mock_get_svc,
+            patch.dict("os.environ", self._GOOGLE_ENV),
+        ):
+            mock_get_svc.side_effect = Exception("auth error")
+            from nodes.calendar import calendar_node
+
+            result = calendar_node(_make_state())
+
+        msg = result["messages"][0]
+        assert isinstance(msg, AIMessage)
+        assert "anselmpius@gmail.com" in msg.content
+
+
+class TestGmailNode:
+    _GOOGLE_ENV = {
+        "GOOGLE_CLIENT_ID": "fake-id",
+        "GOOGLE_CLIENT_SECRET": "fake-secret",
+        "GOOGLE_REFRESH_TOKEN": "fake-refresh",
+    }
+
+    def test_sends_email_and_confirms(self):
+        with (
+            patch("nodes.gmail._get_service") as mock_get_svc,
+            patch.dict("os.environ", self._GOOGLE_ENV),
+        ):
+            mock_svc = MagicMock()
+            mock_svc.users.return_value.messages.return_value.send.return_value.execute.return_value = {}
+            mock_get_svc.return_value = mock_svc
+
+            from nodes.gmail import gmail_node
+
+            state = _make_state(
+                messages=[HumanMessage(content="Hi Anselm, I'd love to connect!")],
+                visitor_name="Jane Recruiter",
+                visitor_email="jane@example.com",
+            )
+            result = gmail_node(state)
+
+        assert mock_svc.users.return_value.messages.return_value.send.called
+        msg = result["messages"][0]
+        assert isinstance(msg, AIMessage)
+        assert "Anselm" in msg.content
+
+    def test_returns_fallback_on_api_failure(self):
+        with (
+            patch("nodes.gmail._get_service") as mock_get_svc,
+            patch.dict("os.environ", self._GOOGLE_ENV),
+        ):
+            mock_get_svc.side_effect = Exception("network error")
+            from nodes.gmail import gmail_node
+
+            result = gmail_node(_make_state())
+
+        msg = result["messages"][0]
+        assert isinstance(msg, AIMessage)
+        assert "anselmpius@gmail.com" in msg.content
