@@ -1,0 +1,11 @@
+% preload.tex — run at Docker build time (no --only-cached) to download
+% all packages required by resume.tex.j2 into tectonic's local cache.
+\documentclass[10pt,letterpaper]{article}
+\usepackage[top=0.6in,bottom=0.6in,left=0.7in,right=0.7in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\begin{document}
+Package cache warm-up complete.
+\end{document}

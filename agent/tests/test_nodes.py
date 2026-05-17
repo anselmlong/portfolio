@@ -262,3 +262,53 @@ class TestGmailNode:
         msg = result["messages"][0]
         assert isinstance(msg, AIMessage)
         assert "anselmpius@gmail.com" in msg.content
+
+
+class TestResumeNode:
+    _mock_selection = None
+
+    def _make_selection(self):
+        sel = MagicMock()
+        sel.tailored_summary = "Anselm is a skilled ML engineer with experience in Python and LangChain."
+        sel.project_indices = [0, 3]
+        sel.skill_emphasis = "Python, Machine Learning, LangChain"
+        return sel
+
+    def test_compiles_and_returns_pdf_url(self):
+        with (
+            patch("nodes.resume._select") as mock_select,
+            patch("nodes.resume._render_template") as mock_render,
+            patch("nodes.resume._compile_tex") as mock_compile,
+            patch("nodes.resume._save_pdf") as mock_save,
+            patch.dict("os.environ", {"AGENT_PUBLIC_URL": "https://agent.test"}),
+        ):
+            mock_select.return_value = self._make_selection()
+            mock_compile.return_value = b"%PDF-1.4 fake"
+            mock_save.return_value = "abc12345"
+
+            from nodes.resume import resume_node
+
+            state = _make_state(
+                messages=[HumanMessage(content="Generate a resume for an ML engineer role at Google")]
+            )
+            result = resume_node(state)
+
+        msg = result["messages"][0]
+        assert isinstance(msg, AIMessage)
+        assert "https://agent.test/pdf/abc12345" in msg.content
+
+    def test_returns_fallback_on_compile_failure(self):
+        with (
+            patch("nodes.resume._select") as mock_select,
+            patch("nodes.resume._compile_tex") as mock_compile,
+        ):
+            mock_select.return_value = self._make_selection()
+            mock_compile.side_effect = RuntimeError("tectonic: command not found")
+
+            from nodes.resume import resume_node
+
+            result = resume_node(_make_state())
+
+        msg = result["messages"][0]
+        assert isinstance(msg, AIMessage)
+        assert "anselmpius@gmail.com" in msg.content

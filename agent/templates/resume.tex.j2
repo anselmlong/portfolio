@@ -1,0 +1,86 @@
+\documentclass[10pt,letterpaper]{article}
+
+\usepackage[top=0.6in,bottom=0.6in,left=0.7in,right=0.7in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+
+\hypersetup{hidelinks}
+\titleformat{\section}{\large\bfseries}{}{0pt}{}[\titlerule]
+\titlespacing*{\section}{0pt}{8pt}{4pt}
+\setlist[itemize]{nosep,leftmargin=*,topsep=0pt}
+\pagestyle{empty}
+\parskip=4pt
+
+\begin{document}
+
+%% ===== HEADER =====
+\begin{center}
+  {\LARGE\textbf{Anselm Long}}\\[4pt]
+  Singapore\enspace|\enspace
+  \href{mailto:anselmpius@gmail.com}{anselmpius@gmail.com}\enspace|\enspace
+  \href{https://anselmlong.com}{anselmlong.com}\enspace|\enspace
+  \href{https://github.com/anselmlong}{github.com/anselmlong}
+\end{center}
+
+%% ===== SUMMARY =====
+\section{Professional Summary}
+{{ tailored_summary }}
+
+%% ===== SKILLS =====
+\section{Technical Skills}
+\textbf{Languages:} Python, TypeScript, JavaScript, Java, SQL\\
+\textbf{Frameworks:} Next.js, React, FastAPI, LangChain, LangGraph, Playwright\\
+\textbf{Tools:} Docker, PostgreSQL, pgvector, Git, Vercel, Railway\\
+\textbf{Highlighted for this role:} {{ skill_emphasis }}
+
+%% ===== EXPERIENCE =====
+\section{Experience}
+
+\noindent\textbf{Lead Developer, Project Aegis}\hfill\textit{Jan 2026 -- Mar 2026}\\
+National Cybersecurity Olympiad
+\begin{itemize}
+  \item Led full-stack development of a controlled AI-access platform for $\sim$90 CTF participants, enforcing admin rate limits and securing prompts with LLM-guard middleware.
+  \item Authored multi-service Docker Compose configurations for reproducible local and production environments.
+  \item Built 130-test Playwright E2E suite gating deployments; reviewed and merged $\sim$200 of 316 PRs as primary code reviewer.
+  \item Drove product decisions as PM --- scoped features around organiser requirements and coordinated a 3-person team.
+\end{itemize}
+
+\vspace{4pt}
+\noindent\textbf{Machine Learning Intern}\hfill\textit{May 2025 -- Aug 2025}\\
+Infocomm Media Development Authority (IMDA)
+\begin{itemize}
+  \item Designed a modular ML pipeline for data parsing, feature engineering, model training, and explainability.
+  \item Achieved 0.994 F1-score classifying malicious SSL/TLS certificates using Isolation Forest, One-Class SVM, Random Forest, GCNs, and LLM embeddings.
+  \item Applied LIME explainable AI to surface influential features, improving stakeholder interpretability.
+\end{itemize}
+
+\vspace{4pt}
+\noindent\textbf{Strategic Digital Projects Intern}\hfill\textit{May 2024 -- Jul 2024}\\
+Infocomm Media Development Authority (IMDA)
+\begin{itemize}
+  \item Curated technical content with Microsoft and AWS for industry workshops; 25\% of attendees initiated GenAI projects.
+  \item Proposed and led a Salesforce data consolidation initiative, reducing cross-team data-lookup time by 35\%.
+\end{itemize}
+
+%% ===== PROJECTS =====
+\section{Featured Projects}
+
+{% for project in featured_projects %}
+\noindent\textbf{{{ project.title }}}\hfill\textit{{{ project.position }}}\\
+{{ project.description }}\\
+\textit{Stack: {{ project.tech | join(", ") }}}
+\vspace{4pt}
+
+{% endfor %}
+
+%% ===== EDUCATION =====
+\section{Education}
+
+\noindent\textbf{National University of Singapore}\hfill\textit{Aug 2023 -- Apr 2027}\\
+B.Sc.\ Computer Science --- First Class Honours (on track)\\[2pt]
+\noindent\textbf{Tulane University (Exchange)}\hfill\textit{Aug -- Dec 2025}\\
+Computer Science
+
+\end{document}

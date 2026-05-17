@@ -1,18 +1,20 @@
 import json
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 
 load_dotenv()
 
 from fastapi import FastAPI, Header, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi.responses import Response, StreamingResponse
 from langchain_core.messages import AIMessage, HumanMessage
 from pydantic import BaseModel
 
 from graph import compiled_graph
 
 AGENT_TOKEN = os.environ.get("AGENT_TOKEN", "")
+_PDF_DIR = Path("/tmp/resume_pdfs")
 
 app = FastAPI()
 
@@ -30,6 +32,20 @@ class ChatRequest(BaseModel):
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+@app.get("/pdf/{job_id}")
+async def get_pdf(job_id: str):
+    if not all(c in "0123456789abcdef" for c in job_id):
+        raise HTTPException(status_code=400, detail="Invalid job ID")
+    pdf_path = _PDF_DIR / f"{job_id}.pdf"
+    if not pdf_path.is_file():
+        raise HTTPException(status_code=404, detail="PDF not found or expired")
+    return Response(
+        content=pdf_path.read_bytes(),
+        media_type="application/pdf",
+        headers={"Content-Disposition": 'attachment; filename="anselm_long_resume.pdf"'},
+    )
 
 
 @app.post("/chat")
