@@ -398,3 +398,55 @@ class TestSkillMatchNode:
         msg = result["messages"][0]
         assert isinstance(msg, AIMessage)
         assert "anselmpius@gmail.com" in msg.content
+
+
+class TestMockInterviewNode:
+    def test_starts_interview_on_first_turn(self):
+        with patch("nodes.mock_interview.ChatOpenAI") as mock_llm_cls:
+            mock_llm_cls.return_value.invoke.return_value = AIMessage(
+                content="Welcome! What role are you preparing for today?"
+            )
+
+            from nodes.mock_interview import mock_interview_node
+
+            state = _make_state(
+                messages=[HumanMessage(content="I want to do a mock interview")]
+            )
+            result = mock_interview_node(state)
+
+        msg = result["messages"][0]
+        assert isinstance(msg, AIMessage)
+        assert len(msg.content) > 0
+
+    def test_continues_interview_on_subsequent_turns(self):
+        with patch("nodes.mock_interview.ChatOpenAI") as mock_llm_cls:
+            mock_llm_cls.return_value.invoke.return_value = AIMessage(
+                content="Good answer! Here's your next question: Tell me about a time you led a team."
+            )
+
+            from nodes.mock_interview import mock_interview_node
+
+            state = _make_state(
+                messages=[
+                    HumanMessage(content="I want to practice for a software engineering role"),
+                    AIMessage(content="Great! Tell me about a challenging project."),
+                    HumanMessage(content="I led Project Aegis, a CTF platform for 90 participants."),
+                ]
+            )
+            result = mock_interview_node(state)
+
+        msg = result["messages"][0]
+        assert isinstance(msg, AIMessage)
+        assert len(msg.content) > 0
+
+    def test_returns_fallback_on_llm_failure(self):
+        with patch("nodes.mock_interview.ChatOpenAI") as mock_llm_cls:
+            mock_llm_cls.return_value.invoke.side_effect = Exception("API error")
+
+            from nodes.mock_interview import mock_interview_node
+
+            result = mock_interview_node(_make_state())
+
+        msg = result["messages"][0]
+        assert isinstance(msg, AIMessage)
+        assert "anselmlong.com" in msg.content
