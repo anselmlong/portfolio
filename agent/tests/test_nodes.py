@@ -73,17 +73,12 @@ class TestIntentRouter:
 
 class TestRagNode:
     def test_returns_ai_message_with_context(self):
-        fake_doc = MagicMock()
-        fake_doc.page_content = "Anselm is a software engineer."
-
-        fake_response = AIMessage(content="Anselm is a software engineer with 5 years experience.")
-
         with (
-            patch("nodes.rag._get_vectorstore") as mock_vs,
-            patch("nodes.rag.ChatOpenAI") as mock_llm_cls,
+            patch("nodes.rag.httpx.post") as mock_post,
+            patch.dict("os.environ", {"NEXTJS_URL": "http://localhost:3000"}),
         ):
-            mock_vs.return_value.similarity_search.return_value = [fake_doc]
-            mock_llm_cls.return_value.invoke.return_value = fake_response
+            mock_post.return_value.raise_for_status = MagicMock()
+            mock_post.return_value.text = "Anselm is a software engineer with 5 years experience."
 
             from nodes.rag import rag_node
 
@@ -93,6 +88,20 @@ class TestRagNode:
         assert len(messages) == 1
         assert isinstance(messages[0], AIMessage)
         assert "Anselm" in messages[0].content
+
+    def test_returns_fallback_on_api_failure(self):
+        with (
+            patch("nodes.rag.httpx.post") as mock_post,
+            patch.dict("os.environ", {"NEXTJS_URL": "http://localhost:3000"}),
+        ):
+            mock_post.side_effect = Exception("connection refused")
+
+            from nodes.rag import rag_node
+
+            result = rag_node(_make_state())
+
+        assert isinstance(result["messages"][0], AIMessage)
+        assert "try again" in result["messages"][0].content.lower()
 
 
 class TestTelegramNode:

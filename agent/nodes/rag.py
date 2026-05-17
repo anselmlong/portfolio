@@ -1,56 +1,37 @@
+"""RAG node — proxies to the existing Next.js RAG endpoint."""
 import os
 
-from langchain_community.vectorstores import PGVector
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+import httpx
+from langchain_core.messages import AIMessage, HumanMessage
+from langchain_core.messages import BaseMessage
 
 from state import AgentState
 
-RAG_SYSTEM = """\
-You are an AI assistant representing Anselm Long, a software engineer.
-Answer questions about Anselm based only on the provided context from his portfolio.
-Be specific, accurate, and professional.
-If the context doesn't contain a clear answer, say so honestly rather than guessing."""
 
-_vectorstore: PGVector | None = None
-
-
-def _get_vectorstore() -> PGVector:
-    global _vectorstore
-    if _vectorstore is None:
-        embeddings = OpenAIEmbeddings(
-            model=os.environ.get("EMBED_MODEL", "text-embedding-3-small")
-        )
-        _vectorstore = PGVector(
-            connection_string=os.environ["DATABASE_URL_DIRECT"],
-            embedding_function=embeddings,
-            collection_name="portfolio_docs_v2",
-        )
-    return _vectorstore
+def _to_ui_messages(messages: list[BaseMessage]) -> list[dict]:
+    result = []
+    for msg in messages:
+        role = "user" if isinstance(msg, HumanMessage) else "assistant"
+        result.append({
+            "id": str(id(msg)),
+            "role": role,
+            "content": msg.content,
+            "parts": [{"type": "text", "text": msg.content}],
+        })
+    return result
 
 
 def rag_node(state: AgentState) -> dict:
-    messages = state["messages"]
-    query = next(
-        (m.content for m in reversed(messages) if isinstance(m, HumanMessage)),
-        "",
-    )
+    base_url = os.environ.get("NEXTJS_URL", "").rstrip("/")
+    try:
+        resp = httpx.post(
+            f"{base_url}/api/chat",
+            json={"messages": _to_ui_messages(state["messages"])},
+            timeout=30.0,
+        )
+        resp.raise_for_status()
+        content = resp.text
+    except Exception:
+        content = "I'm having trouble connecting right now. Please try again in a moment."
 
-    docs = _get_vectorstore().similarity_search(query, k=4)
-    context = "\n\n---\n\n".join(doc.page_content for doc in docs)
-
-    llm = ChatOpenAI(
-        model=os.environ.get("CHAT_MODEL", "gpt-4o"),
-        streaming=True,
-    )
-
-    response = llm.invoke(
-        [
-            SystemMessage(
-                content=f"{RAG_SYSTEM}\n\nContext from Anselm's portfolio:\n{context}"
-            ),
-            *messages,
-        ]
-    )
-
-    return {"messages": [AIMessage(content=response.content)]}
+    return {"messages": [AIMessage(content=content)]}
