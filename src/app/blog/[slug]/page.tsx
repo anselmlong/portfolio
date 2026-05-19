@@ -1,19 +1,47 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllBlogSlugs } from "~/lib/blog";
 import { api } from "~/trpc/server";
 
-function computeReadingTime(html: string) {
-  const text = html.replace(/<[^>]*>/g, " ");
-  const words = (text.match(/\w+/g) ?? []).length;
-  const wpm = 200;
-  const minutes = Math.max(1, Math.ceil(words / wpm));
-  return `${minutes} min`;
-}
-
 export async function generateStaticParams() {
   const slugs = getAllBlogSlugs();
   return slugs.map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await api.blog.bySlug({ slug });
+
+  if (!post) return {};
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: "article",
+      publishedTime: post.date,
+      authors: post.author ? [post.author] : undefined,
+      tags: post.tags,
+      ...(post.image && {
+        images: [
+          { url: post.image, width: 1200, height: 630, alt: post.title },
+        ],
+      }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      ...(post.image && { images: [post.image] }),
+    },
+  };
 }
 
 export default async function BlogPostPage({
@@ -27,8 +55,6 @@ export default async function BlogPostPage({
   if (!post) {
     notFound();
   }
-
-  const readingTime = computeReadingTime(post.content);
 
   return (
     <div className="bg-background text-foreground min-h-screen">
@@ -81,7 +107,7 @@ export default async function BlogPostPage({
                 })}
               </time>
               <span className="bg-muted-foreground/30 size-1 rounded-full" />
-              <span>{readingTime} read</span>
+              <span>{post.readingTime}</span>
               {post.author && (
                 <>
                   <span className="bg-muted-foreground/30 size-1 rounded-full" />

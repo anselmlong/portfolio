@@ -15,6 +15,8 @@ const blogMetadataSchema = z.object({
   excerpt: z.string().min(1),
   author: z.string().min(1).optional(),
   tags: z.array(z.string().min(1)).optional().default([]),
+  readingTime: z.string().min(1),
+  image: z.string().optional(),
 });
 
 const blogPostSchema = blogMetadataSchema.extend({

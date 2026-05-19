@@ -50,3 +50,7 @@ yarn-error.log*
 
 # Ralph config (may contain API key)
 .cursor/ralph-config.json
+.gstack/
+
+# Cross-post exports
+cross-post-output/

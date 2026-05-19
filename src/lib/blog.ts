@@ -13,6 +13,8 @@ export interface BlogPost {
   content: string;
   author?: string;
   tags?: string[];
+  readingTime: string;
+  image?: string;
 }
 
 export interface BlogPostMetadata {
@@ -22,6 +24,8 @@ export interface BlogPostMetadata {
   excerpt: string;
   author?: string;
   tags?: string[];
+  readingTime: string;
+  image?: string;
 }
 
 interface MatterData {
@@ -30,7 +34,21 @@ interface MatterData {
   excerpt?: string;
   author?: string;
   tags?: string[];
+  image?: string;
   [key: string]: unknown;
+}
+
+function computeReadingTime(markdown: string): string {
+  const text = markdown
+    .replace(/^---[\s\S]*?---\n?/, "")
+    .replace(/!\[.*?\]\(.*?\)/g, "")
+    .replace(/<[^>]*>/g, "")
+    .replace(/[#*_`~>\[\]()|-]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  const words = text.split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.ceil(words / 200));
+  return `${minutes} min read`;
 }
 
 function safeData(data: unknown): MatterData {
@@ -69,6 +87,8 @@ export function getAllBlogPosts(): BlogPostMetadata[] {
       excerpt: excerpt.replace(/^#+ /, "").trim(),
       author: d.author,
       tags: d.tags ?? [],
+      readingTime: computeReadingTime(fileContents),
+      image: d.image,
     } as BlogPostMetadata;
   });
 
@@ -99,6 +119,8 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
       content: htmlContent,
       author: d.author,
       tags: d.tags ?? [],
+      readingTime: computeReadingTime(fileContents),
+      image: d.image,
     } as BlogPost;
   } catch {
     return null;

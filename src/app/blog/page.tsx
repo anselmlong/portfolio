@@ -94,16 +94,22 @@ export default async function BlogPage() {
                     <article className="border-border/50 bg-card/20 hover:bg-card/30 hover:border-primary/40 hover:shadow-primary/5 flex h-full flex-col border p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg md:p-7">
                       {/* Meta */}
                       <div className="mb-4 flex items-center justify-between gap-4">
-                        <time
-                          dateTime={post.date}
-                          className="text-muted-foreground/70 text-xs tracking-[0.12em] uppercase"
-                        >
-                          {new Date(post.date).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })}
-                        </time>
+                        <div className="flex items-center gap-3">
+                          <time
+                            dateTime={post.date}
+                            className="text-muted-foreground/70 text-xs tracking-[0.12em] uppercase"
+                          >
+                            {new Date(post.date).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            })}
+                          </time>
+                          <span className="bg-muted-foreground/20 size-1 rounded-full" />
+                          <span className="text-muted-foreground/50 text-xs tracking-[0.12em] uppercase">
+                            {post.readingTime}
+                          </span>
+                        </div>
 
                         <span className="text-primary flex translate-x-2 items-center gap-2 text-xs tracking-[0.15em] uppercase opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100">
                           Read

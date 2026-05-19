@@ -2,6 +2,7 @@
 title: "Predicting Employee Turnover with Random Forest"
 date: "2025-10-31"
 author: "Anselm Long"
+image: "/blogs/images/correlations.png"
 tags:
   - machine-learning
   - random forest
@@ -35,6 +36,7 @@ I used the Kaggle dataset davinwijaya/employee-turnover (1,129 rows × 16 column
 - Psychometric scores: `extraversion`, `independ`, `selfcontrol`, `anxiety`, `novator`
 
 ![skew of the data](/blogs/images/EDA.png)
+
 <figcaption>Plotting the histogram to observe the skew of the data.</figcaption>
 
 I included an exploratory figure (histograms, KDEs and a correlation heatmap) to check distributions and pairwise relationships. The most notable pattern was weak negative correlation among `selfcontrol`, `anxiety`, and `novator`.
@@ -100,9 +102,6 @@ Plot: feature importances reshaped to 28×28 for visual inspection (see notebook
 
 If this model were to be used operationally inside a company, I recommend:
 
-1. Use model outputs as *signals*, not actions: flag high-risk employees for human review and supportive interventions (coaching, career development conversations, compensation review).
+1. Use model outputs as _signals_, not actions: flag high-risk employees for human review and supportive interventions (coaching, career development conversations, compensation review).
 2. Keep transparency and consent: communicate clearly how the model is used and ensure fairness checks (disparate impact by gender/age/etc.).
 3. Monitor model drift: retrain periodically as hiring channels and business context change.
-
-
-

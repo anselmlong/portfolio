@@ -2,13 +2,14 @@
 title: "Hack & Roll 2026: Building Optifiner, a Multi-Agent, Evolutionary Framework"
 date: "2026-01-26"
 author: "Anselm Long (Co-authored by Ava)"
+image: "/blogs/images/38-hours.png"
 tags:
   - hackathon
   - agents
   - evolutionary
   - product
   - teamwork
-excerpt: "We built a self-evolving agentic code optimizer. Also: the welfare was insane." 
+excerpt: "We built a self-evolving agentic code optimizer. Also: the welfare was insane."
 ---
 
 ## TL;DR

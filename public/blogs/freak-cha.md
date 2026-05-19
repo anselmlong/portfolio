@@ -2,6 +2,7 @@
 title: "freak-cha"
 date: "2025-10-24"
 author: "Anselm Long"
+image: "/blogs/images/freakcha.png"
 tags:
   - hackathon
   - next.js
@@ -12,12 +13,12 @@ excerpt: "36 hours. 8 hours of sleep. no showers. Funniest Hack at HackHarvard 2
 ---
 
 ![freak-cha at HackHarvard](/blogs/images/freakcha.png)
+
 <figcaption>us, probably 15 hours into the hackathon and losing it</figcaption>
 
 ## the backstory
 
 joined hackharvard 2025 on a whim - it was a wild idea to fly all the way to boston for a hackathon! but when my friends asked me to join their team, i couldn't say no. the entire experience was... interesting to say the least. the venue had no showers at all, non-existent sleeping areas, and slightly questionable organising. yet, the memories i made here - i probably won't forget anytime soon.
-
 
 ## our project
 
@@ -28,7 +29,7 @@ but not with a boring “select all squares with traffic lights” test... we us
 
 we had no idea what to build in the first 3 hours. we had some generic ideas about automating social media posts, but nothing that we were particularly passionate about. jokingly, i remembered seeing tiktoks about apple's new ios 26 accessibility feature - where you could doomscroll with your tongue, and suggested it - "what if we do something with tongue?"
 
-after a lot of questionable iterations, that became our entire project.  
+after a lot of questionable iterations, that became our entire project.
 
 we called it **freak-cha** — Facial Recognition and Expression Authentication Kit to tell computers and Humans Apart.
 
@@ -40,7 +41,7 @@ users are asked True/False questions, and they respond by moving their tongue **
 after clearing the captcha, users are asked to capture their face - which is then matched against a stored embedding vector computed by **MediaPipe FaceMesh** to ensure an additional layer of security.
 
 our dataset?  
-a very real, very cursed collection of people willing to wiggle their tongues for us on camera (it was probably the weirdest thing i had to pitch at a hackathon). 
+a very real, very cursed collection of people willing to wiggle their tongues for us on camera (it was probably the weirdest thing i had to pitch at a hackathon).
 
 ## the result
 
@@ -58,7 +59,7 @@ check out our devpost [here](https://devpost.com/software/freak-cha?_gl=1*19zwjz
 this hackathon was easily one of the most fun and unhinged experiences i’ve had. from playing cornhole at 11pm and losing our minds over how hard it was, to consuming copious amounts of redbull, i would do this again in a hearbeat.
 i learned a ton about **computer vision**, **real-time inference**, and **working on zero sleep** — but more than anything, I learned that creativity doesn’t always come from overthinking.
 
-sometimes, the dumbest ideas make the best memories.  
+sometimes, the dumbest ideas make the best memories.
 
 huge thanks to my amazing team: **jensen huang**, **junjie hu**, and **isabel wang**.  
 wouldn’t have done it without you all <3

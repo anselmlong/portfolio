@@ -2,6 +2,7 @@
 title: "Managing the distance with Python and Telegram Bots"
 date: "2025-08-13"
 author: "Anselm Long"
+image: "/blogs/images/tele-bot-intro.png"
 tags:
   - personal
   - python
@@ -20,6 +21,7 @@ After some brainstorming, I came up with the idea of a telegram bot! I've always
 ![introductory message](/blogs/images/tele-bot-intro.png)
 
 I decided on a list of features:
+
 - Some pick up lines chosen at random (so we can get a laugh)
 - Motivational quotes and messages
 - Pictures that you can submit and your partner can see at random (main feature)
