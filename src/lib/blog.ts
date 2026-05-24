@@ -5,6 +5,15 @@ import { marked } from "marked";
 
 const blogsDirectory = path.join(process.cwd(), "public/blogs");
 
+function getBlogMarkdownPath(slug: string): string {
+  const folderPath = path.join(blogsDirectory, slug, `${slug}.md`);
+  if (fs.existsSync(folderPath)) {
+    return folderPath;
+  }
+
+  return path.join(blogsDirectory, `${slug}.md`);
+}
+
 export interface BlogPost {
   slug: string;
   title: string;
@@ -60,10 +69,23 @@ export function getAllBlogSlugs(): string[] {
     return [];
   }
 
-  const fileNames = fs.readdirSync(blogsDirectory);
-  return fileNames
-    .filter((fileName) => fileName.endsWith(".md"))
-    .map((fileName) => fileName.replace(/\.md$/, ""));
+  const entries = fs.readdirSync(blogsDirectory, { withFileTypes: true });
+  const slugs = new Set<string>();
+
+  for (const entry of entries) {
+    if (entry.isFile() && entry.name.endsWith(".md")) {
+      slugs.add(entry.name.replace(/\.md$/, ""));
+    }
+
+    if (entry.isDirectory()) {
+      const markdownPath = path.join(blogsDirectory, entry.name, `${entry.name}.md`);
+      if (fs.existsSync(markdownPath)) {
+        slugs.add(entry.name);
+      }
+    }
+  }
+
+  return [...slugs];
 }
 
 export function getAllBlogPosts(): BlogPostMetadata[] {
@@ -99,12 +121,13 @@ export function getAllBlogPosts(): BlogPostMetadata[] {
 
 export async function getBlogPost(slug: string): Promise<BlogPost | null> {
   try {
-    const fullPath = path.join(blogsDirectory, `${slug}.md`);
+    const fullPath = getBlogMarkdownPath(slug);
     const fileContents = fs.readFileSync(fullPath, "utf8");
     const { data, content } = matter(fileContents);
     const d = safeData(data);
 
-    const htmlContent = enhanceHtmlContent(await marked.parse(content));
+    const normalizedContent = rewriteRelativeImagePaths(content, slug);
+    const htmlContent = enhanceHtmlContent(await marked.parse(normalizedContent));
 
     const excerpt =
       d.excerpt ?? content.split("\n\n")[0]?.substring(0, 200) ?? "";
@@ -141,4 +164,25 @@ function enhanceHtmlContent(html: string): string {
     .replace(/<\/table>/g, "</table></div>");
 
   return wrappedTables;
+}
+
+function rewriteRelativeImagePaths(markdown: string, slug: string): string {
+  return markdown.replace(/!\[([^\]]*?)\]\(([^)]+)\)/g, (match, altText: string, rawUrl: string) => {
+    const trimmedUrl = rawUrl.trim();
+
+    if (
+      trimmedUrl.startsWith("/") ||
+      trimmedUrl.startsWith("http://") ||
+      trimmedUrl.startsWith("https://") ||
+      trimmedUrl.startsWith("data:")
+    ) {
+      return match;
+    }
+
+    const resolvedUrl = path.posix.normalize(
+      path.posix.join("/blogs", slug, trimmedUrl),
+    );
+
+    return `![${altText}](${resolvedUrl})`;
+  });
 }
