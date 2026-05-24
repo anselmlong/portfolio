@@ -17,7 +17,7 @@ excerpt: "Scraping over 72,000 confessions from 18,000 users: A deep dive into t
 
 ## Introduction
 
-Live dashboard is up at [confessit.space](confessit.space).
+Live dashboard is up at [confessit.space](https://confessit.space).
 
 NUSConfessIT is a Telegram-based anonymous confession channel serving the NUS community. Since February 2024, it's accumulated over **72,000 confessions**, generating **129 million views** and countless reactions, replies, and discussions.
 
