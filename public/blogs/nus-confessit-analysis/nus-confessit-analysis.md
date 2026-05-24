@@ -100,11 +100,7 @@ The landscape splits into four broad regions, discovered through Mean Shift clus
 
 ## What Goes Viral
 
-![Viral rate by topic region](/blogs/images/viral_by_category.png)
-
-*Figure — Viral rate by topic region.*
-
-The single most important finding: **dating & relationship content dramatically outperforms everything else**. The viral rate among dating‑region posts is **~32%**, compared to ~23–25% for academics and career posts. That's a **~40% relative increase** in viral probability.
+The single most important finding: **dating & relationship content dramatically outperforms everything else**. The viral rate among dating‑region posts is **~32%**, compared to 23–25% for academics and career posts. That's a **40% relative increase** in viral probability.
 
 This makes intuitive sense: anonymous platforms lower the barrier for sharing personal romantic stories that people are reluctant to discuss publicly. The most viral post ever (score 11,121) was a whistleblowing post about a hall resident contracting an STD (famously known as Valor vixens now) — a story that combines romance, scandal, and campus gossip.
 
@@ -128,18 +124,30 @@ I had about 72k labelled NUS confessions, and now it was time to run models thro
 
 The prediction pipeline evolved through six iterations, each addressing a specific limitation of its predecessor.
 
-Version 1 — Baseline. A comprehensive survey of 8 classifiers and 6 regressors was conducted using 3,000-dimensional unigram TF-IDF features paired with basic metadata (hour, word count, day of week, and VADER sentiment scores). Models evaluated included Logistic Regression, Complement Naive Bayes, Linear Support Vector Classification, Random Forest, Gradient Boosting, XGBoost, LightGBM, and a multi-layer perceptron. For regression, Ridge, Random Forest, Gradient Boosting, XGBoost, LightGBM, and MLP regressors were tested across raw, log-transformed, and Box-Cox target encodings. LightGBM with a log1p target achieved the best regression performance at a mean absolute error of 5.09 reactions, while Logistic Regression led classification with a macro F1 of 0.499 (bad...).
+### Version 1 — Baseline. 
 
-Version 2 — Feature Expansion. I wanted more features. Feature dimensionality was increased to 8,000 dimensions using TF-IDF bigrams. The metadata feature set was expanded to include temporal signals (hour, day of week, month, posting hour recency, weekend flags), textual complexity metrics (Flesch readability score, unique word ratio, punctuation density), stylistic markers (emoji count, capitalisation ratio, exclamation frequency, URL count), and academic calendar features (exam period and recess week indicators). Classification was reframed using quantile-balanced bins. LightGBM's macro F1 improved to 0.515. A faster variant was subsequently produced that dropped the computationally prohibitive MLP regressor and added Huber and Histogram Gradient Boosting regressors.
+A comprehensive survey of 8 classifiers and 6 regressors was conducted using 3,000-dimensional unigram TF-IDF features paired with basic metadata (hour, word count, day of week, and VADER sentiment scores). Models evaluated included Logistic Regression, Complement Naive Bayes, Linear Support Vector Classification, Random Forest, Gradient Boosting, XGBoost, LightGBM, and a multi-layer perceptron. For regression, Ridge, Random Forest, Gradient Boosting, XGBoost, LightGBM, and MLP regressors were tested across raw, log-transformed, and Box-Cox target encodings. LightGBM with a log1p target achieved the best regression performance at a mean absolute error of 5.09 reactions, while Logistic Regression led classification with a macro F1 of 0.499 (bad...).
 
-Version 3 — Binary Framing & Composite Targeting. The prediction task was reframed as binary classification — viral versus non-viral — using a composite virality score: (reactions × 1 +
+### Version 2 — Feature Expansion.
+
+I wanted more features. Feature dimensionality was increased to 8,000 dimensions using TF-IDF bigrams. The metadata feature set was expanded to include temporal signals (hour, day of week, month, posting hour recency, weekend flags), textual complexity metrics (Flesch readability score, unique word ratio, punctuation density), stylistic markers (emoji count, capitalisation ratio, exclamation frequency, URL count), and academic calendar features (exam period and recess week indicators). Classification was reframed using quantile-balanced bins. LightGBM's macro F1 improved to 0.515. A faster variant was subsequently produced that dropped the computationally prohibitive MLP regressor and added Huber and Histogram Gradient Boosting regressors.
+
+### Version 3 — Binary Framing & Composite Targeting. 
+
+The prediction task was reframed as binary classification — viral versus non-viral — using a composite virality score: (reactions × 1 +
 replies × 2 + forwards × 3) / 6. This weighted formulation reflects signal quality: forwards (sharing behaviour) receive the highest weight as the strongest indicator of amplification, replies capture discussion depth, and reactions are treated as passive baseline engagement. An initial classifier achieved an AUC of 0.799, though this was later found to be inflated by target leakage from a reply_per_word feature. I wanted to predict the virality, but reply_per_word already implies virality.
 
-Version 4 — Clean Baseline. Following identification of the leak, the pipeline was corrected. The decontaminated model achieved an AUC of 0.774, establishing the true performance floor for subsequent improvements.
+### Version 4 — Clean Baseline. 
 
-Version 5 — Embedding Integration. Sentence embeddings (512-dimensional, generated via OpenRouter's API) were introduced as a complementary feature representation alongside existing TF-IDF and metadata. This lifted AUC to 0.795 — a 2.1% relative gain over the baseline.
+Following identification of the leak, the pipeline was corrected. The decontaminated model achieved an AUC of 0.774, establishing the true performance floor for subsequent improvements.
 
-Version 6 — Combined Representation & Hyperparameter Optimisation. The embedding and TF-IDF feature spaces were combined, and hyperparameter search was conducted over 30 random configurations across eight parameters (maximum tree depth, estimator count, learning rate, subsample ratio, column subsampling, minimum child samples, and L1 and L2 regularisation). Default parameters showed no benefit from combining both representations — both embedding-only and combined pipelines scored 0.796 AUC at default settings. However, hyperparameter optimisation unlocked the
+### Version 5 — Embedding Integration. 
+
+Sentence embeddings (512-dimensional, generated via OpenRouter's API) were introduced as a complementary feature representation alongside existing TF-IDF and metadata. This lifted AUC to 0.795 — a 2.1% relative gain over the baseline.
+
+### Version 6 — Combined Representation & Hyperparameter Optimisation. 
+
+The embedding and TF-IDF feature spaces were combined, and hyperparameter search was conducted over 30 random configurations across eight parameters (maximum tree depth, estimator count, learning rate, subsample ratio, column subsampling, minimum child samples, and L1 and L2 regularisation). Default parameters showed no benefit from combining both representations — both embedding-only and combined pipelines scored 0.796 AUC at default settings. However, hyperparameter optimisation unlocked the
 combination: tuned parameters (300 estimators, maximum depth of 10, learning rate of 0.05, subsample of 0.6, L1 regularisation of 0.5, L2 regularisation of 0.1) produced a final AUC of 0.804 with a macro F1 of 0.575 — an aggregate gain of 3.0% over the clean baseline.
 
 Ablation studies confirmed TF-IDF as the dominant feature block, with temporal and stylistic metadata providing moderate independent signal, and sentiment and category features contributing negligible marginal value beyond the combined model.
