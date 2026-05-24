@@ -92,7 +92,7 @@ export function getAllBlogPosts(): BlogPostMetadata[] {
   const slugs = getAllBlogSlugs();
 
   const posts = slugs.map((slug) => {
-    const fullPath = path.join(blogsDirectory, `${slug}.md`);
+    const fullPath = getBlogMarkdownPath(slug);
     const fileContents = fs.readFileSync(fullPath, "utf8");
     const { data, content } = matter(fileContents);
     const d = safeData(data);
