@@ -39,7 +39,15 @@ What are students actually confessing about? Which topics go viral? Can we predi
 
 ## Dashboard
 
-I created a simple Reddit-like dashboard to show all the posts and replies, along with some stats. There's also a search function that allows for simple keyword search.
+![dashboard](dashboard.png)
+
+I created a simple Reddit-like dashboard to show all the posts and replies, along with some stats. There's also a search function that allows for simple keyword search. Initially, it was a Flask dashboard to show daily reports, but over time I wanted to deploy on Vercel. This part's a small aside but I was trying to see how capable my Hermes agent was, so I asked:
+
+> /goal refactor the frontend of this project to use next.js, typescript, and tailwind, to be deployed on vercel and hosted on [confessit.anselmlong.com](http:// confessit.anselmlong.com/). use this vercel token if needed,
+keep it safe: [REDACTED]. avoid touching anything machine learning or fine tune related. if needed, invoke /frontend-design:frontend-design
+or /impeccable:impeccable to improve aesthetics.
+
+And it worked. Amazing stuff! If you hand an agent enough hands it can do probably anything. I don't advise pasting your token in it though (I revoked it after).
 
 ## Data Analysis
 
@@ -54,7 +62,7 @@ I created a simple Reddit-like dashboard to show all the posts and replies, alon
 
 ## How did I get the data?
 
-![data](images/image.png)
+![data](images/data.png)
 
 I set up a Python scraper to scrape all 72k messages from the channel, and then another one that scraped all the replies as well. These now both run daily as an automated cron job on my server, every 30 minutes. 
 
