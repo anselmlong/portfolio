@@ -54,7 +54,7 @@ I created a simple Reddit-like dashboard to show all the posts and replies, alon
 
 ## How did I get the data?
 
-![data](image.png)
+![data](images/image.png)
 
 I set up a Python scraper to scrape all 72k messages from the channel, and then another one that scraped all the replies as well. These now both run daily as an automated cron job on my server, every 30 minutes. 
 
