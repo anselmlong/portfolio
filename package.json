@@ -6,7 +6,7 @@
   "scripts": {
     "build": "next build",
     "check": "next lint && tsc --noEmit",
-    "test:intent": "bun run src/server/agents/test-intent.ts",
+    "test:agent": "cd agent && python3 -m pytest tests/ -v",
     "db:generate": "prisma migrate dev",
     "db:migrate": "prisma migrate deploy",
     "db:push": "prisma db push",

@@ -56,7 +56,7 @@ const ChatInterface = () => {
   const historyRef = useRef<HTMLDivElement | null>(null);
   const { messages, sendMessage, regenerate, status, error } = useChat({
     transport: new TextStreamChatTransport({
-      api: "/api/chat",
+      api: "/api/chat/agentic",
     }),
     onError: (err) => {
       console.error("Chat error:", err);

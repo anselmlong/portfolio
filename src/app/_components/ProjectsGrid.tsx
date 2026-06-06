@@ -12,6 +12,7 @@ type Project = {
   tech: string;
   description: string;
   url?: string;
+  status?: string;
 };
 
 export default function ProjectsGrid({ projects }: { projects: Project[] }) {
@@ -60,32 +61,49 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
 
   return (
     <section ref={sectionRef} className="mt-32 px-6 pb-24">
-      <div className="animate-right mx-auto max-w-6xl text-center">
-        <p className="font-geist text-muted-foreground text-xs tracking-[0.15em] uppercase">
-          projects
-        </p>
-        <h2 className="font-bricolage text-foreground mb-4 text-4xl leading-tight font-light tracking-tight text-balance md:text-5xl lg:text-6xl">
-          stuff i&apos;ve built
-        </h2>
-        <p className="text-muted-foreground text-base text-pretty md:text-lg">
-          hackathons, school and personal projects.
+      <div className="animate-right mx-auto grid max-w-6xl gap-6 md:grid-cols-[0.9fr_1.1fr] md:items-end">
+        <div>
+          <p className="font-geist text-primary text-xs tracking-[0.15em] uppercase">
+            deployed work
+          </p>
+          <h2 className="font-bricolage text-foreground mt-3 text-4xl leading-tight font-light tracking-tight text-balance md:text-5xl lg:text-6xl">
+            projects people can actually use
+          </h2>
+        </div>
+        <p className="text-muted-foreground max-w-2xl text-base leading-relaxed text-pretty md:text-lg">
+          live sites, telegram bots, tools, and a few build notes. technology is
+          still there, but the emphasis is what shipped and why it exists.
         </p>
       </div>
-      <div className="mx-auto mt-12 grid max-w-6xl grid-cols-2 gap-6">
+      <div className="mx-auto mt-12 grid max-w-6xl gap-4 md:grid-cols-2">
         {projects.map((proj) => (
           <article
             key={proj.name}
-            className="project-card group border-border bg-card hover:border-primary/40 hover:shadow-primary/5 flex h-full flex-col rounded-xl border p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            className="project-card group border-border bg-card/80 hover:border-primary/50 hover:shadow-primary/5 flex h-full flex-col rounded-2xl border p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg md:p-6"
           >
-            <a href={proj.url}>
-              <h3 className="text-card-foreground mt-4 text-2xl font-medium">
-                {proj.name}
-              </h3>
-              <p className="font-geist text-primary mt-2 text-xs font-medium tracking-wide uppercase">
-                {proj.tech}
-              </p>
+            <a
+              href={proj.url}
+              className="flex h-full flex-col"
+              target={proj.url?.startsWith("http") ? "_blank" : undefined}
+              rel={
+                proj.url?.startsWith("http") ? "noopener noreferrer" : undefined
+              }
+            >
+              <div className="flex items-start justify-between gap-4">
+                <h3 className="text-card-foreground text-2xl font-medium tracking-tight">
+                  {proj.name}
+                </h3>
+                {proj.status ? (
+                  <span className="border-primary/30 text-primary shrink-0 rounded-full border px-3 py-1 text-xs leading-none">
+                    {proj.status}
+                  </span>
+                ) : null}
+              </div>
               <p className="text-muted-foreground mt-4 flex-1 leading-relaxed text-pretty">
                 {proj.description}
+              </p>
+              <p className="font-geist text-muted-foreground/80 mt-6 text-xs leading-relaxed">
+                {proj.tech}
               </p>
             </a>
           </article>

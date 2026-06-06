@@ -8,7 +8,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
-import LogosGrid from "~/app/_components/LogosGrid";
 import ExperienceTimeline from "~/app/_components/ExperienceTimeline";
 import ProjectsGrid from "~/app/_components/ProjectsGrid";
 
@@ -68,25 +67,52 @@ const experiences = [
 
 const projects = [
   {
-    name: "personal portfolio website",
-    tech: "Next.js, TypeScript, Tailwind CSS, tRPC, GSAP, LangChain.js",
+    name: "confessit.space",
+    tech: "Next.js, Supabase, anonymous posting",
     description:
-      "a portfolio website to showcase my projects, experiences, and skills. features interactive animations, a chat interface powered by ai, and a sleek responsive design.",
-    url: "/blog/portfolio-website",
+      "an anonymous confession board for campus communities, deployed as a small social product with moderation and fast posting flows.",
+    url: "https://confessit.space",
+    status: "live site",
   },
   {
-    name: "freak-cha",
-    tech: "Next.js, TypeScript, Tailwind CSS, tRPC, Supabase, YOLOv8",
+    name: "@sg_daily_gospel_bot",
+    tech: "Telegram Bot API, scheduled messages",
     description:
-      "CAPTCHA-inspired challenge to distinguish humans from AI using facial expression recognition; awarded Funniest Hack at HackHarvard 2025",
-    url: "/blog/freak-cha",
+      "a telegram bot that sends a daily gospel reading to subscribers without making them open another app or newsletter.",
+    url: "https://t.me/sg_daily_gospel_bot",
+    status: "telegram bot",
+  },
+  {
+    name: "@aircon_checker_bot",
+    tech: "Python, Telegram Bot API, reverse-engineered EVS2 API",
+    description:
+      "a telegram bot that checks nus aircon credits from the EVS2 portal. type /balance and get the current balance instantly.",
+    url: "https://t.me/aircon_checker_bot",
+    status: "telegram bot",
+  },
+  {
+    name: "canvas scraper",
+    tech: "Python, SQLite, Beautiful Soup",
+    description:
+      "a cli that syncs canvas files, filters out noisy downloads, and emails daily summaries of announcements and assignments. next step: a small hero site at canvas.anselmlong.com.",
+    url: "https://github.com/anselmlong/canvas-scraper",
+    status: "cli, hero site next",
   },
   {
     name: "linkedin shitpost generator",
     tech: "Next.js, React, Tailwind CSS, Google Gemini, OpenRouter",
     description:
-      "a satirical web app that generates absurd linkedin-style posts powered by ai. enter a topic, get 6 comedic personas — from tech-bro earnestness to singapore uncle vibes.",
+      "a satirical web app that generates absurd linkedin-style posts powered by ai. enter a topic, get six comedic personas, from tech-bro earnestness to singapore uncle vibes.",
     url: "https://shitpost.anselmlong.com",
+    status: "live site",
+  },
+  {
+    name: "personal portfolio website",
+    tech: "Next.js, TypeScript, Tailwind CSS, tRPC, GSAP, LangChain.js",
+    description:
+      "this site: a portfolio with interactive animation, blog posts, and an ai chat interface backed by rag over my work and experience.",
+    url: "/blog/portfolio-website",
+    status: "live site",
   },
   {
     name: "miccdrop",
@@ -94,6 +120,15 @@ const projects = [
     description:
       "a mobile app that rewards users for singing off key with pitch detection and karaoke style lyrics.",
     url: "/blog/miccdrop",
+    status: "project write-up",
+  },
+  {
+    name: "freak-cha",
+    tech: "Next.js, TypeScript, Tailwind CSS, tRPC, Supabase, YOLOv8",
+    description:
+      "a captcha-inspired challenge to distinguish humans from ai using facial expression recognition. awarded funniest hack at HackHarvard 2025.",
+    url: "/blog/freak-cha",
+    status: "hackathon build",
   },
   {
     name: "vbook",
@@ -101,24 +136,8 @@ const projects = [
     description:
       "a fast and efficient contact manager for developers, with emphasis on keyboard shortcuts and productivity.",
     url: "/blog/vbook",
+    status: "school project",
   },
-];
-const logos = [
-  { src: "/elements/logos/c++.png", alt: "C++" },
-  { src: "/elements/logos/c.png", alt: "C" },
-  { src: "/elements/logos/java.png", alt: "Java" },
-  { src: "/elements/logos/javascript.png", alt: "JavaScript" },
-  { src: "/elements/logos/latex.png", alt: "LaTeX" },
-  { src: "/elements/logos/nextjs.png", alt: "Next.js" },
-  { src: "/elements/logos/numpy.png", alt: "NumPy" },
-  { src: "/elements/logos/pandas.png", alt: "Pandas" },
-  { src: "/elements/logos/postgresql.png", alt: "PostgreSQL" },
-  { src: "/elements/logos/react.png", alt: "React" },
-  { src: "/elements/logos/scikit-learn.png", alt: "Scikit Learn" },
-  { src: "/elements/logos/supabase.png", alt: "Supabase" },
-  { src: "/elements/logos/tailwind.png", alt: "Tailwind" },
-  { src: "/elements/logos/trpc.png", alt: "tRPC" },
-  { src: "/elements/logos/typescript.png", alt: "TypeScript" },
 ];
 const getGreeting = () => {
   const hour = new Date().getHours();
@@ -290,8 +309,6 @@ export default function ClientHome() {
           </div>
         </div>
       </section>
-
-      <LogosGrid logos={logos} />
 
       <ExperienceTimeline experiences={experiences} />
 

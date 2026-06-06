@@ -1115,8 +1115,9 @@ export const PromptInputSpeechButton = ({
         const results = Array.from(event.results);
 
         for (const result of results) {
-          if (result.isFinal) {
-            finalTranscript += result[0].transcript;
+          const transcript = result[0]?.transcript;
+          if (result.isFinal && transcript) {
+            finalTranscript += transcript;
           }
         }
 
