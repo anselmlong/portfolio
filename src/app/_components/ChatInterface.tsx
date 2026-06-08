@@ -1,6 +1,13 @@
 "use client";
 
-import { Fragment, useEffect, useState, useRef } from "react";
+import {
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import { useChat } from "@ai-sdk/react";
 import { TextStreamChatTransport, type UIMessage } from "ai";
 import { CopyIcon, RefreshCcwIcon } from "lucide-react";
@@ -24,6 +31,59 @@ import {
 import { EXAMPLE_PROMPTS } from "~/constants/example-prompts";
 
 const examplePrompts = EXAMPLE_PROMPTS;
+
+type LiquidPromptStyle = CSSProperties & {
+  "--liquid-x": string;
+  "--liquid-y": string;
+};
+
+type LiquidPromptButtonProps = {
+  prompt: string;
+  disabled: boolean;
+  onSelect: (prompt: string) => void;
+};
+
+const liquidPromptStyle: LiquidPromptStyle = {
+  "--liquid-x": "50%",
+  "--liquid-y": "50%",
+};
+
+const handleLiquidPromptPointerMove = (
+  event: ReactPointerEvent<HTMLButtonElement>,
+) => {
+  const rect = event.currentTarget.getBoundingClientRect();
+  const x = ((event.clientX - rect.left) / rect.width) * 100;
+  const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+  event.currentTarget.style.setProperty("--liquid-x", `${x}%`);
+  event.currentTarget.style.setProperty("--liquid-y", `${y}%`);
+};
+
+const handleLiquidPromptPointerLeave = (
+  event: ReactPointerEvent<HTMLButtonElement>,
+) => {
+  event.currentTarget.style.setProperty("--liquid-x", "50%");
+  event.currentTarget.style.setProperty("--liquid-y", "50%");
+};
+
+const LiquidPromptButton = ({
+  prompt,
+  disabled,
+  onSelect,
+}: LiquidPromptButtonProps) => (
+  <button
+    type="button"
+    onClick={() => onSelect(prompt)}
+    onPointerMove={handleLiquidPromptPointerMove}
+    onPointerLeave={handleLiquidPromptPointerLeave}
+    className="liquid-prompt-button group"
+    style={liquidPromptStyle}
+    disabled={disabled}
+  >
+    <span className="liquid-prompt-button__glare" aria-hidden="true" />
+    <span className="liquid-prompt-button__content">{prompt}</span>
+  </button>
+);
 
 // Helper to get random prompts
 const getRandomPrompts = (prompts: string[], count = 2) => {
@@ -151,6 +211,28 @@ const ChatInterface = () => {
 
   return (
     <div className="mx-auto w-full max-w-3xl p-4">
+      <svg
+        className="pointer-events-none absolute size-0"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <filter id="liquid-prompt-distortion" colorInterpolationFilters="sRGB">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.018 0.055"
+            numOctaves="2"
+            seed="8"
+            result="noise"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale="10"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </svg>
       <div className="flex flex-col">
         <div ref={containerRef} className="relative">
           {/* History overlays above the input (no layout shift) */}
@@ -250,14 +332,12 @@ const ChatInterface = () => {
         {/* Example prompts - always visible, rotate on click */}
         <div className="mt-4 flex flex-wrap justify-center gap-2">
           {displayedPrompts.map((prompt) => (
-            <button
+            <LiquidPromptButton
               key={prompt}
-              onClick={() => handleExampleClick(prompt)}
-              className="rounded-full border border-gray-700 bg-gray-800 px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-gray-700 hover:text-white"
+              prompt={prompt}
               disabled={status === "submitted"}
-            >
-              {prompt}
-            </button>
+              onSelect={handleExampleClick}
+            />
           ))}
         </div>
       </div>

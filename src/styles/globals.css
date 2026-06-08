@@ -459,3 +459,148 @@ body {
     background-position: 0% 50%;
   }
 }
+
+/* Liquid glass prompt buttons inspired by liquidGL's refracted, glossy panes. */
+.liquid-prompt-button {
+  --liquid-x: 50%;
+  --liquid-y: 50%;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in oklch, var(--primary) 46%, transparent);
+  background:
+    radial-gradient(
+      circle at var(--liquid-x) var(--liquid-y),
+      oklch(1 0 0 / 0.34),
+      transparent 26%
+    ),
+    linear-gradient(
+      135deg,
+      oklch(1 0 0 / 0.2),
+      oklch(1 0 0 / 0.055) 42%,
+      oklch(0.72 0.12 65 / 0.12)
+    );
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.34),
+    inset 0 -10px 24px oklch(0 0 0 / 0.14),
+    0 10px 30px oklch(0 0 0 / 0.18);
+  color: var(--foreground-high);
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-shadow: 0 1px 10px oklch(0 0 0 / 0.35);
+  transform: translateY(0) scale(1);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    color 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+  backdrop-filter: blur(18px) saturate(165%);
+  -webkit-backdrop-filter: blur(18px) saturate(165%);
+}
+
+.liquid-prompt-button::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      115deg,
+      transparent 0 22%,
+      oklch(1 0 0 / 0.42) 34%,
+      transparent 48% 100%
+    ),
+    radial-gradient(ellipse at 18% 0%, oklch(1 0 0 / 0.32), transparent 54%);
+  mix-blend-mode: screen;
+  opacity: 0.42;
+  transform: translateX(-30%) skewX(-12deg);
+  transition:
+    opacity 180ms ease,
+    transform 360ms ease;
+}
+
+.liquid-prompt-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at var(--liquid-x) var(--liquid-y),
+    oklch(0.72 0.12 65 / 0.32),
+    transparent 44%
+  );
+  filter: blur(10px) url("#liquid-prompt-distortion");
+  opacity: 0.72;
+}
+
+.liquid-prompt-button__glare {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    radial-gradient(
+      circle at var(--liquid-x) var(--liquid-y),
+      oklch(1 0 0 / 0.46),
+      transparent 18%
+    ),
+    linear-gradient(
+      to bottom,
+      oklch(1 0 0 / 0.22),
+      transparent 38%,
+      oklch(0 0 0 / 0.12)
+    );
+  opacity: 0.38;
+  transition: opacity 180ms ease;
+}
+
+.liquid-prompt-button__content {
+  position: relative;
+  z-index: 1;
+}
+
+.liquid-prompt-button:hover:not(:disabled),
+.liquid-prompt-button:focus-visible:not(:disabled) {
+  border-color: color-mix(in oklch, var(--primary) 78%, white 12%);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.48),
+    inset 0 -12px 28px oklch(0 0 0 / 0.12),
+    0 14px 36px oklch(0 0 0 / 0.22),
+    0 0 28px color-mix(in oklch, var(--primary) 24%, transparent);
+  transform: translateY(-2px) scale(1.015);
+}
+
+.liquid-prompt-button:hover::before,
+.liquid-prompt-button:focus-visible::before {
+  opacity: 0.74;
+  transform: translateX(18%) skewX(-12deg);
+}
+
+.liquid-prompt-button:hover .liquid-prompt-button__glare,
+.liquid-prompt-button:focus-visible .liquid-prompt-button__glare {
+  opacity: 0.62;
+}
+
+.liquid-prompt-button:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+
+.liquid-prompt-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .liquid-prompt-button,
+  .liquid-prompt-button::before,
+  .liquid-prompt-button__glare {
+    transition: none;
+  }
+}
