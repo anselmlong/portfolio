@@ -227,7 +227,7 @@ const ChatInterface = () => {
           <feDisplacementMap
             in="SourceGraphic"
             in2="noise"
-            scale="10"
+            scale="4"
             xChannelSelector="R"
             yChannelSelector="G"
           />
