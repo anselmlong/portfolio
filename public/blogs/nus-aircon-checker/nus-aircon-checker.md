@@ -39,7 +39,7 @@ My workflow was basically:
 
 - I do the thinking / decide the plan
 - opencode does the boring implementation
-- I keep it on a leash so it doesnâ€™t hallucinate a whole new architecture
+- I keep it on a leash so it doesn’t hallucinate a whole new architecture
 
 oh-my-opencode is opencode on steroids - it creates multiple agents that do your work super fast.
 

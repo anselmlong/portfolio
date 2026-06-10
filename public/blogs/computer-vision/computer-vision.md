@@ -25,7 +25,7 @@ I decided to use YOLOv8 because it's the more stable and mature version of the Y
 > Note to anyone who's trying this in a Linux environment - it doesn't work natively. WSL doesn't expose the webcam so I couldn't get the webcam to open. After switching to a native Windows environment and reinstalling the needed packages, everything finally worked!  
 
 Out of the box, the detection models worked surprisingly well: They recognized everyday objects like spoons, cups, bowls, people, even with minimal setup.
-Hereâ€™s a snippet of my detection loop:
+Here’s a snippet of my detection loop:
 
 ```python
 	for detection in detections:
@@ -60,13 +60,13 @@ Here's a summary of my preprocessing and augmentation:
 
 - **Preprocessing**
     - Auto-orient images
-    - Resize/stretch to 224 Ã— 224
+    - Resize/stretch to 224 × 224
 	- Grayscale (Colour doesn't matter here)
         
 - **Augmentation**
     - Horizontal flip
-    - Rotation between â€“15Â° and +15Â°
-    - Exposure change: Â±10%
+    - Rotation between –15° and +15°
+    - Exposure change: ±10%
     - Blur up to ~2.5 px
         
 
