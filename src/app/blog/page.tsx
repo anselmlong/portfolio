@@ -1,5 +1,18 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { api } from "~/trpc/server";
+
+export const metadata: Metadata = {
+  title: "blog",
+  description:
+    "Writing on machine learning, side projects, and software engineering by Anselm Long.",
+  openGraph: {
+    title: "blog — anselm long",
+    description:
+      "Writing on machine learning, side projects, and software engineering by Anselm Long.",
+    type: "website",
+  },
+};
 
 export default async function BlogPage() {
   const posts = await api.blog.list();
