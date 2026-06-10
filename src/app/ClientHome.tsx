@@ -94,9 +94,9 @@ const projects = [
     name: "canvas scraper",
     tech: "Python, SQLite, Beautiful Soup",
     description:
-      "a cli that syncs canvas files, filters out noisy downloads, and emails daily summaries of announcements and assignments. next step: a small hero site at canvas.anselmlong.com.",
+      "a cli that syncs canvas files, filters out noisy downloads, and emails daily summaries of announcements and assignments.",
     url: "https://github.com/anselmlong/canvas-scraper",
-    status: "cli, hero site next",
+    status: "cli",
   },
   {
     name: "linkedin shitpost generator",

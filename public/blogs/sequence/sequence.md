@@ -93,7 +93,7 @@ export const extractFramesFromVideo = async (
 };
 ```
 
-This extracts frames at regular intervals (every 20 frames â‰ˆ 0.66 seconds at 30fps) and converts them to base64 data URLs that we can send to Gemini.
+This extracts frames at regular intervals (every 20 frames ≈ 0.66 seconds at 30fps) and converts them to base64 data URLs that we can send to Gemini.
 
 ## AI Analysis with Gemini
 

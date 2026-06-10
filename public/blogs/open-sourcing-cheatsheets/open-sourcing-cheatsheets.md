@@ -12,7 +12,7 @@ excerpt: "Even though AI is great for learning, sometimes it's best to get into 
 
 ## AI is Amazing, But...
 
-Don't get me wrongâ€”AI has completely changed how we learn. ChatGPT, Claude, and other LLMs can explain concepts, debug code, and even generate study guides on demand. It's incredible.
+Don't get me wrong—AI has completely changed how we learn. ChatGPT, Claude, and other LLMs can explain concepts, debug code, and even generate study guides on demand. It's incredible.
 
 But here's the thing: **sometimes you need to slow down and write things out yourself.**
 
@@ -31,7 +31,7 @@ AI can generate a cheatsheet for you in seconds. But you won't have the same dee
 
 I type all my cheatsheets in LaTeX because:
 - **Precision**: Math notation looks beautiful and is easy to read
-- **Control**: I can format exactly how I wantâ€”margins, spacing, columns
+- **Control**: I can format exactly how I want—margins, spacing, columns
 - **Reusability**: Once I build a template, I can reuse it for future modules
 - **Portability**: PDFs work everywhere
 
@@ -70,7 +70,7 @@ Here are some samples of what the cheatsheets look like:
 
 ## Disclaimer
 
-Do your own due diligenceâ€”nothing in here is absolutely ground truth. Content may change, and if you spot improvements, feel free to add to my cheatsheets!
+Do your own due diligence—nothing in here is absolutely ground truth. Content may change, and if you spot improvements, feel free to add to my cheatsheets!
 
 ## Final Thoughts
 
@@ -85,7 +85,7 @@ And now, by open-sourcing them, maybe they can help someone else too.
 
 If you're a student: try making your own cheatsheet for your next exam. Even if your professor doesn't allow cheatsheets, the process alone will help you understand the material better.
 
-And if you find my cheatsheets useful, give the repo a star! â­
+And if you find my cheatsheets useful, give the repo a star! ⭐
 
 ---
 

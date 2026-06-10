@@ -36,7 +36,7 @@ So by "research and analysis"... they basically meant googling. At the end of th
 
 ## My Day-to-Day
 
-Most of my day-to-day work revolved around **researching Gen AI developments** â€” from tools like ChatGPT to enterprise use cases across different industries. Otherwise, we were basically *saikang warriors*, doing random tasks that the team needed help with. It was pretty boring, but I had a lot of free time.
+Most of my day-to-day work revolved around **researching Gen AI developments** — from tools like ChatGPT to enterprise use cases across different industries. Otherwise, we were basically *saikang warriors*, doing random tasks that the team needed help with. It was pretty boring, but I had a lot of free time.
 
 After a while, I realised that researching manually was... extremely slow. 
 
@@ -71,7 +71,7 @@ Well, outside of that, I:
 
 ## What I Learned (and what went wrong)
 
-Well, I learned that not every internship needs to be "super technical" to be valuable. I picked up a lot of **soft skills** â€” from writing executive summaries and presenting to directors, to just figuring out how to communicate data ideas clearly.  
+Well, I learned that not every internship needs to be "super technical" to be valuable. I picked up a lot of **soft skills** — from writing executive summaries and presenting to directors, to just figuring out how to communicate data ideas clearly.  
 
 I kind of wish that I could have done bigger projects in my spare time, but I was also building NUSphere (my Orbital project), so I guess it was reasonable.
 
@@ -81,7 +81,7 @@ I kind of wish that I could have done bigger projects in my spare time, but I wa
 
 On the bright side, this internship planted the seed for my interest in **machine learning and data engineering**. I realised how important structured data is before any analysis or modelling can happen, and how shared data can lead to more efficient processes.
 
-After this experience, I wanted to do something more technical â€” so I spent the next semester learning more Python, ML, and data visualization. That led to my **machine learning internship at IMDA** the following year, where I finally got to apply those skills on real cybersecurity data.  
+After this experience, I wanted to do something more technical — so I spent the next semester learning more Python, ML, and data visualization. That led to my **machine learning internship at IMDA** the following year, where I finally got to apply those skills on real cybersecurity data.  
 
-So yeah, maybe I didn't build the next big AI model that summer â€” but I learned how to think like someone who could.
+So yeah, maybe I didn't build the next big AI model that summer — but I learned how to think like someone who could.
 

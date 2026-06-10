@@ -50,7 +50,7 @@ Another concept to grasp here is the certificate chain. A certificate is usually
 
 ### Initial Dataset
 
-I was given a sample dataset (n â‰ˆ 67k), followed by about 49 CSV files of about 70k records each. I combined this bigger dataset into about 3 million entries. For training, I took a sample from this bigger dataset.
+I was given a sample dataset (n ≈ 67k), followed by about 49 CSV files of about 70k records each. I combined this bigger dataset into about 3 million entries. For training, I took a sample from this bigger dataset.
 
 Each CSV had 3 columns: certificates, JA3 fingerprints, and count. Certificates contained a JSON formatted string with each certificate in the chain of trust being one JSON object. The JA3 fingerprints column contained a string of dash separated numbers, detailing SSL/TLS Version, Cipher Suites, Extensions, Elliptic Curves, and Elliptic Curve Point Formats. Count is a residual of data processing. 
 
@@ -62,9 +62,9 @@ For my supervised learning models (Dataset B), I split this into 60/20/20, to 60
 
 ### Parsing Data
 
-The parsed dataset contains a total of **22 fields**. From the certificate data, both the issuer and subject information were extracted and split into individual columns for each attributeâ€”namely: Country (C), Locality (L), Organization (O), Organizational Unit (OU), Common Name (CN), and State (ST). This results in **12 fields** (6 from the issuer and 6 from the subject). Additional certificate-related fields include the **issuance date**, **expiry date**, and **Subject Alternative Names (SANs)**, bringing the total to **15 fields** derived from certificate metadata.
+The parsed dataset contains a total of **22 fields**. From the certificate data, both the issuer and subject information were extracted and split into individual columns for each attribute—namely: Country (C), Locality (L), Organization (O), Organizational Unit (OU), Common Name (CN), and State (ST). This results in **12 fields** (6 from the issuer and 6 from the subject). Additional certificate-related fields include the **issuance date**, **expiry date**, and **Subject Alternative Names (SANs)**, bringing the total to **15 fields** derived from certificate metadata.
 
-Five additional fields were generated from **JA3 fingerprint data**, and the final two fieldsâ€”**chain index** and **chain length**â€”were introduced during parsing of the certificate chain. For example, if a certificate chain consists of three certificates, each certificate is assigned a **chain index** (0, 1, 2), while the **chain length** remains fixed at 3 across all certificates in that chain.
+Five additional fields were generated from **JA3 fingerprint data**, and the final two fields—**chain index** and **chain length**—were introduced during parsing of the certificate chain. For example, if a certificate chain consists of three certificates, each certificate is assigned a **chain index** (0, 1, 2), while the **chain length** remains fixed at 3 across all certificates in that chain.
 
 ## Feature Engineering
 
@@ -117,7 +117,7 @@ The domain is extracted by parsing the Subject Common Name (CN), specifically by
 
 To identify potentially algorithmically generated or obfuscated domain names, the Shannon entropy of each domain is calculated using the following formula:
 
-H(X) = -âˆ‘ p_i logâ‚‚ p_i
+H(X) = -∑ p_i log₂ p_i
 
 This entropy-based feature is adapted from Feature 7 of Fasllija et al. (2019), and serves to quantify the randomness of character distribution within the domain name. Higher entropy values may indicate suspicious or auto-generated domains.
 
@@ -205,11 +205,11 @@ The tables above summarize the performance of both unsupervised and supervised m
 
 ### Clustering
 
-To explore unsupervised detection of malicious certificates, I initially experimented with the KMeans algorithm. Using the elbow method, an optimal value of k = 21 was estimated. While GÃ³mez et al. (2023) used clustering effectively with labeled malware family data, the absence of such labels in this study limited interpretability, and clustering was not pursued further.
+To explore unsupervised detection of malicious certificates, I initially experimented with the KMeans algorithm. Using the elbow method, an optimal value of k = 21 was estimated. While Gómez et al. (2023) used clustering effectively with labeled malware family data, the absence of such labels in this study limited interpretability, and clustering was not pursued further.
 
 ### Isolation Forest
 
-Isolation Forest was selected as a primary unsupervised approach for detecting anomalous TLS certificates due to its scalability and interpretability. Originally proposed by Liu et al. (2008), this method constructs an ensemble of randomly generated binary *isolation trees*, where each split selects a feature and threshold at random. Anomalous certificatesâ€”being rare and distinctâ€”tend to be isolated in fewer partitions, resulting in shorter paths and higher anomaly scores. The algorithm's linear time complexity and minimal memory requirements make it particularly well-suited for large-scale datasets such as those used in this project. Moreover, recent studies, such as OstertÃ¡g and Stanek (2024), have validated its effectiveness in detecting anomalies within X.509 certificate transparency logs. In the context of this work, Isolation Forest achieved an F1 score of 0.9476 on a balanced, de-duplicated test set, demonstrating its utility as a robust baseline for certificate anomaly detection.
+Isolation Forest was selected as a primary unsupervised approach for detecting anomalous TLS certificates due to its scalability and interpretability. Originally proposed by Liu et al. (2008), this method constructs an ensemble of randomly generated binary *isolation trees*, where each split selects a feature and threshold at random. Anomalous certificates—being rare and distinct—tend to be isolated in fewer partitions, resulting in shorter paths and higher anomaly scores. The algorithm's linear time complexity and minimal memory requirements make it particularly well-suited for large-scale datasets such as those used in this project. Moreover, recent studies, such as Ostertág and Stanek (2024), have validated its effectiveness in detecting anomalies within X.509 certificate transparency logs. In the context of this work, Isolation Forest achieved an F1 score of 0.9476 on a balanced, de-duplicated test set, demonstrating its utility as a robust baseline for certificate anomaly detection.
 
 ### Local Outlier Factor (LOF)
 
@@ -255,11 +255,11 @@ We keep adding the node scores until we reach a terminal node. A terminal node h
 
 The tree score, s_t is then the summation of the scores of each node along the path, increasing in depth.
 
-s_t = âˆ‘ s_n,t
+s_t = ∑ s_n,t
 
 The anomaly score, S will then be the summation of each tree score in the ensemble.
 
-S = âˆ‘ s_t (for t in T)
+S = ∑ s_t (for t in T)
 
 To fit machine learning convention, we take the inverted score, S' as 1 - S so that a value closer to 1 is malicious, and a value closer to 0 is benign.
 
@@ -310,7 +310,7 @@ The graph is represented as an adjacency matrix, using a sparse matrix format fr
 
 #### Training the Model
 
-The architecture replicates the design in Liu et al. (2022), employing a two-layer Graph Convolutional Network (GCN) consisting of: Graph Convolution â†’ ReLU activation â†’ Dropout â†’ Graph Convolution â†’ Linear output layer. They suggest that any more layers result in a drop in model performance.
+The architecture replicates the design in Liu et al. (2022), employing a two-layer Graph Convolutional Network (GCN) consisting of: Graph Convolution → ReLU activation → Dropout → Graph Convolution → Linear output layer. They suggest that any more layers result in a drop in model performance.
 
 #### Results
 
@@ -356,21 +356,21 @@ Moving forward, I hope that the methodologies and lessons from this project will
 
 2. Farshad, K. (2024, November 26). *Understanding Silhouette Score in Clustering*. Medium. <https://farshadabdulazeez.medium.com/understanding-silhouette-score-in-clustering-8aedc06ce9c4>
 
-3. Fasllija, E., EniÅŸer, H., & PrÃ¼nster, B. (2019). *Phish-Hook: Detecting Phishing Certificates Using Certificate Transparency Logs*. In *Lecture Notes in Computer Science, Volume 11718* (pp. 318â€“329). Springer.
+3. Fasllija, E., Enişer, H., & Prünster, B. (2019). *Phish-Hook: Detecting Phishing Certificates Using Certificate Transparency Logs*. In *Lecture Notes in Computer Science, Volume 11718* (pp. 318–329). Springer.
 
-4. GÃ³mez, G., Dell'Amico, M., & Bilge, L. (2022). *Unsupervised Detection and Clustering of Malicious TLS Flows*. Retrieved from <https://arxiv.org/pdf/2109.03878>
+4. Gómez, G., Dell'Amico, M., & Bilge, L. (2022). *Unsupervised Detection and Clustering of Malicious TLS Flows*. Retrieved from <https://arxiv.org/pdf/2109.03878>
 
-5. Han, X., Cui, S., Qin, J., Liu, S., Jiang, B., Dong, C., Lu, Z., & Liu, B. (2024). *ContraMTD: An Unsupervised Malicious Network Traffic Detection Method based on Contrastive Learning*. In *Proceedings of the ACM Web Conference 2022*, 1680â€“1689.
+5. Han, X., Cui, S., Qin, J., Liu, S., Jiang, B., Dong, C., Lu, Z., & Liu, B. (2024). *ContraMTD: An Unsupervised Malicious Network Traffic Detection Method based on Contrastive Learning*. In *Proceedings of the ACM Web Conference 2022*, 1680–1689.
 
-6. Liu, F. T., Ting, K. M., & Zhou, Z. (2008). *Isolation Forest*. In *Proceedings of the 2008 Eighth IEEE International Conference on Data Mining* (pp. 413â€“422). IEEE.
+6. Liu, F. T., Ting, K. M., & Zhou, Z. (2008). *Isolation Forest*. In *Proceedings of the 2008 Eighth IEEE International Conference on Data Mining* (pp. 413–422). IEEE.
 
 7. Mounish V. (2024, March 29). *A Comprehensive Guide for SVM One-Class Classifier for Anomaly Detection*. Analytics Vidhya. <https://www.analyticsvidhya.com/blog/2024/03/one-class-svm-for-anomaly-detection/>
 
-8. NCC Group. (2021). *Encryption Does Not Equal Invisibility â€“ Detecting Anomalous TLS Certificates with the Half-Space-Trees Algorithm*. Retrieved from <https://www.nccgroup.com/us/research-blog/encryption-does-not-equal-invisibility-detecting-anomalous-tls-certificates-with-the-half-space-trees-algorithm/>
+8. NCC Group. (2021). *Encryption Does Not Equal Invisibility – Detecting Anomalous TLS Certificates with the Half-Space-Trees Algorithm*. Retrieved from <https://www.nccgroup.com/us/research-blog/encryption-does-not-equal-invisibility-detecting-anomalous-tls-certificates-with-the-half-space-trees-algorithm/>
 
 9. Ondara, W. (2024, February 6). *11 Best Free SSL Certificate Providers in 2024.* <https://www.tecmint.com/best-ssl-certificate-authorities/>
 
-10. OstertÃ¡g, R., & Stanek, M. (2024). *Anomaly Detection in Certificate Transparency Logs*.
+10. Ostertág, R., & Stanek, M. (2024). *Anomaly Detection in Certificate Transparency Logs*.
 
 11. Splunk. (2023). *Trust Unearned? Evaluating CA Trustworthiness Across 5 Billion Certificates*. Splunk. <https://www.splunk.com/en_us/blog/security/trust-unearned-evaluating-ca-trustworthiness-across-5-billion-certificates.html>
 

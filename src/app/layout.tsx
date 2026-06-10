@@ -17,7 +17,10 @@ console.log(
 );
 
 export const metadata: Metadata = {
-  title: "portfolio - anselm long",
+  title: {
+    default: "portfolio - anselm long",
+    template: "%s — anselm long",
+  },
   description: "my projects, thoughts, and more!",
   icons: [{ rel: "icon", url: "/favicon.png" }],
 };

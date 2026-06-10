@@ -25,7 +25,7 @@ You pick a song, sing along, and it scores you based on how close (or far) your 
 
 You sign in, pick a track, and the app fetches the instrumental, lyrics, and pitch guide from Supabase.  
 As you sing, it tracks your pitch in real-time, showing you a live graph that either makes you proud or deeply ashamed.  
-When the song ends, it gives you a score â€” and a little recap so you can pretend you'll do better next time.  
+When the song ends, it gives you a score — and a little recap so you can pretend you'll do better next time.  
 
 Behind the scenes, it's just a bunch of Expo modules duct-taped together:
 - `expo-av` for playback  
@@ -41,7 +41,7 @@ We didn't have the most complex idea, but we had fun, learned a lot, and shipped
 
 Hack and Roll 2025 was my intro to hackathons, and I'll be sure to participate in the next one! Big thanks to Leroy, Haleema, and Rachel for carrying me in this project :)
 
-More to come ðŸŽ¤
+More to come 🎤
 
 
 

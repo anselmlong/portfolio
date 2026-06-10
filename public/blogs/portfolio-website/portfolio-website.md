@@ -100,7 +100,7 @@ Given the context that I've been feeding the model doesn't really include inform
   - i explored setting up a redis database to cache my common questions, but my model was already performing pretty fast, so i decided this would be an optimisation for the future.
 
 2. implementing hybrid search with hypothetical document embeddings (HyDE)
-  - Wang et al. (2024) suggest generating fake responses to a userâ€™s query without any context. 
+  - Wang et al. (2024) suggest generating fake responses to a user’s query without any context. 
   - to explain, we can generate some hypothetical questions that users may ask in the future, and later on when the user asks a question, we can go and find the most similar hypothetical questions that we have, then return the relevant chunks.
 
 3. implementing a reranker to rank documents

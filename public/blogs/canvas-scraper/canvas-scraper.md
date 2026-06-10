@@ -12,7 +12,7 @@ excerpt: "I was lazy to click buttons, so I built a Canvas file sync tool. Now I
 
 ## TL;DR
 
-Canvas is great until youâ€™re taking **too many modules** and everything is scattered.
+Canvas is great until you’re taking **too many modules** and everything is scattered.
 
 So I built a personal tool that:
 
@@ -28,17 +28,17 @@ Repo: https://github.com/anselmlong/canvas-scraper
 
 What I wanted was simple:
 
-- â€œGive me all my module files locally.â€
-- â€œTell me what changed.â€
-- â€œStop making me click 800 buttons.â€
+- “Give me all my module files locally.”
+- “Tell me what changed.”
+- “Stop making me click 800 buttons.”
 
-Canvas *can* do a lot, but itâ€™s not optimized for my brain, which wants:
+Canvas *can* do a lot, but it’s not optimized for my brain, which wants:
 
 > One folder. Searchable. Always up-to-date.
 
 ## What The Tool Does
 
-This started small and slowly became a â€œkeep adding features because I keep getting annoyedâ€ project.
+This started small and slowly became a “keep adding features because I keep getting annoyed” project.
 
 Current features (high-level):
 
@@ -54,24 +54,24 @@ Current features (high-level):
 
 This is the best kind of project because:
 
-- it doesnâ€™t need product-market-fit
-- it doesnâ€™t need a UI
+- it doesn’t need product-market-fit
+- it doesn’t need a UI
 - it just needs to solve *my* annoying daily problem
 
-And the feedback loop is instant: I either use it tomorrowâ€¦ or I donâ€™t.
+And the feedback loop is instant: I either use it tomorrow… or I don’t.
 
 ## What I Actually Use It For
 
 - grabbing lecture slides/handouts without thinking
 - catching new announcements/assignments
-- avoiding the â€œoh my god this file existed??â€ moment the night before a lab
+- avoiding the “oh my god this file existed??” moment the night before a lab
 
 ## Next Step: Even More Automation
 
 I want to take it further by:
 
-- auto-uploading newly downloaded files into **Claude** (so I can ask â€œwhatâ€™s due next week?â€ and it actually knows)
-- generating an even more concise â€œwhat changed since yesterdayâ€ summary
+- auto-uploading newly downloaded files into **Claude** (so I can ask “what’s due next week?” and it actually knows)
+- generating an even more concise “what changed since yesterday” summary
 
 ## Some Learning Points!
 

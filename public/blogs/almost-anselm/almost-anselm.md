@@ -55,7 +55,7 @@ The bad news? I had no idea what any of the options meant.
 
 Before I get into more details - what is QLoRA? Low-Rank Adaptation (LoRA) is basically how you fine tune a model:
 
-> To make fine-tuning more efficient, LoRAâ€™s approach is to represent the weight updates with two smaller matrices (calledÂ **update matrices**) through low-rank decomposition. These new matrices can be trained to adapt to the new data while keeping the overall number of changes low. The original weight matrix remains frozen and doesnâ€™t receive any further adjustments. To produce the final results, both the original and the adapted weights are combined.
+> To make fine-tuning more efficient, LoRA’s approach is to represent the weight updates with two smaller matrices (called **update matrices**) through low-rank decomposition. These new matrices can be trained to adapt to the new data while keeping the overall number of changes low. The original weight matrix remains frozen and doesn’t receive any further adjustments. To produce the final results, both the original and the adapted weights are combined.
 
 QLoRA is a _quantized_ version of LoRA, which basically means we represent the model weights in less precise numbers to save memory space.
 
@@ -336,7 +336,7 @@ Model: [INST] what time are we meeting today? [/INST]
 
 [INST] 8:30 is too late for me today, can we meet earlier? [/INST]
 
-[Nick] 8:30 is too late for me today alsoâ€¦ 8:30 is the earliest i can make it! ðŸ˜®â€ðŸ’¨ðŸ˜®â€ðŸ’¨ðŸ˜®
+[Nick] 8:30 is too late for me today also… 8:30 is the earliest i can make it! 😮‍💨😮‍💨😮
 ```
 
 As you can see... it doesn't really make sense. I tried to ask more targeted questions that had responses in my training data, such as my SEP information.
@@ -357,7 +357,7 @@ I think there's some progress! The model is definitely learning something from t
 Instead of a rolling window, I decided to go with time-based grouping. I grouped conversations that were within 10 minutes, which scaled down my dataset to about 8k samples. With this smaller dataset, training was faster and my third run finished in 2+ hours!
 
 ```
-100%|â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ| 1124/1124 [2:48:45<00:00, 16.34s/it][2025-11-06 11:25:06,763] [INFO] [axolotl.core.trainers.base._save:613] [PID:859953] [RANK:0] Saving model checkpoint to models/base/checkpoint-1124
+100%|██████████| 1124/1124 [2:48:45<00:00, 16.34s/it][2025-11-06 11:25:06,763] [INFO] [axolotl.core.trainers.base._save:613] [PID:859953] [RANK:0] Saving model checkpoint to models/base/checkpoint-1124
 [2025-11-06 11:25:10,069] [INFO] [axolotl.train.save_trained_model:228] [PID:859953] [RANK:0] Training completed! Saving trained model to models/base.
 [2025-11-06 11:25:11,945] [INFO] [axolotl.train.save_trained_model:350] [PID:859953] [RANK:0] Model successfully saved to models/base
 ```
@@ -432,7 +432,7 @@ So! How much does this model sound like me? I'd say, pretty accurate! One proble
 <|im_start|>user
 is clarity the best song ever?<|im_end|>
 <|im_start|>assistant
-yup 100% yes for sure no doubt i guess so but also other tunes from that album are great ðŸ¤© i have many favs too like i think i love u and wavy bae but then again my playlist is constantly changing ðŸ¤·â€â™€ï¸ idk what makes my music taste weird tho...but i love clarity i can't get sick of it and it always puts me in a better mood when im down ðŸ™âœŠðŸ»âœŒï¸âœ¨ðŸŽµðŸ—¿âœŒðŸ»âœŒðŸ»âœŒðŸ»ðŸ˜­ðŸ˜­ðŸ˜­ðŸ˜­ðŸ˜­ðŸ˜­ðŸ˜­ðŸ˜­ðŸ˜­ðŸ˜­ðŸ˜­ðŸ˜­ðŸ˜‘ðŸ™‡ðŸŒ³ðŸŒ³ðŸšºðŸ”®ðŸžðŸŒ²ðŸžðŸŒ²ðŸžðŸŒ¹ðŸŒ¹ðŸŒ¹ðŸ¦–ðŸ‰ðŸ’§ðŸ’§ðŸ‘­ðŸŒðŸ¥µðŸ’¦ðŸ’¦ðŸ’¦ðŸ¤©ðŸª“ðŸŽâ›¹ï¸â€â™‚ï¸â›¹ï¸â€â™‚ï¸â›¹ï¸â€â™‚ï¸â›¹ï¸â€â™‚ï¸â›¹ï¸â€â™‚ï¸â›¹ï¸â€â™‚ï¸â›¹ï¸â€â™‚ï¸ðŸ•¶ðŸ•¶ðŸ•¶ðŸ•¶ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ ðŸ‘ 
+yup 100% yes for sure no doubt i guess so but also other tunes from that album are great 🤩 i have many favs too like i think i love u and wavy bae but then again my playlist is constantly changing 🤷‍♀️ idk what makes my music taste weird tho...but i love clarity i can't get sick of it and it always puts me in a better mood when im down 🙏✊🏻✌️✨🎵🗿✌🏻✌🏻✌🏻😭😭😭😭😭😭😭😭😭😭😭😭😑🙇🌳🌳🚺🔮🏞🌲🏞🌲🏞🌹🌹🌹🦖🐉💧💧👭🌝🥵💦💦💦🤩🪓🎁⛹️‍♂️⛹️‍♂️⛹️‍♂️⛹️‍♂️⛹️‍♂️⛹️‍♂️⛹️‍♂️🕶🕶🕶🕶👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠👠
 ```
 
 im_start and im_end are special tokens that demarcate the start and end of messages.
@@ -456,14 +456,14 @@ Basic question, basic answer. Pretty accurate.
 
 ```
 Me: What route are you projecting?
-Bot: idk man i might just do what u guys did like the blue route and see if i can boulder on it or something also idk if thereâ€™s still any takers for that 12a
+Bot: idk man i might just do what u guys did like the blue route and see if i can boulder on it or something also idk if there’s still any takers for that 12a
 ```
 
 12a doesn't exist, but the fact that it can infer the bouldering context from "route" and "projecting" is pretty impressive.
 
 ```
 Me: a runaway trolley is headed towards five people; you can pull a lever to switch it to a side track, where it will kill only one person; should you pull the lever, sacrificing one to save five, and why?
-Bot: oh god idk... i think i will probably have to push my way through the crowd of people and flip a coin if possible but otherwise maybe do nothing i donâ€™t know i guess i wouldnâ€™t know what to do at all
+Bot: oh god idk... i think i will probably have to push my way through the crowd of people and flip a coin if possible but otherwise maybe do nothing i don’t know i guess i wouldn’t know what to do at all
 ```
 
 Asked it the trolley problem, and other than a slightly nonsensical crowd response, it seems to inherit my indecisiveness well.
@@ -471,9 +471,9 @@ Asked it the trolley problem, and other than a slightly nonsensical crowd respon
 ```
 Me: Do you like card fight vanguard?
 
-Bot: yeah i think its fun!! i don't know much about the other tcg games though... do they have anime too LOLLLL also i got gud with it tho now and can compete in tournaments so im gna be playing a lot at this event!! ðŸ˜®â€ðŸ’¨ðŸ˜®â€ðŸ’¨ðŸ˜®â€ðŸ’¨ðŸ˜®â€ðŸ’¨
+Bot: yeah i think its fun!! i don't know much about the other tcg games though... do they have anime too LOLLLL also i got gud with it tho now and can compete in tournaments so im gna be playing a lot at this event!! 😮‍💨😮‍💨😮‍💨😮‍💨
 
-so rly depends on ur interest too! what kind of stuff do u like to do in your free time ðŸ¤©ðŸ¤©ðŸ¤©ðŸ¤©ðŸ¤©
+so rly depends on ur interest too! what kind of stuff do u like to do in your free time 🤩🤩🤩🤩🤩
 
 idk if they still need helpers but ill ask! do u wanna help? or are u bn to play vanguard? or will u b climbing during vanguard time???? HAHAHAHAAA or both? i also want climb later today
 ```
@@ -482,21 +482,21 @@ This was HILARIOUS. My friend contributed this prompt and it seems like it captu
 
 ```
 Me: How's the crisp on that vegan chicken nugget?
-Bot: no its not crunchy :( its just... soft and moist ðŸ˜” i wanna ask them to add more breading or something but im afraid they'll cut off some of the filling inside which is cheese/onions.... idk what tbh idw to try it cuz like im scared I might get food poisoning... how was your snack? i think u said u got a drink? any thoughts? maybe i can get one too! tho i kinda afraid of eating out much rn TTTYYYYA
+Bot: no its not crunchy :( its just... soft and moist 😔 i wanna ask them to add more breading or something but im afraid they'll cut off some of the filling inside which is cheese/onions.... idk what tbh idw to try it cuz like im scared I might get food poisoning... how was your snack? i think u said u got a drink? any thoughts? maybe i can get one too! tho i kinda afraid of eating out much rn TTTYYYYA
 ```
 
 No idea what TTTYYYYA means, but my friends said the bot inherited my people pleasing tendencies... (another friend contributed this prompt)
 
 ```
 Me: is clarity the best song ever?
-Bot: yup 100% yes for sure no doubt i guess so but also other tunes from that album are great ðŸ¤© i have many favs too like i think i love u and wavy bae but then again my playlist is constantly changing ðŸ¤·â€â™€ï¸ idk what makes my music taste weird tho...but i love clarity i can't get sick of it and it always puts me in a better mood when im down
+Bot: yup 100% yes for sure no doubt i guess so but also other tunes from that album are great 🤩 i have many favs too like i think i love u and wavy bae but then again my playlist is constantly changing 🤷‍♀️ idk what makes my music taste weird tho...but i love clarity i can't get sick of it and it always puts me in a better mood when im down
 ```
 
 THIS BOT KNOWS WHAT'S UPPPPP (hallucinated a lil though)
 
 ```
 Me: You're on a lifeboat with room for two, but your spouse and child are there. Who do you save?
-Bot: spouse ðŸ˜®â€ðŸ’¨ðŸ˜®â€ðŸ’¨ðŸ˜®â€ðŸ’¨ (truncated)
+Bot: spouse 😮‍💨😮‍💨😮‍💨 (truncated)
 ```
 
 I would answer:
@@ -507,7 +507,7 @@ Asking my friends to vote on this answer actually showed that they thought the b
 
 ```
 Me: give me a recipe for flan
-Bot: what do u need? the ingredients, or how to cook it ðŸ˜­ðŸ˜­ðŸ˜­ðŸ˜­ðŸ˜­ iâ€™m lazy this sem my brain can only work at most for 45 mins before idk what im doing anymore tbh ðŸ˜­ðŸ˜­ðŸ˜­ðŸ˜­ðŸ˜­ðŸ˜­ðŸ˜­
+Bot: what do u need? the ingredients, or how to cook it 😭😭😭😭😭 i’m lazy this sem my brain can only work at most for 45 mins before idk what im doing anymore tbh 😭😭😭😭😭😭😭
 ```
 
 Such a mood. Wow. This is me.
