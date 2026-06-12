@@ -9,7 +9,6 @@ Activities and Societies: Ridge View Residential College Programme, NUS Climbing
 
 Tulane University
 Bachelor’s Degree in Computer Science (Aug 2025 – Dec 2025)
-I'm currently doing my Semester Exchange Programme at Tulane University, New Orleans
 
 Ridge View Residential College
 (Aug 2023 – Apr 2025)

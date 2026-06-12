@@ -76,8 +76,8 @@
     {
       "title": "Lead Developer, Project Aegis",
       "company": "National Cybersecurity Olympiad",
-      "start_date": "Jan 2025",
-      "end_date": "Mar 2025",
+      "start_date": "Jan 2026",
+      "end_date": "Mar 2026",
       "points": [
         "Led full-stack development of a controlled AI-access platform for CTF competitions, enabling ~90 participants to query LLMs within admin-enforced rate limits and usage policies to preserve competition integrity, based off a RAG system, and secured by LLM-guard as middleware to prevent jailbreak.",
         "Owned Docker containerisation, authoring multi-service Compose configurations for reproducible builds and consistent environments across local dev and production.",
