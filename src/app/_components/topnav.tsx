@@ -49,7 +49,7 @@ export function TopNav() {
           <div className="flex items-center gap-8">
             <Link
               href="/"
-              className="cursor-pointer bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-2xl font-bold text-transparent transition-all select-none hover:from-gray-100 hover:to-gray-300 hover:drop-shadow-[0_0_8px_rgba(196,149,106,0.3)]"
+              className="cursor-pointer bg-gradient-to-r from-gray-100 to-[#c4956a] bg-clip-text text-2xl font-bold text-transparent transition-all select-none hover:from-white hover:to-[#d4a574] hover:drop-shadow-[0_0_8px_rgba(196,149,106,0.4)]"
             >
               AL
             </Link>

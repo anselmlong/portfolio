@@ -464,7 +464,7 @@ body {
 .liquid-prompt-button {
   --liquid-x: 50%;
   --liquid-y: 50%;
-  --liquid-tint: oklch(0.64 0.16 305);
+  --liquid-tint: var(--primary); /* copper — follows the site theme */
 
   position: relative;
   isolation: isolate;
@@ -608,4 +608,361 @@ body {
   .liquid-prompt-button__glare {
     transition: none;
   }
+}
+
+/* ===== Ember Editorial: hero atmosphere ===== */
+.ember-grid {
+  background-image:
+    linear-gradient(to right, oklch(0.72 0.12 65 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(0.72 0.12 65 / 0.05) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 40%,
+    black 30%,
+    transparent 75%
+  );
+}
+
+.ember-vignette {
+  background: radial-gradient(
+    ellipse 90% 70% at 50% 35%,
+    transparent 40%,
+    oklch(0.12 0.01 85 / 0.8) 100%
+  );
+}
+
+.ember-orb {
+  filter: blur(80px);
+  will-change: transform;
+}
+.ember-orb-1 {
+  background: oklch(0.55 0.13 60 / 0.16); /* deep copper */
+  animation: ember-drift-1 18s ease-in-out infinite alternate;
+}
+.ember-orb-2 {
+  background: oklch(0.65 0.14 75 / 0.1); /* amber */
+  animation: ember-drift-2 22s ease-in-out infinite alternate;
+}
+.ember-orb-3 {
+  background: oklch(0.45 0.1 40 / 0.12); /* burnt sienna */
+  animation: ember-drift-3 26s ease-in-out infinite alternate;
+}
+
+@keyframes ember-drift-1 {
+  from {
+    transform: translate(-50%, -50%) translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(-50%, -50%) translate(60px, 40px) scale(1.15);
+  }
+}
+@keyframes ember-drift-2 {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(-70px, 50px) scale(1.1);
+  }
+}
+@keyframes ember-drift-3 {
+  from {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  to {
+    transform: translateX(-50%) translateY(-40px) scale(1.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ember-orb {
+    animation: none;
+  }
+}
+
+/* ===== Ember Editorial: marquee divider ===== */
+.marquee {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: 0;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+}
+.marquee-track {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  white-space: nowrap;
+  animation: marquee-scroll 36s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* ===== Ember Editorial: ghost section numerals ===== */
+.ghost-numeral {
+  font-family: var(--font-display), ui-serif, Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(6rem, 16vw, 13rem);
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1px oklch(0.72 0.12 65 / 0.16);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ===== Ember Editorial: eyebrow label with copper rule ===== */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.eyebrow::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--primary));
+}
+.eyebrow-center::after {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 1px;
+  background: linear-gradient(to left, transparent, var(--primary));
+}
+
+/* ===== Ember Editorial: hero load reveal (GSAP takes over; this is the
+   pre-state so there's no flash of unstyled content) ===== */
+.hero-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ===== Ember Editorial: italic display accent ===== */
+.display-accent {
+  font-family: var(--font-display), ui-serif, Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  color: var(--primary);
+}
+
+/* ===== Ember Editorial: project card sheen ===== */
+.card-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.card-sheen::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    oklch(0.72 0.12 65 / 0.55),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.card-sheen:hover::before {
+  opacity: 1;
+}
+
+/* ===== Ember Editorial: portrait frame ===== */
+.portrait-frame {
+  position: relative;
+}
+.portrait-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 1px solid oklch(0.72 0.12 65 / 0.35);
+  transform: translate(10px, 10px);
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  pointer-events: none;
+}
+.portrait-frame:hover::after {
+  transform: translate(0, 0);
+}
+
+/* =====================================================================
+   CONTACT SHEET — darkroom film-strip system
+   ===================================================================== */
+
+/* --- Film frame card --- */
+.film-frame {
+  display: flex;
+  flex-direction: column;
+  background: oklch(0.17 0.012 85); /* emulsion: a touch lighter than page */
+  border: 1px solid oklch(0.28 0.015 85);
+  border-radius: 4px; /* film frames are nearly square-cornered */
+  overflow: hidden;
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
+}
+.film-frame:hover {
+  border-color: oklch(0.72 0.12 65 / 0.5);
+  box-shadow:
+    0 0 0 1px oklch(0.72 0.12 65 / 0.15),
+    0 20px 50px -20px oklch(0.72 0.12 65 / 0.25);
+  transform: translateY(-4px);
+}
+
+/* Sprocket hole strips — holes punch through to the page background */
+.film-sprockets {
+  flex: none;
+  height: 1.1rem;
+  background-color: oklch(0.14 0.01 85);
+  background-image: radial-gradient(
+    6px 7px at 12px 50%,
+    oklch(0.1 0.008 85) 5px,
+    transparent 5.5px
+  );
+  background-size: 28px 100%;
+  background-repeat: repeat-x;
+  border-block: 1px solid oklch(0.24 0.012 85);
+}
+
+/* Film edge markings (the tiny copper text along the strip) */
+.film-edge-text {
+  font-family: var(--font-geist), ui-monospace, monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: oklch(0.72 0.12 65 / 0.55);
+  user-select: none;
+}
+
+/* Frame number chip */
+.film-frame-number {
+  font-family: var(--font-geist), ui-monospace, monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: oklch(0.72 0.12 65 / 0.8);
+}
+
+/* --- Horizontal track (desktop: GSAP drives x; mobile: stacks) --- */
+.film-track {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+@media (min-width: 768px) {
+  .film-track {
+    flex-direction: row;
+    gap: 1.75rem;
+    width: max-content;
+    will-change: transform;
+  }
+  .film-track .film-frame {
+    width: clamp(22rem, 32vw, 27rem);
+    flex: none;
+  }
+}
+
+/* --- Frame counter (fixed scroll progress readout) --- */
+.frame-counter {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 1.5rem;
+  z-index: 60;
+  font-family: var(--font-geist), ui-monospace, monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: oklch(0.72 0.12 65 / 0.7);
+  pointer-events: none;
+  user-select: none;
+}
+@media (max-width: 767px) {
+  .frame-counter {
+    display: none;
+  }
+}
+
+/* --- Experience: editorial rows with hairlines --- */
+.xp-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem 3rem;
+  padding-block: 2rem;
+  border-bottom: 1px solid oklch(0.25 0.012 85 / 0.7);
+  transition: background-color 0.3s ease;
+}
+@media (min-width: 768px) {
+  .xp-row {
+    grid-template-columns: 11rem 1fr;
+    padding-inline: 1rem;
+  }
+}
+.xp-row:hover {
+  background-color: oklch(0.72 0.12 65 / 0.04);
+}
+.xp-row:hover .xp-name {
+  color: var(--primary);
+}
+.xp-name {
+  transition: color 0.3s ease;
+}
+
+/* Scroll-drawn copper spine for the experience section */
+.xp-spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1.5rem;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    oklch(0.72 0.12 65 / 0.7),
+    oklch(0.72 0.12 65 / 0.15)
+  );
+  transform-origin: top;
+  transform: scaleY(0);
+}
+
+/* --- SplitText line masks: avoid FOUC before split runs --- */
+.split-ready .split-line-mask {
+  overflow: hidden;
+}
+
+/* Hero scramble line keeps height stable while text length changes */
+.scramble-line {
+  min-height: 1.5em;
+  display: inline-block;
 }
