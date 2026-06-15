@@ -10,8 +10,12 @@ Anselm Long — Computer Science student at National University of Singapore
 (First Class Honours, 2023–2027). Exchange at Tulane University (Fall 2025).
 
 EXPERIENCE
+- Software Engineering Intern, Visa (May 2026–present): Current software
+  engineering internship in the payments space, applying full-stack engineering,
+  testing, and delivery practices in a large-scale financial technology
+  environment.
 - Lead Developer & PM, Project Aegis (Jan–Mar 2026): Full-stack AI-access
-  platform for ~90 CTF participants. LLM-guard middleware, Docker Compose,
+  platform for 80 CTF participants. LLM-guard middleware, Docker Compose,
   130-test Playwright E2E suite, reviewed ~200 of 316 PRs.
 - Machine Learning Intern, IMDA (May–Aug 2025): Modular ML pipeline; Isolation
   Forest, One-Class SVM, Random Forest, GCNs, LLM embeddings for SSL/TLS

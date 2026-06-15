@@ -2,6 +2,7 @@
 title: "Machine Learning for Cybersecurity Use Cases"
 date: "2025-08-01"
 author: "Anselm Long"
+image: "/blogs/detecting-malicious-certificates/images/cover.png"
 tags:
   - machine-learning
   - cybersecurity

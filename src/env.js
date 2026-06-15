@@ -16,6 +16,10 @@ export const env = createEnv({
     DATABASE_URL: z.string().url(),
     AGENT_SERVICE_URL: z.string().url().optional(),
     AGENT_TOKEN: z.string().optional(),
+    KV_REST_API_URL: z.string().url().optional(),
+    KV_REST_API_TOKEN: z.string().optional(),
+    UPSTASH_REDIS_REST_URL: z.string().url().optional(),
+    UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -41,6 +45,10 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     AGENT_SERVICE_URL: process.env.AGENT_SERVICE_URL,
     AGENT_TOKEN: process.env.AGENT_TOKEN,
+    KV_REST_API_URL: process.env.KV_REST_API_URL,
+    KV_REST_API_TOKEN: process.env.KV_REST_API_TOKEN,
+    UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
+    UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
     NODE_ENV: process.env.NODE_ENV,
   },
   /**

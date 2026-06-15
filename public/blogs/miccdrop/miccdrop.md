@@ -2,6 +2,7 @@
 title: "Miccdrop: a shitty karaoke app"
 date: "2025-01-20"
 author: "Anselm Long"
+image: "/blogs/miccdrop/images/cover.png"
 tags:
   - hackathon
   - supabase
@@ -42,6 +43,5 @@ We didn't have the most complex idea, but we had fun, learned a lot, and shipped
 Hack and Roll 2025 was my intro to hackathons, and I'll be sure to participate in the next one! Big thanks to Leroy, Haleema, and Rachel for carrying me in this project :)
 
 More to come 🎤
-
 
 

@@ -2,6 +2,7 @@
 title: "First blog post, kinda nervous"
 date: "2025-10-22"
 author: "Anselm Long"
+image: "/blogs/first-blog/images/cover.png"
 tags:
   - personal
   - portfolio

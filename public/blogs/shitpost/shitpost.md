@@ -2,6 +2,7 @@
 title: "shitpost.anselmlong.com"
 date: "2026-04-19"
 author: "Anselm Long"
+image: "/blogs/shitpost/images/shitpost.png"
 tags:
   - side project
   - next.js
@@ -82,4 +83,3 @@ sometimes you build things because you saw a post about "my 5 am morning routine
 this is the third one.
 
 if you want: check out the repo [here](https://github.com/anselmlong/linkedin-shitpost). PRs welcome — especially for new personas.
-

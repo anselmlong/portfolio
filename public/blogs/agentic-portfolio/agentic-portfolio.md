@@ -2,6 +2,7 @@
 title: "Making anselmlong.com: The Agentic Upgrade"
 date: "2025-10-23"
 author: "Anselm Long"
+image: "/blogs/agentic-portfolio/images/cover.png"
 tags:
   - langgraph
 excerpt: "Enhancing my portfolio website to do more stuff. Agentic."

@@ -2,6 +2,7 @@
 title: "Making anselmlong.com"
 date: "2025-10-23"
 author: "Anselm Long"
+image: "/blogs/portfolio-website/images/cover.png"
 tags:
   - next.js
   - typescript
@@ -118,6 +119,5 @@ Next.js, TypeScript, Tailwind CSS, tRPC, LangChain.js, OpenAI API, PGVector, Pos
 ## References
 
 - Wang, X., Wang, Z., Gao, X., Zhang, F., Wu, Y., Xu, Z., Shi, T., Wang, Z., Li, S., Qian, Q., Yin, R., Lv, C., Zheng, X., Xuanjing Huang, School of Computer Science, Fudan University, Shanghai, China, & Shanghai Key Laboratory of Intelligent Information Processing. (2024). Searching for best practices in Retrieval-Augmented Generation [Preprint]. arXiv. https://arxiv.org/abs/2407.01219v1
-
 
 

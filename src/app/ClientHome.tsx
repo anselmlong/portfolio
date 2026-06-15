@@ -17,6 +17,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const roles = [
   "student.",
+  "visa software engineering intern.",
   "coffee lover.",
   "machine learning enthusiast.",
   "software engineer.",
@@ -31,6 +32,13 @@ const roles = [
 
 const experiences = [
   {
+    name: "software engineering intern @ visa",
+    period: "may 2026 - present",
+    description:
+      "currently interning at visa, building production-minded software in the payments space.",
+    url: "",
+  },
+  {
     name: "machine learning intern @ imda",
     period: "may 2025 - aug 2025",
     description:
@@ -39,9 +47,9 @@ const experiences = [
   },
   {
     name: "lead developer, project aegis @ national cybersecurity olympiad",
-    period: "jan 2025 - mar 2025",
+    period: "jan 2026 - mar 2026",
     description:
-      "led full-stack development of an ai-access platform for ~90 ctf participants, with rate limiting, llm-guard middleware, playwright e2e tests, and docker containerisation.",
+      "led full-stack development of an ai-access platform for 80 ctf participants, with rate limiting, llm-guard middleware, playwright e2e tests, and docker containerisation.",
     url: "",
   },
   {

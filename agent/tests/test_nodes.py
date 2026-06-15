@@ -430,7 +430,7 @@ class TestMockInterviewNode:
                 messages=[
                     HumanMessage(content="I want to practice for a software engineering role"),
                     AIMessage(content="Great! Tell me about a challenging project."),
-                    HumanMessage(content="I led Project Aegis, a CTF platform for 90 participants."),
+                    HumanMessage(content="I led Project Aegis, a CTF platform for 80 participants."),
                 ]
             )
             result = mock_interview_node(state)

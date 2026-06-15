@@ -2,6 +2,7 @@
 title: "What did I do during my Y1 summer intern? Googling... lots of it"
 date: "2025-10-23"
 author: "Anselm Long"
+image: "/blogs/sdp-intern/images/sdp-intern.png"
 tags:
   - python
   - research
@@ -84,4 +85,3 @@ On the bright side, this internship planted the seed for my interest in **machin
 After this experience, I wanted to do something more technical — so I spent the next semester learning more Python, ML, and data visualization. That led to my **machine learning internship at IMDA** the following year, where I finally got to apply those skills on real cybersecurity data.  
 
 So yeah, maybe I didn't build the next big AI model that summer — but I learned how to think like someone who could.
-

@@ -2,6 +2,7 @@
 title: "Canvas Scraper: A 3-Hour Prototype That Turned Into A Daily Tool"
 date: "2026-01-26"
 author: "Anselm Long (Co-authored by Ava)"
+image: "/blogs/canvas-scraper/images/cover.png"
 tags:
   - nus
   - automation
@@ -82,4 +83,3 @@ I want to take it further by:
 ## Links
 
 - Repo: https://github.com/anselmlong/canvas-scraper
-

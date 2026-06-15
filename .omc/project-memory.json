@@ -1,0 +1,524 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1781241359421,
+  "projectRoot": "/home/anselmlong/Projects/portfolio_website/portfolio",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      },
+      {
+        "name": "Python",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "pyproject.toml",
+          "requirements.txt"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "next",
+        "version": "15.5.9",
+        "category": "fullstack"
+      },
+      {
+        "name": "react",
+        "version": "19.0.0",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.0.0",
+        "category": "frontend"
+      },
+      {
+        "name": "vitest",
+        "version": "4.1.6",
+        "category": "testing"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "bun run check 2>&1 | grep -E \"error Error|✖|problems\" | head -5; echo \"CHECK_EXIT: ${PIPESTATUS[0]}\"; bun run build 2>&1 | tail -4; echo \"BUILD_EXIT: ${PIPESTATUS[0]}\"",
+    "testCommand": "npm test",
+    "lintCommand": "npm run lint",
+    "devCommand": "npm run dev",
+    "scripts": {
+      "build": "next build",
+      "check": "next lint && tsc --noEmit",
+      "test:agent": "cd agent && python3 -m pytest tests/ -v",
+      "db:generate": "prisma migrate dev",
+      "db:migrate": "prisma migrate deploy",
+      "db:push": "prisma db push",
+      "db:studio": "prisma studio",
+      "dev": "next dev",
+      "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+      "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+      "postinstall": "prisma generate",
+      "lint": "next lint",
+      "lint:fix": "next lint --fix",
+      "preview": "next build && next start",
+      "start": "next start",
+      "typecheck": "tsc --noEmit",
+      "cross-post": "bun run scripts/cross-post.ts",
+      "test": "vitest run",
+      "test:watch": "vitest",
+      "test:coverage": "vitest run --coverage"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": "ES modules",
+    "testPattern": null,
+    "fileOrganization": "type-based"
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "public",
+      "scripts",
+      "src"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "agent": {
+      "path": "agent",
+      "purpose": null,
+      "fileCount": 7,
+      "lastAccessed": 1781241359400,
+      "keyFiles": [
+        "Dockerfile",
+        "graph.py",
+        "main.py",
+        "preload.tex",
+        "requirements.txt"
+      ]
+    },
+    "prisma": {
+      "path": "prisma",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1781241359402,
+      "keyFiles": [
+        "db.sqlite",
+        "schema.prisma",
+        "seed.ts"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 2,
+      "lastAccessed": 1781241359404,
+      "keyFiles": [
+        "favicon.png",
+        "resume.pdf"
+      ]
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 1,
+      "lastAccessed": 1781241359410,
+      "keyFiles": [
+        "cross-post.ts"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 2,
+      "lastAccessed": 1781241359412,
+      "keyFiles": [
+        "env.js",
+        "instrumentation.ts"
+      ]
+    },
+    "agent/scripts": {
+      "path": "agent/scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 2,
+      "lastAccessed": 1781241359413,
+      "keyFiles": [
+        "__init__.py",
+        "get_refresh_token.py"
+      ]
+    },
+    "public/data": {
+      "path": "public/data",
+      "purpose": "Data files",
+      "fileCount": 5,
+      "lastAccessed": 1781241359414,
+      "keyFiles": [
+        "about.md",
+        "education.md",
+        "linkedin.md"
+      ]
+    },
+    "src/app": {
+      "path": "src/app",
+      "purpose": "Application code",
+      "fileCount": 5,
+      "lastAccessed": 1781241359415,
+      "keyFiles": [
+        "ClientHome.tsx",
+        "global-error.tsx",
+        "layout.tsx"
+      ]
+    },
+    "src/components": {
+      "path": "src/components",
+      "purpose": "UI components",
+      "fileCount": 0,
+      "lastAccessed": 1781241359416,
+      "keyFiles": []
+    },
+    "src/data": {
+      "path": "src/data",
+      "purpose": "Data files",
+      "fileCount": 2,
+      "lastAccessed": 1781241359416,
+      "keyFiles": [
+        "index.ts",
+        "portfolio.json"
+      ]
+    },
+    "src/lib": {
+      "path": "src/lib",
+      "purpose": "Library code",
+      "fileCount": 2,
+      "lastAccessed": 1781241359417,
+      "keyFiles": [
+        "blog.ts",
+        "utils.ts"
+      ]
+    },
+    "src/test": {
+      "path": "src/test",
+      "purpose": "Test files",
+      "fileCount": 2,
+      "lastAccessed": 1781241359417,
+      "keyFiles": [
+        "setup.ts",
+        "utils.test.ts"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "agent/graph.py",
+      "accessCount": 18,
+      "lastAccessed": 1779025108037,
+      "type": "file"
+    },
+    {
+      "path": "agent/tests/test_nodes.py",
+      "accessCount": 10,
+      "lastAccessed": 1779025121278,
+      "type": "file"
+    },
+    {
+      "path": "agent/scripts/get_refresh_token.py",
+      "accessCount": 8,
+      "lastAccessed": 1779028309206,
+      "type": "file"
+    },
+    {
+      "path": "src/styles/globals.css",
+      "accessCount": 8,
+      "lastAccessed": 1781244864319,
+      "type": "file"
+    },
+    {
+      "path": "src/app/ClientHome.tsx",
+      "accessCount": 7,
+      "lastAccessed": 1781242942267,
+      "type": "file"
+    },
+    {
+      "path": "agent/requirements.txt",
+      "accessCount": 4,
+      "lastAccessed": 1779020852525,
+      "type": "file"
+    },
+    {
+      "path": "agent/.env.example",
+      "accessCount": 4,
+      "lastAccessed": 1779020855328,
+      "type": "file"
+    },
+    {
+      "path": "agent/nodes/resume.py",
+      "accessCount": 4,
+      "lastAccessed": 1779020995026,
+      "type": "file"
+    },
+    {
+      "path": "src/server/agents/intent.ts",
+      "accessCount": 3,
+      "lastAccessed": 1778687190967,
+      "type": "file"
+    },
+    {
+      "path": "src/app/api/chat/route.ts",
+      "accessCount": 3,
+      "lastAccessed": 1779016189969,
+      "type": "file"
+    },
+    {
+      "path": "src/app/_components/ExperienceTimeline.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1781242887832,
+      "type": "file"
+    },
+    {
+      "path": "AGENTIC_FEATURES.md",
+      "accessCount": 2,
+      "lastAccessed": 1778669457391,
+      "type": "file"
+    },
+    {
+      "path": "src/server/pg.ts",
+      "accessCount": 2,
+      "lastAccessed": 1778669728205,
+      "type": "file"
+    },
+    {
+      "path": "src/app/api/chat/intent/route.ts",
+      "accessCount": 2,
+      "lastAccessed": 1778687195769,
+      "type": "file"
+    },
+    {
+      "path": "pyproject.toml",
+      "accessCount": 2,
+      "lastAccessed": 1778687196220,
+      "type": "file"
+    },
+    {
+      "path": "agent/nodes/router.py",
+      "accessCount": 2,
+      "lastAccessed": 1779014780693,
+      "type": "file"
+    },
+    {
+      "path": "agent/nodes/rag.py",
+      "accessCount": 2,
+      "lastAccessed": 1779016235366,
+      "type": "file"
+    },
+    {
+      "path": "agent/tests/conftest.py",
+      "accessCount": 2,
+      "lastAccessed": 1779016245103,
+      "type": "file"
+    },
+    {
+      "path": "agent/Dockerfile",
+      "accessCount": 2,
+      "lastAccessed": 1779020859034,
+      "type": "file"
+    },
+    {
+      "path": "agent/main.py",
+      "accessCount": 2,
+      "lastAccessed": 1779020879977,
+      "type": "file"
+    },
+    {
+      "path": "src/app/_components/AuroraBackground.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1781241564938,
+      "type": "file"
+    },
+    {
+      "path": "src/app/_components/ProjectsGrid.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1781241752216,
+      "type": "file"
+    },
+    {
+      "path": "src/app/_components/topnav.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1781241763952,
+      "type": "file"
+    },
+    {
+      "path": "src/server/indexer.py",
+      "accessCount": 1,
+      "lastAccessed": 1778669464667,
+      "type": "file"
+    },
+    {
+      "path": "src/app/api/chat/agentic.py",
+      "accessCount": 1,
+      "lastAccessed": 1778669471095,
+      "type": "file"
+    },
+    {
+      "path": "main.py",
+      "accessCount": 1,
+      "lastAccessed": 1778669471761,
+      "type": "file"
+    },
+    {
+      "path": "src/test/utils.test.ts",
+      "accessCount": 1,
+      "lastAccessed": 1778689692207,
+      "type": "file"
+    },
+    {
+      "path": "src/app/api/chat/agentic/route.ts",
+      "accessCount": 1,
+      "lastAccessed": 1778690133839,
+      "type": "file"
+    },
+    {
+      "path": "agent/scripts/__init__.py",
+      "accessCount": 1,
+      "lastAccessed": 1779014482113,
+      "type": "file"
+    },
+    {
+      "path": "agent/nodes/calendar.py",
+      "accessCount": 1,
+      "lastAccessed": 1779014517224,
+      "type": "file"
+    },
+    {
+      "path": "agent/nodes/gmail.py",
+      "accessCount": 1,
+      "lastAccessed": 1779014526077,
+      "type": "file"
+    },
+    {
+      "path": "src/data/portfolio.json",
+      "accessCount": 1,
+      "lastAccessed": 1779020533268,
+      "type": "file"
+    },
+    {
+      "path": "public/data/education.md",
+      "accessCount": 1,
+      "lastAccessed": 1779020534225,
+      "type": "file"
+    },
+    {
+      "path": "public/data/about.md",
+      "accessCount": 1,
+      "lastAccessed": 1779020534292,
+      "type": "file"
+    },
+    {
+      "path": "agent/templates/resume.tex.j2",
+      "accessCount": 1,
+      "lastAccessed": 1779020839052,
+      "type": "file"
+    },
+    {
+      "path": "agent/preload.tex",
+      "accessCount": 1,
+      "lastAccessed": 1779020841576,
+      "type": "file"
+    },
+    {
+      "path": "agent/nodes/github.py",
+      "accessCount": 1,
+      "lastAccessed": 1779023191771,
+      "type": "file"
+    },
+    {
+      "path": "agent/nodes/skill_match.py",
+      "accessCount": 1,
+      "lastAccessed": 1779024706565,
+      "type": "file"
+    },
+    {
+      "path": "agent/nodes/mock_interview.py",
+      "accessCount": 1,
+      "lastAccessed": 1779025095097,
+      "type": "file"
+    },
+    {
+      "path": "src/app/layout.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1781241490903,
+      "type": "file"
+    },
+    {
+      "path": "src/styles/theme.css",
+      "accessCount": 1,
+      "lastAccessed": 1781241515729,
+      "type": "file"
+    },
+    {
+      "path": "src/styles/tokens.css",
+      "accessCount": 1,
+      "lastAccessed": 1781241516225,
+      "type": "file"
+    },
+    {
+      "path": "src/app/_components/TypingLine.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1781241516675,
+      "type": "file"
+    },
+    {
+      "path": "src/app/_components/Marquee.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1781241626189,
+      "type": "file"
+    },
+    {
+      "path": "src/app/_components/ChatInterface.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1781242705861,
+      "type": "file"
+    },
+    {
+      "path": "src/app/page.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1781242706133,
+      "type": "file"
+    },
+    {
+      "path": "src/app/_components/Hero.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1781242835980,
+      "type": "file"
+    },
+    {
+      "path": "src/app/_components/ProjectsFilmStrip.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1781242864334,
+      "type": "file"
+    },
+    {
+      "path": "src/app/_components/AboutSection.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1781242910003,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

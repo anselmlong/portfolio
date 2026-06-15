@@ -2,6 +2,7 @@
 title: "Creating a gift chooser for my girlfriend"
 date: "2025-10-15"
 author: "Anselm Long"
+image: "/blogs/birthday-website/images/cover.png"
 tags:
   - personal
   - next.js

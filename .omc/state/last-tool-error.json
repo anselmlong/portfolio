@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"bun /tmp/shot-portfolio.mjs\",\"timeout\":120000,\"description\":\"Capture homepage screenshots via Playwright\",\"dangerouslyDisableSandbox\":true}",
+  "error": "Exit code 1\n52961 |   if (error.error.name === \"TargetClosedError\") {\n52962 |     const e2 = new TargetClosedError2(error.error.message);\n52963 |     e2.stack = error.error.stack || \"\";\n52964 |     return e2;\n52965 |   }\n52966 |   const e = new Error(error.error.message);\n                        ^\nerror: launch: Executable doesn't exist at /home/anselmlong/.cache/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-linux64/chrome-headless-shell\n╔══════════════════════════════════════...",
+  "timestamp": "2026-06-12T05:28:12.255Z",
+  "retry_count": 2
+}

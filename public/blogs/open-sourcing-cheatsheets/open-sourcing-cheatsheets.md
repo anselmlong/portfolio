@@ -2,6 +2,7 @@
 title: "Open-Sourcing My Cheatsheets: Why I Still Write Them by Hand"
 date: "2026-03-03"
 author: "Anselm Long"
+image: "/blogs/open-sourcing-cheatsheets/images/cover.png"
 tags:
   - learning
   - open-source
@@ -90,4 +91,3 @@ And if you find my cheatsheets useful, give the repo a star! ⭐
 ---
 
 **Repo**: [github.com/anselmlong/cheatsheets](https://github.com/anselmlong/cheatsheets)
-

@@ -13,6 +13,9 @@ This script:
 
 import os
 import sys
+from argparse import ArgumentParser
+from collections import defaultdict
+from hashlib import sha256
 from pathlib import Path
 from urllib.parse import urlparse, urlunparse
 from dotenv import load_dotenv
@@ -32,6 +35,8 @@ from langchain_postgres import PGVector
 
 DATA_DIR = PROJECT_ROOT / "public" / "data"
 BLOGS_DIR = PROJECT_ROOT / "public" / "blogs"
+COLLECTION_NAME = "portfolio_docs_v2"
+CONTENT_HASH_KEY = "content_sha256"
 
 
 def get_connection_string() -> str | None:
@@ -83,6 +88,31 @@ def validate_env():
     print(f"  DB: {masked_url}")
 
 
+def _source_for(doc) -> str:
+    source = doc.metadata.get("source", "") if doc.metadata else ""
+    if not source:
+        return ""
+
+    try:
+        return Path(source).resolve().relative_to(PROJECT_ROOT).as_posix()
+    except ValueError:
+        return str(source)
+
+
+def _content_hash(content: str) -> str:
+    return sha256(content.encode("utf-8")).hexdigest()
+
+
+def _prepare_loaded_doc(doc):
+    source = _source_for(doc)
+    doc.metadata = {
+        **(doc.metadata or {}),
+        "source": source,
+        CONTENT_HASH_KEY: _content_hash(doc.page_content),
+    }
+    return doc
+
+
 def load_documents():
     print(f"📁 Loading from: {DATA_DIR}")
     print(f"📁 Loading from: {BLOGS_DIR}")
@@ -97,8 +127,10 @@ def load_documents():
         str(BLOGS_DIR), glob="**/*.md", loader_cls=TextLoader, show_progress=True
     )
 
-    documents_txt = loader_txt.load()
-    documents_md = loader_md.load() + loader_md_blogs.load()
+    documents_txt = [_prepare_loaded_doc(doc) for doc in loader_txt.load()]
+    documents_md = [
+        _prepare_loaded_doc(doc) for doc in loader_md.load() + loader_md_blogs.load()
+    ]
     print(f"📂 Loaded {len(documents_txt)} .txt and {len(documents_md)} .md documents")
     return documents_txt, documents_md
 
@@ -119,7 +151,12 @@ def split_documents(documents_txt, documents_md):
 
     md_header_docs = []
     for d in documents_md:
-        md_header_docs.extend(md_splitter.split_text(d.page_content))
+        for header_doc in md_splitter.split_text(d.page_content):
+            header_doc.metadata = {
+                **d.metadata,
+                **(header_doc.metadata or {}),
+            }
+            md_header_docs.append(header_doc)
     md_docs = splitter.split_documents(md_header_docs)
 
     print(f"🪚 Split into {len(txt_docs)} (.txt) and {len(md_docs)} (.md) chunks")
@@ -162,44 +199,118 @@ def test_connection():
         return False
 
 
-def get_existing_doc_paths() -> set[str]:
+def get_existing_doc_state() -> tuple[dict[str, set[str]], int]:
     print("🔍 Checking for existing embeddings...")
 
-    embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY, model=EMBED_MODEL)
+    import psycopg
 
+    source_hashes: dict[str, set[str]] = defaultdict(set)
     try:
-        vectorstore = PGVector(
-            connection=CONNECTION_STRING,
-            collection_name="portfolio_docs_v2",
-            embedding_function=embeddings,
-        )
+        conn = psycopg.connect(CONNECTION_STRING, connect_timeout=30)
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT
+                    e.cmetadata->>'source' AS source,
+                    e.cmetadata->>%s AS content_hash,
+                    COUNT(*) AS chunk_count
+                FROM langchain_pg_embedding e
+                JOIN langchain_pg_collection c ON c.uuid = e.collection_id
+                WHERE c.name = %s
+                GROUP BY source, content_hash
+                """,
+                (CONTENT_HASH_KEY, COLLECTION_NAME),
+            )
 
-        existing_docs = vectorstore.get()
+            legacy_chunks = 0
+            chunk_total = 0
+            for source, content_hash, chunk_count in cur.fetchall():
+                chunk_total += chunk_count
+                if source and content_hash:
+                    source_hashes[source].add(content_hash)
+                else:
+                    legacy_chunks += chunk_count
 
-        existing_paths: set[str] = set()
-        if existing_docs and "metadatas" in existing_docs:
-            for meta in existing_docs["metadatas"]:
-                if meta and "source" in meta:
-                    existing_paths.add(meta["source"])
+        conn.close()
 
-        print(f"   Found {len(existing_paths)} existing documents in DB")
-        return existing_paths
+        print(f"   Found {chunk_total} existing chunks in DB")
+        print(f"   Found {len(source_hashes)} hash-tracked source documents")
+        if legacy_chunks:
+            print(f"   Found {legacy_chunks} legacy chunks without source/hash metadata")
+        return dict(source_hashes), legacy_chunks
 
     except Exception as e:
         print(f"   No existing collection found (first run): {type(e).__name__}")
-        return set()
+        return {}, 0
 
 
-def filter_existing_docs(docs, existing_paths: set[str]) -> list:
-    new_docs = []
+def delete_sources(sources: set[str]) -> int:
+    if not sources:
+        return 0
 
+    import psycopg
+
+    with psycopg.connect(CONNECTION_STRING, connect_timeout=30) as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                DELETE FROM langchain_pg_embedding e
+                USING langchain_pg_collection c
+                WHERE e.collection_id = c.uuid
+                  AND c.name = %s
+                  AND e.cmetadata->>'source' = ANY(%s)
+                """,
+                (COLLECTION_NAME, list(sources)),
+            )
+            deleted = cur.rowcount
+
+    return deleted
+
+
+def filter_incremental_docs(
+    docs, existing_source_hashes: dict[str, set[str]]
+) -> tuple[list, set[str], int]:
+    docs_by_source: dict[str, list] = defaultdict(list)
     for doc in docs:
         source = doc.metadata.get("source", "") if doc.metadata else ""
-        if source and source in existing_paths:
-            continue
-        new_docs.append(doc)
+        docs_by_source[source].append(doc)
 
-    return new_docs
+    docs_to_index = []
+    changed_sources: set[str] = set()
+    skipped_chunks = 0
+
+    for source, source_docs in docs_by_source.items():
+        current_hashes = {
+            doc.metadata.get(CONTENT_HASH_KEY)
+            for doc in source_docs
+            if doc.metadata and doc.metadata.get(CONTENT_HASH_KEY)
+        }
+        existing_hashes = existing_source_hashes.get(source)
+
+        if source and existing_hashes == current_hashes:
+            skipped_chunks += len(source_docs)
+            continue
+
+        if source and existing_hashes:
+            changed_sources.add(source)
+        docs_to_index.extend(source_docs)
+
+    return docs_to_index, changed_sources, skipped_chunks
+
+
+def _ids_for_docs(docs) -> list[str]:
+    source_counts: dict[str, int] = defaultdict(int)
+    ids = []
+
+    for doc in docs:
+        metadata = doc.metadata or {}
+        source = metadata.get("source", "")
+        content_hash = metadata.get(CONTENT_HASH_KEY, "")
+        chunk_index = source_counts[source]
+        source_counts[source] += 1
+        ids.append(sha256(f"{source}:{content_hash}:{chunk_index}".encode()).hexdigest())
+
+    return ids
 
 
 def index_to_pgvector(docs, incremental: bool = True):
@@ -207,13 +318,33 @@ def index_to_pgvector(docs, incremental: bool = True):
 
     docs_to_index = docs
     if incremental:
-        existing_paths = get_existing_doc_paths()
-        docs_to_index = filter_existing_docs(docs, existing_paths)
+        existing_source_hashes, legacy_chunks = get_existing_doc_state()
+        if legacy_chunks:
+            print(
+                "⚠️  Existing collection has legacy chunks without source/hash metadata."
+            )
+            print("   Running one full refresh to migrate metadata for future increments.")
+            incremental = False
+        else:
+            docs_to_index, changed_sources, skipped = filter_incremental_docs(
+                docs, existing_source_hashes
+            )
+            current_sources = {
+                doc.metadata.get("source")
+                for doc in docs
+                if doc.metadata and doc.metadata.get("source")
+            }
+            removed_sources = set(existing_source_hashes) - current_sources
 
-        skipped = len(docs) - len(docs_to_index)
-        if skipped > 0:
-            print(f"⏭️  Skipping {skipped} already-indexed documents")
-        print(f"📝 Will index {len(docs_to_index)} new documents")
+            stale_sources = changed_sources | removed_sources
+            if stale_sources:
+                deleted = delete_sources(stale_sources)
+                print(
+                    f"♻️  Deleted {deleted} stale chunks from {len(stale_sources)} changed/removed sources"
+                )
+            if skipped > 0:
+                print(f"⏭️  Skipping {skipped} unchanged chunks")
+            print(f"📝 Will index {len(docs_to_index)} new/changed chunks")
     else:
         print(f"📝 Full re-index: {len(docs)} documents")
 
@@ -233,7 +364,8 @@ def index_to_pgvector(docs, incremental: bool = True):
         documents=docs_to_index,
         embedding=embeddings,
         connection=CONNECTION_STRING,
-        collection_name="portfolio_docs_v2",
+        collection_name=COLLECTION_NAME,
+        ids=_ids_for_docs(docs_to_index),
         pre_delete_collection=not incremental,
     )
 
@@ -242,6 +374,14 @@ def index_to_pgvector(docs, incremental: bool = True):
 
 
 def main():
+    parser = ArgumentParser(description="Index portfolio markdown into PGVector.")
+    parser.add_argument(
+        "--full",
+        action="store_true",
+        help="Force a full collection refresh instead of incremental indexing.",
+    )
+    args = parser.parse_args()
+
     print("=" * 60)
     print("Blog Indexer for Neon PGVector")
     print("=" * 60)
@@ -254,7 +394,7 @@ def main():
 
     documents_txt, documents_md = load_documents()
     docs = split_documents(documents_txt, documents_md)
-    index_to_pgvector(docs)
+    index_to_pgvector(docs, incremental=not args.full)
 
 
 if __name__ == "__main__":

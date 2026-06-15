@@ -24,6 +24,7 @@ export interface BlogPost {
   tags?: string[];
   readingTime: string;
   image?: string;
+  viewCount?: number | null;
 }
 
 export interface BlogPostMetadata {
@@ -35,6 +36,7 @@ export interface BlogPostMetadata {
   tags?: string[];
   readingTime: string;
   image?: string;
+  viewCount?: number | null;
 }
 
 interface MatterData {
@@ -78,7 +80,11 @@ export function getAllBlogSlugs(): string[] {
     }
 
     if (entry.isDirectory()) {
-      const markdownPath = path.join(blogsDirectory, entry.name, `${entry.name}.md`);
+      const markdownPath = path.join(
+        blogsDirectory,
+        entry.name,
+        `${entry.name}.md`,
+      );
       if (fs.existsSync(markdownPath)) {
         slugs.add(entry.name);
       }
@@ -127,7 +133,9 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
     const d = safeData(data);
 
     const normalizedContent = rewriteRelativeImagePaths(content, slug);
-    const htmlContent = enhanceHtmlContent(await marked.parse(normalizedContent));
+    const htmlContent = enhanceHtmlContent(
+      await marked.parse(normalizedContent),
+    );
 
     const excerpt =
       d.excerpt ?? content.split("\n\n")[0]?.substring(0, 200) ?? "";
@@ -167,22 +175,25 @@ function enhanceHtmlContent(html: string): string {
 }
 
 function rewriteRelativeImagePaths(markdown: string, slug: string): string {
-  return markdown.replace(/!\[([^\]]*?)\]\(([^)]+)\)/g, (match, altText: string, rawUrl: string) => {
-    const trimmedUrl = rawUrl.trim();
+  return markdown.replace(
+    /!\[([^\]]*?)\]\(([^)]+)\)/g,
+    (match, altText: string, rawUrl: string) => {
+      const trimmedUrl = rawUrl.trim();
 
-    if (
-      trimmedUrl.startsWith("/") ||
-      trimmedUrl.startsWith("http://") ||
-      trimmedUrl.startsWith("https://") ||
-      trimmedUrl.startsWith("data:")
-    ) {
-      return match;
-    }
+      if (
+        trimmedUrl.startsWith("/") ||
+        trimmedUrl.startsWith("http://") ||
+        trimmedUrl.startsWith("https://") ||
+        trimmedUrl.startsWith("data:")
+      ) {
+        return match;
+      }
 
-    const resolvedUrl = path.posix.normalize(
-      path.posix.join("/blogs", slug, trimmedUrl),
-    );
+      const resolvedUrl = path.posix.normalize(
+        path.posix.join("/blogs", slug, trimmedUrl),
+      );
 
-    return `![${altText}](${resolvedUrl})`;
-  });
+      return `![${altText}](${resolvedUrl})`;
+    },
+  );
 }

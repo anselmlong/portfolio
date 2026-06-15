@@ -2,6 +2,7 @@
 title: "Gesture Detection with YOLOv8: Brainrot Edition"
 date: "2025-11-13"
 author: "Anselm Long"
+image: "/blogs/computer-vision/images/cv1.png"
 tags:
   - YOLOv8
   - computer vision
