@@ -61,6 +61,14 @@ export function TopNav() {
                 blog
               </Link>
               <a
+                href="https://photos.anselmlong.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="nav-link text-muted-foreground hover:text-foreground relative transition-colors"
+              >
+                photos
+              </a>
+              <a
                 ref={resumeLinkRef}
                 onClick={handleDownload}
                 href={filePath}
