@@ -101,11 +101,11 @@ const projects = [
   },
   {
     name: "canvas scraper",
-    tech: "Python, SQLite, Beautiful Soup",
+    tech: "Python, Canvas API, SQLite, Jinja2, GitHub Actions",
     description:
-      "a cli that syncs canvas files, filters out noisy downloads, and emails daily summaries of announcements and assignments.",
-    url: "https://github.com/anselmlong/canvas-scraper",
-    status: "cli",
+      "a cli that syncs canvas course files to your machine, skips the 2GB lecture recordings and textbooks, and emails a daily digest of what's new. runs locally or on GitHub Actions so your iPad gets your files while you nap.",
+    url: "https://canvas.anselmlong.com",
+    status: "live site + cli",
   },
   {
     name: "linkedin shitpost generator",
