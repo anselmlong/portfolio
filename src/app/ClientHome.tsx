@@ -7,6 +7,7 @@ import Marquee from "~/app/_components/Marquee";
 import AboutSection from "~/app/_components/AboutSection";
 import ExperienceTimeline from "~/app/_components/ExperienceTimeline";
 import ProjectsFilmStrip from "~/app/_components/ProjectsFilmStrip";
+import EcosystemSection from "~/app/_components/EcosystemSection";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -213,6 +214,8 @@ export default function ClientHome() {
       <ExperienceTimeline experiences={experiences} />
 
       <ProjectsFilmStrip projects={projects} />
+
+      <EcosystemSection />
 
       <section ref={bottomRef} className="relative">
         <div className="animate-up mt-40 mb-24 px-6">
