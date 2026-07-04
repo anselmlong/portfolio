@@ -1,0 +1,27 @@
+<!--
+  ecosystem-footer.html — canonical "part of anselmlong.com" badge for sub-sites.
+
+  CONSISTENCY CONTRACT (this file is the source of truth; sites copy-paste it):
+  - Text: "← part of anselmlong.com" — do not reword per site.
+  - Position: bottom center of the page, after the site's own footer content.
+  - Link: https://anselmlong.com?from=<site> — same-tab (no target=_blank);
+    we WANT visitors to land in the portfolio. Replace <site> with the
+    subdomain slug (canvas, hood, photos, shitpost, ...) for free referral
+    visibility in analytics — no tracking script needed.
+  - Always https://. Self-contained inline styles only — no external CSS,
+    so it can't break or be broken by the host site's stylesheet.
+  - Muted styling: small, low-contrast, inherits nothing.
+
+  For static HTML sites: paste the <div> below before </body>.
+  For React/Next.js sites: translate to JSX in the root layout (keep the
+  same text, href pattern, and inline styles).
+-->
+<div style="text-align: center; padding: 2rem 1rem 1.5rem; font-family: inherit;">
+  <a
+    href="https://anselmlong.com?from=SITE_SLUG"
+    style="color: #888; font-size: 0.8rem; text-decoration: none; opacity: 0.8; letter-spacing: 0.02em;"
+    onmouseover="this.style.opacity=1"
+    onmouseout="this.style.opacity=0.8"
+    >&larr; part of anselmlong.com</a
+  >
+</div>
