@@ -88,17 +88,17 @@ const projects = [
     name: "@sg_daily_gospel_bot",
     tech: "Telegram Bot API, scheduled messages",
     description:
-      "a telegram bot that sends a daily gospel reading to subscribers without making them open another app or newsletter.",
-    url: "https://t.me/sg_daily_gospel_bot",
-    status: "telegram bot",
+      "a telegram bot that sends the daily mass readings to subscribers at the hour they choose, without making them open another app or newsletter.",
+    url: "https://bot.anselmlong.com/gospel",
+    status: "live site + telegram bot",
   },
   {
     name: "@aircon_checker_bot",
-    tech: "Python, Telegram Bot API, reverse-engineered EVS2 API",
+    tech: "TypeScript, Telegram Bot API, reverse-engineered EVS2 API",
     description:
       "a telegram bot that checks nus aircon credits from the EVS2 portal. type /balance and get the current balance instantly.",
-    url: "https://t.me/aircon_checker_bot",
-    status: "telegram bot",
+    url: "https://bot.anselmlong.com/aircon",
+    status: "live site + telegram bot",
   },
   {
     name: "canvas scraper",

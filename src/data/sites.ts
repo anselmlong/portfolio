@@ -35,4 +35,10 @@ export const ecosystemSites: EcosystemSite[] = [
     tagline: "ai-generated linkedin shitposts, six comedic personas",
     emoji: "💼",
   },
+  {
+    name: "telegram bots",
+    url: "https://bot.anselmlong.com",
+    tagline: "daily gospel readings and nus aircon credit alerts, in your chats",
+    emoji: "🤖",
+  },
 ];
