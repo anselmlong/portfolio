@@ -70,6 +70,21 @@
       "href": "https://t.me/aircon_checker_bot",
       "repo": "https://github.com/anselmlong/nus-aircon-checker",
       "highlight": false
+    },
+    {
+      "title": "Kopitype",
+      "position": "Personal project",
+      "description": "A Singlish-themed typing test — type local words, MRT station names, and Singlish quotes as fast as you can. Features multiple corpora, real-time WPM/accuracy stats, pace charts, sound effects, a challenge mode, and a glossary of Singaporean terms. Built with Next.js and deployed to kopitype.com.",
+      "tech": [
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Singlish",
+        "Typing Test"
+      ],
+      "href": "https://kopitype.com",
+      "repo": "https://github.com/anselmlong/kopitype",
+      "highlight": true
     }
   ],
   "experiences": [
