@@ -85,6 +85,33 @@
       "href": "https://kopitype.com",
       "repo": "https://github.com/anselmlong/kopitype",
       "highlight": true
+    },
+    {
+      "title": "67 Bot",
+      "position": "Personal project",
+      "description": "A Telegram bot that watches group media for '67' photos using a hybrid OCR pipeline (EasyOCR + GPT-4o vision fallback), counting each member's drops and keeping a leaderboard. Handles 28 group chats with message deduplication, admin leaderboard resets (manual + scheduled), an owner-only broadcast command, and a scuba reaction GIF.",
+      "tech": ["Python", "EasyOCR", "GPT-4o", "OpenCV", "SQLite", "Docker", "Telegram Bot API"],
+      "href": "https://t.me/anselmlong",
+      "repo": "https://github.com/anselmlong/six-seven-bot",
+      "highlight": true
+    },
+    {
+      "title": "ConfessIT",
+      "position": "Personal project",
+      "description": "Scraper, dashboard, and public viewer for NUSConfessIT — scraped 72,000+ anonymous confessions from 18,000+ users. Built a live site (confessit.space) with semantic search over post embeddings via sqlite-vec, sentiment/thematic analysis, and a fine-tuned Qwen 2.5 7B on the corpus. Wrote deep-dive analyses on embedding landscape and viral dynamics.",
+      "tech": ["Python", "SQLite", "sqlite-vec", "FastAPI", "Fine-tuning", "ML", "Next.js"],
+      "href": "https://confessit.space",
+      "repo": "https://github.com/anselmlong/confessit-scraper",
+      "highlight": true
+    },
+    {
+      "title": "Catholic Daily Gospel Bot",
+      "position": "Personal project",
+      "description": "A Telegram bot (@sg_daily_gospel_bot) that delivers the daily Catholic gospel, readings, and reflections. Caches Universalis readings and runs 24/7 behind a static landing page.",
+      "tech": ["Python", "Telegram Bot API", "systemd", "Docker"],
+      "href": "https://bot.anselmlong.com/gospel",
+      "repo": "https://github.com/anselmlong/catholic-bot",
+      "highlight": false
     }
   ],
   "experiences": [
