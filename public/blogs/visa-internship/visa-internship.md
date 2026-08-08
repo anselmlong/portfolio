@@ -19,7 +19,7 @@ Read the [full technical report here](/blog/visa-internship-report).
 
 ## The first day
 
-I remember my first day. I walked in, and I could see my teammates had screens on their monitors, with three monitors each. On one of them, there were nine different windows with blue terminal text rapidly scrolling. I remeber thinking - damn, what did I get myself into. 
+I remember my first day. I walked in, and I could see my teammates had screens on their monitors, with three monitors each. On one of them, there were nine different windows with blue terminal text rapidly scrolling. I remember thinking - damn, what did I get myself into.
 
 Luckily, I didn't need to touch that. My team handles operations and infrastructure for Visa, and we're in charge of the mainframe, called VisaNet. The terminal outputs were the commands and outputs being run on the mainframe. So we could actually see the actual mainframe of Visa, the largest payment network in the world, on the terminal screens themselves. I thought that was pretty insane.
 
