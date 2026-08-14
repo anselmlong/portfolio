@@ -69,6 +69,14 @@ export function TopNav() {
                 photos
               </a>
               <a
+                href="https://bot.anselmlong.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="nav-link text-muted-foreground hover:text-foreground relative transition-colors"
+              >
+                bots
+              </a>
+              <a
                 ref={resumeLinkRef}
                 onClick={handleDownload}
                 href={filePath}
