@@ -125,6 +125,15 @@
     #brandtxt span{display:none;}
     .btn{padding:8px 9px; font-size:11px;}
   }
+  /* Below ~600px, brand + search + 3 buttons no longer fit in one row —
+     wrap onto a second line instead of letting buttons run off-screen. */
+  @media(max-width:600px){
+    #bar{flex-wrap:wrap; row-gap:8px;}
+    #brand{flex:1 1 auto;}
+    #tools{width:100%; flex-wrap:wrap;}
+    #searchwrap{flex:1 1 auto;}
+    #q{width:100%;}
+  }
   #hint{position:fixed; left:50%; top:58px; transform:translateX(-50%); z-index:26;
     background:rgba(35,31,24,.86); color:#f2ead8; font-size:11.5px; padding:7px 14px;
     border-radius:20px; font-family:ui-sans-serif,sans-serif; pointer-events:none;
@@ -203,7 +212,7 @@ n:"Yap Kwan Seng", a:"葉觀盛", s:"m", b:"1846", d:"1902", line:1,
 title:"Kapitan China of Kuala Lumpur, 1889–1902",
 sp:"Lim Hiong Yueng (1st) — five wives in Malaya, three in China",
 l:"Kuala Lumpur",
-note:"Fifth and last Kapitan China of Kuala Lumpur. Hakka of the Fui Chiu clan, born in Liangpoi Village, Chixi, Taishan, Guangdong; eldest son of Yap Hoin Yin. He reached Malaya at eighteen and worked the tin mines at Seremban, and by the 1890s employed some seven thousand men. He founded Pooi Shin Thong, which became Tung Shin Hospital, co-founded the Victoria Institution and the Tai Wah Ward of the Pauper's Hospital, and built the brick kiln that gave Brickfields its name. He died of consumption; the office of Kapitan was abolished with him. Jalan Yap Kwan Seng in Kuala Lumpur carries his name.",
+note:"Fifth and last Kapitan China of Kuala Lumpur. Hakka of the Fui Chiu clan, born in Liangpoi Village, Chixizhen (Chixi Town), Taishan County, Guangdong; eldest son of Yap Hoin Yin. He reached Malaya at eighteen and worked the tin mines at Seremban, and by the 1890s employed some seven thousand men. He founded Pooi Shin Thong, which became Tung Shin Hospital, co-founded the Victoria Institution and the Tai Wah Ward of the Pauper's Hospital, and built the brick kiln that gave Brickfields its name. He died of consumption on Friday, 17 January 1902; his funeral was held Thursday, 17 April 1902, and he was buried at Maxwell Hill, Kuala Lumpur. The office of Kapitan was abolished with him. Jalan Yap Kwan Seng in Kuala Lumpur carries his name. This tree was compiled by his 3rd, 4th and 5th generation descendants.",
 k:[
 {n:"Yap Tai Kee",a:"Kei",s:"m",o:1,x:1,note:"Birth rank confirmed. Descendants unrecorded."},
 {n:"Yap Tai Cheong",s:"m",o:2,x:1,note:"Birth rank confirmed.",k:[
@@ -247,7 +256,9 @@ k:[
  {n:"Yap Pow Too",s:"m",k:[
   {n:"Yap Peng Seng",s:"m",note:"Attribution uncertain in the source."},
   {n:"Yap Peng Keong",s:"m",note:"A source for this compilation."}]}]},
-{n:"Yap Tai Wah",s:"m",o:10,x:1,note:"Birth rank confirmed. Three wives; the first two were sisters of the Wong family.",k:[
+{n:"Yap Tai Wah",s:"m",o:10,x:1,
+ sp:"Bong Chee Hong, ‘Heung’ cheh, Wong family's 2nd daughter (1st) · Wong Wai Kuen, ‘Keng’ cheh, Wong family's 5th daughter (2nd) · unnamed 3rd wife",
+ note:"Birth rank confirmed. Three wives; the first two were sisters of the Wong family.",k:[
  {n:"Yap Poh Hong",s:"m",b:"1916",d:"1991",via:"Wife 1 · Bong Chee Hong",sp:"Lee Yoke Sum (Elsie); Seet Ah Moi (Nellie)",k:[
   {n:"Yap Peng Khee",s:"m",b:"1955",l:"Sydney?"},
   {n:"Yap Siew Kin",a:"Shirley",s:"f",b:"1945"},
@@ -256,7 +267,7 @@ k:[
   {n:"Yap Peng Cheong",a:"Dr.",s:"m",x:1},
   {n:"Adopted daughter",s:"f",ad:1,note:"Name not recorded."}]},
  {n:"Yap Poh Piew",s:"m",x:1,via:"Wife 1 · Bong Chee Hong",note:"No children recorded."},
- {n:"Yap Poh Tho",a:"‘Heung’ cheh",s:"m",b:"1926",d:"1970",via:"Wife 1 · Bong Chee Hong",sp:"Chan Sow Chen (1926–2007)",k:[
+ {n:"Yap Poh Tho",s:"m",b:"1926",d:"1970",via:"Wife 1 · Bong Chee Hong",sp:"Chan Sow Chen (1926–2007)",k:[
   {n:"Yap Peng Kong",a:"Yap Ping Kon",s:"m",b:"1948",l:"Sydney",note:"A source for this compilation."},
   {n:"Yap Peng Hoe",s:"m",b:"1950",l:"Alor Star"},
   {n:"Yap Peng Yew",s:"m",b:"1956",d:"2010"},
@@ -314,7 +325,7 @@ k:[
  {n:"Phoebe Yap",s:"f",sp:"Ong (?)",note:"Chinese name unknown, per the compilers."}]},
 
 {n:"Yap Tai Kim",s:"m",o:14,x:1,line:1,l:"Kuala Lumpur",
- sp:"Chan Yuet Sun (1st) · Chow Yoke Sim (2nd) · Phoon Lai Yoong (3rd)",
+ sp:"Chan Yuet Sun, ‘Chan Yit San’, b.1900 (1st) · Chow Yoke Sim, 周艳紅 (2nd) · Phoon Lai Yoong (3rd)",
  note:"Fourteenth of the fifteen sons; birth rank confirmed. Anselm's great-great-grandfather. Of his three wives, the line descends through the second, Chow Yoke Sim.",k:[
  {n:"Yap Sau Tim",s:"f",via:"Wife 1 · Chan Yuet Sun",sp:"Teh Hon Yoon",k:[
   {n:"Donald Teh",a:"Ah Fook",s:"m",l:"Kuala Lumpur"},
@@ -419,7 +430,12 @@ function isLineNode(nd){
 ALL.forEach(n=>{ n.path = isLineNode(n); });
 
 /* ---- layout ---- */
-let nodes=[], links=[], bounds={};
+let nodes=[], links=[], bounds={}, lineBounds={};
+function boundsOf(list){
+  const xs=list.map(n=>n.X), ys=list.map(n=>n.Y);
+  return {x0:Math.min(...xs)-40, x1:Math.max(...xs)+NW+40,
+          y0:Math.min(...ys)-40, y1:Math.max(...ys)+NH+40};
+}
 function layout(){
   nodes=[]; links=[];
   let cursor=0;
@@ -436,24 +452,31 @@ function layout(){
     kids.forEach(c=>links.push({a:nd,b:c}));
   })(DATA);
 
-  const xs=nodes.map(n=>n.X), ys=nodes.map(n=>n.Y);
-  bounds={x0:Math.min(...xs)-40, x1:Math.max(...xs)+NW+40,
-          y0:Math.min(...ys)-40, y1:Math.max(...ys)+NH+40};
+  bounds=boundsOf(nodes);
+  // Separate bounds covering only the line-of-descent nodes, so "Fit" while
+  // "Trace the line" is active frames the line itself, not the whole tree
+  // (the root's other ~24 children are still `open`, just dimmed).
+  const pathNodes=nodes.filter(n=>n.path);
+  lineBounds=pathNodes.length?boundsOf(pathNodes):bounds;
 }
 
 /* ---- pan / zoom ---- */
 let T={x:0,y:0,k:1};
 function apply(){ view.setAttribute('transform',`translate(${T.x},${T.y}) scale(${T.k})`); }
+function barHeight(){ return document.getElementById('bar').offsetHeight; }
 function fit(animate){
-  const w=innerWidth, h=innerHeight-52;
-  const bw=bounds.x1-bounds.x0, bh=bounds.y1-bounds.y0;
+  const barH=barHeight();
+  const w=innerWidth, h=innerHeight-barH;
+  const b=focusLine?lineBounds:bounds;
+  const bw=b.x1-b.x0, bh=b.y1-b.y0;
   const k=Math.min(w/bw, h/bh, 1.05);
-  const target={k:k, x:(w-bw*k)/2 - bounds.x0*k, y:52+(h-bh*k)/2 - bounds.y0*k};
+  const target={k:k, x:(w-bw*k)/2 - b.x0*k, y:barH+(h-bh*k)/2 - b.y0*k};
   animate? glide(target) : (T=target, apply());
 }
 function centerOn(nd,kk){
+  const barH=barHeight();
   const k=kk||Math.max(T.k,.72);
-  glide({k:k, x:innerWidth/2-(nd.X+NW/2)*k, y:(innerHeight/2+20)-(nd.Y+NH/2)*k});
+  glide({k:k, x:innerWidth/2-(nd.X+NW/2)*k, y:barH+(innerHeight-barH)/2-(nd.Y+NH/2)*k});
 }
 function glide(to){
   const from={...T}, t0=performance.now(), dur=430;
@@ -485,7 +508,11 @@ function startPan(e){
 }
 stage.addEventListener('pointerdown',e=>{
   pts.set(e.pointerId,e);
-  stage.setPointerCapture(e.pointerId);
+  // Only capture (and treat as pan-eligible) when the tap didn't start on a
+  // card — capturing unconditionally redirects the browser's synthesized
+  // 'click' target to #stage on touch devices, which silently breaks
+  // tap-to-open-detail on every node.
+  if(!e.target.closest('.node')) stage.setPointerCapture(e.pointerId);
   if(pts.size===2){
     drag=null; stage.classList.remove('drag');
     pinchD=pinchDist();
@@ -664,18 +691,24 @@ function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>
 
 /* ---- search ---- */
 const qEl=document.getElementById('q'), qx=document.getElementById('qx');
+let searchOpened=new Set(); // branches opened only to reveal a search hit — closed again when the search clears
 qEl.addEventListener('input',()=>{
   query=qEl.value.trim().toLowerCase();
   qx.style.display=query?'block':'none';
   hits=new Set();
   if(query){
     ALL.forEach(n=>{ if(n.q.includes(query)) hits.add(n.id); });
-    // open ancestors of every hit
-    hits.forEach(id=>{ let p=byId[id].parent; while(p){p.open=true; p=p.parent;} });
+    // open ancestors of every hit, remembering which ones we opened
+    hits.forEach(id=>{ let p=byId[id].parent; while(p){ if(!p.open){p.open=true; searchOpened.add(p.id);} p=p.parent; } });
     layout(); render();
     const first=ALL.find(n=>hits.has(n.id));
     if(first) centerOn(first,Math.max(T.k,.62));
-  } else { render(); }
+  } else {
+    // clearing the search: fold back up whatever it opened, leaving the tree as it was before
+    searchOpened.forEach(id=>{ const n=byId[id]; if(n) n.open=false; });
+    searchOpened.clear();
+    layout(); render();
+  }
 });
 qx.onclick=()=>{qEl.value=''; qEl.dispatchEvent(new Event('input')); qEl.focus();};
 
@@ -698,17 +731,31 @@ bexp.onclick=()=>{
   layout(); render(); fit(true);
 };
 
-/* ---- go ---- */
-layout(); render(); fit(false);
-let resizeT=null;
+/* ---- go: open zoomed in on Anselm's own line, not the whole tree ---- */
+layout(); render();
+focusLine=true;
+bline.classList.add('on');
+bline.textContent='Showing the line';
+render();
+const me=ALL.find(n=>n.me);
+if(me) centerOn(me, innerWidth<480 ? 1 : .85);
+else fit(false);
+
+/* Re-fit only on a real width change (resize/rotation) — a phone's
+   address bar showing/hiding while scrolling fires `resize` constantly
+   with only the height changing, and re-fitting every time would yank
+   the view back out from under whatever the user just panned/zoomed to. */
+let lastW=innerWidth, resizeT=null;
 function onResize(){
   clearTimeout(resizeT);
-  resizeT=setTimeout(()=>{layout();render();fit(false);},120);
+  resizeT=setTimeout(()=>{
+    const widthChanged=Math.abs(innerWidth-lastW)>80;
+    lastW=innerWidth;
+    layout(); render();
+    if(widthChanged) fit(false);
+  },120);
 }
 addEventListener('resize',onResize);
-/* Mobile browsers show/hide their address bar without always firing a
-   reliable window resize — visualViewport catches that so the tree
-   doesn't end up cropped after scrolling on a phone. */
 if(window.visualViewport) visualViewport.addEventListener('resize',onResize);
 setTimeout(()=>{const h=document.getElementById('hint'); h.style.opacity=0;},4200);
 </script>
