@@ -464,17 +464,52 @@ function glide(to){
   })(t0);
 }
 
-let drag=null;
-stage.addEventListener('pointerdown',e=>{
-  if(e.target.closest('.node')) return;
+function zoomAt(cx,cy,f){
+  const nk=Math.min(2.4,Math.max(.02,T.k*f));
+  const r=nk/T.k;
+  T.x=cx-(cx-T.x)*r; T.y=cy-(cy-T.y)*r; T.k=nk; apply();
+}
+
+/* ---- unified pointer handling: pan with one finger, pinch-zoom with two.
+   A single pointer map avoids the drag/pinch state stepping on each other
+   mid-gesture, which is what caused the jump on touch devices. ---- */
+let pts=new Map(), drag=null, pinchD=0;
+
+function pinchDist(){
+  const [a,b]=[...pts.values()];
+  return Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
+}
+function startPan(e){
   drag={x:e.clientX,y:e.clientY,tx:T.x,ty:T.y};
-  stage.classList.add('drag'); stage.setPointerCapture(e.pointerId);
+  stage.classList.add('drag');
+}
+stage.addEventListener('pointerdown',e=>{
+  pts.set(e.pointerId,e);
+  stage.setPointerCapture(e.pointerId);
+  if(pts.size===2){
+    drag=null; stage.classList.remove('drag');
+    pinchD=pinchDist();
+  } else if(pts.size===1 && !e.target.closest('.node')){
+    startPan(e);
+  }
 });
 stage.addEventListener('pointermove',e=>{
-  if(!drag) return;
-  T.x=drag.tx+(e.clientX-drag.x); T.y=drag.ty+(e.clientY-drag.y); apply();
+  if(!pts.has(e.pointerId)) return;
+  pts.set(e.pointerId,e);
+  if(pts.size===2){
+    const d=pinchDist();
+    const [a,b]=[...pts.values()];
+    if(pinchD) zoomAt((a.clientX+b.clientX)/2,(a.clientY+b.clientY)/2, d/pinchD);
+    pinchD=d;
+  } else if(drag){
+    T.x=drag.tx+(e.clientX-drag.x); T.y=drag.ty+(e.clientY-drag.y); apply();
+  }
 });
-['pointerup','pointercancel'].forEach(ev=>stage.addEventListener(ev,()=>{drag=null; stage.classList.remove('drag');}));
+['pointerup','pointercancel'].forEach(ev=>stage.addEventListener(ev,e=>{
+  pts.delete(e.pointerId);
+  drag=null; stage.classList.remove('drag'); pinchD=0;
+  if(pts.size===1) startPan([...pts.values()][0]); // resume panning with the remaining finger
+}));
 
 stage.addEventListener('wheel',e=>{
   e.preventDefault();
@@ -482,27 +517,11 @@ stage.addEventListener('wheel',e=>{
   zoomAt(e.clientX,e.clientY,f);
 },{passive:false});
 
-function zoomAt(cx,cy,f){
-  const nk=Math.min(2.4,Math.max(.02,T.k*f));
-  const r=nk/T.k;
-  T.x=cx-(cx-T.x)*r; T.y=cy-(cy-T.y)*r; T.k=nk; apply();
-}
+/* iOS Safari fires its own gesture events for two-finger pinch on top of
+   (sometimes instead of) pointer events; without this the page can zoom
+   natively while our own pinch-zoom is also running. */
+['gesturestart','gesturechange'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault()));
 
-/* pinch */
-let pts=new Map(), pd=0;
-stage.addEventListener('pointerdown',e=>pts.set(e.pointerId,e));
-stage.addEventListener('pointermove',e=>{
-  if(!pts.has(e.pointerId)) return;
-  pts.set(e.pointerId,e);
-  if(pts.size===2){
-    drag=null;
-    const [a,b]=[...pts.values()];
-    const d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
-    if(pd) zoomAt((a.clientX+b.clientX)/2,(a.clientY+b.clientY)/2, d/pd);
-    pd=d;
-  }
-});
-['pointerup','pointercancel'].forEach(ev=>stage.addEventListener(ev,e=>{pts.delete(e.pointerId); if(pts.size<2) pd=0;}));
 document.getElementById('zin').onclick=()=>zoomAt(innerWidth/2,innerHeight/2,1.32);
 document.getElementById('zout').onclick=()=>zoomAt(innerWidth/2,innerHeight/2,1/1.32);
 document.getElementById('bfit').onclick=()=>{layout();render();fit(true);};
@@ -572,6 +591,7 @@ function render(){
 
     if(nd.k&&nd.k.length){
       const bg=el('g',{class:'toggle',transform:`translate(${NW/2-13},${NH-1})`});
+      bg.append(el('rect',{x:-7,y:-8,width:40,height:32,fill:'transparent'})); // larger invisible hit area for touch
       bg.append(el('rect',{width:26,height:16,rx:8,fill:nd.open?'#8a7c5c':(nd.path?'#a52a1a':'#6d6350')}));
       const t=el('text',{x:13,y:11.5,class:'kid','text-anchor':'middle'});
       t.textContent = nd.open? '–' : (1+nd.desc>99?'99+':nd.n===DATA.n?nd.k.length:1+nd.desc);
@@ -680,7 +700,16 @@ bexp.onclick=()=>{
 
 /* ---- go ---- */
 layout(); render(); fit(false);
-addEventListener('resize',()=>{layout();render();fit(false);});
+let resizeT=null;
+function onResize(){
+  clearTimeout(resizeT);
+  resizeT=setTimeout(()=>{layout();render();fit(false);},120);
+}
+addEventListener('resize',onResize);
+/* Mobile browsers show/hide their address bar without always firing a
+   reliable window resize — visualViewport catches that so the tree
+   doesn't end up cropped after scrolling on a phone. */
+if(window.visualViewport) visualViewport.addEventListener('resize',onResize);
 setTimeout(()=>{const h=document.getElementById('hint'); h.style.opacity=0;},4200);
 </script>
 </body>
