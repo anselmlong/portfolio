@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Kapitan Yap Kwan Seng — Family Tree</title>
+<meta name="description" content="An interactive genealogy of Kapitan Yap Kwan Seng, last Kapitan China of Kuala Lumpur, and his descendants.">
+<meta property="og:title" content="Kapitan Yap Kwan Seng — Family Tree">
+<meta property="og:description" content="Five generations, from the last Kapitan China of Kuala Lumpur to the present day.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --paper:#e7dcc4; --paper2:#f0e7d3; --panel:#efe6d1;
+    --ink:#231f18; --ink2:#6d6350; --hair:#cbbb98;
+    --seal:#a52a1a; --seal2:#8f2415; --gold:#96792f;
+    --m:#3f6b7d; --f:#9a5b6e;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%; margin:0; overflow:hidden;}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+    -webkit-font-smoothing:antialiased; touch-action:none;
+  }
+  .sans{font-family:ui-sans-serif,system-ui,'Helvetica Neue',Arial,sans-serif;}
+
+  /* ---------- top bar ---------- */
+  #bar{
+    position:fixed; top:0; left:0; right:0; z-index:30;
+    display:flex; align-items:center; gap:10px; padding:9px 12px;
+    background:rgba(231,220,196,.94); backdrop-filter:blur(9px);
+    border-bottom:1px solid var(--hair);
+  }
+  #brand{display:flex; align-items:center; gap:9px; flex:0 0 auto;}
+  #seal{width:30px; height:30px; border-radius:4px; background:var(--seal);
+    display:grid; place-items:center; color:#f2ead8; font-size:19px; flex:0 0 auto;
+    font-family:'Noto Serif CJK SC','Songti SC',serif; transform:rotate(-3deg);}
+  #brandtxt{line-height:1.15;}
+  #brandtxt b{font-size:14px; font-weight:600; display:block; letter-spacing:-.01em;}
+  #brandtxt span{font-size:10px; color:var(--ink2); letter-spacing:.12em; text-transform:uppercase;}
+  #tools{display:flex; align-items:center; gap:7px; margin-left:auto; flex-wrap:nowrap;}
+  #searchwrap{position:relative;}
+  #q{width:180px; padding:7px 26px 7px 28px; border:1px solid var(--hair);
+    background:var(--paper2); border-radius:7px; font-size:13px; color:var(--ink);
+    font-family:inherit;}
+  #q:focus{outline:2px solid var(--seal); outline-offset:1px;}
+  #qi{position:absolute; left:9px; top:50%; transform:translateY(-50%); color:var(--ink2); pointer-events:none;}
+  #qx{position:absolute; right:6px; top:50%; transform:translateY(-50%);
+    border:0; background:none; color:var(--ink2); cursor:pointer; font-size:14px; display:none;}
+  .btn{font-family:ui-sans-serif,system-ui,sans-serif; font-size:11.5px; font-weight:600;
+    padding:8px 11px; border:1px solid var(--hair); background:var(--paper2);
+    color:var(--ink); border-radius:7px; cursor:pointer; white-space:nowrap;}
+  .btn:hover{border-color:var(--ink2);}
+  .btn.on{background:var(--seal); border-color:var(--seal2); color:#f7f1e2;}
+  .btn.dark{background:var(--ink); border-color:var(--ink); color:var(--paper2);}
+
+  /* ---------- canvas ---------- */
+  #stage{position:fixed; inset:0; top:0; cursor:grab;}
+  #stage.drag{cursor:grabbing;}
+  svg{width:100%; height:100%; display:block;}
+  .link{fill:none; stroke:#bda97f; stroke-width:1.5;}
+  .link.online{stroke:var(--seal); stroke-width:2.4;}
+  .link.dim{opacity:.13;}
+
+  .node{cursor:pointer;}
+  .card{fill:var(--paper2); stroke:var(--hair); stroke-width:1.5; rx:9;}
+  .node.line .card{fill:#f6eeda; stroke:var(--seal); stroke-width:2.2;}
+  .node.me .card{fill:#fdf6e4; stroke:var(--seal); stroke-width:3;}
+  .node:hover .card{stroke:var(--ink2);}
+  .node.line:hover .card{stroke:var(--seal2);}
+  .node.sel .card{stroke:var(--gold); stroke-width:3;}
+  .node.hit .card{fill:#f5e9c6; stroke:var(--gold); stroke-width:2.5;}
+  .node.dim{opacity:.14;}
+
+  .nm{font-size:13.5px; font-weight:600; fill:var(--ink);}
+  .node.line .nm{fill:var(--seal2);}
+  .al{font-size:11px; font-style:italic; fill:var(--gold);}
+  .dt{font-size:9.5px; fill:var(--ink2); font-family:ui-monospace,Menlo,monospace;}
+  .av{stroke:var(--hair); stroke-width:1.4;}
+  .node.line .av{stroke:var(--seal);}
+  .mono{font-size:13px; font-weight:600; text-anchor:middle;}
+  .kid{font-size:9px; font-weight:700; fill:#f2ead8; font-family:ui-sans-serif,sans-serif;}
+  .toggle{cursor:pointer;}
+
+  /* ---------- detail panel ---------- */
+  #panel{
+    position:fixed; z-index:40; background:var(--paper2);
+    border:1px solid var(--hair); border-radius:13px;
+    box-shadow:0 14px 40px rgba(35,31,24,.24);
+    padding:17px 18px 18px; overflow-y:auto; display:none;
+  }
+  @media(min-width:721px){ #panel{ right:14px; top:64px; width:335px; max-height:calc(100vh - 82px);} }
+  @media(max-width:720px){ #panel{ left:0; right:0; bottom:0; max-height:64vh;
+    border-radius:15px 15px 0 0; border-bottom:0;} }
+  #pclose{position:absolute; top:11px; right:12px; border:0; background:none;
+    font-size:19px; color:var(--ink2); cursor:pointer; line-height:1; padding:3px;}
+  #pgen{font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--seal); font-weight:700;}
+  #pname{font-size:22px; font-weight:600; margin:5px 0 0; line-height:1.15; padding-right:22px;}
+  #palias{font-size:14px; font-style:italic; color:var(--gold); margin-top:2px;}
+  .prow{display:flex; gap:9px; font-size:12.5px; margin-top:9px; line-height:1.45;}
+  .pk{flex:0 0 74px; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--ink2); font-family:ui-sans-serif,sans-serif; font-weight:700; padding-top:2px;}
+  .pv{flex:1;}
+  #pnote{font-size:12.5px; font-style:italic; color:var(--ink2); line-height:1.6;
+    margin-top:13px; padding-top:11px; border-top:1px solid var(--hair);}
+  #ppath{margin-top:12px; padding-top:11px; border-top:1px solid var(--hair);
+    font-size:11px; color:var(--ink2); line-height:1.7;}
+  #ppath b{color:var(--seal2);}
+  #pphoto{width:100%; border-radius:9px; margin-top:12px; display:none; border:1px solid var(--hair);}
+  #pcredit{font-size:9.5px; color:var(--ink2); margin-top:5px; display:none; line-height:1.4;}
+
+  /* ---------- zoom + legend ---------- */
+  #zoom{position:fixed; right:14px; bottom:14px; z-index:25; display:flex; flex-direction:column; gap:6px;}
+  #zoom button{width:38px; height:38px; border-radius:9px; border:1px solid var(--hair);
+    background:rgba(240,231,211,.95); color:var(--ink); font-size:17px; cursor:pointer;
+    display:grid; place-items:center; font-family:ui-sans-serif,sans-serif;}
+  #zoom button:hover{border-color:var(--ink2);}
+  #legend{position:fixed; left:12px; bottom:12px; z-index:25; font-size:10px;
+    color:var(--ink2); background:rgba(240,231,211,.9); border:1px solid var(--hair);
+    border-radius:8px; padding:7px 10px; line-height:1.8; font-family:ui-sans-serif,sans-serif;}
+  #legend b{color:var(--seal);}
+  @media(max-width:720px){
+    #legend{display:none;}
+    #q{width:120px;}
+    #brandtxt span{display:none;}
+    .btn{padding:8px 9px; font-size:11px;}
+  }
+  #hint{position:fixed; left:50%; top:58px; transform:translateX(-50%); z-index:26;
+    background:rgba(35,31,24,.86); color:#f2ead8; font-size:11.5px; padding:7px 14px;
+    border-radius:20px; font-family:ui-sans-serif,sans-serif; pointer-events:none;
+    transition:opacity .6s; }
+</style>
+</head>
+<body>
+
+<div id="bar">
+  <div id="brand">
+    <div id="seal">葉</div>
+    <div id="brandtxt">
+      <b>Yap Kwan Seng</b>
+      <span class="sans">Family Tree · 1846–1902</span>
+    </div>
+  </div>
+  <div id="tools">
+    <div id="searchwrap">
+      <svg id="qi" width="13" height="13" viewBox="0 0 14 14"><circle cx="6" cy="6" r="4.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9.2 9.2 L12.5 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input id="q" class="sans" placeholder="Search a name…" autocomplete="off">
+      <button id="qx">&times;</button>
+    </div>
+    <button class="btn" id="bline">Trace the line</button>
+    <button class="btn" id="bexp">Expand all</button>
+    <button class="btn dark" id="bfit">Fit</button>
+  </div>
+</div>
+
+<div id="stage">
+  <svg id="svg"><g id="view"></g></svg>
+</div>
+
+<div id="hint" class="sans">Drag to pan · scroll or pinch to zoom · tap a name for detail</div>
+
+<div id="zoom">
+  <button id="zin" title="Zoom in">+</button>
+  <button id="zout" title="Zoom out">−</button>
+</div>
+
+<div id="legend" class="sans">
+  <div><b>✦</b> direct line to Anselm &amp; Anton</div>
+  <div><span style="color:var(--m)">●</span> son &nbsp; <span style="color:var(--f)">●</span> daughter &nbsp; † deceased</div>
+  <div>Numbered badge = hidden descendants, tap to open</div>
+</div>
+
+<div id="panel">
+  <button id="pclose">&times;</button>
+  <div id="pgen" class="sans"></div>
+  <h2 id="pname"></h2>
+  <div id="palias"></div>
+  <img id="pphoto" alt="">
+  <div id="pcredit" class="sans"></div>
+  <div id="pmeta"></div>
+  <div id="pnote"></div>
+  <div id="ppath" class="sans"></div>
+</div>
+
+<script>
+/* =================================================================
+   PHOTOS
+   Only Kapitan Yap Kwan Seng carries a portrait. To enable it,
+   save the public-domain portrait from his Wikipedia page as
+   "yap-kwan-seng.jpg" beside this file. If absent, the card falls
+   back to a monogram automatically — nothing breaks.
+   ================================================================= */
+const PHOTOS = {
+  "Yap Kwan Seng": { src: "yap-kwan-seng.jpg",
+    credit: "Portrait of Kapitan Yap Kwan Seng. Public domain (subject died 1902); via Wikimedia Commons." }
+};
+
+/* =================================================================
+   DATA — transcribed from the 2014 family compilation
+   ================================================================= */
+const DATA = {
+n:"Yap Kwan Seng", a:"葉觀盛", s:"m", b:"1846", d:"1902", line:1,
+title:"Kapitan China of Kuala Lumpur, 1889–1902",
+sp:"Lim Hiong Yueng (1st) — five wives in Malaya, three in China",
+l:"Kuala Lumpur",
+note:"Fifth and last Kapitan China of Kuala Lumpur. Hakka of the Fui Chiu clan, born in Liangpoi Village, Chixi, Taishan, Guangdong; eldest son of Yap Hoin Yin. He reached Malaya at eighteen and worked the tin mines at Seremban, and by the 1890s employed some seven thousand men. He founded Pooi Shin Thong, which became Tung Shin Hospital, co-founded the Victoria Institution and the Tai Wah Ward of the Pauper's Hospital, and built the brick kiln that gave Brickfields its name. He died of consumption; the office of Kapitan was abolished with him. Jalan Yap Kwan Seng in Kuala Lumpur carries his name.",
+k:[
+{n:"Yap Tai Kee",a:"Kei",s:"m",o:1,x:1,note:"Birth rank confirmed. Descendants unrecorded."},
+{n:"Yap Tai Cheong",s:"m",o:2,x:1,note:"Birth rank confirmed.",k:[
+ {n:"Yap Pow Chong",s:"m"},{n:"Yap Pow Yin",s:"m"},{n:"Yap Pow Thong",s:"m"},{n:"Yap Pow Leng",s:"m"},
+ {n:"Yap Foong Ngor",s:"f"},{n:"Yap Foong Hei",s:"f"},{n:"Yap Foong Loon",s:"f"},{n:"Yap Foong Meng",s:"f"},
+ {n:"Yap Foong Soo",s:"f"},{n:"Yap Foong Soon",s:"f"},{n:"Yap Foong Yoke",s:"f"},{n:"Yap Foong Chiew",s:"f"},
+ {n:"Yap Foong Foon",s:"f"},{n:"Yap Foong May",s:"f"}]},
+{n:"Yap Tai Kwai",s:"m",o:3,ad:1,x:1,k:[
+ {n:"Yap Pow Yoong",s:"m",k:[{n:"Yap Peng Ann",a:"Yew?",s:"m"}]},
+ {n:"Yap Pow Onn",s:"m"},{n:"Yap Pow Sun",s:"m"}]},
+{n:"Yap Tai Kong",s:"m",o:4,x:1,sp:"Lye Beng Choo",k:[
+ {n:"Yap Pow Thiam",s:"m",x:1,sp:"Hoh Yoong Foon",k:[
+  {n:"Yap Peng Siew",s:"m",note:"Not married."},
+  {n:"Yap Weng Fong",s:"f",note:"Not married."},
+  {n:"Yap Weng Yue",s:"f",sp:"Hong Yiew Khoon",k:[
+   {n:"Hong Eng Kean",a:"Jonathan",s:"m"},{n:"Hong Eng Hin",a:"Dominic",s:"m"},
+   {n:"Hong Yen Kei",a:"Cassandra",s:"f"}]}]},
+ {n:"Yap Kim Choon",s:"f",sp:"Lim Khoon Pai",k:[
+  {n:"Lim Teck Hock",a:"Willie",s:"m",sp:"Hoh Siew Lween (May)",k:[
+   {n:"Lim Yew Aik",a:"Douglas",s:"m"},{n:"Lim Peng Sim",a:"Kerstin",s:"f"},{n:"Lim Peng Ee",a:"Cheryl",s:"f"}]},
+  {n:"Lim Suan Imm",s:"f",sp:"Lye",k:[
+   {n:"Lye Chong Beng",a:"Benny",s:"m",k:[{n:"Lye Kin Sang",a:"Anson",s:"m"}]},
+   {n:"Lye Leng In",a:"Wendy",s:"f"}]},
+  {n:"Lim Suan Cheng",s:"f",note:"Not married."},
+  {n:"Lim Suan Heok",s:"f",note:"Not married."},
+  {n:"Lim Suan Teen",s:"f",sp:"Leong Kum Fatt",k:[
+   {n:"Leong Tuck Heng",s:"m",sp:"Ng Li Fung",k:[{n:"Leong Yue Chen",a:"Denise",s:"f"}]},
+   {n:"Leong Mei Ling",s:"f",sp:"Chen Shao Fei (Allan)",k:[
+    {n:"Chen Hoong Kit",a:"Brandon",s:"m"},{n:"Chen Hoong Yee",a:"Justin",s:"m"}]}]},
+  {n:"Lim Suan Geak",s:"f",sp:"Gan",k:[
+   {n:"Gan Chee Keong",s:"m"},{n:"Gan Chee Teik",a:"Eric",s:"m"},{n:"Gan Chee Seng",a:"Jason",s:"m"}]}]},
+ {n:"Yap Kim Eu",s:"f",sp:"Khor Ah Chooi",k:[
+  {n:"Khor Thye Lee",s:"m",k:[{n:"Khor Siew Hong",a:"Winston",s:"m"},{n:"Khor Phaik Geok",a:"Elaine",s:"f"}]},
+  {n:"Khor Boay Leng",s:"f",note:"Not married."}]}]},
+{n:"Yap Tai Yook",s:"m",o:5,x:1,note:"Descendants unrecorded."},
+{n:"Yap Tai Yam",s:"m",o:6,x:1,k:[
+ {n:"Yap Boo Rok",s:"f",k:[{n:"Chua Boon Chin",s:"m",l:"Vancouver"}]}]},
+{n:"Yap Tai Chee",s:"m",o:7,ad:1,x:1,note:"Possibly father of Yap Peng Seng and Yap Peng Kwan (Koong) — the compilers were unsure whether these belong here or under Yap Tai Chi."},
+{n:"Yap Tai Hing",s:"m",o:8,x:1,note:"Descendants unrecorded."},
+{n:"Yap Tai Chi",s:"m",o:9,x:1,k:[
+ {n:"Yap Pow Too",s:"m",k:[
+  {n:"Yap Peng Seng",s:"m",note:"Attribution uncertain in the source."},
+  {n:"Yap Peng Keong",s:"m",note:"A source for this compilation."}]}]},
+{n:"Yap Tai Wah",s:"m",o:10,x:1,note:"Birth rank confirmed. Three wives; the first two were sisters of the Wong family.",k:[
+ {n:"Yap Poh Hong",s:"m",b:"1916",d:"1991",via:"Wife 1 · Bong Chee Hong",sp:"Lee Yoke Sum (Elsie); Seet Ah Moi (Nellie)",k:[
+  {n:"Yap Peng Khee",s:"m",b:"1955",l:"Sydney?"},
+  {n:"Yap Siew Kin",a:"Shirley",s:"f",b:"1945"},
+  {n:"Yap Siew Peng",a:"Sharon",s:"f",b:"1953",note:"A source for this compilation."}]},
+ {n:"Yap Poh Pak",s:"m",x:1,via:"Wife 1 · Bong Chee Hong",sp:"Ong Siew Fah",k:[
+  {n:"Yap Peng Cheong",a:"Dr.",s:"m",x:1},
+  {n:"Adopted daughter",s:"f",ad:1,note:"Name not recorded."}]},
+ {n:"Yap Poh Piew",s:"m",x:1,via:"Wife 1 · Bong Chee Hong",note:"No children recorded."},
+ {n:"Yap Poh Tho",a:"‘Heung’ cheh",s:"m",b:"1926",d:"1970",via:"Wife 1 · Bong Chee Hong",sp:"Chan Sow Chen (1926–2007)",k:[
+  {n:"Yap Peng Kong",a:"Yap Ping Kon",s:"m",b:"1948",l:"Sydney",note:"A source for this compilation."},
+  {n:"Yap Peng Hoe",s:"m",b:"1950",l:"Alor Star"},
+  {n:"Yap Peng Yew",s:"m",b:"1956",d:"2010"},
+  {n:"Yap Moh Lan",s:"f",b:"1947"},{n:"Yap Mo Ching",s:"f",b:"1953"},
+  {n:"Yap Moh Kit",s:"f",note:"Born and died — record lost."}]},
+ {n:"Yap Swee Ho",s:"f",x:1,via:"Wife 1 · Bong Chee Hong",sp:"Boey Heng Sang",k:[
+  {n:"Boey Kok Leong",s:"m",l:"Ipoh"},{n:"Boey Pik Yee",s:"f"},{n:"Boey Pik Fong",s:"f"},
+  {n:"Boey Pik Yoke",s:"f"},{n:"Boey Pik Har",s:"f"}]},
+ {n:"Yap Swee Yee",s:"f",x:1,via:"Wife 1 · Bong Chee Hong"},
+ {n:"Yap Swee Sum",s:"f",x:1,via:"Wife 1 · Bong Chee Hong"},
+ {n:"Yap Poh Tang",s:"m",x:1,via:"Wife 2 · Wong Wai Kuen",sp:"Nona",note:"No children recorded."},
+ {n:"Yap Poh Thong",s:"m",l:"Shah Alam",via:"Wife 2 · Wong Wai Kuen",sp:"Ng Tu Yee",k:[
+  {n:"Yap Peng Loong",s:"m",l:"Kolkata, India"},{n:"Yap Sook Yee",s:"f"},{n:"Yap Sook Yen",s:"f"}]},
+ {n:"Yap Poh Kok",a:"Freddie",s:"m",d:"1995",via:"Wife 2 · Wong Wai Kuen",sp:"Yeoh Nyok Lian ‘Ah Yeong’ (d. 2005)",k:[
+  {n:"Yap Peng Nam",a:"Douglas",s:"m",b:"1964",l:"Kuala Lumpur"},
+  {n:"Yap Su Mei",a:"Audrey",s:"f"}]},
+ {n:"Yap Poh Woh",s:"m",x:1,via:"Wife 2 · Wong Wai Kuen",sp:"‘Ah Sow’",k:[
+  {n:"Yap Peng Hung",s:"m",b:"1961"},{n:"Yap Peng Wei",s:"m",b:"1970"}]},
+ {n:"Yap Poh Yun",s:"m",x:1,via:"Wife 2 · Wong Wai Kuen",sp:"‘Ah Ling’",k:[
+  {n:"Yap Peng Kuin",s:"m",l:"Kuala Lumpur?"},{n:"Janet Yap",s:"f"}]},
+ {n:"Yap Poh Yeng",s:"m",x:1,via:"Wife 2 · Wong Wai Kuen",k:[{n:"Yap Peng Leong",s:"m",l:"Kuala Lumpur?"}]},
+ {n:"Yap Poh Seng",s:"m",x:1,via:"Wife 2 · Wong Wai Kuen",sp:"‘Ah Lan’",k:[
+  {n:"Yap Peng Lok",s:"m",x:1},{n:"Yap Yuet Lai",a:"Melissa",s:"f"},{n:"Yap Yuet Meng",s:"f"}]},
+ {n:"Yap Swee Han",a:"Suzanne?",s:"f",x:1,via:"Wife 2 · Wong Wai Kuen"},
+ {n:"Yap Poh Hoi",s:"m",x:1,via:"Wife 3",k:[{n:"Yap Peng Soon",s:"m",x:1}]},
+ {n:"Yap Poh How",s:"m",x:1,via:"Wife 3",k:[
+  {n:"Yap Peng Leik",a:"Henry",s:"m"},{n:"Yap Chui Peng",a:"Athena",s:"f"},{n:"Yap Chui Mei",a:"Alouis",s:"f"}]},
+ {n:"Yap Swee Lin",s:"f",b:"1946",via:"Wife 3"},
+ {n:"Yap Swee Toh",s:"f",x:1,via:"Wife 3"}]},
+{n:"Yap Tai Seong",s:"m",o:11,x:1,k:[
+ {n:"Yap Pow Chin",s:"m",k:[{n:"Yap Peng Kai",s:"m"}]},
+ {n:"Yap Pow Thong",s:"m",l:"Singapore",sp:"Helena"},
+ {n:"Helena",s:"f",x:1,note:"Listed as a daughter in the source; possibly a transcription overlap with Yap Pow Thong's wife."}]},
+{n:"Yap Tai Hong",s:"m",o:12,x:1,note:"Birth rank confirmed.",sp:"Leow Sin Nyong",k:[
+ {n:"Yap Pow Wai",s:"m",x:1,sp:"Helen Yap (Prather)",l:"Houston, Texas"},
+ {n:"Yap Pow Cheng",s:"m",x:1,sp:"Chen Nyen Nying",k:[
+  {n:"Yap Piang Kian",a:"Dr.",s:"m",l:"Kuala Lumpur",note:"Co-compiler of this genealogy."},
+  {n:"Yap Lee Lin",s:"f",l:"Penang"}]},
+ {n:"Yap Pow Meng",s:"m",b:"1921",d:"1971",k:[
+  {n:"Yap Peng Lun",a:"Tony?",s:"m",l:"Canada"},{n:"Jane Yap",s:"f",x:1,l:"Hong Kong"}]},
+ {n:"Yap Pow Veng",s:"m",x:1,k:[
+  {n:"Yap Peng Lee",a:"Dr.",s:"m",l:"Edinburgh"},{n:"Yap Peng Soon",s:"m",l:"Kuala Lumpur"}]},
+ {n:"Yap Pow Tat",s:"m",x:1,k:[{n:"Yap Peng Choong",s:"m",ad:1}]},
+ {n:"Yap Peng Yoke",s:"f",x:1,sp:"How Say Lam",k:[
+  {n:"How Wan Hong",s:"m",l:"Kuala Lumpur"},{n:"How Wan Ping",s:"m",l:"Canada"},{n:"How Wan Yan",s:"m"},
+  {n:"Eileen How",s:"f",l:"Penang"},{n:"Violet How",s:"f",l:"Kuala Lumpur"},
+  {n:"Ellen How",s:"f",l:"Cairns"},{n:"Margie How",s:"f",l:"Canada"}]},
+ {n:"Yap Sai Yoke",s:"f",x:1,sp:"Chong Yuen Shak",k:[
+  {n:"Chong Siew Meng",a:"Dr.",s:"m",l:"Kuala Lumpur"},{n:"Chong Siew Leng",s:"f",l:"Kuala Lumpur"},
+  {n:"Chong Mei Ling",s:"f",x:1},{n:"Chong Suet Ling",s:"f",l:"Kuala Lumpur"}]},
+ {n:"Yap Phui Yoke",a:"Betty",s:"f",l:"Kuala Lumpur",note:"Unmarried. Co-compiler of this genealogy — much of the record for the Tai Hong, Tai Cheong, Tai Kwai and Tai Sing branches comes from her."}]},
+{n:"Yap Tai Sing",s:"m",o:13,x:1,k:[
+ {n:"Yap Poh Law",a:"Paul",s:"m",note:"Further confirmation required, per the compilers."},
+ {n:"Yap Poh Mun",a:"Raymond",s:"m",note:"Further confirmation required, per the compilers."},
+ {n:"Phoebe Yap",s:"f",sp:"Ong (?)",note:"Chinese name unknown, per the compilers."}]},
+
+{n:"Yap Tai Kim",s:"m",o:14,x:1,line:1,l:"Kuala Lumpur",
+ sp:"Chan Yuet Sun (1st) · Chow Yoke Sim (2nd) · Phoon Lai Yoong (3rd)",
+ note:"Fourteenth of the fifteen sons; birth rank confirmed. Anselm's great-great-grandfather. Of his three wives, the line descends through the second, Chow Yoke Sim.",k:[
+ {n:"Yap Sau Tim",s:"f",via:"Wife 1 · Chan Yuet Sun",sp:"Teh Hon Yoon",k:[
+  {n:"Donald Teh",a:"Ah Fook",s:"m",l:"Kuala Lumpur"},
+  {n:"Richard Teh",a:"Ah Ying",s:"m",l:"Kuala Lumpur"},
+  {n:"Betty Teh",s:"f",sp:"Loh Poh Kiong",k:[
+   {n:"Loh Kok Weng",a:"Dr. William",s:"m",b:"1964",l:"Brisbane"},
+   {n:"Loh Wai Kiew",a:"Isabella",s:"f",b:"1960"},
+   {n:"Loh Wai Sim",s:"f",b:"1961"},
+   {n:"Loh Wai Foong",a:"Susannah",s:"f",b:"1972"}]},
+  {n:"Doris Teh",s:"f"}]},
+ {n:"Yap Sau Leng",a:"Ah Luck",s:"f",via:"Wife 1 · Chan Yuet Sun",sp:"Phoon",k:[
+  {n:"(Ah Kok)",s:"m",note:"Given name not recorded."},{n:"Phoon Wai Yee",s:"f"}]},
+ {n:"Yap Sau Keng",a:"Ah Yah",s:"f",via:"Wife 1 · Chan Yuet Sun",sp:"Simon Lim (Ah Seng)"},
+ {n:"Yap Sau Cheng",s:"f",via:"Wife 1 · Chan Yuet Sun",sp:"Ng Lian Huat (d. 1967)",k:[
+  {n:"Ng Cheong Wee",a:"Nicholas",s:"m",b:"1947",l:"Sydney"},
+  {n:"Ng Cheong Aik",s:"m",b:"1949",l:"Kuala Lumpur"},
+  {n:"Ng Cheong Hin",s:"m",b:"1951",l:"Kuala Lumpur"},
+  {n:"Ng Cheong Hock",s:"m"},
+  {n:"Ng Lily",s:"f",b:"1945"},{n:"Ng Li Lian",s:"f",b:"1950"},
+  {n:"Ng Mee Lian",s:"f",b:"1953",note:"Co-compiler of this genealogy — the primary source for the Tai Kim branch."}]},
+ {n:"Yoke Yee",s:"f",ad:1,via:"Wife 1 · Chan Yuet Sun",note:"Adoption uncertain in the source."},
+ {n:"Yap Poh Sum",s:"m",b:"1926",d:"2010",via:"Wife 2 · Chow Yoke Sim",
+  note:"Yap Tai Kim's only son. Never married, so the Yap name did not continue through him. Anselm's grand-uncle."},
+ {n:"Yap Sau Kow",a:"Choy Woon Meng · Rose",s:"f",line:1,via:"Wife 2 · Chow Yoke Sim",
+  sp:"Long Kwee Wah (Joseph)",
+  note:"Anselm's grandmother. Because the line passes through a daughter, the Yap 葉 surname ends here and the family continues as Long 梁 through her husband.",k:[
+  {n:"Long Chee Wai",a:"Paul",s:"m",line:1,l:"Singapore",sp:"Annabella",
+   note:"Anselm's father. The surname is 梁 (Liáng); the romanisation changed to “Long” during the Japanese Occupation.",k:[
+   {n:"Anselm Long",a:"梁君豪",s:"m",line:1,me:1,l:"Singapore"},
+   {n:"Anton Long",s:"m",line:1}]},
+  {n:"Long Chui Mei",a:"Anna",s:"f",note:"Anselm's aunt."}]},
+ {n:"Chan Sow Chen",s:"f",ad:1,x:1,via:"Wife 3 · Phoon Lai Yoong",
+  note:"Adopted. Married Yap Poh Tho of the Tai Wah branch (1926–2007) — the two branches rejoin here."}]},
+
+{n:"Yap Tai Nyen",s:"m",o:15,x:1,note:"Listed fifteenth; the compilers queried whether a sixteenth son existed.",k:[
+ {n:"Yap Pow Thong",s:"m",via:"Wife 2 · Chen See",sp:"Chow Sui Ying · Yong Kuan Ying · Molly Chia · Looi Yuet Lan",k:[
+  {n:"Yap Lee Fui",a:"Remi",s:"m",l:"Terengganu",via:"m. Chow Sui Ying"},
+  {n:"Yap Soon Nam",s:"m",l:"Kuala Lumpur",via:"m. Chow Sui Ying"},
+  {n:"Yap Lee Ming",s:"m",l:"Perth",via:"m. Chow Sui Ying"},
+  {n:"Yap Chan Ling",a:"Anne",s:"f",l:"London",via:"m. Chow Sui Ying"},
+  {n:"Yap Lee Weng",s:"m",l:"Kuala Lumpur",via:"m. Looi Yuet Lan"},
+  {n:"Yap Chan Mei",s:"f",l:"Kuala Lumpur",via:"m. Looi Yuet Lan"},
+  {n:"Yap Chan Mui",s:"f",l:"Kuala Lumpur",via:"m. Looi Yuet Lan"},
+  {n:"Yap Chan Chee",a:"Angela",s:"f",ad:1,l:"Kuala Lumpur",via:"m. Looi Yuet Lan"}]},
+ {n:"Yap Pow Kean",s:"m",x:1,via:"Wife 2 · Chen See"},
+ {n:"Yap Pow Kong",s:"m",via:"Wife 3 · Phang Nyet Foong"},
+ {n:"Yap Pow Choy",s:"m",via:"Wife 3 · Phang Nyet Foong"},
+ {n:"Yap Pow Phin",s:"m",via:"Wife 3 · Phang Nyet Foong"},
+ {n:"Yap Voon Sen",a:"Jeannie",s:"f",via:"Wife 3 · Phang Nyet Foong",sp:"Loh Ai Chearn"}]},
+
+{n:"Yap Yuet Lan",s:"f",ad:1,x:1,dau:1,note:"Adopted. Further confirmation required."},
+{n:"Yap Yuet Ying",s:"f",x:1,dau:1},
+{n:"Yap Yuet Sum",s:"f",x:1,dau:1},
+{n:"Yap Nyet Tai",a:"Yap Yuet Thye",s:"f",x:1,dau:1},
+{n:"Yap Yuet Wah",s:"f",x:1,dau:1},
+{n:"Yap Yuet Hei",a:"Hui?",s:"f",x:1,dau:1},
+{n:"Yap Yuet Kuan",s:"f",x:1,dau:1},
+{n:"Yap Yuet Chi",s:"f",x:1,dau:1},
+{n:"Yap Yuet Soh",s:"f",x:1,dau:1,note:"The compilers asked whether this is the daughter who left for Hong Kong very young, connected to someone called “Ziying”."},
+{n:"Yap Yuet Choi",s:"f",x:1,dau:1}
+]};
+
+/* ================================================================= */
+const NW=172, NH=64, GAPX=16, GAPY=112;
+const GENNAME=["First","Second","Third","Fourth","Fifth","Sixth"];
+const GENCN=["第一代","第二代","第三代","第四代","第五代","第六代"];
+
+const view=document.getElementById('view');
+const svg=document.getElementById('svg');
+const stage=document.getElementById('stage');
+
+let ALL=[], byId={}, lineIds=[];
+
+/* ---- prepare ---- */
+(function prep(){
+  let i=0;
+  (function walk(nd,depth,parent){
+    nd.id='n'+(i++); nd.depth=depth; nd.parent=parent;
+    nd.open = false;
+    byId[nd.id]=nd; ALL.push(nd);
+    nd.desc=0;
+    if(nd.k) nd.k.forEach(c=>{ walk(c,depth+1,nd); nd.desc += 1 + c.desc; });
+    if(nd.line) lineIds.push(nd.id);
+    nd.q=[nd.n,nd.a,nd.l,nd.sp,nd.note].filter(Boolean).join(' ').toLowerCase();
+  })(DATA,0,null);
+  // open the direct line by default
+  ALL.forEach(n=>{ if(n.line && n.k) n.open=true; });
+  DATA.open=true;
+})();
+
+function onLine(nd){ // is this node an ancestor-or-self of the line?
+  let p=nd; while(p){ if(p.line) return true; p=p.parent; }
+  return false;
+}
+function isLineNode(nd){
+  if(nd.line) return true;
+  // a node is "on the path" if any descendant is on the line
+  let found=false;
+  (function w(x){ if(found) return; if(x.line){found=true;return;} if(x.k) x.k.forEach(w); })(nd);
+  return found;
+}
+ALL.forEach(n=>{ n.path = isLineNode(n); });
+
+/* ---- layout ---- */
+let nodes=[], links=[], bounds={};
+function layout(){
+  nodes=[]; links=[];
+  let cursor=0;
+  (function place(nd){
+    const kids = (nd.open && nd.k) ? nd.k : [];
+    if(!kids.length){
+      nd.X = cursor; cursor += NW+GAPX;
+    } else {
+      kids.forEach(place);
+      nd.X = (kids[0].X + kids[kids.length-1].X)/2;
+    }
+    nd.Y = nd.depth*(NH+GAPY);
+    nodes.push(nd);
+    kids.forEach(c=>links.push({a:nd,b:c}));
+  })(DATA);
+
+  const xs=nodes.map(n=>n.X), ys=nodes.map(n=>n.Y);
+  bounds={x0:Math.min(...xs)-40, x1:Math.max(...xs)+NW+40,
+          y0:Math.min(...ys)-40, y1:Math.max(...ys)+NH+40};
+}
+
+/* ---- pan / zoom ---- */
+let T={x:0,y:0,k:1};
+function apply(){ view.setAttribute('transform',`translate(${T.x},${T.y}) scale(${T.k})`); }
+function fit(animate){
+  const w=innerWidth, h=innerHeight-52;
+  const bw=bounds.x1-bounds.x0, bh=bounds.y1-bounds.y0;
+  const k=Math.min(w/bw, h/bh, 1.05);
+  const target={k:k, x:(w-bw*k)/2 - bounds.x0*k, y:52+(h-bh*k)/2 - bounds.y0*k};
+  animate? glide(target) : (T=target, apply());
+}
+function centerOn(nd,kk){
+  const k=kk||Math.max(T.k,.72);
+  glide({k:k, x:innerWidth/2-(nd.X+NW/2)*k, y:(innerHeight/2+20)-(nd.Y+NH/2)*k});
+}
+function glide(to){
+  const from={...T}, t0=performance.now(), dur=430;
+  (function step(t){
+    const p=Math.min(1,(t-t0)/dur), e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+    T={x:from.x+(to.x-from.x)*e, y:from.y+(to.y-from.y)*e, k:from.k+(to.k-from.k)*e};
+    apply(); if(p<1) requestAnimationFrame(step);
+  })(t0);
+}
+
+let drag=null;
+stage.addEventListener('pointerdown',e=>{
+  if(e.target.closest('.node')) return;
+  drag={x:e.clientX,y:e.clientY,tx:T.x,ty:T.y};
+  stage.classList.add('drag'); stage.setPointerCapture(e.pointerId);
+});
+stage.addEventListener('pointermove',e=>{
+  if(!drag) return;
+  T.x=drag.tx+(e.clientX-drag.x); T.y=drag.ty+(e.clientY-drag.y); apply();
+});
+['pointerup','pointercancel'].forEach(ev=>stage.addEventListener(ev,()=>{drag=null; stage.classList.remove('drag');}));
+
+stage.addEventListener('wheel',e=>{
+  e.preventDefault();
+  const f=Math.exp(-e.deltaY*0.0016);
+  zoomAt(e.clientX,e.clientY,f);
+},{passive:false});
+
+function zoomAt(cx,cy,f){
+  const nk=Math.min(2.4,Math.max(.02,T.k*f));
+  const r=nk/T.k;
+  T.x=cx-(cx-T.x)*r; T.y=cy-(cy-T.y)*r; T.k=nk; apply();
+}
+
+/* pinch */
+let pts=new Map(), pd=0;
+stage.addEventListener('pointerdown',e=>pts.set(e.pointerId,e));
+stage.addEventListener('pointermove',e=>{
+  if(!pts.has(e.pointerId)) return;
+  pts.set(e.pointerId,e);
+  if(pts.size===2){
+    drag=null;
+    const [a,b]=[...pts.values()];
+    const d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
+    if(pd) zoomAt((a.clientX+b.clientX)/2,(a.clientY+b.clientY)/2, d/pd);
+    pd=d;
+  }
+});
+['pointerup','pointercancel'].forEach(ev=>stage.addEventListener(ev,e=>{pts.delete(e.pointerId); if(pts.size<2) pd=0;}));
+document.getElementById('zin').onclick=()=>zoomAt(innerWidth/2,innerHeight/2,1.32);
+document.getElementById('zout').onclick=()=>zoomAt(innerWidth/2,innerHeight/2,1/1.32);
+document.getElementById('bfit').onclick=()=>{layout();render();fit(true);};
+
+/* ---- render ---- */
+let focusLine=false, query='', hits=new Set(), selId=null;
+const NS='http://www.w3.org/2000/svg';
+function el(t,at){const e=document.createElementNS(NS,t); for(const k in at) e.setAttribute(k,at[k]); return e;}
+
+function render(){
+  view.textContent='';
+  const gl=el('g'),gn=el('g');
+  view.append(gl,gn);
+
+  links.forEach(L=>{
+    const x1=L.a.X+NW/2, y1=L.a.Y+NH, x2=L.b.X+NW/2, y2=L.b.Y;
+    const my=y1+(y2-y1)/2;
+    const p=el('path',{d:`M${x1},${y1} V${my} H${x2} V${y2}`,class:'link'});
+    if(L.a.path&&L.b.path) p.classList.add('online');
+    if(focusLine&&!(L.a.path&&L.b.path)) p.classList.add('dim');
+    gl.append(p);
+  });
+
+  nodes.forEach(nd=>{
+    const g=el('g',{class:'node',transform:`translate(${nd.X},${nd.Y})`});
+    if(nd.line) g.classList.add('line');
+    if(nd.me) g.classList.add('me');
+    if(nd.id===selId) g.classList.add('sel');
+    if(query&&hits.has(nd.id)) g.classList.add('hit');
+    if(focusLine&&!nd.path) g.classList.add('dim');
+    if(query&&!hits.has(nd.id)) g.classList.add('dim');
+
+    g.append(el('rect',{class:'card',width:NW,height:NH,rx:9}));
+
+    // avatar: photo for Kapitan only, else monogram
+    const ph=PHOTOS[nd.n];
+    const cx=25,cy=NH/2,r=16;
+    if(ph){
+      const cid='clip'+nd.id;
+      const cp=el('clipPath',{id:cid}); cp.append(el('circle',{cx,cy,r}));
+      g.append(cp);
+      const im=el('image',{x:cx-r,y:cy-r,width:r*2,height:r*2,'clip-path':`url(#${cid})`,
+        preserveAspectRatio:'xMidYMid slice'});
+      im.setAttributeNS('http://www.w3.org/1999/xlink','href',ph.src);
+      im.setAttribute('href',ph.src);
+      im.addEventListener('error',()=>{im.remove(); g.append(mono(nd,cx,cy,r));});
+      g.append(el('circle',{cx,cy,r,fill:'#ded0b0'}));
+      g.append(im);
+      g.append(el('circle',{cx,cy,r,class:'av',fill:'none'}));
+    } else {
+      g.append(mono(nd,cx,cy,r));
+    }
+
+    const nx=50;
+    let ty= nd.a? 26 : 31;
+    const nm=el('text',{x:nx,y:ty,class:'nm'});
+    nm.textContent=(nd.line?'✦ ':'')+trunc(nd.n,17)+(nd.x?' †':'');
+    g.append(nm);
+    if(nd.a){ const al=el('text',{x:nx,y:40,class:'al'}); al.textContent=trunc(nd.a,20); g.append(al); }
+    const bits=[];
+    if(nd.o) bits.push('#'+nd.o+' son');
+    if(nd.dau) bits.push('daughter');
+    if(nd.b||nd.d) bits.push((nd.b||'?')+'–'+(nd.d||(nd.x?'?':'')));
+    if(nd.l&&!nd.b&&!nd.o) bits.push(nd.l);
+    if(nd.ad) bits.push('adopted');
+    if(bits.length){ const dt=el('text',{x:nx,y:nd.a?54:46,class:'dt'}); dt.textContent=trunc(bits.join(' · '),24); g.append(dt); }
+
+    if(nd.k&&nd.k.length){
+      const bg=el('g',{class:'toggle',transform:`translate(${NW/2-13},${NH-1})`});
+      bg.append(el('rect',{width:26,height:16,rx:8,fill:nd.open?'#8a7c5c':(nd.path?'#a52a1a':'#6d6350')}));
+      const t=el('text',{x:13,y:11.5,class:'kid','text-anchor':'middle'});
+      t.textContent = nd.open? '–' : (1+nd.desc>99?'99+':nd.n===DATA.n?nd.k.length:1+nd.desc);
+      bg.append(t); g.append(bg);
+      bg.addEventListener('click',ev=>{ev.stopPropagation(); toggle(nd);});
+    }
+    g.addEventListener('click',()=>showPanel(nd));
+    gn.append(g);
+  });
+}
+function mono(nd,cx,cy,r){
+  const g=el('g');
+  g.append(el('circle',{cx,cy,r,fill:nd.s==='f'?'#e4d3d8':'#d5e0e5',class:'av'}));
+  const t=el('text',{x:cx,y:cy+4.5,class:'mono',fill:nd.s==='f'?'#9a5b6e':'#3f6b7d'});
+  t.textContent=initials(nd.n); g.append(t); return g;
+}
+function initials(n){
+  const p=n.replace(/[()']/g,'').trim().split(/\s+/).filter(Boolean);
+  if(!p.length) return '?';
+  return (p.length>2? p[1][0]+p[2][0] : p.map(w=>w[0]).join('')).toUpperCase().slice(0,2);
+}
+function trunc(s,n){ return s.length>n? s.slice(0,n-1)+'…' : s; }
+
+function toggle(nd){
+  nd.open=!nd.open;
+  const bx=nd.X, by=nd.Y;
+  layout(); render();
+  T.x += (bx-nd.X)*T.k; T.y += (by-nd.Y)*T.k; apply();
+}
+
+/* ---- panel ---- */
+const panel=document.getElementById('panel');
+document.getElementById('pclose').onclick=()=>{panel.style.display='none'; selId=null; render();};
+function showPanel(nd){
+  selId=nd.id; render();
+  const gi=Math.min(nd.depth,5);
+  document.getElementById('pgen').textContent=`${GENCN[gi]} · ${GENNAME[gi]} generation`;
+  document.getElementById('pname').textContent=nd.n+(nd.x?' †':'');
+  const al=document.getElementById('palias');
+  al.textContent=nd.a||''; al.style.display=nd.a?'block':'none';
+
+  const ph=PHOTOS[nd.n], img=document.getElementById('pphoto'), cr=document.getElementById('pcredit');
+  if(ph){ img.src=ph.src; img.style.display='block'; cr.textContent=ph.credit; cr.style.display='block';
+    img.onerror=()=>{img.style.display='none'; cr.style.display='none';};
+  } else { img.style.display='none'; cr.style.display='none'; }
+
+  const rows=[];
+  if(nd.title) rows.push(['Office',nd.title]);
+  if(nd.o) rows.push(['Rank','Son no. '+nd.o+' of 15']);
+  if(nd.dau) rows.push(['Rank','Daughter of the Kapitan']);
+  if(nd.b||nd.d) rows.push(['Dates',(nd.b||'?')+' – '+(nd.d||(nd.x?'?':'living'))]);
+  if(nd.sp) rows.push(['Married',nd.sp]);
+  if(nd.via) rows.push(['Born to',nd.via]);
+  if(nd.l) rows.push(['Location',nd.l]);
+  if(nd.ad) rows.push(['Note','Adopted']);
+  if(nd.k) rows.push(['Children',nd.k.length+' recorded · '+nd.desc+' descendants in total']);
+  document.getElementById('pmeta').innerHTML=rows.map(r=>
+    `<div class="prow"><div class="pk">${r[0]}</div><div class="pv">${esc(r[1])}</div></div>`).join('');
+
+  const nt=document.getElementById('pnote');
+  nt.textContent=nd.note||''; nt.style.display=nd.note?'block':'none';
+
+  const chain=[]; let p=nd; while(p){chain.unshift(p); p=p.parent;}
+  document.getElementById('ppath').innerHTML='<b>Line of descent</b><br>'+
+    chain.map(c=>c===nd?`<b>${esc(c.n)}</b>`:esc(c.n)).join(' &rsaquo; ');
+
+  panel.style.display='block'; panel.scrollTop=0;
+}
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+
+/* ---- search ---- */
+const qEl=document.getElementById('q'), qx=document.getElementById('qx');
+qEl.addEventListener('input',()=>{
+  query=qEl.value.trim().toLowerCase();
+  qx.style.display=query?'block':'none';
+  hits=new Set();
+  if(query){
+    ALL.forEach(n=>{ if(n.q.includes(query)) hits.add(n.id); });
+    // open ancestors of every hit
+    hits.forEach(id=>{ let p=byId[id].parent; while(p){p.open=true; p=p.parent;} });
+    layout(); render();
+    const first=ALL.find(n=>hits.has(n.id));
+    if(first) centerOn(first,Math.max(T.k,.62));
+  } else { render(); }
+});
+qx.onclick=()=>{qEl.value=''; qEl.dispatchEvent(new Event('input')); qEl.focus();};
+
+/* ---- modes ---- */
+const bline=document.getElementById('bline');
+bline.onclick=()=>{
+  focusLine=!focusLine; bline.classList.toggle('on',focusLine);
+  bline.textContent=focusLine?'Showing the line':'Trace the line';
+  if(focusLine){ ALL.forEach(n=>{ if(n.path&&n.k) n.open=true; }); layout(); }
+  render();
+  if(focusLine){ const me=ALL.find(n=>n.me); if(me) centerOn(me,.85); }
+};
+let allOpen=false;
+const bexp=document.getElementById('bexp');
+bexp.onclick=()=>{
+  allOpen=!allOpen;
+  ALL.forEach(n=>{ if(n.k) n.open=allOpen; });
+  if(!allOpen){ DATA.open=true; ALL.forEach(n=>{ if(n.line&&n.k) n.open=true; }); }
+  bexp.textContent=allOpen?'Collapse':'Expand all';
+  layout(); render(); fit(true);
+};
+
+/* ---- go ---- */
+layout(); render(); fit(false);
+addEventListener('resize',()=>{layout();render();fit(false);});
+setTimeout(()=>{const h=document.getElementById('hint'); h.style.opacity=0;},4200);
+</script>
+</body>
+</html>
