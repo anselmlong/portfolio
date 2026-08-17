@@ -49,10 +49,14 @@ Bachelor of Computing (Computer Science) — Aug 2023 – Apr 2027
 
 ## Experience
 
-**Software Engineering Intern, Visa** — Visa, Singapore (May 2026 – Present)
+**Software Engineering Intern, Open Government Products (GovTech)** — Open Government Products, Singapore (Sep 2026 – Dec 2026)
 
-- Currently interning as a software engineering intern at Visa.
-- Building production-minded software in the payments space while applying full-stack engineering, testing, and delivery practices from prior AI, RAG, and platform projects.
+- Joining Open Government Products (GovTech Singapore) — a team of engineers and public officers building civic technology that serves the public good.
+- Eager to apply Go/Python, full-stack, and LLM/RAG guardrail experience to real government software that helps citizens and public officers.
+
+**Software Engineering Intern, Visa** — Visa, Singapore (May 2026 – Aug 2026)
+
+- Interning as a software engineering intern at Visa, building production-minded software in the payments space while applying full-stack engineering, testing, and delivery practices from prior AI, RAG, and platform projects.
 
 **Lead Developer, Project Aegis** — National Cybersecurity Olympiad, Singapore (Jan 2026 – Mar 2026)
 

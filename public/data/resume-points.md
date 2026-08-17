@@ -1,9 +1,19 @@
 ## Resume-Ready Points
 
+### Software Engineering Internship at Open Government Products (GovTech)
+
+**Role:** Software Engineering Intern (upcoming)
+**Period:** September 2026 - December 2026
+
+**Key Achievements:**
+- Selected to intern at Open Government Products (GovTech Singapore), building civic technology for the public good.
+- Committed to shipping software that helps citizens and public officers — blending full-stack engineering (Go/Python, Next.js) with LLM/RAG guardrail experience from Project Aegis.
+- Motivated by small-scale impact: built tools and bots (canvas-scraper, nus-aircon-checker, daily Gospel bot) used by real people — the reason to build in public service.
+
 ### Software Engineering Internship at Visa
 
 **Role:** Software Engineering Intern
-**Period:** May 2026 - Present
+**Period:** May 2026 - August 2026
 
 **Key Achievements:**
 
