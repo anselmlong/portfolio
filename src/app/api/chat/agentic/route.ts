@@ -1,27 +1,26 @@
-export const runtime = "edge";
+export const runtime = "nodejs";
+export const maxDuration = 30;
 
-import type { UIMessage } from "ai";
+import { ChatInputError, readChatRequest } from "~/lib/chat-request";
+import { reserveChatRequest } from "~/server/chat-budget";
+import { pool } from "~/server/pg";
 
 type AgentMessage = {
   role: "user" | "assistant";
   content: string;
 };
 
-type AgenticChatRequest = {
-  messages?: UIMessage[];
-  visitor?: {
-    name?: string;
-    email?: string;
-  };
-};
+type ChatMessage = Awaited<
+  ReturnType<typeof readChatRequest>
+>["messages"][number];
 
-const extractText = (message: UIMessage) =>
+const extractText = (message: ChatMessage) =>
   message.parts
     .filter((part) => part.type === "text")
     .map((part) => (part.type === "text" ? part.text : ""))
     .join("");
 
-const toAgentMessages = (messages: UIMessage[] = []): AgentMessage[] =>
+const toAgentMessages = (messages: ChatMessage[] = []): AgentMessage[] =>
   messages.flatMap((message) => {
     if (message.role !== "user" && message.role !== "assistant") return [];
 
@@ -80,7 +79,15 @@ const streamAgentEventsAsText = (body: ReadableStream<Uint8Array>) => {
 export async function POST(req: Request) {
   const agentUrl = process.env.AGENT_SERVICE_URL;
   const agentToken = process.env.AGENT_TOKEN;
-  const body = (await req.json()) as AgenticChatRequest;
+  let body: Awaited<ReturnType<typeof readChatRequest>>;
+  try {
+    body = await readChatRequest(req);
+  } catch (error) {
+    return Response.json(
+      { error: "Invalid chat request" },
+      { status: error instanceof ChatInputError ? error.status : 400 },
+    );
+  }
 
   if (!agentUrl || !agentToken) {
     const fallback = await fetch(new URL("/api/chat", req.url), {
@@ -93,8 +100,25 @@ export async function POST(req: Request) {
       status: fallback.status,
       headers: {
         "Content-Type": fallback.headers.get("Content-Type") ?? "text/plain",
+        ...(fallback.headers.has("Retry-After")
+          ? { "Retry-After": fallback.headers.get("Retry-After")! }
+          : {}),
       },
     });
+  }
+
+  try {
+    if (!(await reserveChatRequest(pool))) {
+      return Response.json(
+        { error: "Chat has reached its daily allowance" },
+        { status: 429, headers: { "Retry-After": "3600" } },
+      );
+    }
+  } catch {
+    return Response.json(
+      { error: "Chat is temporarily unavailable" },
+      { status: 503 },
+    );
   }
 
   const upstream = await fetch(`${agentUrl}/chat`, {
@@ -107,6 +131,7 @@ export async function POST(req: Request) {
       messages: toAgentMessages(body.messages),
       visitor: body.visitor ?? {},
     }),
+    signal: AbortSignal.timeout(30000),
   });
 
   if (!upstream.ok) {
