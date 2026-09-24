@@ -145,3 +145,24 @@ The script converts your blog posts to Substack's ProseMirror format and publish
 ## License
 
 MIT
+# Public chat allowance
+
+Before deploying the chat guard, apply `scripts/chat-budget.sql` to the existing
+PostgreSQL database. The chat route fails with 503 if this budget store cannot be
+read; it never bypasses the allowance on an error. A shared atomic counter permits
+200 accepted chat requests per UTC day across all instances. Exhaustion returns
+429. Rejected inputs do not consume this allowance. Failed provider calls do.
+
+Input is capped at 32 KiB, 50 messages, 4,000 characters per text part, and 12,000
+characters total. Both `/api/chat` and the active `/api/chat/agentic` entrypoint
+share validation and the same daily allowance; the fallback is counted once.
+Roles must be user/assistant and the final turn must be a nonempty user message.
+Visitor name/email fields are bounded. The existing RAG 600-output-token limit
+remains. RAG can make a rewrite and an answer call plus embeddings; the agent
+service may make additional model/tool calls. The daily counter
+is a request ceiling, not a dollar guarantee. Set a provider-side spending limit
+as well. This global safeguard limits aggregate spend but can be exhausted by
+one visitor; per-visitor authentication/quotas remain a follow-up.
+
+The route no longer logs visitors' question text. Test the input boundary with
+`bun run test -- src/lib/chat-request.test.ts`.

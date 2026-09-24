@@ -12,24 +12,23 @@ import {
   type BaseMessage,
 } from "@langchain/core/messages";
 import { type Document } from "@langchain/core/documents";
-import type { UIMessage } from "ai";
 import { pool } from "~/server/pg";
+import { ChatInputError, readChatRequest } from "~/lib/chat-request";
+import { reserveChatRequest } from "~/server/chat-budget";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
 // Types
-interface ChatRequest {
-  messages: UIMessage[];
-}
-
 // Helper: Format docs
 function formatDocs(docs: Document[]): string {
   return docs.map((d) => d.pageContent).join("\n\n");
 }
 
 // Helper: Extract text from UIMessage parts
-function extractText(message: UIMessage): string {
+function extractText(message: {
+  parts: { type: "text"; text: string }[];
+}): string {
   return message.parts
     .filter((p) => p.type === "text")
     .map((p) => (p.type === "text" ? p.text : ""))
@@ -46,7 +45,7 @@ let vectorStoreSingleton: PGVectorStore | null = null;
 // POST Endpoint -> Takes in AI SDK messages format
 export async function POST(req: NextRequest) {
   try {
-    const body: ChatRequest = (await req.json()) as ChatRequest;
+    const body = await readChatRequest(req);
     const { messages } = body;
 
     if (!messages || messages.length === 0) {
@@ -60,10 +59,27 @@ export async function POST(req: NextRequest) {
     }
 
     const question = extractText(lastMessage);
-    console.log("Question:", question);
 
     if (!question) {
       return Response.json({ error: "Question is required" }, { status: 400 });
+    }
+
+    // Reserve before any embedding or model request, across all server instances.
+    // An unavailable budget store fails closed rather than allowing unmetered calls.
+    let allowed: boolean;
+    try {
+      allowed = await reserveChatRequest(pool);
+    } catch {
+      return Response.json(
+        { error: "Chat is temporarily unavailable" },
+        { status: 503 },
+      );
+    }
+    if (!allowed) {
+      return Response.json(
+        { error: "Chat has reached its daily allowance" },
+        { status: 429, headers: { "Retry-After": "3600" } },
+      );
     }
 
     // --- Timing: start request ---
@@ -133,7 +149,7 @@ export async function POST(req: NextRequest) {
     const startIdx = Math.max(0, messages.length - 1 - historyWindow);
     const historyMessages: BaseMessage[] = messages
       .slice(startIdx, -1)
-      .map((msg: UIMessage) => {
+      .map((msg) => {
         const text = extractText(msg);
         return msg.role === "user"
           ? new HumanMessage(text)
@@ -256,6 +272,9 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
+    if (error instanceof ChatInputError) {
+      return Response.json({ error: error.message }, { status: error.status });
+    }
     console.error("Error in chat API:", error);
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
