@@ -135,8 +135,8 @@ export default function Hero({ roles }: { roles: string[] }) {
               — <span ref={scrambleRef} className="scramble-line" />
             </p>
             <p className="hero-reveal text-muted-foreground mt-4 max-w-md text-base leading-relaxed font-light text-pretty md:text-lg">
-              studying computer science @ nus, working at the intersection of
-              design and engineering.
+              studying computer science @ nus. currently on the maps team at
+              Open Government Products.
             </p>
             <p className="hero-reveal display-accent mt-3 text-lg tracking-tight md:text-xl">
               constantly learning, always improving, never boring.

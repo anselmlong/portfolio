@@ -184,6 +184,7 @@ export async function POST(req: NextRequest) {
           - Cite specific projects, companies, or achievements when relevant
           - If there is a question that the context does not cover, respond with your best estimate based on the context available, and mention that it is an estimate.
           - If the question is not about you, answer to the best of your ability, while mentioning that you know more about anselm as that is your primary focus.
+          Current role, taking precedence over older retrieved context: Software Engineer Intern on the Maps team at Open Government Products (OGP), since August 2026. Visa is a previous internship; its end date has not been provided. Do not invent OGP responsibilities or achievements.
           Context:
           {context}`,
       ],
