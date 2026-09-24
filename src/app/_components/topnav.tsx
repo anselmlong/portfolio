@@ -22,6 +22,7 @@ export function TopNav() {
       const x = (rect.left + rect.width / 2) / window.innerWidth;
       const y = (rect.top + rect.height / 2) / window.innerHeight;
       void confetti({
+        disableForReducedMotion: true,
         particleCount: 30,
         spread: 40,
         startVelocity: 20,
@@ -44,19 +45,25 @@ export function TopNav() {
 
   return (
     <nav className="fixed top-0 right-0 left-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur-md">
-      <div className="container mx-auto px-0">
+      <div className="container mx-auto px-5">
         <header className="flex items-center justify-between py-4">
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-5 md:gap-8">
             <Link
               href="/"
-              className="cursor-pointer bg-gradient-to-r from-gray-100 to-[#c4956a] bg-clip-text text-2xl font-bold text-transparent transition-all select-none hover:from-white hover:to-[#d4a574] hover:drop-shadow-[0_0_8px_rgba(196,149,106,0.4)]"
+              className="text-primary cursor-pointer text-2xl font-bold select-none"
             >
               AL
             </Link>
             <nav className="font-geist flex flex-row gap-4 md:mt-0 md:flex-row md:gap-6">
               <Link
+                href="/#projects"
+                className="nav-link text-muted-foreground hover:text-foreground inline-flex min-h-11 items-center"
+              >
+                work
+              </Link>
+              <Link
                 href="/blog"
-                className="nav-link text-muted-foreground hover:text-foreground relative transition-colors"
+                className="nav-link text-muted-foreground hover:text-foreground relative hidden items-center transition-colors sm:inline-flex"
               >
                 blog
               </Link>
@@ -64,7 +71,7 @@ export function TopNav() {
                 href="https://photos.anselmlong.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="nav-link text-muted-foreground hover:text-foreground relative transition-colors"
+                className="nav-link text-muted-foreground hover:text-foreground relative hidden items-center transition-colors md:inline-flex"
               >
                 photos
               </a>
@@ -72,16 +79,19 @@ export function TopNav() {
                 href="https://bot.anselmlong.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="nav-link text-muted-foreground hover:text-foreground relative transition-colors"
+                className="nav-link text-muted-foreground hover:text-foreground relative hidden items-center transition-colors lg:inline-flex"
               >
                 bots
               </a>
               <a
                 ref={resumeLinkRef}
-                onClick={handleDownload}
+                onClick={(event) => {
+                  event.preventDefault();
+                  handleDownload();
+                }}
                 href={filePath}
                 download={fileName}
-                className="group text-muted-foreground hover:text-foreground transform cursor-pointer transition-all duration-300 hover:scale-110"
+                className="group text-muted-foreground hover:text-foreground inline-flex min-h-11 cursor-pointer items-center"
                 aria-label={`Download ${fileName}`}
               >
                 resume
@@ -90,7 +100,13 @@ export function TopNav() {
           </div>
 
           <div className="flex items-center">
-            <div className="flex items-center justify-center gap-2 md:gap-6">
+            <a
+              href="mailto:anselmpius@gmail.com"
+              className="text-muted-foreground hover:text-foreground inline-flex min-h-11 items-center text-sm md:hidden"
+            >
+              contact
+            </a>
+            <div className="hidden items-center justify-center gap-2 md:flex md:gap-6">
               <a
                 href="mailto:anselmpius@gmail.com"
                 className="group text-muted-foreground hover:text-foreground relative transform transition-all duration-300 hover:scale-110"

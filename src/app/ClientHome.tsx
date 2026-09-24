@@ -1,36 +1,10 @@
 // app/ClientHome.tsx
 "use client";
 
-import ChatInterface from "~/app/_components/ChatInterface";
-import Hero from "~/app/_components/Hero";
-import Marquee from "~/app/_components/Marquee";
+import GuidedPortfolio from "~/app/_components/GuidedPortfolio";
 import AboutSection from "~/app/_components/AboutSection";
 import ExperienceTimeline from "~/app/_components/ExperienceTimeline";
-import ProjectsFilmStrip from "~/app/_components/ProjectsFilmStrip";
 import EcosystemSection from "~/app/_components/EcosystemSection";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-import { useRef } from "react";
-
-// Register plugins once at module scope
-gsap.registerPlugin(ScrollTrigger, useGSAP);
-
-const roles = [
-  "student.",
-  "software engineer intern @ OGP, maps team.",
-  "coffee lover.",
-  "machine learning enthusiast.",
-  "software engineer.",
-  "data analyst.",
-  "web developer.",
-  "storyteller.",
-  "photographer.",
-  "rock toucher.",
-  "creator.",
-  "builder.",
-];
-
 const experiences = [
   {
     name: "software engineer intern @ open government products",
@@ -41,8 +15,7 @@ const experiences = [
   {
     name: "software engineering intern @ visa",
     period: "2026",
-    description:
-      "software engineering internship in the payments space.",
+    description: "software engineering internship in the payments space.",
     url: "",
   },
   {
@@ -189,88 +162,72 @@ const projects = [
 ];
 
 export default function ClientHome() {
-  const mainRef = useRef<HTMLElement | null>(null);
-  const counterRef = useRef<HTMLSpanElement | null>(null);
-  const bottomRef = useRef<HTMLDivElement | null>(null);
-
-  // Global: film frame counter tracks overall scroll progress
-  useGSAP(
-    () => {
-      const trigger = ScrollTrigger.create({
-        start: 0,
-        end: "max",
-        onUpdate: (self) => {
-          if (counterRef.current) {
-            counterRef.current.textContent = `fr ${String(
-              Math.round(self.progress * 99) + 1,
-            ).padStart(3, "0")} / 100`;
-          }
-        },
-      });
-      return () => trigger.kill();
-    },
-    { scope: mainRef },
-  );
-
-  // Closing CTA reveal
-  useGSAP(
-    () => {
-      gsap.from(".animate-up", {
-        y: 80,
-        autoAlpha: 0,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: bottomRef.current,
-          start: "top 85%",
-          toggleActions: "play none none reverse",
-        },
-      });
-    },
-    { scope: bottomRef },
-  );
-
   return (
-    <main
-      ref={mainRef}
-      className="bg-background text-foreground selection:bg-primary/20 min-h-screen pt-10"
-    >
-      <Hero roles={roles} />
-
-      <Marquee
-        items={[
-          "constantly learning",
-          "always improving",
-          "never boring",
-          "design × engineering",
-          "reducing friction",
-        ]}
-      />
-
-      <AboutSection />
-
-      <ExperienceTimeline experiences={experiences} />
-
-      <ProjectsFilmStrip projects={projects} />
-
-      <EcosystemSection />
-
-      <section ref={bottomRef} className="relative">
-        <div className="animate-up mt-40 mb-24 px-6">
-          <p className="eyebrow eyebrow-center mb-6 flex justify-center">
-            one more thing
+    <main className="bg-background text-foreground selection:bg-primary/20 min-h-screen">
+      <GuidedPortfolio />
+      <section
+        id="projects"
+        aria-labelledby="projects-title"
+        className="mx-auto max-w-6xl scroll-mt-24 px-6 py-16"
+      >
+        <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+          <h2
+            id="projects-title"
+            className="font-bricolage text-4xl tracking-tight"
+          >
+            The work, at a glance.
+          </h2>
+          <p className="text-muted-foreground">
+            No tour required. Pick something that catches your eye.
           </p>
-          <h1 className="font-bricolage text-foreground-high mb-10 text-center text-4xl leading-tight font-light tracking-tight text-balance md:text-6xl lg:text-7xl">
-            still curious? <span className="display-accent">ask.</span>
-          </h1>
-          <ChatInterface />
+        </div>
+        <div className="grid gap-x-12 md:grid-cols-2">
+          {projects.map((project) => (
+            <article key={project.name} className="border-border border-t py-7">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h3 className="font-bricolage text-2xl">
+                  <a
+                    href={project.url}
+                    target={
+                      project.url.startsWith("https") ? "_blank" : undefined
+                    }
+                    rel={
+                      project.url.startsWith("https")
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
+                    className="hover:text-primary focus-visible:outline-primary underline-offset-4 hover:underline"
+                  >
+                    {project.name}
+                    <span aria-hidden="true"> ↗</span>
+                  </a>
+                </h3>
+                <span className="text-primary text-xs">{project.status}</span>
+              </div>
+              <p className="mt-3 text-base leading-relaxed text-stone-300">
+                {project.description}
+              </p>
+              <p className="text-muted-foreground mt-4 text-xs leading-relaxed">
+                {project.tech}
+              </p>
+            </article>
+          ))}
         </div>
       </section>
-
-      {/* Fixed film frame counter (desktop) */}
-      <span ref={counterRef} className="frame-counter" aria-hidden="true">
-        fr 001 / 100
-      </span>
+      <AboutSection />
+      <ExperienceTimeline experiences={experiences} />
+      <EcosystemSection />
+      <section id="contact" className="mx-auto max-w-6xl px-6 py-24">
+        <h2 className="font-bricolage text-4xl">
+          A good conversation starts somewhere.
+        </h2>
+        <a
+          href="mailto:anselmpius@gmail.com"
+          className="text-primary mt-6 inline-block text-xl underline underline-offset-8"
+        >
+          Say hello →
+        </a>
+      </section>
     </main>
   );
 }
