@@ -10,7 +10,9 @@ Anselm Long — Computer Science student at National University of Singapore
 (First Class Honours, 2023–2027). Exchange at Tulane University (Fall 2025).
 
 EXPERIENCE
-- Software Engineering Intern, Visa (May 2026–present): Current software
+- Software Engineer Intern, Open Government Products (OGP) (Aug 2026–present):
+  Working on the Maps team. No specific responsibilities or achievements supplied.
+- Software Engineering Intern, Visa (2026): Previous software
   engineering internship in the payments space, applying full-stack engineering,
   testing, and delivery practices in a large-scale financial technology
   environment.

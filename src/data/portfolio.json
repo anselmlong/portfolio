@@ -116,12 +116,19 @@
   ],
   "experiences": [
     {
+      "title": "Software Engineer Intern",
+      "company": "Open Government Products (OGP)",
+      "start_date": "Aug 2026",
+      "end_date": "Present",
+      "points": ["Working on the Maps team at Open Government Products."]
+    },
+    {
       "title": "Software Engineering Intern",
       "company": "Visa",
       "start_date": "May 2026",
-      "end_date": "Present",
+      "end_date": "",
       "points": [
-        "Currently interning as a software engineering intern at Visa, building production-minded software in the payments space.",
+        "Software engineering internship at Visa in the payments space.",
         "Applying full-stack engineering, testing, and delivery practices from prior AI, RAG, and platform projects in a large-scale financial technology environment."
       ]
     },

@@ -93,7 +93,8 @@ Tailor Anselm Long's resume for the given job description.
 Anselm's skills: Python, TypeScript, JavaScript, Java, SQL, Next.js, React, FastAPI,
 LangChain, LangGraph, Docker, PostgreSQL, pgvector, Playwright, Machine Learning,
 Computer Vision, Explainable AI, Data Engineering. He is currently a Software
-Engineering Intern at Visa.
+Engineer Intern on the Maps team at Open Government Products (OGP), since August 2026.
+Do not invent responsibilities or achievements for this role.
 
 Available projects (0-indexed):
 0. Freak-Cha — CV/hackathon, Next.js, MediaPipe, YOLOv8

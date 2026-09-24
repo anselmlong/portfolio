@@ -18,7 +18,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const roles = [
   "student.",
-  "visa software engineering intern.",
+  "software engineer intern @ OGP, maps team.",
   "coffee lover.",
   "machine learning enthusiast.",
   "software engineer.",
@@ -33,10 +33,16 @@ const roles = [
 
 const experiences = [
   {
+    name: "software engineer intern @ open government products",
+    period: "aug 2026 - present",
+    description: "working on the maps team at Open Government Products (OGP).",
+    url: "",
+  },
+  {
     name: "software engineering intern @ visa",
-    period: "may 2026 - present",
+    period: "2026",
     description:
-      "currently interning at visa, building production-minded software in the payments space.",
+      "software engineering internship in the payments space.",
     url: "",
   },
   {
