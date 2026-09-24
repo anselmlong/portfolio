@@ -1,5 +1,3 @@
-import { projects } from "./portfolio-content";
-
 export const intents = [
   "work",
   "experience",
@@ -56,24 +54,4 @@ export function curatedReply(intent: Intent): Reply {
     },
   };
   return replies[intent];
-}
-
-export function isIntent(value: unknown): value is Intent {
-  return (
-    typeof value === "string" && intents.some((intent) => intent === value)
-  );
-}
-
-export function isReply(value: unknown): value is Reply {
-  if (!value || typeof value !== "object") return false;
-  const reply = value as Partial<Reply>;
-  return (
-    typeof reply.text === "string" &&
-    reply.text.length <= 5000 &&
-    isIntent(reply.intent) &&
-    Array.isArray(reply.projects) &&
-    reply.projects.length <= 3 &&
-    reply.projects.every((name) => projects.some((p) => p.name === name)) &&
-    (reply.note === undefined || typeof reply.note === "string")
-  );
 }

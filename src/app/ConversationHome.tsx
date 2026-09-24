@@ -16,7 +16,6 @@ import {
 import {
   choices,
   curatedReply,
-  isReply,
   type Intent,
   type Reply,
 } from "~/lib/conversation";
@@ -216,19 +215,54 @@ export default function ConversationHome() {
       .slice(-8)
       .map((m) => ({ role: m.role, content: m.text.slice(0, 1200) }));
     add("user", text);
+    const assistantId = nextId.current++;
+    setMessages((previous) => [
+      ...previous,
+      { id: assistantId, role: "assistant", text: "" },
+    ]);
     try {
-      const response = await fetch("/api/conversation", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         signal: AbortSignal.any([request.signal, AbortSignal.timeout(28000)]),
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: [...history, { role: "user", content: text }],
+          messages: [...history, { role: "user", content: text }].map(
+            (message) => ({
+              id: crypto.randomUUID(),
+              role: message.role,
+              parts: [{ type: "text", text: message.content }],
+            }),
+          ),
         }),
       });
-      const data: unknown = await response.json();
-      if (!response.ok || !isReply(data)) throw new Error("Unavailable");
-      if (!request.signal.aborted) add("assistant", data.text, data);
+      if (!response.ok || !response.body) throw new Error("Unavailable");
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let answer = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        answer += decoder.decode(value, { stream: true });
+        if (!request.signal.aborted) {
+          setMessages((previous) =>
+            previous.map((message) =>
+              message.id === assistantId ? { ...message, text: answer } : message,
+            ),
+          );
+        }
+      }
+      answer += decoder.decode();
+      if (!request.signal.aborted) {
+        setMessages((previous) =>
+          previous.map((message) =>
+            message.id === assistantId ? { ...message, text: answer } : message,
+          ),
+        );
+      }
     } catch {
+      setMessages((previous) =>
+        previous.filter((message) => message.id !== assistantId),
+      );
       if (!request.signal.aborted) {
         setError(
           "The AI guide couldn’t answer just now. Your draft is preserved—try again, or choose a reply below.",
@@ -449,8 +483,9 @@ export default function ConversationHome() {
                 </div>
               </form>
               <p className={styles.disclosure}>
-                AI guide, not a live chat with me. Free text goes to TypeSafe
-                and OpenAI. Please don’t share sensitive information.
+                AI guide, not a live chat with me. Free-text questions use my
+                project notes and OpenAI. Please don’t share sensitive
+                information.
               </p>
             </div>
           </>
