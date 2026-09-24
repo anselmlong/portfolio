@@ -125,6 +125,54 @@ const projects = [
     status: "live site",
   },
   {
+    name: "kopitype",
+    tech: "Next.js, TypeScript, SQLite, typing analytics",
+    description:
+      "a Singlish-themed typing test with local word lists, MRT stations, live WPM and accuracy stats, challenge mode, and a glossary of Singaporean terms.",
+    url: "https://kopitype.com",
+    status: "live site",
+  },
+  {
+    name: "bonsai",
+    tech: "FastAPI, React, research agents, streaming",
+    description:
+      "an AI research workspace that turns a question into a sourced report, with streaming progress and controllable research depth.",
+    url: "https://bonsai.anselmlong.com",
+    status: "live site",
+  },
+  {
+    name: "govML",
+    tech: "Python, FastAPI, machine-learning pipelines",
+    description:
+      "a machine-learning pipeline and project gallery for exploring public-sector use cases; the live API exposes interactive documentation.",
+    url: "https://api.govml.anselmlong.com/docs",
+    status: "live API",
+  },
+  {
+    name: "route archiver",
+    tech: "Python, FastAPI, SQLite, Telegram Mini App",
+    description:
+      "a climbing-route archive for the NUS USC gym: Telegram posts become searchable routes with grades, wall sections, photos, and ratings.",
+    url: "https://routes.anselmlong.com/",
+    status: "live site + API",
+  },
+  {
+    name: "betaview",
+    tech: "Next.js, FastAPI, MediaPipe, OpenCV, Claude",
+    description:
+      "an AI climbing coach that analyzes bouldering videos for movement efficiency, foot stability, rhythm, and body tension.",
+    url: "https://betaview.vercel.app",
+    status: "live site",
+  },
+  {
+    name: "computah",
+    tech: "TypeScript, desktop automation, local AI",
+    description:
+      "a desktop AI assistant that can see and operate the computer, with explicit security boundaries and a signed-app release workflow.",
+    url: "https://computah.anselmlong.com",
+    status: "live site + prototype",
+  },
+  {
     name: "miccdrop",
     tech: "React Native, Node.js, Supabase, Spotify API",
     description:
