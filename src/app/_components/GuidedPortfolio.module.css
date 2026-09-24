@@ -1,0 +1,451 @@
+.guide {
+  max-width: 1160px;
+  margin: auto;
+  padding: 120px 32px 64px;
+  color: #e9e2d8;
+}
+.guide button,
+.guide a {
+  -webkit-tap-highlight-color: transparent;
+}
+.guide button {
+  cursor: pointer;
+}
+.guide :is(button, a, input):focus-visible {
+  outline: 2px solid #dea367;
+  outline-offset: 5px;
+}
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+.identity img {
+  border-radius: 50%;
+  object-fit: cover;
+  width: 42px;
+  height: 42px;
+}
+.identity strong,
+.identity span {
+  display: block;
+}
+.identity strong {
+  font-size: 14px;
+  font-weight: 500;
+}
+.identity span {
+  font-size: 12px;
+  color: #b4aba0;
+  margin-top: 3px;
+}
+.identity a {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  min-height: 44px;
+}
+.opening {
+  margin: 64px 0 36px;
+}
+.opening h1 {
+  font-family: var(--font-bg-sans), sans-serif;
+  font-size: clamp(38px, 5.4vw, 72px);
+  line-height: 1.08;
+  font-weight: 350;
+  letter-spacing: -0.035em;
+}
+.opening h1 span {
+  color: #dca063;
+}
+.opening p {
+  margin-top: 24px;
+  color: #bcb2a6;
+  font-size: 18px;
+  line-height: 1.7;
+}
+.choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid #504136;
+  border-bottom: 1px solid #504136;
+}
+.choices button {
+  padding: 24px 22px;
+  text-align: left;
+  background: transparent;
+  transition: background 0.2s;
+}
+.choices button + button {
+  border-left: 1px solid #504136;
+}
+.choices button:hover,
+.choices button[aria-pressed="true"] {
+  background: #2a2119;
+}
+.choices button[aria-pressed="true"] {
+  box-shadow: inset 0 -2px #dca063;
+}
+.choices button > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 16px;
+  color: #f1e8dc;
+}
+.choices small {
+  display: block;
+  margin-top: 9px;
+  color: #bcb2a6;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.invitation {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 0 48px;
+  font-size: 13px;
+  color: #a79d91;
+}
+.conversation {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  padding: 36px 0 48px;
+  animation: arrive 0.35s ease-out;
+}
+.chapter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #bcb2a6;
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 12px;
+}
+.chapter button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+}
+.story h2 {
+  scroll-margin-top: 120px;
+  margin: 20px 0;
+  font-family: var(--font-bg-sans), sans-serif;
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+.story h2:focus {
+  outline: none;
+}
+.story > p {
+  line-height: 1.8;
+  color: #c5bbae;
+  font-size: 17px;
+}
+.detailToggle {
+  color: #e0a770;
+  min-height: 44px;
+  margin-top: 12px;
+  font-size: 15px;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.story .details {
+  font-size: 15px;
+  margin-top: 12px;
+}
+.projectLink {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 16px 0 24px;
+  min-height: 44px;
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 14px;
+}
+.tourNavigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  border-top: 1px solid #40362d;
+  padding-top: 16px;
+}
+.tourNavigation button,
+.tourNavigation a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: #e0a770;
+  font-size: 15px;
+}
+.artifact {
+  min-width: 0;
+  align-self: start;
+  margin-top: 12px;
+  background: #211c17;
+  border: 1px solid #4b3b2e;
+  border-radius: 6px;
+  overflow: hidden;
+  animation: arrive 0.35s ease-out;
+}
+.artifactLabel {
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 12px;
+  color: #d2b99e;
+}
+.typing,
+.pipeline {
+  padding: 28px;
+}
+.phrase {
+  margin: 30px 0;
+  font-family: var(--font-bg-sans), sans-serif;
+  font-size: 32px;
+  line-height: 1.45;
+  color: #a89b8b;
+  white-space: pre-wrap;
+}
+.correct {
+  color: #bce0b4;
+}
+.incorrect {
+  color: #ffb5a9;
+  text-decoration: underline wavy;
+  text-underline-offset: 5px;
+}
+.inputLabel {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 10px;
+  color: #d0c4b5;
+}
+.typing input {
+  width: 100%;
+  padding: 14px;
+  min-height: 48px;
+  border: 1px solid #7f6b57;
+  border-radius: 4px;
+  background: #15120f;
+  color: #f4eadc;
+  font-size: 16px;
+}
+.typing input::placeholder {
+  color: #b9aa99;
+}
+.typing input:disabled {
+  opacity: 0.75;
+}
+.gameFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+.gameFooter p {
+  font-size: 13px;
+  color: #c3b5a5;
+  min-height: 40px;
+}
+.gameFooter button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  align-self: flex-start;
+  color: #e0a770;
+}
+.routeDemo > .artifactLabel {
+  padding: 22px 24px 0;
+}
+.wall {
+  background: #31291f;
+  margin: 20px 24px;
+  color: #e0a770;
+}
+.wall svg {
+  width: 100%;
+  height: 190px;
+}
+.wall span {
+  display: block;
+  padding: 8px 16px 16px;
+  font-size: 12px;
+  text-align: center;
+  color: #d5c6b4;
+}
+.routeRecord {
+  padding: 0 24px;
+  min-height: 128px;
+}
+.routeRecord strong {
+  display: block;
+  font-size: 20px;
+  font-weight: 500;
+}
+.routeRecord span {
+  color: #e0a770;
+  font-size: 14px;
+}
+.routeRecord p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #c3b5a5;
+  margin-top: 8px;
+}
+.artifactButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  color: #e0a770;
+  border-top: 1px solid #4b3b2e;
+  font-size: 14px;
+}
+.artifactButton:hover {
+  background: #32281e;
+}
+.pipeline > div {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 0;
+  border-bottom: 1px solid #4b3b2e;
+}
+.pipeline > div span {
+  color: #dca063;
+  font-size: 13px;
+}
+.pipeline strong {
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+}
+.pipeline > p:last-child {
+  font-size: 14px;
+  line-height: 1.7;
+  margin-top: 22px;
+  color: #c3b5a5;
+}
+.photo img {
+  width: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  object-position: center 35%;
+}
+.photo p {
+  padding: 20px 24px;
+  font-size: 15px;
+  color: #d0c4b5;
+}
+.aiSection {
+  border-top: 1px solid #40362d;
+}
+.aiToggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 0;
+  text-align: left;
+  color: #d9cbb9;
+  font-size: 16px;
+}
+.aiToggle span {
+  color: #e0a770;
+  font-size: 24px;
+}
+.aiNote {
+  color: #bcb2a6;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.aiNote a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@keyframes arrive {
+  from {
+    opacity: 0.5;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 760px) {
+  .guide {
+    padding: 94px 22px 40px;
+  }
+  .identity {
+    flex-wrap: wrap;
+  }
+  .identity a {
+    width: 100%;
+    margin: 0;
+  }
+  .opening {
+    margin: 28px 0;
+  }
+  .opening p {
+    font-size: 16px;
+    margin-top: 18px;
+  }
+  .desktopBreak {
+    display: none;
+  }
+  .choices {
+    grid-template-columns: 1fr;
+  }
+  .choices button {
+    padding: 18px 12px;
+  }
+  .choices button + button {
+    border-left: 0;
+    border-top: 1px solid #40362d;
+  }
+  .choices small {
+    margin-top: 5px;
+  }
+  .invitation {
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px 0 28px;
+  }
+  .conversation {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 20px 0 32px;
+  }
+  .story h2 {
+    margin-top: 12px;
+  }
+  .artifact {
+    margin-top: 0;
+  }
+  .typing,
+  .pipeline {
+    padding: 22px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .conversation,
+  .artifact {
+    animation: none;
+  }
+  .choices button {
+    transition: none;
+  }
+}

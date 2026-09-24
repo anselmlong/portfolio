@@ -19,7 +19,7 @@ jobs:
           python-version: "3.12"
       - run: bun install --frozen-lockfile
       - run: bun run check
-      - run: bun test
+      - run: bun run test
       - run: bun run build
       - run: python -m pip install -r agent/requirements.txt
       - run: bun run test:agent
