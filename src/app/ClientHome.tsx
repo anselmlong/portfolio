@@ -141,28 +141,12 @@ const projects = [
     status: "live site",
   },
   {
-    name: "govML",
-    tech: "Python, FastAPI, machine-learning pipelines",
-    description:
-      "a machine-learning pipeline and project gallery for exploring public-sector use cases; the live API exposes interactive documentation.",
-    url: "https://api.govml.anselmlong.com/docs",
-    status: "live API",
-  },
-  {
     name: "route archiver",
     tech: "Python, FastAPI, SQLite, Telegram Mini App",
     description:
       "a climbing-route archive for the NUS USC gym: Telegram posts become searchable routes with grades, wall sections, photos, and ratings.",
     url: "https://routes.anselmlong.com/",
     status: "live site + API",
-  },
-  {
-    name: "betaview",
-    tech: "Next.js, FastAPI, MediaPipe, OpenCV, Claude",
-    description:
-      "an AI climbing coach that analyzes bouldering videos for movement efficiency, foot stability, rhythm, and body tension.",
-    url: "https://betaview.vercel.app",
-    status: "live site",
   },
   {
     name: "computah",
