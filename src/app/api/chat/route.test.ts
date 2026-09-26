@@ -9,6 +9,7 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("~/server/pg", () => ({ pool: {} }));
+vi.mock("~/server/chat-budget", () => ({ reserveChatRequest: vi.fn(async () => true) }));
 vi.mock("@langchain/community/vectorstores/pgvector", () => ({
   PGVectorStore: { initialize: mocks.initialize },
 }));
