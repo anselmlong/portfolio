@@ -62,7 +62,7 @@ describe("preview reveal endpoint", () => {
 
   it("drops unknown choices, low confidence, and project-less work reveals", async () => {
     for (const reply of [
-      decision("<script>", "kopitype"),
+      decision("<script>", "none"),
       decision("experience", "none", 0.3),
       decision("work", "an invented project"),
     ]) {
@@ -75,6 +75,24 @@ describe("preview reveal endpoint", () => {
         projects: [],
       });
     }
+  });
+
+  it("prefers a confidently named project over a split topic", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        Response.json({
+          answers: {
+            intent: { choice: "photos", confidence: 0.9 },
+            project: { choice: "route archiver", confidence: 0.88 },
+          },
+        }),
+      ),
+    );
+    expect(await (await POST(request(valid))).json()).toEqual({
+      intent: "work",
+      projects: ["route archiver"],
+    });
   });
 
   it("reports a Jev outage as 502", async () => {
