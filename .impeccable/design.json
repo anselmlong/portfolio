@@ -1,130 +1,103 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-24T06:13:54.464Z",
+  "generatedAt": "2026-09-24T07:21:18.082Z",
   "title": "Design System: Anselm Long Portfolio",
   "extensions": {
     "colorMeta": {
-      "primary": {
-        "role": "primary",
-        "displayName": "Muted Copper",
-        "tonalRamp": [
-          "oklch(0.15 0.12 65)",
-          "oklch(0.26 0.12 65)",
-          "oklch(0.38 0.12 65)",
-          "oklch(0.49 0.12 65)",
-          "oklch(0.61 0.12 65)",
-          "oklch(0.72 0.12 65)",
-          "oklch(0.84 0.12 65)",
-          "oklch(0.95 0.12 65)"
-        ]
-      },
       "background": {
         "role": "neutral",
-        "displayName": "Warm Charcoal",
-        "tonalRamp": [
-          "oklch(0.15 0.01 85)",
-          "oklch(0.26 0.01 85)",
-          "oklch(0.38 0.01 85)",
-          "oklch(0.49 0.01 85)",
-          "oklch(0.61 0.01 85)",
-          "oklch(0.72 0.01 85)",
-          "oklch(0.84 0.01 85)",
-          "oklch(0.95 0.01 85)"
-        ]
+        "displayName": "Conversation paper"
+      },
+      "gallery": {
+        "role": "neutral",
+        "displayName": "Showcase charcoal"
+      },
+      "focus": {
+        "role": "primary",
+        "displayName": "Keyboard blue"
       }
     },
     "typographyMeta": {
       "display": {
-        "displayName": "Guided display",
-        "purpose": "Opening greeting."
-      },
-      "body": {
-        "displayName": "Reading copy",
-        "purpose": "Chapter narration."
+        "displayName": "Conversation greeting",
+        "purpose": "Opening greeting; 29px on mobile."
       }
     },
-    "shadows": [
-      {
-        "name": "selected-choice",
-        "value": "inset 0 -2px #dca063",
-        "purpose": "Marks the selected guided path."
-      }
-    ],
+    "shadows": [],
     "motion": [
       {
         "name": "arrive",
-        "value": "0.35s ease-out",
-        "purpose": "Opacity 0.5 to 1 and translateY 8px to 0; disabled for reduced motion."
-      },
-      {
-        "name": "choice-hover",
-        "value": "background 0.2s",
-        "purpose": "Choice state change; disabled for reduced motion."
+        "value": "0.35s cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Reply arrival from 9px below at opacity 0.4; disabled for reduced motion."
       }
     ],
     "breakpoints": [
       {
-        "name": "guided-stack",
+        "name": "homepage-stack",
         "value": "760px"
-      },
-      {
-        "name": "editorial-desktop",
-        "value": "768px"
       }
     ]
   },
   "components": [
     {
-      "name": "Path choice",
+      "name": "Suggested reply",
       "kind": "button",
-      "refersTo": "path-choice",
-      "description": "Guided entry with selected state.",
-      "html": "<button class=\"ds-choice\" aria-pressed=\"true\"><span>I’m hiring</span><small>The work, the decisions, the person.</small></button>",
-      "css": ".ds-choice { cursor:pointer; padding:24px 22px; text-align:left; border:1px solid #504136; background:transparent; color:#f1e8dc; transition:background .2s; } .ds-choice span { font-family:var(--font-geist-sans),sans-serif; font-size:16px; } .ds-choice small { display:block; margin-top:9px; color:#bcb2a6; font-size:13px; line-height:1.6; } .ds-choice:hover,.ds-choice[aria-pressed=\"true\"] { background:#2a2119; } .ds-choice[aria-pressed=\"true\"] { box-shadow:inset 0 -2px #dca063; } .ds-choice:focus-visible { outline: 2px solid #dea367; outline-offset: 5px; } @media(prefers-reduced-motion:reduce) { .ds-choice { transition:none; } }"
+      "refersTo": "suggested-reply",
+      "description": "Starts a curated exchange.",
+      "html": "<button class=\"ds-choice\">Show me your work</button>",
+      "css": ".ds-choice{font:12px var(--font-geist-sans),sans-serif;padding:10px 13px;min-height:44px;border:1px solid #dfe0e3;border-radius:22px;background:#fff;color:#202124;cursor:pointer}.ds-choice:hover{background:#f0f1f4;border-color:#b4b7be}.ds-choice:disabled{opacity:.45;cursor:not-allowed}.ds-choice:focus-visible{outline:2px solid #4362d0;outline-offset:4px}"
     },
     {
-      "name": "Detail toggle",
-      "kind": "button",
-      "refersTo": "detail-toggle",
-      "description": "Progressive disclosure in a chapter.",
-      "html": "<button class=\"ds-detail\" aria-expanded=\"false\">A little more detail</button>",
-      "css": ".ds-detail { cursor:pointer; background:transparent; border:0; color:#e0a770; min-height:44px; font-size:15px; text-decoration:underline; text-underline-offset:5px; } .ds-detail:focus-visible { outline: 2px solid #dea367; outline-offset: 5px; }"
-    },
-    {
-      "name": "Typing input",
+      "name": "Composer",
       "kind": "input",
-      "refersTo": "typing-input",
-      "description": "Labelled playable typing field.",
-      "html": "<label class=\"ds-label\" for=\"ds-typing\">Type: steady lah, one step at a time</label><input class=\"ds-input\" id=\"ds-typing\" placeholder=\"Start typing here…\">",
-      "css": ".ds-label { display:block; font-size:13px; margin-bottom:10px; color:#d0c4b5; } .ds-input { width:100%; padding:14px; min-height:48px; border:1px solid #7f6b57; border-radius:4px; background:#15120f; color:#f4eadc; font-size:16px; } .ds-input::placeholder { color:#b9aa99; } .ds-input:disabled { opacity:.75; } .ds-input:focus-visible { outline: 2px solid #dea367; outline-offset: 5px; }"
+      "refersTo": "composer",
+      "description": "Labelled free-text conversation field.",
+      "html": "<div class=\"ds-composer\"><textarea aria-label=\"Message the guide\" placeholder=\"Ask about my work…\"></textarea></div>",
+      "css": ".ds-composer{background:#fff;border:1px solid #dadce1;border-radius:16px;padding:16px 18px 10px}.ds-composer:focus-within{border-color:#777f95}.ds-composer textarea{font:14px var(--font-geist-sans),sans-serif;width:100%;min-height:50px;max-height:150px;resize:vertical;border:0;background:transparent;color:#25272c}.ds-composer textarea:focus-visible{outline:2px solid #4362d0;outline-offset:4px}"
     },
     {
-      "name": "Artifact panel",
+      "name": "User reply",
+      "kind": "custom",
+      "description": "Right-aligned grey bubble; assistant replies remain unboxed.",
+      "html": "<div class=\"ds-reply\"><small>You</small><p>What have you been building?</p></div>",
+      "css": ".ds-reply{font:14px/1.6 var(--font-geist-sans),sans-serif;color:#202124;background:#eaecef;border-radius:18px 18px 4px 18px;padding:12px 18px;margin-left:auto;width:fit-content;max-width:85%}.ds-reply small{font-size:10px;font-weight:600;color:#696d74}.ds-reply p{margin:0}"
+    },
+    {
+      "name": "Inline project",
       "kind": "card",
-      "refersTo": "artifact",
-      "description": "Warm framed project demonstration.",
-      "html": "<article class=\"ds-artifact\"><p>Route Archiver · illustrative example</p><button>Reveal the record</button></article>",
-      "css": ".ds-artifact { background:#211c17; border:1px solid #4b3b2e; border-radius:6px; overflow:hidden; } .ds-artifact p { padding:22px 24px; font-family:var(--font-geist-sans),sans-serif; font-size:12px; color:#d2b99e; } .ds-artifact button { cursor:pointer; width:100%; padding:18px 24px; background:transparent; color:#e0a770; border:0; border-top:1px solid #4b3b2e; font-size:14px; } .ds-artifact button:hover { background:#32281e; } .ds-artifact button:focus-visible { outline: 2px solid #dea367; outline-offset: 5px; }"
+      "refersTo": "inline-project",
+      "description": "Project link revealed beneath the assistant answer.",
+      "html": "<a class=\"ds-project\" href=\"https://kopitype.com\">Kopitype</a>",
+      "css": ".ds-project{display:block;font:550 16px var(--font-geist-sans),sans-serif;background:#fff;color:#202124;border:1px solid #dfe1e5;padding:18px;border-radius:12px;text-decoration:none}.ds-project:hover{background:#f1f3f7}.ds-project:focus-visible{outline:2px solid #4362d0;outline-offset:4px}"
     },
     {
-      "name": "Tour navigation",
+      "name": "Gallery filter",
+      "kind": "chip",
+      "description": "Pressed project filter on the charcoal gallery.",
+      "html": "<button class=\"ds-filter\" aria-pressed=\"true\">✓ All projects</button>",
+      "css": ".ds-filter{font:11px var(--font-geist-sans),sans-serif;min-height:44px;border:0;border-radius:22px;padding:8px 14px;background:#33363e;color:#fff;cursor:pointer}.ds-filter:focus-visible{outline:2px solid #4362d0;outline-offset:4px}"
+    },
+    {
+      "name": "Header navigation",
       "kind": "nav",
-      "description": "Compact chapter navigation.",
-      "html": "<nav class=\"ds-tour\" aria-label=\"Tour\"><button>Previous</button><button>Next chapter</button></nav>",
-      "css": ".ds-tour { display:flex; flex-wrap:wrap; gap:16px; border-top:1px solid #40362d; padding-top:16px; } .ds-tour button { cursor:pointer; background:transparent; border:0; min-height:44px; color:#e0a770; font-size:15px; } .ds-tour button:focus-visible { outline: 2px solid #dea367; outline-offset: 5px; }"
+      "description": "Quiet links with underline feedback.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Main navigation\"><a href=\"#projects\">Work</a><a href=\"/blog\">Writing</a></nav>",
+      "css": ".ds-nav{display:flex;gap:28px;font:13px var(--font-geist-sans),sans-serif}.ds-nav a{display:inline-flex;align-items:center;min-height:44px;color:#202124;text-decoration:none}.ds-nav a:hover{text-decoration:underline;text-underline-offset:5px}.ds-nav a:focus-visible{outline:2px solid #4362d0;outline-offset:4px}"
     }
   ],
   "narrative": {
-    "overview": "The existing dark copper photographic identity carries into a guided, conversational homepage. Warm charcoal, copper accents, generous display type and restrained framed artifacts keep software demonstrations and photography in the same visual family.",
+    "northStar": "A conversation with the work",
+    "overview": "A ChatGPT-like neutral conversation introduces the person and reveals real work inline. A charcoal gallery gives projects their own browsing space, with pale blue and green feature artwork and a quiet light biography below.",
     "keyCharacteristics": [],
     "rules": [],
     "dos": [
-      "Do retain the dark copper palette and photographic identity.",
-      "Do preserve visible keyboard focus, readable labels and reduced-motion behavior."
+      "Do keep the conversation light and the project showcase charcoal.",
+      "Do preserve keyboard focus, accessible labels, status feedback and reduced motion.",
+      "Do reveal relevant work inline while keeping direct browsing available."
     ],
     "donts": [
-      "Don't treat legacy pink and blue theme declarations as the homepage palette.",
-      "Don't promote the guided homepage composition into a rule for every page."
+      "Don't restore copper accents, serif display typography or photographic film framing to this homepage.",
+      "Don't assume other routes have adopted this homepage design."
     ]
   }
 }

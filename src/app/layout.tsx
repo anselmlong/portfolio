@@ -11,11 +11,6 @@ import {
 import { Analytics } from "@vercel/analytics/next";
 import { TRPCReactProvider } from "~/trpc/react";
 
-console.log(
-  "%c👋 Hey there, fellow dev! Like what you see? Let's connect: anselmpius@gmail.com",
-  "color: #c4956a; font-size: 14px; font-weight: bold; font-family: monospace;",
-);
-
 export const metadata: Metadata = {
   title: {
     default: "portfolio - anselm long",
