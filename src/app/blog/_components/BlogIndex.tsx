@@ -1,0 +1,155 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { BlogPostMetadata } from "~/lib/blog";
+import styles from "../blog.module.css";
+
+const day = (d: string) =>
+  new Date(`${d}T00:00:00`).toLocaleDateString("en-SG", { day: "numeric", month: "short" });
+const monthYear = (d: string) =>
+  new Date(`${d}T00:00:00`).toLocaleDateString("en-SG", { month: "short", year: "numeric" }).toLowerCase();
+const minutes = (r: string) => r.replace(" read", "");
+
+export default function BlogIndex({
+  posts,
+  featured,
+}: {
+  posts: BlogPostMetadata[];
+  featured: BlogPostMetadata | null;
+}) {
+  const [active, setActive] = useState("all");
+  const [term, setTerm] = useState("");
+  const mast = useRef<HTMLHeadingElement>(null);
+  const list = useRef<HTMLDivElement>(null);
+  const peek = useRef<HTMLDivElement>(null);
+  const [cover, setCover] = useState<string | null>(null);
+
+  const tags = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const p of posts) for (const t of p.tags ?? []) counts.set(t.toLowerCase(), (counts.get(t.toLowerCase()) ?? 0) + 1);
+    return [...counts].sort((a, b) => b[1] - a[1]).slice(0, 9);
+  }, [posts]);
+
+  const shown = posts.filter((p) => {
+    const inTag = active === "all" || (p.tags ?? []).some((t) => t.toLowerCase() === active);
+    const q = term.trim().toLowerCase();
+    const inText = !q || `${p.title} ${p.excerpt} ${(p.tags ?? []).join(" ")}`.toLowerCase().includes(q);
+    return inTag && inText;
+  });
+  const years = [...new Set(shown.map((p) => p.date.slice(0, 4)))];
+
+  useEffect(() => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const letters = [...(mast.current?.querySelectorAll<HTMLElement>("span") ?? [])];
+    let px = innerWidth / 2, raf = 0;
+    const onMove = (e: PointerEvent) => { px = e.clientX; };
+    // The masthead letters follow the cursor, then spread and tilt as you scroll away.
+    const tick = () => {
+      const k = Math.min(1, scrollY / 500);
+      letters.forEach((l, i) => {
+        const c = i - (letters.length - 1) / 2;
+        const pull = (px / innerWidth - 0.5) * 10;
+        l.style.transform = `translate(${c * k * 18 + pull * (1 - k)}px,${k * Math.abs(c) * 10}px) rotate(${c * k * 2}deg)`;
+      });
+      raf = requestAnimationFrame(tick);
+    };
+    addEventListener("pointermove", onMove, { passive: true });
+    raf = requestAnimationFrame(tick);
+
+    // A post's cover follows the cursor, lagging and tilting with its speed.
+    let tx = 0, ty = 0, x = 0, y = 0, raf2 = 0;
+    const fine = matchMedia("(pointer: fine)").matches;
+    const onFollow = (e: PointerEvent) => { tx = e.clientX + 170; ty = e.clientY; };
+    const follow = () => {
+      const vx = (tx - x) * 0.14;
+      x += vx;
+      y += (ty - y) * 0.14;
+      if (peek.current)
+        peek.current.style.transform = `translate(${Math.min(x, innerWidth - 160) - 150}px,${y - 94}px) rotate(${Math.max(-10, Math.min(10, vx * 0.4))}deg)`;
+      raf2 = requestAnimationFrame(follow);
+    };
+    if (fine) {
+      addEventListener("pointermove", onFollow, { passive: true });
+      raf2 = requestAnimationFrame(follow);
+    }
+    return () => {
+      cancelAnimationFrame(raf);
+      cancelAnimationFrame(raf2);
+      removeEventListener("pointermove", onMove);
+      removeEventListener("pointermove", onFollow);
+    };
+  }, []);
+
+  return (
+    <main className={styles.wrap}>
+      <section className={styles.mast} aria-labelledby="writing-title">
+        <span className={styles.mono}>
+          the blog · {posts.length} posts · since {monthYear(posts.at(-1)?.date ?? "2024-11-01")}
+        </span>
+        <h1 id="writing-title" ref={mast} aria-label="Writing">
+          {"WRITING".split("").map((c, i) => <span key={i} aria-hidden="true">{c}</span>)}
+          <span className={styles.dot} aria-hidden="true">.</span>
+        </h1>
+        <p>Notes from building things: internships, hackathons, fine-tuning models on my own texts, and the occasional brainrot.</p>
+      </section>
+
+      {featured && (
+        <Link className={styles.feat} href={`/blog/${featured.slug}`}>
+          <div className={styles.featImg}>
+            {featured.image && <Image src={featured.image} alt="" fill priority sizes="(max-width: 820px) 100vw, 680px" style={{ objectFit: "cover" }} />}
+          </div>
+          <div>
+            <span className={styles.mono}>featured · {featured.readingTime} · {monthYear(featured.date)}</span>
+            <h2>{featured.title}</h2>
+            <p>{featured.excerpt}</p>
+            <span className={styles.go}>Read it →</span>
+          </div>
+        </Link>
+      )}
+
+      <div className={styles.bar} role="search">
+        <label className={styles.search}>
+          <span className={styles.mono} aria-hidden="true">⌕</span>
+          <input type="search" placeholder="search posts" aria-label="Search posts" value={term} onChange={(e) => setTerm(e.target.value)} />
+        </label>
+        <div className={styles.tags} aria-label="Filter by topic">
+          {[["all", posts.length] as const, ...tags].map(([t, n]) => (
+            <button key={t} type="button" className={styles.tag} aria-pressed={active === t} onClick={() => setActive(t)}>
+              {t}<small>{n}</small>
+            </button>
+          ))}
+        </div>
+        <span className={`${styles.mono} ${styles.count}`} aria-live="polite">{shown.length} of {posts.length}</span>
+      </div>
+
+      <div ref={list} onPointerLeave={() => setCover(null)}>
+        {years.map((y) => (
+          <section key={y} className={styles.year} aria-label={y}>
+            <h3>{y}</h3>
+            <div>
+              {shown.filter((p) => p.date.startsWith(y)).map((p) => (
+                <Link key={p.slug} href={`/blog/${p.slug}`} className={styles.row} onPointerEnter={() => setCover(p.image ?? null)}>
+                  <b>{p.title}</b>
+                  <div className={styles.meta}>
+                    <span className={styles.mono}>{day(p.date)}</span>
+                    <span className={styles.mono}>{minutes(p.readingTime)}</span>
+                  </div>
+                  {p.excerpt && <span className={styles.ex}>{p.excerpt}</span>}
+                  <span className={styles.tg}>{(p.tags ?? []).slice(0, 4).map((t) => <span key={t}>{t}</span>)}</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        ))}
+        {!shown.length && <p className={styles.empty}>Nothing matches that. Try another word or topic.</p>}
+      </div>
+
+      <div ref={peek} className={`${styles.peek} ${cover ? styles.peekOn : ""}`} aria-hidden="true">
+        {cover && <Image src={cover} alt="" fill sizes="300px" style={{ objectFit: "cover" }} />}
+      </div>
+      <footer className={styles.foot}><Link className={styles.mono} href="/">← back to the chat</Link></footer>
+    </main>
+  );
+}

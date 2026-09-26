@@ -12,28 +12,38 @@ import {
   type BaseMessage,
 } from "@langchain/core/messages";
 import { type Document } from "@langchain/core/documents";
-import type { UIMessage } from "ai";
 import { pool } from "~/server/pg";
+import { ChatInputError, readChatRequest } from "~/lib/chat-request";
+import { reserveChatRequest } from "~/server/chat-budget";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
 // Types
-interface ChatRequest {
-  messages: UIMessage[];
-}
-
 // Helper: Format docs
 function formatDocs(docs: Document[]): string {
   return docs.map((d) => d.pageContent).join("\n\n");
 }
 
 // Helper: Extract text from UIMessage parts
-function extractText(message: UIMessage): string {
+function extractText(message: {
+  parts: { type: "text"; text: string }[];
+}): string {
   return message.parts
     .filter((p) => p.type === "text")
     .map((p) => (p.type === "text" ? p.text : ""))
     .join("");
+}
+
+// Every failure before streaming returns a JSON error naming the phase that
+// failed, so the client and `vercel logs` can tell them apart.
+type ChatPhase = "init" | "rewrite" | "retrieval";
+function phaseError(phase: ChatPhase, error: unknown) {
+  console.error(`[RAG] ${phase} failed`, error);
+  return Response.json(
+    { error: "The chat backend failed before answering.", code: phase },
+    { status: phase === "init" ? 503 : 502 },
+  );
 }
 
 // Note: in-memory retrieval cache removed to avoid stale per-process state.
@@ -46,7 +56,7 @@ let vectorStoreSingleton: PGVectorStore | null = null;
 // POST Endpoint -> Takes in AI SDK messages format
 export async function POST(req: NextRequest) {
   try {
-    const body: ChatRequest = (await req.json()) as ChatRequest;
+    const body = await readChatRequest(req);
     const { messages } = body;
 
     if (!messages || messages.length === 0) {
@@ -60,10 +70,26 @@ export async function POST(req: NextRequest) {
     }
 
     const question = extractText(lastMessage);
-    console.log("Question:", question);
-
     if (!question) {
       return Response.json({ error: "Question is required" }, { status: 400 });
+    }
+
+    // Reserve before any embedding or model request, across all server instances.
+    // An unavailable budget store fails closed rather than allowing unmetered calls.
+    let allowed: boolean;
+    try {
+      allowed = await reserveChatRequest(pool);
+    } catch {
+      return Response.json(
+        { error: "Chat is temporarily unavailable" },
+        { status: 503 },
+      );
+    }
+    if (!allowed) {
+      return Response.json(
+        { error: "Chat has reached its daily allowance" },
+        { status: 429, headers: { "Retry-After": "3600" } },
+      );
     }
 
     // --- Timing: start request ---
@@ -95,32 +121,37 @@ export async function POST(req: NextRequest) {
       // ignore
     }
 
-    const vectorStore =
-      vectorStoreSingleton ??
-      (vectorStoreSingleton = await (async () => {
-        const tInitStart = Date.now();
-        try {
-          return await PGVectorStore.initialize(embeddings, {
-            pool,
-            tableName: "langchain_pg_embedding",
-            collectionName: "portfolio_docs_v2",
-            collectionTableName: "langchain_pg_collection",
-            columns: {
-              idColumnName: "id",
-              vectorColumnName: "embedding",
-              contentColumnName: "document",
-              metadataColumnName: "cmetadata",
-            },
-          });
-        } catch (err) {
-          const initMs = Date.now() - tInitStart;
-          console.error(
-            `[RAG] PGVectorStore.initialize failed after ${initMs}ms (dbHost=${dbHost})`,
-            err,
-          );
-          throw err;
-        }
-      })());
+    let vectorStore: PGVectorStore;
+    try {
+      vectorStore =
+        vectorStoreSingleton ??
+        (vectorStoreSingleton = await (async () => {
+          const tInitStart = Date.now();
+          try {
+            return await PGVectorStore.initialize(embeddings, {
+              pool,
+              tableName: "langchain_pg_embedding",
+              collectionName: "portfolio_docs_v2",
+              collectionTableName: "langchain_pg_collection",
+              columns: {
+                idColumnName: "id",
+                vectorColumnName: "embedding",
+                contentColumnName: "document",
+                metadataColumnName: "cmetadata",
+              },
+            });
+          } catch (err) {
+            const initMs = Date.now() - tInitStart;
+            console.error(
+              `[RAG] PGVectorStore.initialize failed after ${initMs}ms (dbHost=${dbHost})`,
+              err,
+            );
+            throw err;
+          }
+        })());
+    } catch (error) {
+      return phaseError("init", error);
+    }
 
     // Change Top K to 3 for more context
     const TOP_K = 3;
@@ -133,7 +164,7 @@ export async function POST(req: NextRequest) {
     const startIdx = Math.max(0, messages.length - 1 - historyWindow);
     const historyMessages: BaseMessage[] = messages
       .slice(startIdx, -1)
-      .map((msg: UIMessage) => {
+      .map((msg) => {
         const text = extractText(msg);
         return msg.role === "user"
           ? new HumanMessage(text)
@@ -164,10 +195,14 @@ export async function POST(req: NextRequest) {
     let rewriteMs = 0;
     if (needsRewrite) {
       const tRewriteStart = Date.now();
-      rewrittenQuestion = await rewriteChain.invoke({
-        input: question,
-        history: historyMessages,
-      });
+      try {
+        rewrittenQuestion = await rewriteChain.invoke({
+          input: question,
+          history: historyMessages,
+        });
+      } catch (error) {
+        return phaseError("rewrite", error);
+      }
       rewriteMs = Date.now() - tRewriteStart;
     }
     const t2 = Date.now();
@@ -192,19 +227,24 @@ export async function POST(req: NextRequest) {
       ["human", "{input}"],
     ]);
 
+    // --- Timing: retrieval phase ---
+    // Retrieve before streaming so a retrieval failure is a real error status,
+    // not an apology streamed back as if it were an answer.
+    const tRetrievalStart = Date.now();
+    let context: string;
+    try {
+      const docs = await retriever.invoke(rewrittenQuestion);
+      context = formatDocs(docs);
+    } catch (error) {
+      return phaseError("retrieval", error);
+    }
+    const retrievalMs = Date.now() - tRetrievalStart;
+
     // Create a streaming response
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          // --- Timing: retrieval phase ---
-          const tRetrievalStart = Date.now();
-          // Retrieve top K documents from vector store
-          const docs = await retriever.invoke(rewrittenQuestion);
-          const context = formatDocs(docs);
-          const retrievalMs = Date.now() - tRetrievalStart;
-          const t3 = Date.now();
-
           // --- Timing: LLM phase ---
           const tLLMStart = Date.now();
           // Piping in the prompt to the chain
@@ -239,13 +279,9 @@ export async function POST(req: NextRequest) {
             `[RAG Timing] Total: ${t4 - t0}ms | Init: ${t1 - t0}ms | Rewrite: ${rewriteMs}ms | Retrieval: ${retrievalMs}ms | LLM first token: ${firstTokenMs}ms | LLM total: ${t4 - tLLMStart}ms`,
           );
         } catch (error) {
-          console.error("Error during streaming:", error);
-          controller.enqueue(
-            encoder.encode(
-              "I'm sorry, I encountered an error processing your request. Please try again later.",
-            ),
-          );
-          controller.close();
+          // Abort the stream so the client sees a failure, not a partial answer.
+          console.error("[RAG] stream failed", error);
+          controller.error(error);
         }
       },
     });
@@ -257,6 +293,9 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
+    if (error instanceof ChatInputError) {
+      return Response.json({ error: error.message }, { status: error.status });
+    }
     console.error("Error in chat API:", error);
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }

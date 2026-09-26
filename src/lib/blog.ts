@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { marked } from "marked";
+import hljs from "highlight.js";
+import { Marked } from "marked";
 
 const blogsDirectory = path.join(process.cwd(), "public/blogs");
 
@@ -134,7 +135,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
 
     const normalizedContent = rewriteRelativeImagePaths(content, slug);
     const htmlContent = enhanceHtmlContent(
-      await marked.parse(normalizedContent),
+      await renderPostMarkdown(normalizedContent),
     );
 
     const excerpt =
@@ -161,6 +162,47 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
 function extractTitleFromContent(content: string, fallback: string): string {
   const match = /^#\s+(.+)$/m.exec(content);
   return match?.[1] ?? fallback.replace(/-/g, " ");
+}
+
+const escapeHtml = (s: string) =>
+  s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
+
+/**
+ * Posts use "#" for their own sections, so every heading drops one level under
+ * the page title and gets an id the contents rail can link to. Fenced code with
+ * a known language is highlighted on the server.
+ */
+export async function renderPostMarkdown(markdown: string): Promise<string> {
+  const used = new Map<string, number>();
+  const idFor = (text: string) => {
+    const base =
+      text
+        .toLowerCase()
+        .replace(/<[^>]*>/g, "")
+        .replace(/&[a-z]+;/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "") || "section";
+    const n = used.get(base) ?? 0;
+    used.set(base, n + 1);
+    return n ? `${base}-${n + 1}` : base;
+  };
+  const renderer = new Marked({
+    renderer: {
+      heading({ tokens, depth }) {
+        const html = this.parser.parseInline(tokens);
+        const level = Math.min(6, depth + 1);
+        return `<h${level} id="${idFor(html)}">${html}</h${level}>\n`;
+      },
+      code({ text, lang }) {
+        const language = lang && hljs.getLanguage(lang) ? lang : undefined;
+        const body = language
+          ? hljs.highlight(text, { language, ignoreIllegals: true }).value
+          : escapeHtml(text);
+        return `<pre><code class="hljs${language ? ` language-${language}` : ""}">${body}</code></pre>\n`;
+      },
+    },
+  });
+  return renderer.parse(markdown);
 }
 
 function enhanceHtmlContent(html: string): string {

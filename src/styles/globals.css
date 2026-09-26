@@ -4,6 +4,9 @@
 @import "./tokens.css";
 @import "tw-animate-css";
 
+/* The conversation homepage replaces the film treatment. */
+body:has([data-conversation-home])::before { display: none; }
+
 @theme {
   --font-geist: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-bricolage: var(--font-bg-sans), ui-sans-serif, system-ui, sans-serif;

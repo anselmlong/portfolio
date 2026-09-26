@@ -11,11 +11,6 @@ import {
 import { Analytics } from "@vercel/analytics/next";
 import { TRPCReactProvider } from "~/trpc/react";
 
-console.log(
-  "%c👋 Hey there, fellow dev! Like what you see? Let's connect: anselmpius@gmail.com",
-  "color: #c4956a; font-size: 14px; font-weight: bold; font-family: monospace;",
-);
-
 export const metadata: Metadata = {
   title: {
     default: "portfolio - anselm long",
@@ -23,6 +18,22 @@ export const metadata: Metadata = {
   },
   description: "my projects, thoughts, and more!",
   icons: [{ rel: "icon", url: "/favicon.png" }],
+  metadataBase: new URL("https://anselmlong.com"),
+  openGraph: {
+    type: "website",
+    title: "anselm long",
+    description:
+      "i build small tools that fix everyday annoyances, film things, and climb when i can.",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Anselm Long, over the Golden Gate",
+      },
+    ],
+  },
+  twitter: { card: "summary_large_image", images: ["/og.png"] },
 };
 
 const geist = Geist({
