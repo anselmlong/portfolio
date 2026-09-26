@@ -55,6 +55,16 @@ describe("homepage chat", () => {
     ).toBeInTheDocument();
     // A chip already knows its card, so Jev isn't asked.
     expect(fetcher.mock.calls.map(([url]) => url)).toEqual(["/api/chat"]);
+    // The RAG gets the chip's specific question; the visitor sees the short one.
+    const sent = JSON.parse(fetcher.mock.calls[0]![1].body as string) as {
+      messages: { parts: { text: string }[] }[];
+    };
+    expect(sent.messages.at(-1)!.parts[0]!.text).toMatch(
+      /computah, ava, optifiner/,
+    );
+    expect(
+      screen.getByText("what have you shipped?", { selector: "[data-id]" }),
+    ).toBeInTheDocument();
     // Follow-up questions replace the starters.
     expect(
       screen.getByRole("button", {
