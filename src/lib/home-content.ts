@@ -207,17 +207,17 @@ export const starters: TopicKey[] = ["shipped", "working", "technical", "kopi"];
 
 /** Maps a project name Jev can choose (see portfolio-content.ts) to a topic. */
 export const projectTopics: Record<string, TopicKey> = {
-  computah: "computah",
-  ava: "ava",
-  optifiner: "technical",
-  "confessit.space": "confessit",
-  "almost anselm": "almost",
-  kopitype: "kopi",
-  "67 bot": "sixseven",
-  "@aircon_checker_bot": "aircon",
-  "@sg_daily_gospel_bot": "aircon",
-  "canvas scraper": "canvas",
-  "linkedin shitpost generator": "shitpost",
+  "Computah (desktop AI assistant)": "computah",
+  "Ava (Anselm's personal AI agent)": "ava",
+  "Optifiner (evolutionary multi-agent code optimiser)": "technical",
+  "ConfessIT (NUS confessions site and analysis)": "confessit",
+  "Almost Anselm (an AI fine-tuned to text like Anselm)": "almost",
+  "Kopitype (Singlish typing test)": "kopi",
+  "67 bot (Telegram bot that spots the number 67)": "sixseven",
+  "Aircon checker bot": "aircon",
+  "Daily gospel bot": "aircon",
+  "Canvas scraper": "canvas",
+  "LinkedIn shitpost generator": "shitpost",
 };
 
 /** Maps Jev's intent choice to a topic when no specific project was named. */

@@ -49,15 +49,15 @@ export const experiences = [
 
 // Jev chooses among these names; home-content.ts maps each name to a topic.
 export const projects = [
-  { name: "computah", description: "a desktop AI assistant that can see and operate the computer, with explicit security boundaries." },
-  { name: "ava", description: "Anselm's personal agent on Hermes Agent, self-hosted on a VPS, used from Telegram with GitHub and Vercel integrations." },
-  { name: "optifiner", description: "a multi-agent, evolutionary framework that improves code against a benchmark. Hack & Roll 2026 prize." },
-  { name: "confessit.space", description: "NUS confessions on the web, an analysis of 72,000 confessions, and a Qwen fine-tune." },
-  { name: "almost anselm", description: "a 7B model fine-tuned on Anselm's own Telegram replies to text like him." },
-  { name: "kopitype", description: "a Singlish typing test: monkeytype, but Singaporean." },
-  { name: "67 bot", description: "a Telegram bot that spots the number 67 in group chat photos and videos and keeps a leaderboard." },
-  { name: "@aircon_checker_bot", description: "a Telegram bot that checks NUS aircon credits from a reverse-engineered portal." },
-  { name: "@sg_daily_gospel_bot", description: "a Telegram bot that sends the daily mass readings at a chosen hour." },
-  { name: "canvas scraper", description: "syncs Canvas course files daily and emails a digest of what's new." },
-  { name: "linkedin shitpost generator", description: "a satirical generator of LinkedIn posts in six comedic personas." },
+  { name: "Computah (desktop AI assistant)", description: "a desktop AI assistant that can see and operate the computer, with explicit security boundaries." },
+  { name: "Ava (Anselm's personal AI agent)", description: "Anselm's personal agent on Hermes Agent, self-hosted on a VPS, used from Telegram with GitHub and Vercel integrations." },
+  { name: "Optifiner (evolutionary multi-agent code optimiser)", description: "a multi-agent, evolutionary framework that improves code against a benchmark. Hack & Roll 2026 prize." },
+  { name: "ConfessIT (NUS confessions site and analysis)", description: "NUS confessions on the web, an analysis of 72,000 confessions, and a Qwen fine-tune." },
+  { name: "Almost Anselm (an AI fine-tuned to text like Anselm)", description: "a 7B model fine-tuned on Anselm's own Telegram replies to text like him." },
+  { name: "Kopitype (Singlish typing test)", description: "a Singlish typing test: monkeytype, but Singaporean." },
+  { name: "67 bot (Telegram bot that spots the number 67)", description: "a Telegram bot that spots the number 67 in group chat photos and videos and keeps a leaderboard." },
+  { name: "Aircon checker bot", description: "a Telegram bot that checks NUS aircon credits from a reverse-engineered portal." },
+  { name: "Daily gospel bot", description: "a Telegram bot that sends the daily mass readings at a chosen hour." },
+  { name: "Canvas scraper", description: "syncs Canvas course files daily and emails a digest of what's new." },
+  { name: "LinkedIn shitpost generator", description: "a satirical generator of LinkedIn posts in six comedic personas." },
 ];

@@ -54,10 +54,13 @@ describe("preview reveal endpoint", () => {
   it("returns only a known intent and a known project, never text", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn(async () => decision("work", "kopitype")),
+      vi.fn(async () => decision("work", "Kopitype (Singlish typing test)")),
     );
     const body = (await (await POST(request(valid))).json()) as object;
-    expect(body).toEqual({ intent: "work", projects: ["kopitype"] });
+    expect(body).toEqual({
+      intent: "work",
+      projects: ["Kopitype (Singlish typing test)"],
+    });
   });
 
   it("drops unknown choices, low confidence, and project-less work reveals", async () => {
@@ -84,14 +87,17 @@ describe("preview reveal endpoint", () => {
         Response.json({
           answers: {
             intent: { choice: "photos", confidence: 0.9 },
-            project: { choice: "ava", confidence: 0.88 },
+            project: {
+              choice: "Ava (Anselm's personal AI agent)",
+              confidence: 0.88,
+            },
           },
         }),
       ),
     );
     expect(await (await POST(request(valid))).json()).toEqual({
       intent: "work",
-      projects: ["ava"],
+      projects: ["Ava (Anselm's personal AI agent)"],
     });
   });
 
