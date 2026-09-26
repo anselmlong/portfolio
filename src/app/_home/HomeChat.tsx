@@ -177,7 +177,8 @@ export function HomeChat({
       });
 
     try {
-      await streamAnswer(history, question, request.signal, (answer) =>
+      const query = topic ? (topics[topic].ask ?? question) : question;
+      await streamAnswer(history, query, request.signal, (answer) =>
         update(replyId, { text: answer, pending: false }),
       );
       exchanges.current++;
