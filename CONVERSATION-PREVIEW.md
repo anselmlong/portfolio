@@ -2,6 +2,17 @@
 
 Preview only. The live domain must not change until Anselm approves this preview.
 
+## What the homepage is
+
+The approved "Viewfinder" design: Anselm's own footage plays through the letters of his name, and each answer opens the frame onto what it's about. Below the chat are the work reel, the experience dial, writing, LinkedIn posts and the photo contact sheet, all scroll-driven. The blog uses the same design. See `DESIGN.md`.
+
+- **Question chips** send their question to `/api/chat` and show that chip's own card and scene, so Jev isn't needed.
+- **Free text** goes to `/api/chat` and, in parallel, `/api/reveal`. Jev's intent and project name are mapped to a topic in `src/lib/home-content.ts`.
+
+## RAG coverage (action needed)
+
+`portfolio_docs_v2` was last indexed before several sources existed. It has nothing on Computah or OGP, and little on Ava (Hermes Agent) or the 67 bot. Both Visa posts are missing. New profiles are in `public/data/projects/` and `public/data/now.md`. Re-running `src/server/indexer.py` writes to the same database production reads, so it needs Anselm's go-ahead. Until then, the chat cards are labelled "related" and answers may lag behind them.
+
 ## How a free-text message is answered
 
 Two requests run in parallel:

@@ -84,14 +84,14 @@ describe("preview reveal endpoint", () => {
         Response.json({
           answers: {
             intent: { choice: "photos", confidence: 0.9 },
-            project: { choice: "route archiver", confidence: 0.88 },
+            project: { choice: "ava", confidence: 0.88 },
           },
         }),
       ),
     );
     expect(await (await POST(request(valid))).json()).toEqual({
       intent: "work",
-      projects: ["route archiver"],
+      projects: ["ava"],
     });
   });
 
