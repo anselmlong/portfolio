@@ -48,6 +48,8 @@
 .nav a { text-decoration: none; color: var(--dim); }
 .nav a:hover { color: var(--paper); }
 .exit { border: 1px solid var(--paper); background: transparent; border-radius: 999px; padding: 8px 14px; font: 600 12px var(--mono) !important; letter-spacing: 0.04em; }
+.resume { border: 1px solid var(--accent); color: var(--accent) !important; border-radius: 999px; padding: 7px 13px; font: 600 12px var(--mono); letter-spacing: 0.04em; text-decoration: none; }
+.resume:hover { background: var(--accent); color: var(--accent-ink) !important; }
 .exit:hover { background: var(--paper); color: var(--night) !important; }
 
 /* hero */
@@ -64,7 +66,7 @@
 
 .reveal { position: absolute; left: clamp(14px, 3vw, 32px); bottom: clamp(14px, 3vw, 28px); max-width: min(460px, calc(100% - 28px)); background: rgba(13, 10, 10, 0.86); border: 1px solid rgba(241, 239, 232, 0.18); border-radius: 16px; padding: 16px 18px; display: grid; gap: 8px; transform: translateY(12px); opacity: 0; pointer-events: none; transition: transform 0.5s cubic-bezier(0.2, 1.2, 0.3, 1), opacity 0.35s; }
 .reveal.on { transform: none; opacity: 1; pointer-events: auto; }
-.reveal h3 { margin: 0; font: 900 clamp(30px, 4vw, 44px)/0.95 var(--display); text-transform: uppercase; letter-spacing: 0.01em; }
+.reveal h3 { margin: 0; font: 900 clamp(26px, 3vw, 36px)/0.95 var(--display); text-transform: uppercase; letter-spacing: 0.01em; }
 .reveal p { margin: 0; color: #d7d5ce; font-size: 15px; }
 .row { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
 .reveal a { font: 600 12px var(--mono); color: var(--accent); }
@@ -116,7 +118,7 @@
 .pin { position: relative; }
 .sticky { position: sticky; top: 0; height: var(--vh, 100vh); overflow: hidden; display: grid; align-content: center; }
 .kicker { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline; }
-.kicker h2 { margin: 0; font: 900 clamp(44px, 7vw, 92px)/0.9 var(--display); text-transform: uppercase; }
+.kicker h2 { margin: 0; font: 900 clamp(34px, 4.6vw, 60px)/0.9 var(--display); text-transform: uppercase; }
 
 .workPin { height: calc(var(--vh, 100vh) * 4.4); margin-inline: -16px; }
 .workPin .sticky { gap: 22px; }
@@ -143,7 +145,7 @@
 .shitInner span { font: 500 12px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: #666; }
 .shit .illus { color: #777; }
 .cap { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; align-items: baseline; }
-.cap b { font: 900 clamp(30px, 4vw, 52px)/0.9 var(--display); text-transform: uppercase; }
+.cap b { font: 900 clamp(24px, 2.8vw, 36px)/0.95 var(--display); text-transform: uppercase; }
 .cap span { color: #cfcdc6; font-size: 15px; max-width: 56ch; }
 .cap small { grid-column: 1/-1; font: 500 11px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
 @media (max-width: 640px) { .cap { grid-template-columns: 1fr; } }
@@ -161,7 +163,7 @@
 .mark { fill: var(--accent); }
 .role { display: grid; gap: 14px; }
 .when { font: 600 13px var(--mono); color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; }
-.role h3 { margin: 0; font: 900 clamp(40px, 6vw, 84px)/0.9 var(--display); text-transform: uppercase; }
+.role h3 { margin: 0; font: 900 clamp(34px, 4.4vw, 60px)/0.92 var(--display); text-transform: uppercase; }
 .role p { margin: 0; color: #d7d5ce; font-size: 18px; max-width: 44ch; }
 .steps { display: flex; gap: 6px; }
 .steps i { width: 26px; height: 3px; background: var(--line); transition: background 0.3s; }
@@ -172,7 +174,7 @@
 .writing { padding-block: clamp(80px, 12vw, 160px); }
 .posts { display: grid; margin-top: 26px; }
 .post { display: grid; grid-template-columns: 1fr auto; gap: 18px; padding-block: 18px; border-bottom: 1px solid var(--line); text-decoration: none; align-items: baseline; }
-.post b { font: 800 clamp(22px, 3vw, 36px)/1.05 var(--display); text-transform: uppercase; letter-spacing: 0.01em; transition: color 0.2s, transform 0.3s; }
+.post b { font: 700 clamp(17px, 1.7vw, 22px)/1.25 var(--body); letter-spacing: -0.005em; transition: color 0.2s, transform 0.3s; }
 .post:hover b { color: var(--accent); transform: translateX(10px); }
 .post > span { font: 12px var(--mono); color: var(--dim); white-space: nowrap; }
 .w { display: inline-block; overflow: hidden; vertical-align: bottom; }
@@ -195,11 +197,11 @@
 .sheet figcaption { font: 10px var(--mono); color: var(--dim); letter-spacing: 0.06em; text-transform: uppercase; }
 .focusShot img { outline: 2px solid var(--accent); outline-offset: 3px; }
 .overlayCap { position: absolute; left: 0; right: 0; bottom: calc(var(--vh, 100vh) * 0.06); text-align: center; display: grid; gap: 8px; justify-items: center; pointer-events: none; opacity: 0; }
-.overlayCap b { font: 900 clamp(40px, 7vw, 96px)/0.9 var(--display); text-transform: uppercase; text-shadow: 0 4px 30px rgba(0, 0, 0, 0.6); }
+.overlayCap b { font: 900 clamp(32px, 5vw, 68px)/0.9 var(--display); text-transform: uppercase; text-shadow: 0 4px 30px rgba(0, 0, 0, 0.6); }
 .overlayCap a { pointer-events: auto; font: 600 12px var(--mono); background: rgba(13, 10, 10, 0.7); border: 1px solid rgba(241, 239, 232, 0.3); border-radius: 999px; padding: 8px 14px; }
 
 .outro { min-height: calc(var(--vh, 100vh) * 0.9); display: grid; align-content: center; justify-items: center; gap: 18px; text-align: center; padding-block: 80px; }
-.hi { font: 900 clamp(96px, 22vw, 300px)/0.8 var(--display); text-transform: uppercase; display: flex; gap: 0.02em; }
+.hi { font: 900 clamp(80px, 16vw, 220px)/0.8 var(--display); text-transform: uppercase; display: flex; gap: 0.02em; }
 .hi span { display: inline-block; will-change: transform; transition: color 0.2s; }
 .hi span:hover { color: var(--accent); }
 .mail { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }

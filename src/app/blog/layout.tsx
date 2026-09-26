@@ -2,7 +2,11 @@ import Link from "next/link";
 import { viewfinderFonts } from "~/app/_home/fonts";
 import styles from "./blog.module.css";
 
-export default function BlogLayout({ children }: { children: React.ReactNode }) {
+export default function BlogLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className={`${viewfinderFonts} ${styles.root}`}>
       <div className={styles.wrap}>
@@ -15,8 +19,15 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
             <Link href="/blog" aria-current="page">
               Writing
             </Link>
-            <Link href="/#glimpses">Photos</Link>
+            <a href="https://photos.anselmlong.com">Photos</a>
             <Link href="/">Chat</Link>
+            <a
+              href="/resume.pdf"
+              download="Anselm-Long-Resume.pdf"
+              className={styles.resume}
+            >
+              Resume ↓
+            </a>
           </nav>
         </header>
       </div>
