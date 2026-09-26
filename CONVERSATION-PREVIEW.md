@@ -1,23 +1,28 @@
 # Conversation-first portfolio preview
 
-Replaces the rejected copper homepage with a neutral, ChatGPT-like conversation and a separate charcoal project showcase. The live domain must not be changed until Anselm approves this preview.
+Preview only. The live domain must not change until Anselm approves this preview.
 
-## Changed
+## How a free-text message is answered
 
-- An accumulating conversation: selected replies become user messages, followed by animated guide responses and inline project cards, experience details, photography, or a local typing round.
-- Free-text questions use the existing `/api/chat` RAG: it retrieves from the `portfolio_docs_v2` pgvector collection and streams an OpenAI answer. Suggested choices remain instant and deterministic; no Jev call or model-generated UI.
-- Explicit close/reopen, new chat, browse-work exit, responsive catalog filters, and redesigned about/contact sections.
-- Shared project/experience data drives the catalog and AI context. OGP Maps: Software Engineer Intern, August 2026–present. Excludes govML, Betaview, BCE vote and resiwash.
-- Existing blog/photo routes and old chat APIs are preserved, not redesigned in this preview. Existing standalone photo website is untouched.
+Two requests run in parallel:
 
-## Configuration and safety
+- **`/api/chat`** writes the answer. It is the existing portfolio RAG: pgvector retrieval from `portfolio_docs_v2`, then a streamed OpenAI reply in Anselm's own first-person voice. The system prompt is unchanged from `main`; keep it that way.
+- **`/api/reveal`** asks Jev (TypeSafe `jev-latest`) to choose one trusted card to show beside the answer: a project, experience, photos, the typing game, contact, or nothing. Jev returns only an intent and a known project name. It never writes text, HTML or code, and the page renders its own components. If Jev is unavailable the answer still appears, just without a card.
 
-- Uses the site's existing server-side `OPENAI_API_KEY`, `CHAT_MODEL`, database connection, and pgvector store. Retrieved project notes are reference data; the guide must say when it does not know, and raw visitor prompts are not logged.
-- This reuses the existing RAG route rather than adding another model/API layer. The route streams plain text; all clickable project links remain trusted, static portfolio UI.
-- The existing `/api/chat` route is also used by the old site. Production remains on the old deployment until the preview is reviewed and explicitly released.
-- The preview deployment remains Vercel-protected. The old preview-only TypeSafe credential is no longer needed and should be removed from Preview environment variables.
+Suggested reply chips stay instant and deterministic, with no API calls.
 
-## Verification
+A small line under the composer says replies are AI-generated.
 
-- The RAG path requires the existing OpenAI and database configuration. If those are unavailable, the guide reports an error and preserves the visitor's draft.
-- The preview branch should be redeployed and reviewed before any production release.
+## Configuration
+
+- `/api/chat` uses the existing server-side `OPENAI_API_KEY`, `CHAT_MODEL`, `EMBED_MODEL` and `DATABASE_URL`.
+- `/api/reveal` needs `TYPESAFE_API_KEY`, which the owner set in Vercel as a Sensitive variable. **Do not remove it.** `vercel env pull` only returns a placeholder for it, so Jev can only be exercised on a deployed preview.
+- `/api/reveal` only runs when `VERCEL_ENV=preview`, and it enforces a same-origin check plus a per-instance request brake. It needs a durable budget before any production release.
+
+## Chat failures
+
+`/api/chat` does init, question rewrite and retrieval before it starts streaming. If any of those fail, it returns a JSON error with `code: "init" | "rewrite" | "retrieval"` (503 or 502) and logs `[RAG] <phase> failed`. A model failure mid-answer errors the stream rather than streaming an apology as if it were the answer.
+
+The page shows a message that names the failure class, keeps the visitor's draft, and logs the status and `x-vercel-id`. Its timeout covers only the wait for the first byte, and it doesn't rely on `AbortSignal.any`, which older iOS in-app browsers lack.
+
+To investigate a report, run `vercel logs --environment preview --status-code 5xx` and look for `[RAG]` lines.

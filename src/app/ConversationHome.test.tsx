@@ -32,6 +32,27 @@ describe("conversation homepage", () => {
     await screen.findByRole("alert");
     expect(input).toHaveValue("My next draft");
   });
+  it("names the failing phase when the chat backend errors", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: false,
+        status: 502,
+        body: null,
+        headers: new Headers({ "x-vercel-id": "sin1::abc" }),
+        json: async () => ({ code: "retrieval" }),
+      })),
+    );
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+    render(<ConversationHome />);
+    const input = screen.getByRole("textbox", {
+      name: "Ask about Anselm’s work",
+    });
+    fireEvent.change(input, { target: { value: "What is bonsai?" } });
+    fireEvent.click(screen.getByRole("button", { name: "Send message" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("retrieval");
+    expect(input).toHaveValue("What is bonsai?");
+  });
   it("appends choices and inline reveals without an API call", () => {
     const fetcher = vi.fn();
     vi.stubGlobal("fetch", fetcher);
@@ -78,22 +99,21 @@ describe("conversation homepage", () => {
     fireEvent.click(screen.getByRole("button", { name: "All projects" }));
     expect(screen.getAllByRole("article")).toHaveLength(13);
   });
-  it("renders a validated AI reply and restores the draft on failure", async () => {
-    const fetcher = vi
-      .fn()
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          text: "A specific reply",
-          intent: "contact",
-          projects: [],
-        }),
-      })
-      .mockResolvedValueOnce({
-        ok: false,
-        json: async () => ({ error: "unavailable" }),
-      });
-    vi.stubGlobal("fetch", fetcher);
+  it("streams an AI reply and restores the draft on failure", async () => {
+    const chat = vi
+      .fn<() => Promise<Response>>()
+      .mockResolvedValueOnce(new Response("A specific reply"))
+      .mockResolvedValueOnce(
+        Response.json({ code: "retrieval" }, { status: 502 }),
+      );
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string) =>
+        url === "/api/reveal"
+          ? Response.json({ intent: "contact", projects: [] })
+          : chat(),
+      ),
+    );
     render(<ConversationHome />);
     const input = screen.getByRole("textbox", {
       name: "Ask about Anselm’s work",
@@ -101,6 +121,12 @@ describe("conversation homepage", () => {
     fireEvent.change(input, { target: { value: "Contact?" } });
     fireEvent.click(screen.getByRole("button", { name: "Send message" }));
     expect(await screen.findByText("A specific reply")).toBeInTheDocument();
+    // Jev's choice attaches a trusted contact card; it never supplies text.
+    expect(
+      await within(screen.getByRole("log")).findByRole("link", {
+        name: /anselmpius@gmail.com/,
+      }),
+    ).toBeInTheDocument();
     fireEvent.change(input, { target: { value: "Follow up" } });
     fireEvent.click(screen.getByRole("button", { name: "Send message" }));
     await screen.findByRole("alert");

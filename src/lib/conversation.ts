@@ -55,3 +55,9 @@ export function curatedReply(intent: Intent): Reply {
   };
   return replies[intent];
 }
+
+export function isIntent(value: unknown): value is Intent {
+  return (
+    typeof value === "string" && intents.some((intent) => intent === value)
+  );
+}

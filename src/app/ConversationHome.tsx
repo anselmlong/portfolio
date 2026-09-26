@@ -16,6 +16,7 @@ import {
 import {
   choices,
   curatedReply,
+  isIntent,
   type Intent,
   type Reply,
 } from "~/lib/conversation";
@@ -160,6 +161,29 @@ function Reveal({ reply, id }: { reply: Reply; id: number }) {
   );
 }
 
+class ChatFailure extends Error {
+  constructor(
+    public status: number,
+    public code: string | undefined,
+    public requestId: string | null,
+  ) {
+    super(`Chat request failed: ${status} ${code ?? ""} ${requestId ?? ""}`);
+  }
+}
+
+function chatErrorMessage(failure: unknown, timedOut: boolean) {
+  const keep = "Your draft is still here.";
+  if (timedOut) return `That took too long, so I stopped waiting. ${keep}`;
+  if (failure instanceof ChatFailure) {
+    if (failure.status === 429)
+      return `Chat has hit its limit for now. Try later, or pick a reply below. ${keep}`;
+    if (failure.status === 400 || failure.status === 413)
+      return `That message couldn’t be sent. Try a shorter question. ${keep}`;
+    return `Something broke on my end (${failure.code ?? failure.status}). Try again in a moment. ${keep}`;
+  }
+  return `The connection dropped before I could answer. ${keep}`;
+}
+
 export default function ConversationHome() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -202,6 +226,53 @@ export default function ConversationHome() {
     const reply = curatedReply(intent);
     add("assistant", reply.text, reply);
   }
+  // Jev picks one trusted card to show beside the answer. It is decoration,
+  // not the answer, so a failure here is logged and otherwise ignored.
+  async function requestReveal(
+    conversation: { role: Message["role"]; content: string }[],
+    assistantId: number,
+    signal: AbortSignal,
+  ) {
+    try {
+      const response = await fetch("/api/reveal", {
+        method: "POST",
+        signal,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: conversation.filter((m) => m.content.trim()).slice(-10),
+        }),
+      });
+      if (!response.ok) {
+        console.warn("[reveal] unavailable", response.status);
+        return;
+      }
+      const reveal = (await response.json()) as Pick<
+        Reply,
+        "intent" | "projects"
+      >;
+      if (
+        signal.aborted ||
+        !isIntent(reveal.intent) ||
+        reveal.intent === "clarify"
+      )
+        return;
+      const known = reveal.projects.filter((name) =>
+        projects.some((p) => p.name === name),
+      );
+      setMessages((previous) =>
+        previous.map((message) =>
+          message.id === assistantId
+            ? {
+                ...message,
+                reply: { text: "", intent: reveal.intent, projects: known },
+              }
+            : message,
+        ),
+      );
+    } catch (failure) {
+      if (!signal.aborted) console.warn("[reveal] failed", failure);
+    }
+  }
   async function send() {
     const text = input.trim();
     if (!text || pending.current) return;
@@ -220,10 +291,19 @@ export default function ConversationHome() {
       ...previous,
       { id: assistantId, role: "assistant", text: "" },
     ]);
+    void requestReveal(
+      [...history, { role: "user", content: text }],
+      assistantId,
+      request.signal,
+    );
+    // Time out only while waiting for the first byte; a long streamed answer
+    // must not be cut off. (AbortSignal.any is missing on older iOS WebViews,
+    // e.g. the Instagram and LinkedIn in-app browsers.)
+    const firstByte = window.setTimeout(() => request.abort("timeout"), 25000);
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
-        signal: AbortSignal.any([request.signal, AbortSignal.timeout(28000)]),
+        signal: request.signal,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: [...history, { role: "user", content: text }].map(
@@ -235,18 +315,30 @@ export default function ConversationHome() {
           ),
         }),
       });
-      if (!response.ok || !response.body) throw new Error("Unavailable");
+      if (!response.ok || !response.body) {
+        const detail = (await response.json().catch(() => null)) as {
+          code?: string;
+        } | null;
+        throw new ChatFailure(
+          response.status,
+          detail?.code,
+          response.headers.get("x-vercel-id"),
+        );
+      }
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let answer = "";
       while (true) {
         const { done, value } = await reader.read();
+        window.clearTimeout(firstByte);
         if (done) break;
         answer += decoder.decode(value, { stream: true });
         if (!request.signal.aborted) {
           setMessages((previous) =>
             previous.map((message) =>
-              message.id === assistantId ? { ...message, text: answer } : message,
+              message.id === assistantId
+                ? { ...message, text: answer }
+                : message,
             ),
           );
         }
@@ -259,17 +351,18 @@ export default function ConversationHome() {
           ),
         );
       }
-    } catch {
+    } catch (failure) {
+      const timedOut = request.signal.reason === "timeout";
       setMessages((previous) =>
         previous.filter((message) => message.id !== assistantId),
       );
-      if (!request.signal.aborted) {
-        setError(
-          "The AI guide couldn’t answer just now. Your draft is preserved—try again, or choose a reply below.",
-        );
+      console.error("[chat] request failed", failure);
+      if (!request.signal.aborted || timedOut) {
+        setError(chatErrorMessage(failure, timedOut));
         setInput((current) => current || text);
       }
     } finally {
+      window.clearTimeout(firstByte);
       if (abort.current === request) {
         pending.current = false;
         setBusy(false);
@@ -394,7 +487,7 @@ export default function ConversationHome() {
                   }
                 >
                   <span className={styles.speaker}>
-                    {message.role === "user" ? "You" : "Anselm’s guide"}
+                    {message.role === "user" ? "You" : "Anselm"}
                   </span>
                   <p>{message.text}</p>
                   {message.reply && (
@@ -483,9 +576,8 @@ export default function ConversationHome() {
                 </div>
               </form>
               <p className={styles.disclosure}>
-                AI guide, not a live chat with me. Free-text questions use my
-                project notes and OpenAI. Please don’t share sensitive
-                information.
+                Replies are AI-generated from my notes, so they can be wrong.
+                Please don’t share anything sensitive.
               </p>
             </div>
           </>
