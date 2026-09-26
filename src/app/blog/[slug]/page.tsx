@@ -33,17 +33,17 @@ export async function generateMetadata({
       publishedTime: post.date,
       authors: post.author ? [post.author] : undefined,
       tags: post.tags,
-      ...(post.image && {
-        images: [
-          { url: post.image, width: 1200, height: 630, alt: post.title },
-        ],
-      }),
+      images: [
+        post.image
+          ? { url: post.image, width: 1200, height: 630, alt: post.title }
+          : { url: "/og.png", width: 1200, height: 630, alt: "Anselm Long" },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
-      ...(post.image && { images: [post.image] }),
+      images: [post.image ?? "/og.png"],
     },
   };
 }
@@ -54,7 +54,11 @@ function contents(html: string) {
     ([, level, id, inner]) => ({
       id: id!,
       level: Number(level),
-      text: inner!.replace(/<[^>]*>/g, "").replace(/&amp;/g, "&").replace(/&#39;|&apos;/g, "'").replace(/&quot;/g, '"'),
+      text: inner!
+        .replace(/<[^>]*>/g, "")
+        .replace(/&amp;/g, "&")
+        .replace(/&#39;|&apos;/g, "'")
+        .replace(/&quot;/g, '"'),
     }),
   );
 }
@@ -91,7 +95,10 @@ export default async function BlogPostPage({
           <div className={`${styles.metaRow} ${styles.mono}`}>
             <time dateTime={post.date}>{date}</time>
             <span>{post.readingTime}</span>
-            <BlogViewBeacon slug={post.slug} initialViewCount={post.viewCount} />
+            <BlogViewBeacon
+              slug={post.slug}
+              initialViewCount={post.viewCount}
+            />
             {(post.tags ?? []).map((t) => (
               <span key={t} className={styles.hash}>
                 {t}
@@ -101,7 +108,15 @@ export default async function BlogPostPage({
         </header>
         {post.image && (
           <div className={styles.cover}>
-            <Image src={post.image} alt="" fill priority sizes="(min-width: 1280px) 1240px, 100vw" style={{ objectFit: "cover" }} data-cover />
+            <Image
+              src={post.image}
+              alt=""
+              fill
+              priority
+              sizes="(min-width: 1280px) 1240px, 100vw"
+              style={{ objectFit: "cover" }}
+              data-cover
+            />
           </div>
         )}
 
@@ -110,7 +125,11 @@ export default async function BlogPostPage({
             <nav className={styles.toc} aria-label="On this page" data-toc>
               <span className={styles.mono}>on this page</span>
               {toc.map((h) => (
-                <a key={h.id} href={`#${h.id}`} className={h.level === 3 ? styles.sub : ""}>
+                <a
+                  key={h.id}
+                  href={`#${h.id}`}
+                  className={h.level === 3 ? styles.sub : ""}
+                >
                   <i />
                   {h.text}
                 </a>
@@ -120,7 +139,11 @@ export default async function BlogPostPage({
             <div />
           )}
           <div>
-            <article className={styles.article} data-article dangerouslySetInnerHTML={{ __html: post.content }} />
+            <article
+              className={styles.article}
+              data-article
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
             {next && next.slug !== post.slug && (
               <Link className={styles.next} href={`/blog/${next.slug}`}>
                 <div>

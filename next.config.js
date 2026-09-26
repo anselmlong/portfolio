@@ -23,6 +23,13 @@ const config = {
 			// Add other image hostnames if needed
 		],
 	},
+	// The photo gallery now lives at its own site.
+	async redirects() {
+		return [
+			{ source: "/photos", destination: "https://photos.anselmlong.com", permanent: false },
+			{ source: "/photos/:path*", destination: "https://photos.anselmlong.com", permanent: false },
+		];
+	},
 	webpack: (config, { dev }) => {
 		if (dev) {
 			// Reduce cache serialization warnings in development

@@ -594,7 +594,7 @@
 }
 
 .workPin {
-  height: calc(var(--vh, 100vh) * 4.4);
+  height: calc(var(--vh, 100vh) * 3.6);
   margin-inline: -16px;
 }
 .workPin .sticky {
@@ -795,7 +795,7 @@
 }
 
 .expPin {
-  height: calc(var(--vh, 100vh) * 2.4);
+  height: calc(var(--vh, 100vh) * 2);
 }
 .expSticky {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -919,7 +919,7 @@
 }
 
 .deckPin {
-  height: calc(var(--vh, 100vh) * 1.9);
+  height: calc(var(--vh, 100vh) * 1.6);
 }
 .deckPin .sticky {
   gap: 24px;
@@ -978,7 +978,7 @@
 }
 
 .sheetPin {
-  height: calc(var(--vh, 100vh) * 2.1);
+  height: calc(var(--vh, 100vh) * 1.8);
 }
 .sheet {
   display: grid;
@@ -1136,5 +1136,50 @@
   .root *::after {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+/* On phones the reel is a native swipe carousel rather than scroll-driven. */
+@media (max-width: 700px) {
+  .workPin {
+    height: auto;
+  }
+  .workPin .sticky {
+    position: static;
+    height: auto;
+    overflow: visible;
+    padding-block: 48px 24px;
+  }
+  .track {
+    transform: none !important;
+    width: auto;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    padding-bottom: 12px;
+    scrollbar-width: none;
+  }
+  .track::-webkit-scrollbar {
+    display: none;
+  }
+  .frame {
+    scroll-snap-align: center;
+    opacity: 1 !important;
+  }
+  .ghost,
+  .counter {
+    display: none;
+  }
+}
+
+.onPhone {
+  display: none;
+}
+@media (max-width: 700px) {
+  .onDesk {
+    display: none;
+  }
+  .onPhone {
+    display: inline;
   }
 }

@@ -11,6 +11,7 @@ export const metadata: Metadata = {
     description:
       "Writing on machine learning, side projects, and software engineering by Anselm Long.",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Anselm Long" }],
   },
 };
 

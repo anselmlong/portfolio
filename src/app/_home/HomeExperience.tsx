@@ -300,7 +300,9 @@ export default function HomeExperience({
           <div className={`${styles.wrap} ${styles.kicker}`}>
             <h2>Work</h2>
             <span className={styles.mono}>
-              scroll to wind the reel · live sites, captured this month
+              <span className={styles.onDesk}>scroll to wind the reel</span>
+              <span className={styles.onPhone}>swipe through</span> · live
+              sites, captured this month
             </span>
           </div>
           <div ref={track} className={styles.track}>

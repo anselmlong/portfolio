@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { isIntent, type Intent } from "~/lib/conversation";
 import { projects } from "~/lib/portfolio-content";
+import { pool } from "~/server/pg";
+import { reserveRevealRequest } from "~/server/reveal-budget";
 
 export const runtime = "nodejs";
 export const maxDuration = 15;
@@ -20,8 +22,7 @@ const inputSchema = z.object({
     .min(1)
     .max(10),
 });
-// A local abuse brake for the protected preview, NOT a distributed production budget.
-// Production is deliberately disabled below until a durable budget is installed.
+// A per-instance burst brake. The durable, shared limit is reserveRevealRequest below.
 const windowMs = 10 * 60 * 1000;
 let windowStart = Date.now();
 let requests = 0;
@@ -45,8 +46,6 @@ const minimumConfidence = 0.65;
 const projectConfidence = 0.75;
 
 export async function POST(req: Request) {
-  if (process.env.VERCEL_ENV !== "preview")
-    return json({ error: "Reveals are only enabled in the preview." }, 503);
   if (req.headers.get("origin") !== new URL(req.url).origin)
     return json({ error: "Invalid request origin." }, 403);
   if (!req.headers.get("content-type")?.includes("application/json"))
@@ -77,7 +76,15 @@ export async function POST(req: Request) {
     return json({ error: "Invalid reveal request." }, 400);
   }
   if (!reservePreviewRequest())
-    return json({ error: "Preview reveal limit reached." }, 429);
+    return json({ error: "Reveal limit reached." }, 429);
+  // Fail closed: without the shared daily budget, no paid decision is made.
+  try {
+    if (!(await reserveRevealRequest(pool)))
+      return json({ error: "Reveal limit reached for today." }, 429);
+  } catch (error) {
+    console.error("[reveal] budget unavailable", error);
+    return json({ error: "The decision service is unavailable." }, 503);
+  }
   if (!process.env.TYPESAFE_API_KEY)
     return json({ error: "The decision service is not configured." }, 503);
 

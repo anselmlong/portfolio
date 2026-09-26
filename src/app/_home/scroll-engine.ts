@@ -67,6 +67,8 @@ export function startScroll(p: ScrollParts): () => void {
 
   const frames = [...p.reel.track.children] as HTMLElement[];
   function reel(k: number) {
+    // Phones swipe the reel natively (see home.module.css); leave it alone there.
+    if (innerWidth <= 700) return;
     const x = -(p.reel.track.scrollWidth - innerWidth) * k;
     p.reel.track.style.transform = `translate3d(${x}px,0,0)`;
     p.reel.ghost.style.transform = `translate3d(${x * 0.35}px,-50%,0)`;

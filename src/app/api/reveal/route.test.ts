@@ -1,5 +1,10 @@
 // @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+const budget = vi.hoisted(() => ({ reserve: vi.fn(async () => true) }));
+vi.mock("~/server/pg", () => ({ pool: {} }));
+vi.mock("~/server/reveal-budget", () => ({
+  reserveRevealRequest: budget.reserve,
+}));
 import { POST } from "./route";
 
 function request(body: unknown, origin = "https://preview.example") {
@@ -32,13 +37,17 @@ afterEach(() => {
 });
 
 describe("preview reveal endpoint", () => {
-  it("fails closed outside the preview and rejects foreign origins", async () => {
-    vi.stubEnv("VERCEL_ENV", "production");
-    expect((await POST(request(valid))).status).toBe(503);
-    vi.stubEnv("VERCEL_ENV", "preview");
+  it("rejects foreign origins, and fails closed on an exhausted or unavailable budget", async () => {
     expect((await POST(request(valid, "https://other.example"))).status).toBe(
       403,
     );
+    const fetcher = vi.fn();
+    vi.stubGlobal("fetch", fetcher);
+    budget.reserve.mockResolvedValueOnce(false);
+    expect((await POST(request(valid))).status).toBe(429);
+    budget.reserve.mockRejectedValueOnce(new Error("db down"));
+    expect((await POST(request(valid))).status).toBe(503);
+    expect(fetcher).not.toHaveBeenCalled();
   });
 
   it("rejects malformed and oversized requests before calling Jev", async () => {
