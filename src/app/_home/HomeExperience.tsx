@@ -235,6 +235,10 @@ export default function HomeExperience({
         <h1 className={styles.sr}>Anselm Long</h1>
         <div className={styles.stageWrap}>
           <div ref={stage} className={styles.stage} data-stage>
+            {/* Shown before the canvas takes over, and instead of it if scripts fail. */}
+            <div className={styles.stillName} aria-hidden="true">
+              ANSELM
+            </div>
             <canvas ref={canvas} aria-hidden="true" />
             <div className={styles.grain} aria-hidden="true" />
             <span className={`${styles.corner} ${styles.tl}`}>

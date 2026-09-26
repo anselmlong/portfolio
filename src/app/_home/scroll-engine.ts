@@ -6,10 +6,27 @@ const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 export type ScrollParts = {
   root: HTMLElement;
   stage: HTMLElement;
-  reel: { section: HTMLElement; track: HTMLElement; ghost: HTMLElement; count: HTMLElement; bar: HTMLElement };
-  dial: { section: HTMLElement; ring: SVGGElement; labels: SVGTextElement[]; steps: number; onStep: (i: number) => void };
+  reel: {
+    section: HTMLElement;
+    track: HTMLElement;
+    ghost: HTMLElement;
+    count: HTMLElement;
+    bar: HTMLElement;
+  };
+  dial: {
+    section: HTMLElement;
+    ring: SVGGElement;
+    labels: SVGTextElement[];
+    steps: number;
+    onStep: (i: number) => void;
+  };
   deck: { section: HTMLElement; cards: HTMLElement[] };
-  sheet: { section: HTMLElement; sheet: HTMLElement; focus: HTMLElement; caption: HTMLElement };
+  sheet: {
+    section: HTMLElement;
+    sheet: HTMLElement;
+    focus: HTMLElement;
+    caption: HTMLElement;
+  };
   onHeroScroll: (k: number) => void;
 };
 
@@ -18,9 +35,13 @@ export type ScrollParts = {
  * that sizes the frame to the page, can't stretch the pinned sections. Returns
  * true when pinning can't work, and the page should lay out flat.
  */
-export function measureViewport(root: HTMLElement): { flat: boolean; cleanup: () => void } {
+export function measureViewport(root: HTMLElement): {
+  flat: boolean;
+  cleanup: () => void;
+} {
   const screenH = screen.availHeight || screen.height || innerHeight;
-  let vh = Math.min(innerHeight, screenH), lastW = innerWidth;
+  let vh = Math.min(innerHeight, screenH),
+    lastW = innerWidth;
   const flat = innerHeight > screenH * 1.5;
   root.style.setProperty("--vh", `${vh}px`);
   const onResize = () => {
@@ -36,7 +57,9 @@ export function measureViewport(root: HTMLElement): { flat: boolean; cleanup: ()
 }
 
 export function startScroll(p: ScrollParts): () => void {
-  const vh = () => parseFloat(getComputedStyle(p.root).getPropertyValue("--vh")) || innerHeight;
+  const vh = () =>
+    parseFloat(getComputedStyle(p.root).getPropertyValue("--vh")) ||
+    innerHeight;
   const progress = (el: HTMLElement) => {
     const r = el.getBoundingClientRect();
     return clamp(-r.top / (r.height - vh()));
@@ -52,7 +75,8 @@ export function startScroll(p: ScrollParts): () => void {
       const c = (r.left + r.width / 2 - innerWidth / 2) / innerWidth;
       // Screenshots drift inside their frame; designed frames drift as a whole.
       const inner = f.querySelector<HTMLElement>("[data-drift]");
-      if (inner) inner.style.transform = `translate3d(${c * -6}%,0,0) scale(${1 - Math.abs(c) * 0.05})`;
+      if (inner)
+        inner.style.transform = `translate3d(${c * -6}%,0,0) scale(${1 - Math.abs(c) * 0.05})`;
       f.style.opacity = String(1 - clamp(Math.abs(c) - 0.45) * 0.8);
     }
     const i = Math.min(frames.length - 1, Math.round(k * (frames.length - 1)));
@@ -66,7 +90,10 @@ export function startScroll(p: ScrollParts): () => void {
     p.dial.ring.setAttribute("transform", `rotate(${-f * 60})`);
     // Keep each year label upright while the ring turns.
     for (const t of p.dial.labels)
-      t.setAttribute("transform", `rotate(${f * 60} ${t.getAttribute("x")} ${Number(t.getAttribute("y")) - 4})`);
+      t.setAttribute(
+        "transform",
+        `rotate(${f * 60} ${t.getAttribute("x")} ${Number(t.getAttribute("y")) - 4})`,
+      );
     const i = Math.round(f);
     if (i !== step) {
       step = i;
@@ -75,12 +102,18 @@ export function startScroll(p: ScrollParts): () => void {
   }
 
   function deck(k: number) {
-    const e = 1 - Math.pow(1 - k, 3), cw = p.deck.cards[0]?.offsetWidth ?? 0;
+    const e = 1 - Math.pow(1 - k, 3),
+      cw = p.deck.cards[0]?.offsetWidth ?? 0;
     const spread = Math.min(cw * 1.05, (innerWidth - cw) / 2);
     const vertical = innerWidth < 700;
+    // On phones the cards fan downwards; space them by their real height so they don't overlap.
+    const ch = Math.max(...p.deck.cards.map((c) => c.offsetHeight), 0);
+    const table = p.deck.cards[0]?.parentElement?.clientHeight ?? 0;
+    const spreadY = Math.min(ch + 14, Math.max(90, (table - ch) / 2));
     p.deck.cards.forEach((c, i) => {
       const o = i - 1;
-      const x = vertical ? 0 : o * spread * e, y = vertical ? o * 90 * e : Math.abs(o) * 24 * e;
+      const x = vertical ? 0 : o * spread * e,
+        y = vertical ? o * spreadY * e : Math.abs(o) * 24 * e;
       const rot = o * (4 - 12 * e) + (i === 0 ? -3 : i === 2 ? 3 : 0) * (1 - e);
       c.style.transform = `translate(${x}px, calc(-50% + ${y}px)) rotate(${rot}deg)`;
       c.style.zIndex = i === 1 ? "3" : "2";
@@ -90,7 +123,8 @@ export function startScroll(p: ScrollParts): () => void {
   function sheet(k: number) {
     const { sheet: s, focus, caption } = p.sheet;
     s.style.transform = "none";
-    const r = focus.getBoundingClientRect(), b = s.getBoundingClientRect();
+    const r = focus.getBoundingClientRect(),
+      b = s.getBoundingClientRect();
     const target = Math.min(innerWidth / r.width, vh() / r.height) * 1.02;
     const e = k < 0.15 ? 0 : clamp((k - 0.15) / 0.7);
     const ee = e * e * (3 - 2 * e);
@@ -98,7 +132,8 @@ export function startScroll(p: ScrollParts): () => void {
     const dx = (innerWidth / 2 - (r.left + r.width / 2)) * ee;
     const dy = (vh() / 2 - (r.top + r.height / 2)) * ee;
     s.style.transform = `translate(${dx}px,${dy}px) scale(${1 + (target - 1) * ee})`;
-    for (const f of s.children as HTMLCollectionOf<HTMLElement>) if (f !== focus) f.style.opacity = String(1 - ee);
+    for (const f of s.children as HTMLCollectionOf<HTMLElement>)
+      if (f !== focus) f.style.opacity = String(1 - ee);
     const fc = focus.querySelector<HTMLElement>("figcaption");
     if (fc) fc.style.opacity = String(1 - ee);
     caption.style.opacity = String(clamp((k - 0.8) / 0.15));
@@ -111,15 +146,18 @@ export function startScroll(p: ScrollParts): () => void {
     [p.sheet.section, sheet],
   ];
   const eased = new Map(parts.map(([el]) => [el, progress(el)]));
-  let raf = 0, drawn = false;
+  let raf = 0,
+    drawn = false;
   function tick() {
     if (p.root.dataset.flat === "true") {
       for (const [, fn] of parts) fn(0);
       return;
     }
     for (const [el, fn] of parts) {
-      const target = progress(el), cur = eased.get(el) ?? target;
-      const next = Math.abs(target - cur) < 0.0005 ? target : cur + (target - cur) * 0.16;
+      const target = progress(el),
+        cur = eased.get(el) ?? target;
+      const next =
+        Math.abs(target - cur) < 0.0005 ? target : cur + (target - cur) * 0.16;
       if (next !== cur || !drawn) {
         eased.set(el, next);
         fn(next);

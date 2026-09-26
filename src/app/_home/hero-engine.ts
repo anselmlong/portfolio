@@ -43,7 +43,13 @@ export function startHero({
   const mctx = mask.getContext("2d");
   if (!ctx || !mctx) {
     const idle = () => undefined;
-    return { setScene: idle, setPeek: idle, bump: idle, setScroll: idle, destroy: idle };
+    return {
+      setScene: idle,
+      setPeek: idle,
+      bump: idle,
+      setScroll: idle,
+      destroy: idle,
+    };
   }
 
   const images = new Map<string, HTMLImageElement>();
@@ -59,14 +65,26 @@ export function startHero({
   };
   const posterImgs = posters.map(image);
 
-  let W = 0, H = 0, dpr = 1;
+  let W = 0,
+    H = 0,
+    dpr = 1;
   const t0 = performance.now();
-  let open = 0, openTarget = 0, peekAmt = 0, bump = 0, scrollK = 0;
-  let clipIdx = 0, clipFade = 1, lastSwap = performance.now();
-  let scene: Scene | null = null, sceneStart = 0;
-  let peek: Scene | null = null, peekStart = 0;
+  let open = 0,
+    openTarget = 0,
+    peekAmt = 0,
+    bump = 0,
+    scrollK = 0;
+  let clipIdx = 0,
+    clipFade = 1,
+    lastSwap = performance.now();
+  let scene: Scene | null = null,
+    sceneStart = 0;
+  let peek: Scene | null = null,
+    peekStart = 0;
   const lens = { x: 0, y: 0, tx: 0, ty: 0, r: 0, tr: 0, pulse: 0 };
-  let raf = 0, visible = true, alive = true;
+  let raf = 0,
+    visible = true,
+    alive = true;
 
   function size() {
     dpr = Math.min(devicePixelRatio || 1, 2);
@@ -78,10 +96,14 @@ export function startHero({
   }
 
   function cover(src: Source, zoom = 1, panY = 0.5, alpha = 1, dx = 0, dy = 0) {
-    const sw = src instanceof HTMLVideoElement ? src.videoWidth : src.naturalWidth;
-    const sh = src instanceof HTMLVideoElement ? src.videoHeight : src.naturalHeight;
+    const sw =
+      src instanceof HTMLVideoElement ? src.videoWidth : src.naturalWidth;
+    const sh =
+      src instanceof HTMLVideoElement ? src.videoHeight : src.naturalHeight;
     if (!sw || !ctx) return;
-    const s = Math.max(W / sw, H / sh) * zoom, dw = sw * s, dh = sh * s;
+    const s = Math.max(W / sw, H / sh) * zoom,
+      dw = sw * s,
+      dh = sh * s;
     ctx.globalAlpha = alpha;
     ctx.drawImage(src, (W - dw) / 2 + dx, (H - dh) * panY + dy, dw, dh);
     ctx.globalAlpha = 1;
@@ -96,7 +118,8 @@ export function startHero({
     // Footage drifts slightly against the cursor, so the letters feel like a window.
     const dx = still ? 0 : (lens.x / (W || 1) - 0.5) * -24;
     const dy = still ? 0 : (lens.y / (H || 1) - 0.5) * -16;
-    const a = clipSource(prev), b = clipSource(clipIdx);
+    const a = clipSource(prev),
+      b = clipSource(clipIdx);
     if (clipFade < 1 && a) cover(a, 1.12, 0.5, 1, dx, dy);
     if (b) cover(b, push, 0.5, clipFade, dx, dy);
   }
@@ -113,10 +136,12 @@ export function startHero({
       cover(s, 1.02, k * 0.9);
       return;
     }
-    const n = sc.srcs.length, per = 3.2;
+    const n = sc.srcs.length,
+      per = 3.2;
     const i = still ? 0 : Math.floor(e / per) % n;
     const f = still ? 1 : Math.min(1, (e % per) / 0.6);
-    const a = image(sc.srcs[(i + n - 1) % n]!), b = image(sc.srcs[i]!);
+    const a = image(sc.srcs[(i + n - 1) % n]!),
+      b = image(sc.srcs[i]!);
     if (ready(a) && f < 1) cover(a, 1.12);
     if (ready(b)) cover(b, still ? 1.02 : 1.02 + (e % per) * 0.025, 0.5, f);
   }
@@ -160,7 +185,14 @@ export function startHero({
       mctx.globalAlpha = 1;
     }
     if (lens.r > 2) {
-      const g = mctx.createRadialGradient(lens.x, lens.y, 0, lens.x, lens.y, lens.r);
+      const g = mctx.createRadialGradient(
+        lens.x,
+        lens.y,
+        0,
+        lens.x,
+        lens.y,
+        lens.r,
+      );
       g.addColorStop(0, "rgba(255,255,255,.95)");
       g.addColorStop(0.55, "rgba(255,255,255,.55)");
       g.addColorStop(1, "rgba(255,255,255,0)");
@@ -168,7 +200,9 @@ export function startHero({
       mctx.fillRect(lens.x - lens.r, lens.y - lens.r, lens.r * 2, lens.r * 2);
       mctx.fillStyle = "#fff";
     }
-    const family = getComputedStyle(stage).getPropertyValue("--hero-font").trim() || "Impact, sans-serif";
+    const family =
+      getComputedStyle(stage).getPropertyValue("--hero-font").trim() ||
+      "Impact, sans-serif";
     mctx.font = `900 ${fs}px ${family}`;
     const widths = [...word].map((ch) => mctx.measureText(ch).width);
     const gap = fs * (0.02 + (open + bump) * 0.9 + scrollK * 0.1);
@@ -181,7 +215,13 @@ export function startHero({
       const ease = 1 - Math.pow(1 - intro, 3);
       const cx = x + w / 2;
       // Letters near the cursor lift a little toward it.
-      const near = still || lens.tr === 0 ? 0 : Math.max(0, 1 - Math.hypot(lens.x - cx, lens.y - H / 2) / (fs * 1.2));
+      const near =
+        still || lens.tr === 0
+          ? 0
+          : Math.max(
+              0,
+              1 - Math.hypot(lens.x - cx, lens.y - H / 2) / (fs * 1.2),
+            );
       mctx.save();
       mctx.globalAlpha = ease;
       mctx.translate(cx, base + (1 - ease) * fs * 0.45 - near * fs * 0.06);
@@ -198,12 +238,20 @@ export function startHero({
     ctx.restore();
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.35, W / 2, H / 2, Math.max(W, H) * 0.75);
+    const vg = ctx.createRadialGradient(
+      W / 2,
+      H / 2,
+      Math.min(W, H) * 0.35,
+      W / 2,
+      H / 2,
+      Math.max(W, H) * 0.75,
+    );
     vg.addColorStop(0, "rgba(0,0,0,0)");
     vg.addColorStop(1, `rgba(0,0,0,${0.25 + open * 0.25})`);
     ctx.fillStyle = vg;
     ctx.fillRect(0, 0, W, H);
 
+    stage.dataset.live ??= "true";
     if (!still && visible) raf = requestAnimationFrame(draw);
   }
 
@@ -244,7 +292,8 @@ export function startHero({
     lens.tr = 0;
   };
   const onDown = (ev: PointerEvent) => {
-    if (!(ev.target as Element).closest("[data-reveal]")) lens.pulse = Math.min(W, H) * 0.35;
+    if (!(ev.target as Element).closest("[data-reveal]"))
+      lens.pulse = Math.min(W, H) * 0.35;
   };
   if (!still && finePointer) {
     stage.addEventListener("pointermove", onMove);

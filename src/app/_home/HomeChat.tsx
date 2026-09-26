@@ -11,7 +11,19 @@ import {
 import { starters, topics, type TopicKey } from "~/lib/home-content";
 import styles from "./home.module.css";
 
-type Message = { id: number; role: "user" | "assistant"; text: string; pending?: boolean };
+type Message = {
+  id: number;
+  role: "user" | "assistant";
+  text: string;
+  pending?: boolean;
+};
+
+/** Answers render as plain text, so drop the markdown emphasis the model sometimes adds. */
+const tidy = (text: string) =>
+  text
+    .replace(/\*\*(.+?)\*\*/g, "$1")
+    .replace(/__(.+?)__/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "");
 
 const examples = [
   "what did you build at visa?",
@@ -40,7 +52,9 @@ export function HomeChat({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [nudge, setNudge] = useState(false);
-  const [placeholder, setPlaceholder] = useState("ask me about kopitype, OGP, the aircon bot…");
+  const [placeholder, setPlaceholder] = useState(
+    "ask me about kopitype, OGP, the aircon bot…",
+  );
   const asked = useRef(new Set<TopicKey>());
   const exchanges = useRef(0);
   const nextId = useRef(1);
@@ -50,13 +64,17 @@ export function HomeChat({
 
   useEffect(() => () => abort.current?.abort(), []);
   useEffect(() => {
-    log.current?.scrollTo?.({ top: log.current.scrollHeight, behavior: still ? "auto" : "smooth" });
+    log.current?.scrollTo?.({
+      top: log.current.scrollHeight,
+      behavior: still ? "auto" : "smooth",
+    });
   }, [messages, nudge, still]);
 
   // While the box is idle, the placeholder types out example questions.
   useEffect(() => {
     if (still) return;
-    let i = 0, typer = 0;
+    let i = 0,
+      typer = 0;
     const every = window.setInterval(() => {
       if (document.activeElement === box.current || box.current?.value) return;
       const ex = examples[i++ % examples.length]!;
@@ -74,26 +92,44 @@ export function HomeChat({
   }, [still]);
 
   const update = (id: number, patch: Partial<Message>) =>
-    setMessages((all) => all.map((m) => (m.id === id ? { ...m, ...patch } : m)));
+    setMessages((all) =>
+      all.map((m) => (m.id === id ? { ...m, ...patch } : m)),
+    );
 
   // The tapped chip flies into the conversation and becomes your message.
   function fly(from: HTMLElement | null, userId: number) {
     if (still || !from) return;
     const a = from.getBoundingClientRect();
     requestAnimationFrame(() => {
-      const bubble = log.current?.querySelector<HTMLElement>(`[data-id="${userId}"]`);
+      const bubble = log.current?.querySelector<HTMLElement>(
+        `[data-id="${userId}"]`,
+      );
       if (!bubble) return;
       const b = bubble.getBoundingClientRect();
       const ghost = from.cloneNode(true) as HTMLElement;
       ghost.className = `${styles.chip} ${styles.flying}`;
-      Object.assign(ghost.style, { left: `${a.left}px`, top: `${a.top}px`, width: `${a.width}px`, height: `${a.height}px`, translate: "", rotate: "" });
+      Object.assign(ghost.style, {
+        left: `${a.left}px`,
+        top: `${a.top}px`,
+        width: `${a.width}px`,
+        height: `${a.height}px`,
+        translate: "",
+        rotate: "",
+      });
       document.body.append(ghost);
       bubble.style.visibility = "hidden";
       ghost.animate(
         [
           { transform: "translate(0,0) scale(1)" },
-          { transform: `translate(${(b.left - a.left) * 0.5}px,${(b.top - a.top) * 0.5 - 40}px) scale(1.06) rotate(-2deg)`, offset: 0.55 },
-          { transform: `translate(${b.left - a.left}px,${b.top - a.top}px) scale(1)`, width: `${b.width}px`, height: `${b.height}px` },
+          {
+            transform: `translate(${(b.left - a.left) * 0.5}px,${(b.top - a.top) * 0.5 - 40}px) scale(1.06) rotate(-2deg)`,
+            offset: 0.55,
+          },
+          {
+            transform: `translate(${b.left - a.left}px,${b.top - a.top}px) scale(1)`,
+            width: `${b.width}px`,
+            height: `${b.height}px`,
+          },
         ],
         { duration: 560, easing: "cubic-bezier(.3,.7,.2,1)" },
       ).onfinish = () => {
@@ -103,7 +139,11 @@ export function HomeChat({
     });
   }
 
-  async function ask(text: string, topic: TopicKey | null, from: HTMLElement | null) {
+  async function ask(
+    text: string,
+    topic: TopicKey | null,
+    from: HTMLElement | null,
+  ) {
     const question = text.trim();
     if (!question || busy) return;
     abort.current?.abort();
@@ -116,7 +156,8 @@ export function HomeChat({
     const history: Turn[] = messages
       .filter((m) => !m.pending && m.text)
       .map((m) => ({ role: m.role, content: m.text }));
-    const userId = nextId.current++, replyId = nextId.current++;
+    const userId = nextId.current++,
+      replyId = nextId.current++;
     setMessages((all) => [
       ...all,
       { id: userId, role: "user", text: question },
@@ -141,8 +182,12 @@ export function HomeChat({
       );
       exchanges.current++;
       if (exchanges.current >= 2) setNudge(true);
-      const next = (chosen ? topics[chosen].next : starters).filter((k) => !asked.current.has(k));
-      const rest = (Object.keys(topics) as TopicKey[]).filter((k) => !asked.current.has(k) && !next.includes(k));
+      const next = (chosen ? topics[chosen].next : starters).filter(
+        (k) => !asked.current.has(k),
+      );
+      const rest = (Object.keys(topics) as TopicKey[]).filter(
+        (k) => !asked.current.has(k) && !next.includes(k),
+      );
       setChips([...next, ...rest].slice(0, 3));
     } catch (failure) {
       const timedOut = failure instanceof TimeoutError;
@@ -162,15 +207,27 @@ export function HomeChat({
 
   return (
     <div className={styles.chatbox}>
-      <div ref={log} className={styles.log} role="log" aria-live="polite" aria-label="Conversation">
+      <div
+        ref={log}
+        className={styles.log}
+        role="log"
+        aria-live="polite"
+        aria-label="Conversation"
+      >
         {messages.map((m) => (
-          <div key={m.id} data-id={m.id} className={`${styles.msg} ${m.role === "user" ? styles.me : ""} ${m.pending ? styles.dots : ""}`}>
+          <div
+            key={m.id}
+            data-id={m.id}
+            className={`${styles.msg} ${m.role === "user" ? styles.me : ""} ${m.pending ? styles.dots : ""}`}
+          >
             {m.pending ? (
               <span aria-label="Anselm is typing">
                 <i />
                 <i />
                 <i />
               </span>
+            ) : m.role === "assistant" ? (
+              tidy(m.text)
             ) : (
               m.text
             )}
@@ -178,14 +235,20 @@ export function HomeChat({
         ))}
         {nudge && (
           <div className={styles.nudge}>
-            <span>everything else is laid out below, whenever you want it.</span>
+            <span>
+              everything else is laid out below, whenever you want it.
+            </span>
             <button type="button" onClick={onSeeAll} data-label="SCROLL">
               see the full site ↓
             </button>
           </div>
         )}
       </div>
-      <div className={`${styles.chips} ${busy ? styles.leaving : ""}`} aria-label="Suggested questions" data-chips>
+      <div
+        className={`${styles.chips} ${busy ? styles.leaving : ""}`}
+        aria-label="Suggested questions"
+        data-chips
+      >
         {chips.map((key, i) => (
           <button
             key={key}
@@ -193,7 +256,9 @@ export function HomeChat({
             className={styles.chip}
             style={{ animationDelay: `${i * 80}ms` }}
             disabled={busy}
-            onClick={(e) => void ask(topics[key].question, key, e.currentTarget)}
+            onClick={(e) =>
+              void ask(topics[key].question, key, e.currentTarget)
+            }
             onPointerEnter={() => !busy && onPeek(key)}
             onPointerLeave={() => onPeek(null)}
             onFocus={() => !busy && onPeek(key)}
@@ -236,7 +301,9 @@ export function HomeChat({
           {error}
         </p>
       )}
-      <p className={styles.fine}>Replies are AI-generated from my notes, so they can be wrong.</p>
+      <p className={styles.fine}>
+        Replies are AI-generated from my notes, so they can be wrong.
+      </p>
     </div>
   );
 }

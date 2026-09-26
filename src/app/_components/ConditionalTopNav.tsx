@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 
 export function ConditionalTopNav() {
   const pathname = usePathname();
-  // The homepage and blog carry their own header.
-  if (pathname === "/" || pathname.startsWith("/blog")) return null;
+  // Only the older /photos page still uses this nav; everything else has its own header.
+  if (!pathname.startsWith("/photos")) return null;
   return <TopNav />;
 }

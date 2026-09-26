@@ -15,19 +15,34 @@ export function startCursor({
   shy: HTMLElement;
 }): () => void {
   root.dataset.cursor = "on";
-  const cur = { x: -100, y: -100, tx: -100, ty: -100, w: 34, h: 34, tw: 34, th: 34 };
+  const cur = {
+    x: -100,
+    y: -100,
+    tx: -100,
+    ty: -100,
+    w: 34,
+    h: 34,
+    tw: 34,
+    th: 34,
+  };
   let lock: HTMLElement | null = null;
   let inStage = false;
   let raf = 0;
-  const springs = new WeakMap<HTMLElement, { x: number; y: number; vx: number; vy: number }>();
+  const springs = new WeakMap<
+    HTMLElement,
+    { x: number; y: number; vx: number; vy: number }
+  >();
   const letters = [...shy.querySelectorAll<HTMLElement>("span")];
 
   const onMove = (ev: PointerEvent) => {
     cur.tx = ev.clientX;
     cur.ty = ev.clientY;
     const target = ev.target as Element;
-    const hit = target.closest<HTMLElement>("a,button,input,textarea,[data-label]");
-    inStage = !!target.closest("[data-stage]") && !target.closest("[data-reveal]");
+    const hit = target.closest<HTMLElement>(
+      "a,button,input,textarea,[data-label]",
+    );
+    inStage =
+      !!target.closest("[data-stage]") && !target.closest("[data-reveal]");
     lock = hit && !inStage && root.contains(hit) ? hit : null;
     reticle.dataset.state = lock ? "locked" : inStage ? "lens" : "free";
     label.textContent = lock
@@ -38,8 +53,12 @@ export function startCursor({
     for (const s of letters) {
       const r = s.getBoundingClientRect();
       if (r.bottom < 0 || r.top > innerHeight) continue;
-      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-      const k = Math.max(0, 1 - Math.hypot(ev.clientX - cx, ev.clientY - cy) / 220);
+      const cx = r.left + r.width / 2,
+        cy = r.top + r.height / 2;
+      const k = Math.max(
+        0,
+        1 - Math.hypot(ev.clientX - cx, ev.clientY - cy) / 220,
+      );
       s.style.transform = k
         ? `translate(${(cx - ev.clientX) * 0.35 * k}px,${(cy - ev.clientY) * 0.35 * k}px) rotate(${(cx - ev.clientX) * 0.05 * k}deg)`
         : "";
@@ -51,7 +70,8 @@ export function startCursor({
 
   function loop() {
     if (lock?.isConnected) {
-      const r = lock.getBoundingClientRect(), pad = 6;
+      const r = lock.getBoundingClientRect(),
+        pad = 6;
       cur.tw = r.width + pad * 2;
       cur.th = r.height + pad * 2;
       cur.x = lerp(cur.x, r.left + r.width / 2, 0.25);
@@ -72,7 +92,8 @@ export function startCursor({
       const st = springs.get(c) ?? { x: 0, y: 0, vx: 0, vy: 0 };
       springs.set(c, st);
       const r = c.getBoundingClientRect();
-      const cx = r.left + r.width / 2 - st.x, cy = r.top + r.height / 2 - st.y;
+      const cx = r.left + r.width / 2 - st.x,
+        cy = r.top + r.height / 2 - st.y;
       const k = Math.max(0, 1 - Math.hypot(cur.tx - cx, cur.ty - cy) / 150);
       st.vx = (st.vx + ((cur.tx - cx) * 0.22 * k - st.x) * 0.14) * 0.78;
       st.vy = (st.vy + ((cur.ty - cy) * 0.3 * k - st.y) * 0.14) * 0.78;
