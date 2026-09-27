@@ -22,6 +22,7 @@ import { startHero, type HeroHandle } from "./hero-engine";
 import { HomeChat } from "./HomeChat";
 import { AboutCover } from "./AboutCover";
 import { GithubLog } from "./GithubLog";
+import { SceneRail, Slate } from "./Scenes";
 import type { GithubActivity } from "~/server/github";
 import { measureViewport, startScroll } from "./scroll-engine";
 import styles from "./home.module.css";
@@ -187,8 +188,10 @@ export default function HomeExperience({
   }
   const peek = (key: TopicKey | null) =>
     hero.current?.setPeek(key ? scenes[topics[key].scene] : null);
-  const toWork = () =>
-    work.current?.scrollIntoView({ behavior: still ? "auto" : "smooth" });
+  const toStory = () =>
+    document
+      .getElementById("about")
+      ?.scrollIntoView({ behavior: still ? "auto" : "smooth" });
   // Glide back to the chat and leave the cursor in the box, ready to type.
   const toChat = () => {
     const box = document.getElementById("ask-anselm");
@@ -219,6 +222,8 @@ export default function HomeExperience({
         <em ref={reticleLabel} />
       </div>
 
+      <SceneRail />
+
       <div className={styles.wrap}>
         <header className={styles.top}>
           <Link href="/" className={styles.wordmark}>
@@ -245,7 +250,7 @@ export default function HomeExperience({
             <button
               type="button"
               className={styles.exit}
-              onClick={toWork}
+              onClick={toStory}
               data-label="SCROLL"
             >
               Show me the full site ↓
@@ -313,125 +318,16 @@ export default function HomeExperience({
       </div>
 
       <section
-        id="work"
-        ref={work}
-        className={`${styles.pin} ${styles.workPin}`}
-        aria-label="Work"
-      >
-        <div className={styles.sticky}>
-          <div ref={ghost} className={styles.ghost} aria-hidden="true">
-            WORK · WORK · WORK
-          </div>
-          <div className={`${styles.wrap} ${styles.kicker}`}>
-            <h2>Work</h2>
-            <span className={styles.mono}>
-              <span className={styles.onDesk}>scroll to wind the reel</span>
-              <span className={styles.onPhone}>swipe through</span> · live
-              sites, captured this month
-            </span>
-          </div>
-          <div ref={track} className={styles.track}>
-            {reel.map((f) => (
-              <a
-                key={f.name}
-                className={styles.frame}
-                href={f.href}
-                data-label={f.label}
-              >
-                <div
-                  className={`${styles.shot} ${!f.video && f.visual.kind !== "image" ? styles.typeShot : ""} ${!f.video && f.visual.kind === "shitpost" ? styles.shit : ""}`}
-                >
-                  {f.video && (
-                    <ReelVideo
-                      src={f.video.src}
-                      poster={f.video.poster}
-                      name={f.name}
-                    />
-                  )}
-                  {!f.video && f.visual.kind === "image" && (
-                    <>
-                      <div className={styles.drift} data-drift>
-                        <Image
-                          src={f.visual.src}
-                          alt={f.visual.alt}
-                          fill
-                          sizes="(max-width: 800px) 80vw, 860px"
-                          style={{
-                            objectFit: "cover",
-                            objectPosition: f.visual.position ?? "top",
-                          }}
-                        />
-                      </div>
-                      {f.visual.note && (
-                        <em className={styles.note}>{f.visual.note}</em>
-                      )}
-                    </>
-                  )}
-                  {!f.video && f.visual.kind === "ava" && (
-                    <div className={styles.tchat} data-drift aria-hidden="true">
-                      <p className={styles.u}>
-                        fix the typo on my blog and open a PR
-                      </p>
-                      <p className={styles.a}>
-                        done. the PR is open, and vercel is building a preview.
-                      </p>
-                      <p className={styles.u}>
-                        send me the link when it&apos;s ready
-                      </p>
-                      <p className={styles.a}>will do.</p>
-                    </div>
-                  )}
-                  {!f.video && f.visual.kind === "sixseven" && (
-                    <>
-                      <span
-                        className={styles.n67}
-                        data-drift
-                        aria-hidden="true"
-                      >
-                        6<span>7</span>
-                      </span>
-                      <span className={styles.ocr} aria-hidden="true" />
-                    </>
-                  )}
-                  {!f.video && f.visual.kind === "shitpost" && (
-                    <div
-                      data-drift
-                      className={styles.shitInner}
-                      aria-hidden="true"
-                    >
-                      <b>Your career depends on this.</b>
-                      <span>six personas · one topic · zero shame</span>
-                    </div>
-                  )}
-                  {!f.video && f.visual.kind !== "image" && (
-                    <em className={styles.illus}>illustration</em>
-                  )}
-                </div>
-                <div className={styles.cap}>
-                  <b>{f.name}</b>
-                  <span>{f.body}</span>
-                  <small>{f.tech}</small>
-                </div>
-              </a>
-            ))}
-          </div>
-          <div className={styles.counter}>
-            <output ref={count}>
-              01 / {String(reel.length).padStart(2, "0")}
-            </output>
-            <div className={styles.bar}>
-              <i ref={bar} />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section
+        id="experience"
         ref={exp}
         className={`${styles.pin} ${styles.expPin}`}
-        aria-label="Experience"
+        aria-labelledby="exp-title"
       >
         <div className={`${styles.sticky} ${styles.expSticky}`}>
+          <div className={styles.expHead}>
+            <Slate n={1} />
+            <h2 id="exp-title">Experience</h2>
+          </div>
           <div className={styles.dial} aria-hidden="true">
             <svg viewBox="-260 -260 520 520">
               <defs>
@@ -562,11 +458,132 @@ export default function HomeExperience({
         </div>
       </section>
 
+      <section
+        id="work"
+        ref={work}
+        className={`${styles.pin} ${styles.workPin}`}
+        aria-label="Work"
+      >
+        <div className={styles.sticky}>
+          <div ref={ghost} className={styles.ghost} aria-hidden="true">
+            WORK · WORK · WORK
+          </div>
+          <div className={`${styles.wrap} ${styles.kicker}`}>
+            <div>
+              <Slate n={2} />
+              <h2>Work</h2>
+            </div>
+            <span className={styles.mono}>
+              <span className={styles.onDesk}>scroll to wind the reel</span>
+              <span className={styles.onPhone}>swipe through</span> · live
+              sites, captured this month
+            </span>
+          </div>
+          <div ref={track} className={styles.track}>
+            {reel.map((f) => (
+              <a
+                key={f.name}
+                className={styles.frame}
+                href={f.href}
+                data-label={f.label}
+              >
+                <div
+                  className={`${styles.shot} ${!f.video && f.visual.kind !== "image" ? styles.typeShot : ""} ${!f.video && f.visual.kind === "shitpost" ? styles.shit : ""}`}
+                >
+                  {f.video && (
+                    <ReelVideo
+                      src={f.video.src}
+                      poster={f.video.poster}
+                      name={f.name}
+                    />
+                  )}
+                  {!f.video && f.visual.kind === "image" && (
+                    <>
+                      <div className={styles.drift} data-drift>
+                        <Image
+                          src={f.visual.src}
+                          alt={f.visual.alt}
+                          fill
+                          sizes="(max-width: 800px) 80vw, 860px"
+                          style={{
+                            objectFit: "cover",
+                            objectPosition: f.visual.position ?? "top",
+                          }}
+                        />
+                      </div>
+                      {f.visual.note && (
+                        <em className={styles.note}>{f.visual.note}</em>
+                      )}
+                    </>
+                  )}
+                  {!f.video && f.visual.kind === "ava" && (
+                    <div className={styles.tchat} data-drift aria-hidden="true">
+                      <p className={styles.u}>
+                        fix the typo on my blog and open a PR
+                      </p>
+                      <p className={styles.a}>
+                        done. the PR is open, and vercel is building a preview.
+                      </p>
+                      <p className={styles.u}>
+                        send me the link when it&apos;s ready
+                      </p>
+                      <p className={styles.a}>will do.</p>
+                    </div>
+                  )}
+                  {!f.video && f.visual.kind === "sixseven" && (
+                    <>
+                      <span
+                        className={styles.n67}
+                        data-drift
+                        aria-hidden="true"
+                      >
+                        6<span>7</span>
+                      </span>
+                      <span className={styles.ocr} aria-hidden="true" />
+                    </>
+                  )}
+                  {!f.video && f.visual.kind === "shitpost" && (
+                    <div
+                      data-drift
+                      className={styles.shitInner}
+                      aria-hidden="true"
+                    >
+                      <b>Your career depends on this.</b>
+                      <span>six personas · one topic · zero shame</span>
+                    </div>
+                  )}
+                  {!f.video && f.visual.kind !== "image" && (
+                    <em className={styles.illus}>illustration</em>
+                  )}
+                </div>
+                <div className={styles.cap}>
+                  <b>{f.name}</b>
+                  <span>{f.body}</span>
+                  <small>{f.tech}</small>
+                </div>
+              </a>
+            ))}
+          </div>
+          <div className={styles.counter}>
+            <output ref={count}>
+              01 / {String(reel.length).padStart(2, "0")}
+            </output>
+            <div className={styles.bar}>
+              <i ref={bar} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className={styles.wrap}>{github && <GithubLog data={github} />}</div>
+
       <div className={styles.wrap}>
-        {github && <GithubLog data={github} />}
         <section id="writing" className={styles.writing} aria-label="Writing">
           <div className={styles.kicker}>
-            <h2>Writing</h2>
+            <div>
+              <Slate n={3} />
+              <h2>Writing</h2>
+            </div>
             <Link className={styles.mono} href="/blog" data-label="READ">
               all {totalPosts} posts →
             </Link>
@@ -639,6 +656,9 @@ export default function HomeExperience({
         aria-label="Photos"
       >
         <div className={styles.sticky}>
+          <div className={styles.sheetHead}>
+            <Slate n={4} />
+          </div>
           <div ref={sheet} className={styles.sheet}>
             {photos.map((p, i) => (
               <figure
@@ -669,7 +689,8 @@ export default function HomeExperience({
       </section>
 
       <div className={styles.wrap}>
-        <section className={styles.outro} aria-label="Say hi">
+        <section id="say-hi" className={styles.outro} aria-label="Say hi">
+          <Slate n={5} />
           <div ref={shy} className={styles.hi} aria-label="Say hi">
             {"SAY HI".split("").map((c, i) => (
               <span key={i}>{c === " " ? " " : c}</span>

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef } from "react";
+import { Slate } from "./Scenes";
 import styles from "./home.module.css";
 
 const rows = [
@@ -75,7 +76,7 @@ export function AboutCover() {
   }, []);
 
   return (
-    <section className={styles.about} aria-labelledby="about-title">
+    <section id="about" className={styles.about} aria-labelledby="about-title">
       <div ref={stage} className={styles.cover}>
         <Image
           className={styles.coverBack}
@@ -108,7 +109,7 @@ export function AboutCover() {
         </span>
       </div>
       <div className={styles.aboutText}>
-        <span className={styles.mono}>about</span>
+        <Slate n={0} />
         <h2 id="about-title">hi, that&apos;s me.</h2>
         <p>
           i study computer science at nus, specialising in ai, and i&apos;m a
