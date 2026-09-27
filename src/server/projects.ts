@@ -8,7 +8,7 @@ import {
   type Project,
   type Status,
 } from "~/lib/projects";
-import { githubUser } from "./github";
+import { githubApi, githubUser } from "./github";
 
 export type RepoMeta = {
   stars: number;
@@ -100,18 +100,7 @@ export function mergeProjects(
 }
 
 async function liveRepos(): Promise<Record<string, RepoMeta>> {
-  const res = await fetch(
-    `https://api.github.com/users/${githubUser}/repos?per_page=100`,
-    {
-      next: { revalidate: 6 * 3600 },
-      headers: {
-        Accept: "application/vnd.github+json",
-        ...(process.env.GITHUB_TOKEN
-          ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
-          : {}),
-      },
-    },
-  );
+  const res = await githubApi(`/users/${githubUser}/repos?per_page=100`, 6);
   if (!res.ok) throw new Error(`repos ${res.status}`);
   const list = (await res.json()) as {
     name: string;

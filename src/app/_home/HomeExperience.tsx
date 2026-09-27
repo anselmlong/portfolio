@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import {
   clips,
-  contactEmail,
   heroPhotoIndex,
   linkedinPosts,
   photos,
@@ -14,7 +13,6 @@ import {
   roles,
   scenes,
   topics,
-  type Card,
   type TopicKey,
 } from "~/lib/home-content";
 import { startCursor } from "./cursor-engine";
@@ -22,6 +20,8 @@ import { ReelVideo } from "./ReelVideo";
 import { startHero, type HeroHandle } from "./hero-engine";
 import { HomeChat } from "./HomeChat";
 import { AboutCover } from "./AboutCover";
+import { CopyEmail } from "./CopyEmail";
+import { RevealCard } from "./RevealCard";
 import { GithubLog } from "./GithubLog";
 import { SceneRail, Slate } from "./Scenes";
 import { Cookie } from "./Cookie";
@@ -743,175 +743,6 @@ export default function HomeExperience({
           hidden
         />
       ))}
-    </div>
-  );
-}
-
-function RevealCard({
-  card,
-  onBack,
-  onType,
-}: {
-  card: Card;
-  onBack: () => void;
-  onType: () => void;
-}) {
-  const back = (
-    <button type="button" className={styles.back} onClick={onBack}>
-      back to the name
-    </button>
-  );
-  if (card.kind === "experience")
-    return (
-      <>
-        <span className={styles.mono}>experience</span>
-        <div className={styles.tlList}>
-          {roles.slice(0, 4).map((r) => (
-            <div key={r.ring}>
-              <span>{r.when}</span>
-              {r.org}
-            </div>
-          ))}
-        </div>
-        {back}
-      </>
-    );
-  if (card.kind === "game")
-    return (
-      <>
-        <span className={styles.mono}>kopitype, tiny round</span>
-        <KopiRound onType={onType} />
-        <div className={styles.row}>
-          <a href="https://kopitype.com" data-label="PLAY">
-            full game at kopitype.com ↗
-          </a>
-          {back}
-        </div>
-      </>
-    );
-  if (card.kind === "contact")
-    return (
-      <>
-        <span className={styles.mono}>say hi</span>
-        <h3>Email me</h3>
-        <CopyEmail />
-        <div className={styles.row}>{back}</div>
-      </>
-    );
-  return (
-    <>
-      <span className={styles.mono}>{card.kicker}</span>
-      <h3>{card.title}</h3>
-      <p>{card.body}</p>
-      <div className={styles.row}>
-        {card.link &&
-          (card.link.href.startsWith("/") ? (
-            <Link href={card.link.href} data-label="READ">
-              {card.link.label} →
-            </Link>
-          ) : (
-            <a href={card.link.href} data-label="OPEN">
-              {card.link.label} ↗
-            </a>
-          ))}
-        {back}
-      </div>
-    </>
-  );
-}
-
-const round = "shiok lah kopi peng tapao";
-function KopiRound({ onType }: { onType: () => void }) {
-  const [typed, setTyped] = useState("");
-  const [start, setStart] = useState(0);
-  const [wpm, setWpm] = useState<number | null>(null);
-  return (
-    <>
-      <div className={styles.kt} aria-hidden="true">
-        {[...round].map((c, i) => (
-          <span
-            key={i}
-            className={
-              i >= typed.length ? "" : typed[i] === c ? styles.ok : styles.bad
-            }
-          >
-            {c}
-          </span>
-        ))}
-        {wpm !== null && <span> · {wpm} wpm, shiok</span>}
-      </div>
-      <input
-        className={styles.ktIn}
-        aria-label={`Type: ${round}`}
-        autoComplete="off"
-        spellCheck={false}
-        disabled={wpm !== null}
-        value={typed}
-        onChange={(e) => {
-          const v = e.target.value;
-          const t0 = start || performance.now();
-          if (!start) setStart(t0);
-          setTyped(v);
-          onType();
-          if (v === round)
-            setWpm(
-              Math.round(round.length / 5 / ((performance.now() - t0) / 60000)),
-            );
-        }}
-      />
-    </>
-  );
-}
-
-export function CopyEmail() {
-  const [state, setState] = useState<"idle" | "copied" | "selected">("idle");
-  const code = useRef<HTMLElement>(null);
-  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
-  useEffect(() => () => clearTimeout(timer.current), []);
-
-  const settle = (next: "copied" | "selected") => {
-    setState(next);
-    clearTimeout(timer.current);
-    timer.current = setTimeout(() => setState("idle"), 2400);
-  };
-  // No clipboard access (older browsers, insecure frames): select the address
-  // so a long-press or Ctrl+C finishes the job.
-  const select = () => {
-    const sel = getSelection();
-    if (code.current && sel) {
-      sel.selectAllChildren(code.current);
-      settle("selected");
-    }
-  };
-
-  return (
-    <div className={styles.mail}>
-      <a href={`mailto:${contactEmail}`} data-label="EMAIL">
-        <code ref={code}>{contactEmail}</code>
-      </a>
-      <button
-        type="button"
-        data-state={state}
-        onClick={() => {
-          if (!navigator.clipboard) return select();
-          navigator.clipboard
-            .writeText(contactEmail)
-            .then(() => settle("copied"), select);
-        }}
-      >
-        {state === "idle"
-          ? "copy"
-          : state === "copied"
-            ? "copied ✓"
-            : "selected"}
-      </button>
-      <span className={styles.sr} role="status">
-        {state === "copied"
-          ? "Email address copied"
-          : state === "selected"
-            ? "Email address selected, copy it from here"
-            : ""}
-      </span>
     </div>
   );
 }

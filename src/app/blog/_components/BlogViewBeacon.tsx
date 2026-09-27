@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { api } from "~/trpc/react";
+import styles from "../blog.module.css";
 
 function formatViews(viewCount: number) {
   return new Intl.NumberFormat("en-US", {
@@ -45,11 +46,8 @@ export function BlogViewBeacon({
   }
 
   return (
-    <span className="blog-count-pop inline-flex items-center gap-2">
-      <span
-        className="bg-primary/70 size-1.5 rounded-full"
-        aria-hidden="true"
-      />
+    <span className={styles.views}>
+      <i aria-hidden="true" />
       <span>{formatViews(viewCount)} views</span>
     </span>
   );
