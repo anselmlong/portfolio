@@ -63,6 +63,8 @@ export default function HomeExperience({
   const [label, setLabel] = useState(clips[0]!.label);
   const [topic, setTopic] = useState<TopicKey | null>(null);
   const [role, setRole] = useState(0);
+  // Once a conversation starts, the frame eases down and the chat takes the full width.
+  const [chatting, setChatting] = useState(false);
 
   useEffect(() => {
     const el = root.current,
@@ -192,7 +194,11 @@ export default function HomeExperience({
   };
 
   return (
-    <div ref={root} className={styles.root}>
+    <div
+      ref={root}
+      className={styles.root}
+      data-chatting={chatting || undefined}
+    >
       <div
         ref={reticle}
         className={styles.reticle}
@@ -209,7 +215,7 @@ export default function HomeExperience({
 
       <div className={styles.wrap}>
         <header className={styles.top}>
-          <Link href="/" className={styles.me}>
+          <Link href="/" className={styles.wordmark}>
             Anselm Long
           </Link>
           <nav aria-label="Site" className={styles.nav}>
@@ -274,7 +280,7 @@ export default function HomeExperience({
         </div>
 
         <section className={styles.talk} aria-label="Talk to Anselm">
-          <div>
+          <div className={styles.intro}>
             <p className={styles.say}>
               hi, i&apos;m anselm. i build small tools that fix{" "}
               <em>everyday annoyances</em>, film things, and climb when i can.
@@ -291,6 +297,7 @@ export default function HomeExperience({
               onPeek={peek}
               onType={() => hero.current?.bump()}
               onSeeAll={toWork}
+              onStart={() => setChatting(true)}
             />
           </div>
         </section>
