@@ -139,6 +139,30 @@ export default async function BlogPostPage({
             <div />
           )}
           <div>
+            {toc.length > 1 && (
+              <details className={styles.tocPhone} data-toc-phone>
+                <summary>
+                  <span className={styles.mono}>on this page</span>
+                  <b data-toc-now>{toc[0]!.text}</b>
+                </summary>
+                <nav
+                  className={styles.tocList}
+                  aria-label="On this page"
+                  data-toc
+                >
+                  {toc.map((h) => (
+                    <a
+                      key={h.id}
+                      href={`#${h.id}`}
+                      className={h.level === 3 ? styles.sub : ""}
+                    >
+                      <i />
+                      {h.text}
+                    </a>
+                  ))}
+                </nav>
+              </details>
+            )}
             <article
               className={styles.article}
               data-article

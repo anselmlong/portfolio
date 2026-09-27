@@ -26,7 +26,7 @@ const onScreen = (el: Element) => {
 
 /**
  * Reading aids for a post: a progress bar, the current section lit in the
- * contents rail, copy buttons on code, and images that grow out of the page
+ * contents rail (and named in the phone strip), copy buttons on code, and images that grow out of the page
  * into a full-screen view (by click, Enter or Space) and settle back on close.
  */
 export function PostReader() {
@@ -44,7 +44,10 @@ export function PostReader() {
     if (!article) return;
     still.current = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const heads = [...article.querySelectorAll<HTMLElement>("h2[id],h3[id]")];
-    const links = [...document.querySelectorAll<HTMLAnchorElement>("[data-toc] a")];
+    // The desktop rail and the phone strip each list the same headings, in order.
+    const navs = [...document.querySelectorAll("[data-toc]")].map((n) => [...n.querySelectorAll("a")]);
+    const phone = document.querySelector<HTMLDetailsElement>("[data-toc-phone]");
+    const now = phone?.querySelector("[data-toc-now]");
     const cover = document.querySelector<HTMLElement>("[data-cover]");
 
     const onScroll = () => {
@@ -53,11 +56,30 @@ export function PostReader() {
       if (bar.current) bar.current.style.transform = `scaleX(${k})`;
       let cur = 0;
       heads.forEach((h, i) => { if (h.getBoundingClientRect().top < innerHeight * 0.3) cur = i; });
-      links.forEach((a, i) => a.toggleAttribute("data-on", i === cur));
+      navs.forEach((links) => links.forEach((a, i) => {
+        a.toggleAttribute("data-on", i === cur);
+        if (i === cur) a.setAttribute("aria-current", "location");
+        else a.removeAttribute("aria-current");
+      }));
+      const label = phone?.querySelectorAll("a")[cur]?.textContent;
+      if (now && label && now.textContent !== label) now.textContent = label;
       if (cover && !still.current) cover.style.transform = `translateY(${Math.min(120, scrollY * 0.18)}px) scale(1.08)`;
     };
     addEventListener("scroll", onScroll, { passive: true });
     onScroll();
+
+    // The phone contents fold away after a jump, on Escape, or on a tap elsewhere.
+    const fold = () => { if (phone) phone.open = false; };
+    const onPick = (e: MouseEvent) => { if ((e.target as Element).closest("a")) fold(); };
+    const onEsc = (e: KeyboardEvent) => {
+      if (e.key !== "Escape" || !phone?.open) return;
+      fold();
+      phone.querySelector("summary")?.focus();
+    };
+    const onAway = (e: PointerEvent) => { if (phone?.open && !phone.contains(e.target as Node)) fold(); };
+    phone?.addEventListener("click", onPick);
+    phone?.addEventListener("keydown", onEsc);
+    document.addEventListener("pointerdown", onAway);
 
     const buttons = [...article.querySelectorAll("pre")].map((pre) => {
       const b = document.createElement("button");
@@ -101,6 +123,9 @@ export function PostReader() {
 
     return () => {
       removeEventListener("scroll", onScroll);
+      phone?.removeEventListener("click", onPick);
+      phone?.removeEventListener("keydown", onEsc);
+      document.removeEventListener("pointerdown", onAway);
       article.removeEventListener("click", onClick);
       article.removeEventListener("keydown", onKey);
       buttons.forEach((b) => b.remove());

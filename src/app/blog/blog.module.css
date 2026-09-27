@@ -91,11 +91,27 @@
 @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } .toc { display: none !important; } }
 .toc { position: sticky; top: 32px; align-self: start; display: grid; gap: 4px; }
 .toc > span { margin-bottom: 6px; }
-.toc a { display: grid; grid-template-columns: 18px 1fr; gap: 6px; text-decoration: none; color: var(--dim); font-size: 14px; padding: 5px 0; transition: color 0.2s; }
-.toc a i { height: 2px; margin-top: 0.7em; background: var(--line); transition: background 0.2s, transform 0.3s; transform-origin: left; transform: scaleX(0.6); }
-.toc a[data-on] { color: var(--paper); }
-.toc a[data-on] i { background: var(--accent); transform: none; }
-.toc a.sub { padding-left: 14px; font-size: 13px; }
+.toc a, .tocList a { display: grid; grid-template-columns: 18px 1fr; gap: 6px; text-decoration: none; color: var(--dim); font-size: 14px; padding: 5px 0; transition: color 0.2s; }
+.toc a i, .tocList a i { height: 2px; margin-top: 0.7em; background: var(--line); transition: background 0.2s, transform 0.3s; transform-origin: left; transform: scaleX(0.6); }
+.toc a[data-on], .tocList a[data-on] { color: var(--paper); }
+.toc a[data-on] i, .tocList a[data-on] i { background: var(--accent); transform: none; }
+.toc a.sub, .tocList a.sub { padding-left: 14px; font-size: 13px; }
+/* On phones the rail becomes a strip that sticks under the progress bar, names the section you're in, and opens into the contents. */
+.tocPhone { display: none; }
+@media (max-width: 980px) {
+  .tocPhone { display: block; position: sticky; top: 0; z-index: 6; margin: 0 -16px 28px; background: color-mix(in srgb, var(--night) 90%, transparent); backdrop-filter: blur(10px); border-block: 1px solid var(--line); }
+  .article h2, .article h3, .article h4 { scroll-margin-top: 72px; }
+}
+.tocPhone summary { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 8px 16px; cursor: pointer; list-style: none; }
+.tocPhone summary::-webkit-details-marker { display: none; }
+.tocPhone summary > span { flex: none; }
+.tocPhone summary b { flex: 1; min-width: 0; font: 600 15px/1.3 var(--body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tocPhone summary::after { content: ""; flex: none; width: 7px; height: 7px; margin-right: 4px; border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: translateY(-2px) rotate(45deg); transition: transform 0.25s; }
+.tocPhone[open] summary::after { transform: translateY(2px) rotate(-135deg); }
+.tocPhone summary:focus-visible { outline-offset: -4px; }
+.tocList { display: grid; gap: 0; padding: 0 16px 12px; max-height: min(60vh, 420px); overflow-y: auto; overscroll-behavior: contain; }
+.tocList a { padding: 9px 0; font-size: 15px; }
+.tocList a.sub { font-size: 14px; }
 
 .article { max-width: 70ch; font: 400 20px/1.72 var(--read); color: #e6e3da; }
 .article p { margin: 0 0 1.15em; }
@@ -115,6 +131,7 @@
 .article pre code { display: block; background: none; border: 0; padding: 18px; font: 400 14px/1.6 var(--mono); color: #dcdad2; white-space: pre; }
 .copy { position: absolute; top: 8px; right: 8px; border: 1px solid var(--line); background: #1b1716; border-radius: 8px; padding: 3px 9px; font: 600 10px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim); cursor: pointer; opacity: 0; transition: opacity 0.2s; }
 .article pre:hover .copy, .copy:focus-visible { opacity: 1; }
+@media (hover: none) { .copy { opacity: 1; } }
 .article img { display: block; max-width: 100%; height: auto; margin: 1.6em auto 0.5em; border-radius: 12px; border: 1px solid var(--line); cursor: zoom-in; }
 .article video { display: block; width: 100%; max-width: 100%; height: auto; margin: 1.6em auto 0.5em; border-radius: 12px; border: 1px solid var(--line); background: #000; }
 .article figure { margin: 1.6em 0; }
