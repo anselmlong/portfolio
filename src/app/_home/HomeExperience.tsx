@@ -181,6 +181,15 @@ export default function HomeExperience({
     hero.current?.setPeek(key ? scenes[topics[key].scene] : null);
   const toWork = () =>
     work.current?.scrollIntoView({ behavior: still ? "auto" : "smooth" });
+  // Glide back to the chat and leave the cursor in the box, ready to type.
+  const toChat = () => {
+    const box = document.getElementById("ask-anselm");
+    box?.focus({ preventScroll: true });
+    box?.scrollIntoView({
+      behavior: still ? "auto" : "smooth",
+      block: "center",
+    });
+  };
 
   return (
     <div ref={root} className={styles.root}>
@@ -572,9 +581,14 @@ export default function HomeExperience({
             ))}
           </div>
           <CopyEmail />
-          <span className={styles.mono}>
-            or keep asking the chat, it&apos;s still up there
-          </span>
+          <button
+            type="button"
+            className={`${styles.mono} ${styles.backUp}`}
+            onClick={toChat}
+            data-label="ASK"
+          >
+            or keep asking the chat, it&apos;s still up there ↑
+          </button>
         </section>
       </div>
 
@@ -713,24 +727,55 @@ function KopiRound({ onType }: { onType: () => void }) {
   );
 }
 
-function CopyEmail() {
-  const [state, setState] = useState("copy");
+export function CopyEmail() {
+  const [state, setState] = useState<"idle" | "copied" | "selected">("idle");
+  const code = useRef<HTMLElement>(null);
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const settle = (next: "copied" | "selected") => {
+    setState(next);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setState("idle"), 2400);
+  };
+  // No clipboard access (older browsers, insecure frames): select the address
+  // so a long-press or Ctrl+C finishes the job.
+  const select = () => {
+    const sel = getSelection();
+    if (code.current && sel) {
+      sel.selectAllChildren(code.current);
+      settle("selected");
+    }
+  };
+
   return (
     <div className={styles.mail}>
       <a href={`mailto:${contactEmail}`} data-label="EMAIL">
-        <code>{contactEmail}</code>
+        <code ref={code}>{contactEmail}</code>
       </a>
       <button
         type="button"
-        onClick={() =>
-          navigator.clipboard.writeText(contactEmail).then(
-            () => setState("copied"),
-            () => setState("select it"),
-          )
-        }
+        data-state={state}
+        onClick={() => {
+          if (!navigator.clipboard) return select();
+          navigator.clipboard
+            .writeText(contactEmail)
+            .then(() => settle("copied"), select);
+        }}
       >
-        {state}
+        {state === "idle"
+          ? "copy"
+          : state === "copied"
+            ? "copied ✓"
+            : "selected"}
       </button>
+      <span className={styles.sr} role="status">
+        {state === "copied"
+          ? "Email address copied"
+          : state === "selected"
+            ? "Email address selected, copy it from here"
+            : ""}
+      </span>
     </div>
   );
 }
