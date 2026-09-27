@@ -9,7 +9,9 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("~/server/pg", () => ({ pool: {} }));
-vi.mock("~/server/chat-budget", () => ({ reserveChatRequest: vi.fn(async () => true) }));
+vi.mock("~/server/chat-budget", () => ({
+  reserveChatRequest: vi.fn(async () => true),
+}));
 vi.mock("@langchain/community/vectorstores/pgvector", () => ({
   PGVectorStore: { initialize: mocks.initialize },
 }));
@@ -115,5 +117,32 @@ describe("chat route failure phases", () => {
     )(post([text("user", "hello")]) as never);
     expect(response.status).toBe(200);
     await expect(response.text()).rejects.toThrow();
+  });
+});
+
+describe("OpenRouter routing", () => {
+  it("stays on OpenAI unless an OpenRouter model id and key are both set", async () => {
+    const { openRouterOptions } = await import("~/server/chat-model");
+    vi.stubEnv("CHAT_MODEL", "gpt-4.1");
+    vi.stubEnv("OPENROUTER_API_KEY", "test-only");
+    expect(openRouterOptions()).toEqual({});
+    vi.stubEnv("CHAT_MODEL", "deepseek/deepseek-v4.1-flash");
+    vi.stubEnv("OPENROUTER_API_KEY", "");
+    expect(openRouterOptions()).toEqual({});
+    vi.unstubAllEnvs();
+  });
+
+  it("pins OpenRouter to US providers that don't store data", async () => {
+    const { openRouterOptions } = await import("~/server/chat-model");
+    vi.stubEnv("CHAT_MODEL", "deepseek/deepseek-v4.1-flash");
+    vi.stubEnv("OPENROUTER_API_KEY", "test-only");
+    expect(openRouterOptions()).toMatchObject({
+      openAIApiKey: "test-only",
+      configuration: { baseURL: "https://openrouter.ai/api/v1" },
+      modelKwargs: {
+        provider: { allow_fallbacks: false, data_collection: "deny" },
+      },
+    });
+    vi.unstubAllEnvs();
   });
 });

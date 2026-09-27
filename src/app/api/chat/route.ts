@@ -13,6 +13,7 @@ import {
 } from "@langchain/core/messages";
 import { type Document } from "@langchain/core/documents";
 import { pool } from "~/server/pg";
+import { openRouterOptions } from "~/server/chat-model";
 import { ChatInputError, readChatRequest } from "~/lib/chat-request";
 import { reserveChatRequest } from "~/server/chat-budget";
 
@@ -105,6 +106,7 @@ export async function POST(req: NextRequest) {
         streaming: true,
         // Optional: cap response length for speed
         maxTokens: 600,
+        ...openRouterOptions(),
       }));
 
     const embeddings =
