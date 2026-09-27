@@ -2071,3 +2071,112 @@
     transform: rotate(0deg);
   }
 }
+
+/* Say hi: a shutter button everyone presses together. */
+.clicker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px 28px;
+  margin-top: 18px;
+  padding: 22px 28px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--panel);
+  text-align: left;
+}
+.flash {
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 60;
+}
+.release {
+  position: relative;
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  border: 3px solid var(--paper);
+  padding: 0;
+  background: radial-gradient(circle at 35% 30%, #ff9a85, var(--accent) 45%, #b8422f);
+  box-shadow:
+    0 0 0 6px var(--night),
+    0 0 0 7px var(--line),
+    0 10px 30px rgba(255, 111, 85, 0.25);
+  transition:
+    transform 0.08s,
+    box-shadow 0.25s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.release:hover {
+  box-shadow:
+    0 0 0 6px var(--night),
+    0 0 0 7px var(--accent),
+    0 10px 40px rgba(255, 111, 85, 0.45);
+}
+.release:active {
+  transform: scale(0.93);
+}
+.blades {
+  position: absolute;
+  inset: 18px;
+  border-radius: 50%;
+  overflow: hidden;
+  transition: rotate 0.25s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.blades i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 60%;
+  height: 2px;
+  background: rgba(18, 11, 10, 0.55);
+  transform-origin: 0 50%;
+}
+.release:active .blades {
+  rotate: 30deg;
+}
+.plus {
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  margin-left: -12px;
+  font: 700 16px var(--mono);
+  font-style: normal;
+  color: var(--accent);
+  pointer-events: none;
+  animation: floatUp 0.9s ease-out forwards;
+}
+@keyframes floatUp {
+  from {
+    transform: translateY(0) scale(0.8);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-60px) scale(1.2);
+    opacity: 0;
+  }
+}
+.tally {
+  display: grid;
+  gap: 4px;
+  min-width: 220px;
+}
+.tally b {
+  font: 900 clamp(40px, 5vw, 60px)/0.95 var(--display);
+  font-variant-numeric: tabular-nums;
+}
+.shutterNote {
+  font-size: 13px;
+  color: var(--accent);
+}
+@media (max-width: 600px) {
+  .tally {
+    justify-items: center;
+    text-align: center;
+  }
+}
