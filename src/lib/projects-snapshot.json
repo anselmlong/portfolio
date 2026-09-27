@@ -1,0 +1,461 @@
+{
+ "almost-anselm": {
+  "stars": 0,
+  "language": "Python",
+  "created": "2025-11-02",
+  "description": "Training and fine tuning a model to reply my Telegram messages for me",
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "anselmbot": {
+  "stars": 1,
+  "language": "Python",
+  "created": "2025-07-21",
+  "description": "A Python telegram bot for easing my long distance relationship.",
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "anselmgpt": {
+  "stars": 0,
+  "language": null,
+  "created": "2025-11-29",
+  "description": null,
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "autocorrect": {
+  "stars": 0,
+  "language": "Rust",
+  "created": "2026-02-05",
+  "description": null,
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "ava": {
+  "stars": 0,
+  "language": "Python",
+  "created": "2025-12-22",
+  "description": "Ava: Agentic AI Telegram Personal Assistant. She remembers things so you don\u2019t have to.",
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "betaview": {
+  "stars": 0,
+  "language": "Python",
+  "created": "2026-02-16",
+  "description": "AI-powered climbing technique analysis",
+  "homepage": "https://betaview.vercel.app",
+  "fork": false,
+  "archived": false
+ },
+ "bonsai": {
+  "stars": 0,
+  "language": "HTML",
+  "created": "2026-04-16",
+  "description": "Multi-agent, trackable research.",
+  "homepage": "https://bonsai.anselmlong.com",
+  "fork": false,
+  "archived": false
+ },
+ "canvas-scraper": {
+  "stars": 12,
+  "language": "Python",
+  "created": "2026-01-13",
+  "description": "Download your files without lifting a finger.",
+  "homepage": "https://canvas-scraper.vercel.app",
+  "fork": false,
+  "archived": false
+ },
+ "catcher-smoke-test": {
+  "stars": 0,
+  "language": null,
+  "created": "2024-10-25",
+  "description": null,
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "catholic-bot": {
+  "stars": 0,
+  "language": "Python",
+  "created": "2026-05-31",
+  "description": null,
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "cheatsheets": {
+  "stars": 0,
+  "language": null,
+  "created": "2026-03-03",
+  "description": "my collection of NUS cheatsheets over the years!",
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "computah": {
+  "stars": 0,
+  "language": "Swift",
+  "created": "2026-09-13",
+  "description": "hey computah, do this!",
+  "homepage": "https://computah.anselmlong.com",
+  "fork": false,
+  "archived": false
+ },
+ "confessit-scraper": {
+  "stars": 2,
+  "language": "Python",
+  "created": "2026-04-25",
+  "description": "NUSConfessIT - now on the web.",
+  "homepage": "https://confessit.space",
+  "fork": false,
+  "archived": false
+ },
+ "Desktop-Research": {
+  "stars": 2,
+  "language": "Python",
+  "created": "2024-06-14",
+  "description": "Using Apify and Gemini to automate desktop research.",
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "emeraldscorpion": {
+  "stars": 0,
+  "language": null,
+  "created": "2021-06-05",
+  "description": "Config files for my GitHub profile.",
+  "homepage": "https://github.com/emeraldscorpion",
+  "fork": false,
+  "archived": true
+ },
+ "first-fork": {
+  "stars": 0,
+  "language": null,
+  "created": "2024-05-19",
+  "description": "tutorial",
+  "homepage": null,
+  "fork": true,
+  "archived": true
+ },
+ "govML": {
+  "stars": 0,
+  "language": "Python",
+  "created": "2026-07-21",
+  "description": null,
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "hackharvard": {
+  "stars": 0,
+  "language": "TypeScript",
+  "created": "2025-10-04",
+  "description": "Hack Harvard 2025",
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "hoodscore": {
+  "stars": 0,
+  "language": "Python",
+  "created": "2026-06-26",
+  "description": null,
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "ip": {
+  "stars": 0,
+  "language": "Java",
+  "created": "2024-08-19",
+  "description": null,
+  "homepage": null,
+  "fork": true,
+  "archived": false
+ },
+ "javafx-tutorial": {
+  "stars": 0,
+  "language": null,
+  "created": "2024-09-03",
+  "description": null,
+  "homepage": null,
+  "fork": true,
+  "archived": false
+ },
+ "kopitype": {
+  "stars": 3,
+  "language": "TypeScript",
+  "created": "2026-07-14",
+  "description": "Monkeytype, but Singaporean.",
+  "homepage": "https://kopitype.com",
+  "fork": false,
+  "archived": false
+ },
+ "laundry_bot": {
+  "stars": 0,
+  "language": "Python",
+  "created": "2026-07-21",
+  "description": null,
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "linkedin-shitpost": {
+  "stars": 0,
+  "language": "TypeScript",
+  "created": "2026-04-13",
+  "description": "I made a shitpost generator.",
+  "homepage": "https://shitpost.anselmlong.com",
+  "fork": false,
+  "archived": false
+ },
+ "miccdrop": {
+  "stars": 0,
+  "language": "TypeScript",
+  "created": "2025-01-18",
+  "description": "hack n roll",
+  "homepage": null,
+  "fork": true,
+  "archived": false
+ },
+ "nus-aircon-checker": {
+  "stars": 0,
+  "language": "TypeScript",
+  "created": "2026-01-25",
+  "description": "Check your aircon credits on Telegram.",
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "nuscc-bot-2627": {
+  "stars": 0,
+  "language": null,
+  "created": "2026-07-13",
+  "description": null,
+  "homepage": null,
+  "fork": true,
+  "archived": false
+ },
+ "nusphere": {
+  "stars": 1,
+  "language": "JavaScript",
+  "created": "2024-05-13",
+  "description": "Orbital project of Anselm Long and Yi Xhi",
+  "homepage": "https://nusphere-frontend.onrender.com",
+  "fork": false,
+  "archived": false
+ },
+ "optifiner": {
+  "stars": 3,
+  "language": "Python",
+  "created": "2026-03-05",
+  "description": "Optifiner is a self-evolving code framework that automatically improves codebases through multi-agent AI-driven optimization. It spawns parallel AI agents that propose and test code improvements, keeping only changes that measurably improve performance against benchmark metrics.",
+  "homepage": "https://optifiner.dev",
+  "fork": false,
+  "archived": false
+ },
+ "pe": {
+  "stars": 0,
+  "language": null,
+  "created": "2024-11-15",
+  "description": null,
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "ped": {
+  "stars": 0,
+  "language": null,
+  "created": "2024-11-08",
+  "description": null,
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "photos": {
+  "stars": 0,
+  "language": "TypeScript",
+  "created": "2026-02-18",
+  "description": "Photography portfolio - photos.anselmlong.com",
+  "homepage": "https://photos-flax-gamma.vercel.app",
+  "fork": false,
+  "archived": false
+ },
+ "photos-portfolio": {
+  "stars": 0,
+  "language": "TypeScript",
+  "created": "2026-03-19",
+  "description": "photosite",
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "portfolio": {
+  "stars": 1,
+  "language": "TypeScript",
+  "created": "2025-09-27",
+  "description": null,
+  "homepage": "https://anselmlong.com",
+  "fork": false,
+  "archived": false
+ },
+ "predicting-employee-turnover": {
+  "stars": 0,
+  "language": "Jupyter Notebook",
+  "created": "2025-10-31",
+  "description": "Predicting employee turnover using Random Forest and other machine learning models. Obtained best F1 score of 0.73. Models can be used as a signal by companies to pay special attention to flagged employees.",
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "protolog": {
+  "stars": 1,
+  "language": "Python",
+  "created": "2026-02-06",
+  "description": "for you nick",
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "React-Landing-Page-Template": {
+  "stars": 0,
+  "language": null,
+  "created": "2024-05-25",
+  "description": "A simple react one page landing page templates for startups/companies",
+  "homepage": "https://react-landing-page-template-93ne.vercel.app/",
+  "fork": true,
+  "archived": false
+ },
+ "resiwash": {
+  "stars": 0,
+  "language": "TypeScript",
+  "created": "2026-01-11",
+  "description": null,
+  "homepage": null,
+  "fork": true,
+  "archived": false
+ },
+ "route-archiver": {
+  "stars": 0,
+  "language": "Python",
+  "created": "2026-09-08",
+  "description": "NUS USC climbing route archive \u2014 Telegram bot + mini-app",
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "samplerepo-pr-practice": {
+  "stars": 0,
+  "language": null,
+  "created": "2024-08-26",
+  "description": "A sample repo for practicing how to create Pull Requests",
+  "homepage": null,
+  "fork": true,
+  "archived": false
+ },
+ "samplerepo-things": {
+  "stars": 0,
+  "language": null,
+  "created": "2024-08-19",
+  "description": "test",
+  "homepage": null,
+  "fork": true,
+  "archived": false
+ },
+ "seacodex": {
+  "stars": 0,
+  "language": "Python",
+  "created": "2026-06-06",
+  "description": "WLIAS - We Live In A Society",
+  "homepage": "https://seacodex.vercel.app",
+  "fork": false,
+  "archived": false
+ },
+ "sequence": {
+  "stars": 0,
+  "language": "TypeScript",
+  "created": "2026-01-10",
+  "description": "AI Native Video Editing",
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "six-seven": {
+  "stars": 0,
+  "language": "Python",
+  "created": "2025-11-12",
+  "description": "Training a computer vision model to detect gestures with YOLOv8",
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "six-seven-bot": {
+  "stars": 0,
+  "language": "Python",
+  "created": "2026-07-21",
+  "description": "67",
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "skincare-recommendation": {
+  "stars": 0,
+  "language": "Python",
+  "created": "2026-03-16",
+  "description": null,
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "stickfreak": {
+  "stars": 0,
+  "language": "TypeScript",
+  "created": "2026-01-10",
+  "description": "freaky stickers",
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "StuckInCOM1": {
+  "stars": 0,
+  "language": null,
+  "created": "2026-01-17",
+  "description": "escape com1.",
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "surprise-prayer-bot": {
+  "stars": 0,
+  "language": "Python",
+  "created": "2026-07-22",
+  "description": null,
+  "homepage": null,
+  "fork": false,
+  "archived": false
+ },
+ "tp": {
+  "stars": 0,
+  "language": "Java",
+  "created": "2024-09-19",
+  "description": null,
+  "homepage": null,
+  "fork": true,
+  "archived": false
+ },
+ "UltimateTicTacToeAI": {
+  "stars": 0,
+  "language": null,
+  "created": "2025-04-02",
+  "description": "A minimax AI I created for ultimate tic tac toe",
+  "homepage": null,
+  "fork": true,
+  "archived": true
+ }
+}

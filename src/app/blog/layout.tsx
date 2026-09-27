@@ -16,6 +16,7 @@ export default function BlogLayout({
           </Link>
           <nav aria-label="Site" className={styles.nav}>
             <Link href="/#work">Work</Link>
+            <Link href="/projects">Projects</Link>
             <Link href="/blog" aria-current="page">
               Writing
             </Link>

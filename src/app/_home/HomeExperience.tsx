@@ -233,6 +233,9 @@ export default function HomeExperience({
             <a href="#work" data-label="SCROLL">
               Work
             </a>
+            <Link href="/projects" data-label="EXPLORE">
+              Projects
+            </Link>
             <Link href="/blog" data-label="READ">
               Writing
             </Link>
@@ -476,7 +479,10 @@ export default function HomeExperience({
             <span className={styles.mono}>
               <span className={styles.onDesk}>scroll to wind the reel</span>
               <span className={styles.onPhone}>swipe through</span> · live
-              sites, captured this month
+              sites, captured this month ·{" "}
+              <Link href="/projects" data-label="EXPLORE">
+                see everything on the project map →
+              </Link>
             </span>
           </div>
           <div ref={track} className={styles.track}>
