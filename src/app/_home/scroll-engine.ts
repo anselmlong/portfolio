@@ -87,9 +87,29 @@ export function startScroll(p: ScrollParts): () => void {
   }
 
   let step = -1;
+  // Ticks under the pointer grow and glow, like a lit scale on a lens barrel.
+  const ticks = [...p.dial.ring.querySelectorAll("line")].map((line, i) => ({
+    line,
+    deg: (i / 120) * 360,
+    a: (i / 120) * Math.PI * 2,
+    r2: Number(line.dataset.r2 ?? 198),
+  }));
+  function spotlight(rotation: number) {
+    for (const t of ticks) {
+      const d = ((t.deg - rotation + 540) % 360) - 180;
+      const c = Math.max(0, 1 - Math.abs(d) / 34);
+      const r2 = t.r2 - c * c * 16;
+      t.line.setAttribute("x2", (Math.sin(t.a) * r2).toFixed(1));
+      t.line.setAttribute("y2", (-Math.cos(t.a) * r2).toFixed(1));
+      t.line.style.stroke =
+        c > 0.02 ? `rgba(255, 111, 85, ${(0.35 + 0.65 * c).toFixed(2)})` : "";
+    }
+  }
+
   function dial(k: number) {
     const f = k * (p.dial.steps - 1);
     p.dial.ring.setAttribute("transform", `rotate(${-f * 60})`);
+    spotlight(f * 60);
     // Keep each year label upright while the ring turns.
     for (const t of p.dial.labels)
       t.setAttribute(

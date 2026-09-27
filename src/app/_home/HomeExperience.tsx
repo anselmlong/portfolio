@@ -443,6 +443,7 @@ export default function HomeExperience({
                       y2={-Math.cos(a) * r2}
                       stroke={long ? "#f1efe8" : "#4a4e59"}
                       strokeWidth={long ? 2 : 1}
+                      data-r2={r2}
                     />
                   );
                 })}
@@ -469,6 +470,7 @@ export default function HomeExperience({
               />
               <polygon className={styles.mark} points="0,-238 -8,-252 8,-252" />
             </svg>
+            <span key={`shutter-${role}`} className={styles.shutter} />
             <div key={role} className={styles.dialLogo}>
               {roles[role]!.logo ? (
                 // eslint-disable-next-line @next/next/no-img-element -- small static SVG logos
@@ -495,16 +497,40 @@ export default function HomeExperience({
           </div>
           <div className={styles.role} aria-live="polite">
             <span className={styles.ghostIndex} aria-hidden="true">
-              {String(role + 1).padStart(2, "0")}
+              <span
+                className={styles.odometer}
+                style={{ transform: `translateY(${-role}em)` }}
+              >
+                {roles.map((_, i) => (
+                  <span key={i}>{String(i + 1).padStart(2, "0")}</span>
+                ))}
+              </span>
             </span>
             <div key={role} className={styles.swap}>
               <div className={styles.when}>
-                {roles[role]!.when}
+                <span className={styles.typed}>{roles[role]!.when}</span>
                 {roles[role]!.current && (
                   <span className={styles.nowPill}>now</span>
                 )}
               </div>
-              <h3>{roles[role]!.org}</h3>
+              <h3 aria-label={roles[role]!.org}>
+                {roles[role]!.org.split(" ").map((word, w, words) => {
+                  const before = words.slice(0, w).join("").length + w;
+                  return (
+                    <span key={w} className={styles.word} aria-hidden="true">
+                      {[...word].map((ch, c) => (
+                        <span
+                          key={c}
+                          className={styles.char}
+                          style={{ animationDelay: `${(before + c) * 22}ms` }}
+                        >
+                          {ch}
+                        </span>
+                      ))}
+                    </span>
+                  );
+                })}
+              </h3>
               <div className={styles.roleTitle}>{roles[role]!.title}</div>
               <p>{roles[role]!.what}</p>
             </div>
