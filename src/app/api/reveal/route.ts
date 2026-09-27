@@ -170,7 +170,7 @@ export async function POST(req: Request) {
         intent: "work",
         projects: [project.name],
       } satisfies Reveal);
-    if (intent === "experience" || intent === "photos")
+    if (intent === "experience" || intent === "photos" || intent === "climbing")
       return json({ intent, projects: [] } satisfies Reveal);
     return json(none);
   } catch (error) {

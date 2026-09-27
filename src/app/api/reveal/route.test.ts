@@ -86,6 +86,17 @@ describe("preview reveal endpoint", () => {
     ).toBe(400);
   });
 
+  it("passes a confident climbing intent through", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => decision("climbing", "none")),
+    );
+    expect(await (await POST(request(valid))).json()).toEqual({
+      intent: "climbing",
+      projects: [],
+    });
+  });
+
   it("drops unknown choices, low confidence, and project-less work reveals", async () => {
     for (const reply of [
       decision("<script>", "none"),
