@@ -19,6 +19,19 @@ export type GithubActivity = {
 
 const hours = (n: number) => ({ next: { revalidate: n * 3600 } });
 
+/** GitHub's REST API, cached for `cacheHours`; a GITHUB_TOKEN, if set, lifts the rate limit. */
+export function githubApi(path: string, cacheHours: number) {
+  return fetch(`https://api.github.com${path}`, {
+    ...hours(cacheHours),
+    headers: {
+      Accept: "application/vnd.github+json",
+      ...(process.env.GITHUB_TOKEN
+        ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
+        : {}),
+    },
+  });
+}
+
 /**
  * The past year of contributions, read from the public calendar GitHub draws
  * on a profile. No token needed; each cell has a date and level, and its
@@ -71,17 +84,9 @@ async function calendar() {
 
 /** Recent public commits across repos, skipping merges and one repo hogging the list. */
 async function commits(): Promise<Commit[]> {
-  const res = await fetch(
-    `https://api.github.com/search/commits?q=author:${githubUser}&sort=author-date&order=desc&per_page=60`,
-    {
-      ...hours(1),
-      headers: {
-        Accept: "application/vnd.github+json",
-        ...(process.env.GITHUB_TOKEN
-          ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
-          : {}),
-      },
-    },
+  const res = await githubApi(
+    `/search/commits?q=author:${githubUser}&sort=author-date&order=desc&per_page=60`,
+    1,
   );
   if (!res.ok) throw new Error(`commits ${res.status}`);
   const body = (await res.json()) as {

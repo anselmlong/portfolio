@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { contactEmail } from "~/lib/home-content";
-import { CopyEmail } from "./HomeExperience";
+import { CopyEmail } from "./CopyEmail";
 
 afterEach(() => {
   vi.useRealTimers();

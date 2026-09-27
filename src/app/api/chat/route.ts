@@ -207,7 +207,6 @@ export async function POST(req: NextRequest) {
       }
       rewriteMs = Date.now() - tRewriteStart;
     }
-    const t2 = Date.now();
 
     // System Prompt!
     const answerPrompt = ChatPromptTemplate.fromMessages([
