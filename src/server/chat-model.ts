@@ -9,8 +9,11 @@ export function openRouterOptions() {
   const key = process.env.OPENROUTER_API_KEY;
   if (!key || !model.includes("/")) return {};
   return {
+    // This LangChain version only honours `apiKey` once a custom baseURL is set.
+    apiKey: key,
     openAIApiKey: key,
     configuration: {
+      apiKey: key,
       baseURL: "https://openrouter.ai/api/v1",
       defaultHeaders: {
         "HTTP-Referer": "https://anselmlong.com",
