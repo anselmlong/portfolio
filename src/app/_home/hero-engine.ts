@@ -283,8 +283,9 @@ export function startHero({
       lens.x = lens.tx;
       lens.y = lens.ty;
     }
-    const ty = ((ev.clientX - r.left) / r.width - 0.5) * 5;
-    const tx = -((ev.clientY - r.top) / r.height - 0.5) * 4;
+    // A gentle tilt, small enough that the frame's edges stay in line with the page.
+    const ty = ((ev.clientX - r.left) / r.width - 0.5) * 2.4;
+    const tx = -((ev.clientY - r.top) / r.height - 0.5) * 2;
     stage.style.transform = `rotateX(${tx}deg) rotateY(${ty}deg)`;
   };
   const onLeave = () => {

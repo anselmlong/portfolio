@@ -149,7 +149,7 @@
   position: relative;
   z-index: 3;
 }
-.me {
+.wordmark {
   font: 900 20px/1 var(--display);
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -1222,5 +1222,43 @@
   }
   .onPhone {
     display: inline;
+  }
+}
+
+/* Chatting: once the first question is asked, the frame eases down to about half
+   the screen, the intro folds into one line, and the chat takes the full width. */
+.stage {
+  transition:
+    transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+    height 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.intro {
+  display: grid;
+  transition: opacity 0.4s;
+}
+.root[data-chatting] .stage {
+  height: clamp(280px, calc(var(--vh, 100vh) * 0.46), 520px);
+}
+.root[data-chatting] .talk {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  padding-top: 18px;
+}
+.root[data-chatting] .say {
+  font-size: 15px;
+  color: var(--dim);
+}
+.root[data-chatting] .sub {
+  display: none;
+}
+.root[data-chatting] .log {
+  max-height: max(260px, calc(var(--vh, 100vh) * 0.42));
+}
+.root[data-chatting] .msg {
+  max-width: min(92%, 760px);
+}
+@media (max-width: 640px) {
+  .root[data-chatting] .stage {
+    height: clamp(200px, 56vw, 320px);
   }
 }

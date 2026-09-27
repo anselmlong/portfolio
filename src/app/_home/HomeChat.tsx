@@ -39,12 +39,15 @@ export function HomeChat({
   onPeek,
   onType,
   onSeeAll,
+  onStart,
 }: {
   still: boolean;
   onTopic: (topic: TopicKey | null) => void;
   onPeek: (topic: TopicKey | null) => void;
   onType: () => void;
   onSeeAll: () => void;
+  /** Called once, when the first question is asked. */
+  onStart?: () => void;
 }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [chips, setChips] = useState<TopicKey[]>(starters);
@@ -149,6 +152,7 @@ export function HomeChat({
     abort.current?.abort();
     const request = new AbortController();
     abort.current = request;
+    onStart?.();
     setBusy(true);
     setError("");
     onPeek(null);
