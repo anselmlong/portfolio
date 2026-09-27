@@ -103,8 +103,20 @@ def _content_hash(content: str) -> str:
     return sha256(content.encode("utf-8")).hexdigest()
 
 
+# Posts whose markdown tables hold AI-generated replies (e.g. a fine-tuned model's
+# answers next to Anselm's real ones). Indexed as-is, the RAG repeats them as facts,
+# so their tables are dropped before chunking; the surrounding prose is kept.
+AI_TABLE_SOURCES = {"public/blogs/evaluating-llm/evaluating-llm.md"}
+
+
+def _drop_markdown_tables(text: str) -> str:
+    return "\n".join(line for line in text.splitlines() if not line.lstrip().startswith("|"))
+
+
 def _prepare_loaded_doc(doc):
     source = _source_for(doc)
+    if source in AI_TABLE_SOURCES:
+        doc.page_content = _drop_markdown_tables(doc.page_content)
     doc.metadata = {
         **(doc.metadata or {}),
         "source": source,
