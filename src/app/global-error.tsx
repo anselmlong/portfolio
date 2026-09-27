@@ -1,9 +1,12 @@
 "use client";
 
 import * as Sentry from "@sentry/nextjs";
-import { useEffect } from "react";
 import Link from "next/link";
+import { useEffect } from "react";
+import { viewfinderFonts } from "./_home/fonts";
+import styles from "./blog/blog.module.css";
 
+// Replaces the root layout when it crashes, so it brings its own html, fonts and styles.
 export default function GlobalError({
   error,
   reset,
@@ -16,41 +19,34 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html>
-      <body className="bg-background text-foreground flex min-h-screen items-center justify-center">
-        <div className="max-w-md px-6 text-center">
-          <p className="text-muted-foreground mb-8 text-xs tracking-[0.2em] uppercase">
-            something went wrong
-          </p>
-
-          <h1
-            className="text-foreground-high mb-6 text-4xl font-light md:text-5xl"
-            style={{
-              fontFamily: "var(--font-display, ui-serif, Georgia, serif)",
-            }}
-          >
-            we hit a snag
-          </h1>
-
-          <p className="text-muted-foreground mb-10 leading-relaxed font-light text-pretty">
-            an unexpected error occurred. try refreshing the page, or head back
-            home and start fresh.
-          </p>
-
-          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <button
-              onClick={reset}
-              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground inline-flex items-center border px-8 py-4 text-sm tracking-[0.15em] uppercase transition-colors duration-200"
-            >
-              Try Again
-            </button>
-            <Link
-              href="/"
-              className="text-muted-foreground hover:text-foreground inline-flex items-center text-sm tracking-wide transition-colors duration-200"
-            >
-              return home →
-            </Link>
-          </div>
+    <html lang="en">
+      <body style={{ margin: 0, background: "#0d0a0a" }}>
+        <div className={`${viewfinderFonts} ${styles.root}`}>
+          <main className={`${styles.wrap} ${styles.mast}`}>
+            <span className={styles.mono}>something went wrong</span>
+            <h1 aria-label="Snag">
+              {"SNAG".split("").map((c, i) => (
+                <span key={i} aria-hidden="true">
+                  {c}
+                </span>
+              ))}
+              <span className={styles.dot} aria-hidden="true">
+                .
+              </span>
+            </h1>
+            <p>
+              an unexpected error happened. try again, or head back home and
+              start fresh.
+            </p>
+            <p style={{ display: "flex", gap: 18, flexWrap: "wrap" }}>
+              <button type="button" className={styles.mono} onClick={reset}>
+                try again ↻
+              </button>
+              <Link className={styles.mono} href="/">
+                ← back home
+              </Link>
+            </p>
+          </main>
         </div>
       </body>
     </html>
