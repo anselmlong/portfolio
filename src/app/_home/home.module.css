@@ -1960,10 +1960,6 @@
   );
   transform-origin: 0 100%;
 }
-.slate b {
-  color: var(--accent);
-  font-weight: 600;
-}
 .kicker > div {
   display: grid;
 }

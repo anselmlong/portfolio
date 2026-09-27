@@ -15,12 +15,11 @@ export const chapters = [
 
 const number = (n: number) => String(n + 1).padStart(2, "0");
 
-/** A clapperboard label that opens each section: "SC 02 · where i've worked". */
+/** A clapperboard label that opens each section: "where i've worked". */
 export function Slate({ n }: { n: number }) {
   return (
     <span className={styles.slate}>
       <i aria-hidden="true" />
-      <b>SC {number(n)}</b>
       {chapters[n]!.label}
     </span>
   );
