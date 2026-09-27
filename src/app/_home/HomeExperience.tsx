@@ -20,6 +20,8 @@ import { startCursor } from "./cursor-engine";
 import { startHero, type HeroHandle } from "./hero-engine";
 import { HomeChat } from "./HomeChat";
 import { AboutCover } from "./AboutCover";
+import { GithubLog } from "./GithubLog";
+import type { GithubActivity } from "~/server/github";
 import { measureViewport, startScroll } from "./scroll-engine";
 import styles from "./home.module.css";
 
@@ -34,9 +36,11 @@ const month = (d: string) =>
 export default function HomeExperience({
   posts,
   totalPosts,
+  github = null,
 }: {
   posts: PostTeaser[];
   totalPosts: number;
+  github?: GithubActivity | null;
 }) {
   const root = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
@@ -551,6 +555,7 @@ export default function HomeExperience({
       </section>
 
       <div className={styles.wrap}>
+        {github && <GithubLog data={github} />}
         <section id="writing" className={styles.writing} aria-label="Writing">
           <div className={styles.kicker}>
             <h2>Writing</h2>
