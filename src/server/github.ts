@@ -53,13 +53,20 @@ export function longestStreak(days: Day[]) {
   return best;
 }
 
+/** The total GitHub prints above the calendar, which is the number the profile shows. */
+export function parseTotal(html: string) {
+  const m = /([\d,]+)\s+contributions?\s+in the last year/.exec(html);
+  return m ? Number(m[1]!.replace(/,/g, "")) : null;
+}
+
 async function calendar() {
   const res = await fetch(
     `https://github.com/users/${githubUser}/contributions`,
-    hours(6),
+    { ...hours(1), headers: { Accept: "text/html" } },
   );
   if (!res.ok) throw new Error(`calendar ${res.status}`);
-  return parseCalendar(await res.text());
+  const html = await res.text();
+  return { days: parseCalendar(html), total: parseTotal(html) };
 }
 
 /** Recent public commits across repos, skipping merges and one repo hogging the list. */
@@ -109,12 +116,14 @@ export async function getGithubActivity(): Promise<GithubActivity | null> {
   const [cal, log] = await Promise.allSettled([calendar(), commits()]);
   if (cal.status === "rejected") console.warn("[github] calendar", cal.reason);
   if (log.status === "rejected") console.warn("[github] commits", log.reason);
-  const days = cal.status === "fulfilled" ? cal.value : [];
+  const days = cal.status === "fulfilled" ? cal.value.days : [];
   const list = log.status === "fulfilled" ? log.value : [];
   if (!days.length && !list.length) return null;
   return {
     days,
-    total: days.reduce((s, d) => s + d.count, 0),
+    total:
+      (cal.status === "fulfilled" ? cal.value.total : null) ??
+      days.reduce((s, d) => s + d.count, 0),
     streak: longestStreak(days),
     best: days.reduce<Day | null>(
       (b, d) => (!b || d.count > b.count ? d : b),
