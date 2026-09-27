@@ -11,6 +11,12 @@ tags:
 excerpt: "Scraping over 72,000 confessions from 18,000 users: A deep dive into the embedding landscape, viral dynamics, and thematic structure of NUSConfessIT."
 ---
 
+<video controls preload="metadata" playsinline poster="/videos/launch/confessit.jpg">
+  <source src="/videos/launch/confessit.mp4" type="video/mp4" />
+  <a href="/videos/launch/confessit.mp4">Watch the video</a>.
+</video>
+<figcaption>ConfessIT in 20 seconds</figcaption>
+
 ![Score distribution histogram](/blogs/images/score_distribution.png)
 
 *Figure — Score distribution histogram.*

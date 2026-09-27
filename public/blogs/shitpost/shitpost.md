@@ -11,6 +11,12 @@ tags:
 excerpt: "i made a thing that generates absurd linkedin posts so you don't have to."
 ---
 
+<video controls preload="metadata" playsinline poster="/videos/launch/shitpost.jpg">
+  <source src="/videos/launch/shitpost.mp4" type="video/mp4" />
+  <a href="/videos/launch/shitpost.mp4">Watch the video</a>.
+</video>
+<figcaption>shitpost.anselmlong.com in 20 seconds</figcaption>
+
 ![shitpost](/blogs/shitpost/images/shitpost.png)
 
 <figcaption>one person's trash is another person's linkedin post</figcaption>

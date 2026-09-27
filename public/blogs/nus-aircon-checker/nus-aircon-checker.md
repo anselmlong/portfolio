@@ -11,6 +11,12 @@ tags:
 excerpt: "I reverse engineered an API from a website with oh-my-opencode." 
 ---
 
+<video controls preload="metadata" playsinline poster="/videos/launch/bots.jpg">
+  <source src="/videos/launch/bots.mp4" type="video/mp4" />
+  <a href="/videos/launch/bots.mp4">Watch the video</a>.
+</video>
+<figcaption>the aircon and gospel bots in 20 seconds</figcaption>
+
 ## TL;DR
 
 I got tired of forgetting to top up my aircon credits and waking up sweaty.

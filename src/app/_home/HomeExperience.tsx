@@ -17,6 +17,7 @@ import {
   type TopicKey,
 } from "~/lib/home-content";
 import { startCursor } from "./cursor-engine";
+import { ReelVideo } from "./ReelVideo";
 import { startHero, type HeroHandle } from "./hero-engine";
 import { HomeChat } from "./HomeChat";
 import { measureViewport, startScroll } from "./scroll-engine";
@@ -330,9 +331,16 @@ export default function HomeExperience({
                 data-label={f.label}
               >
                 <div
-                  className={`${styles.shot} ${f.visual.kind !== "image" ? styles.typeShot : ""} ${f.visual.kind === "shitpost" ? styles.shit : ""}`}
+                  className={`${styles.shot} ${!f.video && f.visual.kind !== "image" ? styles.typeShot : ""} ${!f.video && f.visual.kind === "shitpost" ? styles.shit : ""}`}
                 >
-                  {f.visual.kind === "image" && (
+                  {f.video && (
+                    <ReelVideo
+                      src={f.video.src}
+                      poster={f.video.poster}
+                      name={f.name}
+                    />
+                  )}
+                  {!f.video && f.visual.kind === "image" && (
                     <>
                       <div className={styles.drift} data-drift>
                         <Image
@@ -351,7 +359,7 @@ export default function HomeExperience({
                       )}
                     </>
                   )}
-                  {f.visual.kind === "ava" && (
+                  {!f.video && f.visual.kind === "ava" && (
                     <div className={styles.tchat} data-drift aria-hidden="true">
                       <p className={styles.u}>
                         fix the typo on my blog and open a PR
@@ -365,7 +373,7 @@ export default function HomeExperience({
                       <p className={styles.a}>will do.</p>
                     </div>
                   )}
-                  {f.visual.kind === "sixseven" && (
+                  {!f.video && f.visual.kind === "sixseven" && (
                     <>
                       <span
                         className={styles.n67}
@@ -377,7 +385,7 @@ export default function HomeExperience({
                       <span className={styles.ocr} aria-hidden="true" />
                     </>
                   )}
-                  {f.visual.kind === "shitpost" && (
+                  {!f.video && f.visual.kind === "shitpost" && (
                     <div
                       data-drift
                       className={styles.shitInner}
@@ -387,7 +395,7 @@ export default function HomeExperience({
                       <span>six personas · one topic · zero shame</span>
                     </div>
                   )}
-                  {f.visual.kind !== "image" && (
+                  {!f.video && f.visual.kind !== "image" && (
                     <em className={styles.illus}>illustration</em>
                   )}
                 </div>

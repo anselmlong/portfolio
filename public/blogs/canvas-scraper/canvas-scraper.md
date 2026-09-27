@@ -11,6 +11,12 @@ tags:
 excerpt: "I was lazy to click buttons, so I built a Canvas file sync tool. Now I actually use it." 
 ---
 
+<video controls preload="metadata" playsinline poster="/videos/launch/canvas.jpg">
+  <source src="/videos/launch/canvas.mp4" type="video/mp4" />
+  <a href="/videos/launch/canvas.mp4">Watch the video</a>.
+</video>
+<figcaption>canvas-scraper in 20 seconds</figcaption>
+
 ## TL;DR
 
 Canvas is great until you’re taking **too many modules** and everything is scattered.

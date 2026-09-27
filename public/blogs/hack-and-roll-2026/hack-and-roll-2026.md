@@ -12,6 +12,12 @@ tags:
 excerpt: "We built a self-evolving agentic code optimizer. Also: the welfare was insane."
 ---
 
+<video controls preload="metadata" playsinline poster="/videos/launch/optifiner.jpg">
+  <source src="/videos/launch/optifiner.mp4" type="video/mp4" />
+  <a href="/videos/launch/optifiner.mp4">Watch the video</a>.
+</video>
+<figcaption>Optifiner in 20 seconds</figcaption>
+
 ## TL;DR
 
 Hack & Roll 2026 was chaotic in the best way possible.

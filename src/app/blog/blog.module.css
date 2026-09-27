@@ -116,6 +116,7 @@
 .copy { position: absolute; top: 8px; right: 8px; border: 1px solid var(--line); background: #1b1716; border-radius: 8px; padding: 3px 9px; font: 600 10px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim); cursor: pointer; opacity: 0; transition: opacity 0.2s; }
 .article pre:hover .copy, .copy:focus-visible { opacity: 1; }
 .article img { display: block; max-width: 100%; height: auto; margin: 1.6em auto 0.5em; border-radius: 12px; border: 1px solid var(--line); cursor: zoom-in; }
+.article video { display: block; width: 100%; max-width: 100%; height: auto; margin: 1.6em auto 0.5em; border-radius: 12px; border: 1px solid var(--line); background: #000; }
 .article figure { margin: 1.6em 0; }
 .article figcaption { font: 500 13px/1.5 var(--mono); color: var(--dim); text-align: center; }
 .article hr { border: 0; height: 1px; background: var(--line); margin: 2.4em 0; }

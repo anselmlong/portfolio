@@ -15,6 +15,12 @@ tags:
 excerpt: "I fine-tuned Mistral-7b with Axolotl on Telegram messages."
 ---
 
+<video controls preload="metadata" playsinline poster="/videos/launch/almost-anselm.jpg">
+  <source src="/videos/launch/almost-anselm.mp4" type="video/mp4" />
+  <a href="/videos/launch/almost-anselm.mp4">Watch the video</a>.
+</video>
+<figcaption>Almost Anselm in 20 seconds</figcaption>
+
 # What dumb project did I do again?
 
 Hey everyone, welcome to another useless side project of mine. I've been getting a lot of Telegram messages lately. Sometimes - it just gets annoying to reply... so why not create a model to reply like me? This was a fun but very painful project that took me over three weeks to debug and iterate through model training and inference. Working with the NUS SoC Compute Cluster was a major pain, and I kept running into out of memory errors. But without Further Ado - here's how I did it.
