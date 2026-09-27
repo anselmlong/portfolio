@@ -24,6 +24,7 @@ import { HomeChat } from "./HomeChat";
 import { AboutCover } from "./AboutCover";
 import { GithubLog } from "./GithubLog";
 import { SceneRail, Slate } from "./Scenes";
+import { Shutter } from "./Shutter";
 import type { GithubActivity } from "~/server/github";
 import { measureViewport, startScroll } from "./scroll-engine";
 import styles from "./home.module.css";
@@ -715,6 +716,7 @@ export default function HomeExperience({
             ))}
           </div>
           <CopyEmail />
+          <Shutter />
           <button
             type="button"
             className={`${styles.mono} ${styles.backUp}`}
