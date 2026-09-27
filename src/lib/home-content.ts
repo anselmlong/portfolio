@@ -228,7 +228,7 @@ export const topics: Record<TopicKey, Topic> = {
       kicker: "my agent",
       title: "Ava",
       body: "Runs on Hermes Agent on my own VPS, lives on Telegram, and has GitHub and Vercel integrations. A lot of what I build starts as a message to it.",
-      link: { href: "https://github.com/anselmlong/ava", label: "github" },
+      link: { href: "/blog/ava", label: "read the post" },
     },
   },
   almost: {
@@ -506,10 +506,10 @@ export const reel: ReelFrame[] = [
   },
   {
     name: "Ava",
-    href: "https://github.com/anselmlong/ava",
-    label: "CODE",
+    href: "/blog/ava",
+    label: "OPEN",
     body: "My personal agent. It runs on Hermes Agent on my own VPS, talks to me on Telegram, and has GitHub and Vercel access, so a lot of what I build starts as a message to it.",
-    tech: "Hermes Agent · self-hosted VPS · GitHub + Vercel · Telegram",
+    tech: "Hermes Agent · DeepSeek V4 Flash · OVH VPS · GitHub + Vercel · Telegram",
     video: { src: "/videos/launch/ava.mp4", poster: "/videos/launch/ava.jpg" },
     visual: { kind: "ava" },
   },
