@@ -118,7 +118,9 @@ export async function POST(req: Request) {
               experience:
                 "Anything about a job or internship, including what he built or does there (OGP Maps, Visa, IMDA), Project Aegis, education, or resume",
               play: "An explicit request to play a game or try the typing test here",
-              photos: "Photography, climbing, or life outside of code",
+              photos:
+                "Photography, filming, or life outside of code, other than climbing",
+              climbing: "Climbing, bouldering, or route setting",
               contact: "How to contact, reach, or hire Anselm",
               clarify:
                 "No card fits: greetings, opinions, general questions, or anything else",

@@ -106,6 +106,30 @@ describe("homepage chat", () => {
     expect(body.answer).toBe("i shoot on a fuji and edit in lightroom.");
   });
 
+  it("keeps the contact card when 'not sure' only comes up later in the answer", async () => {
+    stubFetch(async (url) =>
+      url === "/api/reveal"
+        ? Response.json({ intent: "contact", projects: [] })
+        : new Response(
+            "easiest is email: anselmpius@gmail.com. best for details i'm not sure about.",
+          ),
+    );
+    const props = setup();
+    send("how do i reach you?");
+    await waitFor(() => expect(props.onTopic).toHaveBeenCalledWith("contact"));
+  });
+
+  it("maps a climbing question to the climbing card", async () => {
+    stubFetch(async (url) =>
+      url === "/api/reveal"
+        ? Response.json({ intent: "climbing", projects: [] })
+        : new Response("yes! i boulder around v6 to v7."),
+    );
+    const props = setup();
+    send("do you climb?");
+    await waitFor(() => expect(props.onTopic).toHaveBeenCalledWith("climb"));
+  });
+
   it("shows no card when the answer says it isn't sure", async () => {
     const fetcher = stubFetch(async (url) =>
       url === "/api/reveal"

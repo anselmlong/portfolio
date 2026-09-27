@@ -435,6 +435,7 @@ export const intentTopics: Partial<Record<string, TopicKey>> = {
   experience: "working",
   play: "kopi",
   photos: "life",
+  climbing: "climb",
   contact: "contact",
 };
 
@@ -451,11 +452,46 @@ export type Role = {
 };
 
 export const roles: Role[] = [
-  { org: "Open Government Products", title: "Software Engineer Intern · Maps", when: "Aug 2026 – Feb 2027", ring: "AUG '26", current: true, logo: "/home/logos/ogp.svg", what: "Shipping features to production and building an enhanced ingestion feature." },
-  { org: "Visa", title: "Software Engineering Intern", when: "May – Aug 2026", ring: "MAY '26", logo: "/home/logos/visa.svg", what: "Built SAGE, a retrieval-augmented assistant for incident investigation, and met z/TPF." },
-  { org: "Project Aegis", title: "Lead Developer · National Cybersecurity Olympiad", when: "Jan – Mar 2026", ring: "JAN '26", what: "A guarded AI-access platform for 80 CTF players. 316 PRs in two months." },
-  { org: "IMDA", title: "Machine Learning Intern", when: "May – Aug 2025", ring: "MAY '25", logo: "/home/logos/imda.svg", what: "An ML pipeline classifying malicious SSL/TLS certificates, reaching 0.994 F1, with LIME explanations." },
-  { org: "IMDA", title: "Strategic Digital Projects Intern", when: "May – Aug 2024", ring: "MAY '24", logo: "/home/logos/imda.svg", what: "Ran GenAI workshops with Microsoft and AWS; 30+ companies started GenAI projects after them." },
+  {
+    org: "Open Government Products",
+    title: "Software Engineer Intern · Maps",
+    when: "Aug 2026 – Feb 2027",
+    ring: "AUG '26",
+    current: true,
+    logo: "/home/logos/ogp.svg",
+    what: "Shipping features to production and building an enhanced ingestion feature.",
+  },
+  {
+    org: "Visa",
+    title: "Software Engineering Intern",
+    when: "May – Aug 2026",
+    ring: "MAY '26",
+    logo: "/home/logos/visa.svg",
+    what: "Built SAGE, a retrieval-augmented assistant for incident investigation, and met z/TPF.",
+  },
+  {
+    org: "Project Aegis",
+    title: "Lead Developer · National Cybersecurity Olympiad",
+    when: "Jan – Mar 2026",
+    ring: "JAN '26",
+    what: "A guarded AI-access platform for 80 CTF players. 316 PRs in two months.",
+  },
+  {
+    org: "IMDA",
+    title: "Machine Learning Intern",
+    when: "May – Aug 2025",
+    ring: "MAY '25",
+    logo: "/home/logos/imda.svg",
+    what: "An ML pipeline classifying malicious SSL/TLS certificates, reaching 0.994 F1, with LIME explanations.",
+  },
+  {
+    org: "IMDA",
+    title: "Strategic Digital Projects Intern",
+    when: "May – Aug 2024",
+    ring: "MAY '24",
+    logo: "/home/logos/imda.svg",
+    what: "Ran GenAI workshops with Microsoft and AWS; 30+ companies started GenAI projects after them.",
+  },
 ];
 
 export type ReelFrame = {

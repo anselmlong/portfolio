@@ -3,6 +3,7 @@ export const intents = [
   "experience",
   "play",
   "photos",
+  "climbing",
   "contact",
   "clarify",
 ] as const;
@@ -41,6 +42,11 @@ export function curatedReply(intent: Intent): Reply {
       intent,
       text: "Away from the keyboard, I take photographs, climb, and try to make better coffee. Here’s the photography side of my world.",
       projects: [],
+    },
+    climbing: {
+      intent,
+      text: "I boulder around Singapore with friends, and set routes at the NUS USC gym.",
+      projects: ["route archiver"],
     },
     contact: {
       intent,

@@ -25,10 +25,14 @@ const tidy = (text: string) =>
     .replace(/__(.+?)__/g, "$1")
     .replace(/^#{1,6}\s+/gm, "");
 
-/** The answer admits it doesn't know, so no card should suggest otherwise. */
+/**
+ * The answer opens by admitting it doesn't know, so no card should suggest
+ * otherwise. Only the first sentence counts: a contact answer can mention
+ * "details i'm not sure about" further down and still deserve its card.
+ */
 const unsure = (answer: string) =>
-  /not sure|don't know|do not know|email me|anselmpius@gmail/i.test(
-    answer.slice(0, 400),
+  /not sure|don't know|do not know|no idea/i.test(
+    answer.split(/[.!?\n]/)[0] ?? "",
   );
 
 const examples = [
