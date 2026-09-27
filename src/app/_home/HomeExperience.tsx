@@ -297,7 +297,6 @@ export default function HomeExperience({
               onTopic={showTopic}
               onPeek={peek}
               onType={() => hero.current?.bump()}
-              onSeeAll={toWork}
               onStart={() => setChatting(true)}
             />
           </div>
@@ -423,6 +422,13 @@ export default function HomeExperience({
         <div className={`${styles.sticky} ${styles.expSticky}`}>
           <div className={styles.dial} aria-hidden="true">
             <svg viewBox="-260 -260 520 520">
+              <defs>
+                <radialGradient id="dial-glow">
+                  <stop offset="0%" stopColor="#ff6f55" stopOpacity="0.16" />
+                  <stop offset="70%" stopColor="#ff6f55" stopOpacity="0" />
+                </radialGradient>
+              </defs>
+              <circle r={180} fill="url(#dial-glow)" />
               <g ref={ring}>
                 {Array.from({ length: 120 }, (_, i) => {
                   const a = (i / 120) * Math.PI * 2,
@@ -444,35 +450,73 @@ export default function HomeExperience({
                   const a = (i * 60 * Math.PI) / 180;
                   return (
                     <text
-                      key={r.name}
-                      x={Math.sin(a) * 160}
-                      y={-Math.cos(a) * 160 + 4}
+                      key={r.ring}
+                      x={Math.sin(a) * 162}
+                      y={-Math.cos(a) * 162 + 4}
                       textAnchor="middle"
+                      className={i === role ? styles.ringOn : ""}
                     >
-                      {r.when.split(" ").pop()}
+                      {r.ring}
                     </text>
                   );
                 })}
                 <circle r={226} fill="none" stroke="#2a2d35" />
               </g>
+              {/* The active role always turns to the top, under the pointer. */}
+              <path
+                className={styles.activeArc}
+                d="M -77.3 -212.4 A 226 226 0 0 1 77.3 -212.4"
+              />
               <polygon className={styles.mark} points="0,-238 -8,-252 8,-252" />
             </svg>
+            <div key={role} className={styles.dialLogo}>
+              {roles[role]!.logo ? (
+                // eslint-disable-next-line @next/next/no-img-element -- small static SVG logos
+                <img src={roles[role]!.logo} alt="" />
+              ) : (
+                <svg viewBox="0 0 64 72" className={styles.shield}>
+                  <path
+                    d="M32 3 L59 13 V35 C59 52 47 63 32 69 C17 63 5 52 5 35 V13 Z"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3.5"
+                  />
+                  <path
+                    d="M20 36 L29 45 L45 26"
+                    fill="none"
+                    stroke="#ff6f55"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              )}
+            </div>
           </div>
           <div className={styles.role} aria-live="polite">
+            <span className={styles.ghostIndex} aria-hidden="true">
+              {String(role + 1).padStart(2, "0")}
+            </span>
             <div key={role} className={styles.swap}>
-              <div className={styles.when}>{roles[role]!.when}</div>
-              <h3>{roles[role]!.name}</h3>
+              <div className={styles.when}>
+                {roles[role]!.when}
+                {roles[role]!.current && (
+                  <span className={styles.nowPill}>now</span>
+                )}
+              </div>
+              <h3>{roles[role]!.org}</h3>
+              <div className={styles.roleTitle}>{roles[role]!.title}</div>
               <p>{roles[role]!.what}</p>
             </div>
             <div className={styles.steps}>
               {roles.map((r, i) => (
-                <i key={r.name} className={i <= role ? styles.stepOn : ""} />
+                <i key={r.ring} className={i <= role ? styles.stepOn : ""} />
               ))}
             </div>
             <ol className={styles.sr}>
               {roles.map((r) => (
-                <li key={r.name}>
-                  {r.when}: {r.name}. {r.what}
+                <li key={r.ring}>
+                  {r.when}: {r.title}, {r.org}. {r.what}
                 </li>
               ))}
             </ol>
@@ -643,9 +687,9 @@ function RevealCard({
         <span className={styles.mono}>experience</span>
         <div className={styles.tlList}>
           {roles.slice(0, 4).map((r) => (
-            <div key={r.name}>
+            <div key={r.ring}>
               <span>{r.when}</span>
-              {r.name}
+              {r.org}
             </div>
           ))}
         </div>

@@ -115,8 +115,8 @@ export function AboutCover() {
           software engineer intern on the maps team at open government products.
         </p>
         <p>
-          outside of code i film and take photos, and i boulder around v6 to v7
-          in singapore, usually with friends.
+          outside of code i boulder, take photos, and make latte art. (sometimes
+          i dj!)
         </p>
         <p className={styles.aboutNote}>
           this photo is from hackharvard 2025, where freak-cha won funniest

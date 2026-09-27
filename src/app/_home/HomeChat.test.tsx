@@ -20,7 +20,6 @@ const setup = () => {
     onTopic: vi.fn(),
     onPeek: vi.fn(),
     onType: vi.fn(),
-    onSeeAll: vi.fn(),
   };
   render(<HomeChat {...props} />);
   return props;
@@ -104,13 +103,13 @@ describe("homepage chat", () => {
     expect(box()).toHaveValue("what is bonsai?");
   });
 
-  it("offers the full site after two answers, but never scrolls on its own", async () => {
+  it("never shows a see-the-full-site prompt, even after several answers", async () => {
     stubFetch(async (url) =>
       url === "/api/reveal"
         ? Response.json({ intent: "clarify", projects: [] })
         : new Response("an answer"),
     );
-    const props = setup();
+    setup();
     send("hello");
     await screen.findByText("an answer");
     expect(
@@ -120,10 +119,10 @@ describe("homepage chat", () => {
     await waitFor(() =>
       expect(screen.getAllByText("an answer")).toHaveLength(2),
     );
-    const nudge = screen.getByRole("button", { name: /see the full site/ });
-    expect(props.onSeeAll).not.toHaveBeenCalled();
-    fireEvent.click(nudge);
-    expect(props.onSeeAll).toHaveBeenCalledOnce();
+    // The chat never pushes visitors toward the rest of the site.
+    expect(
+      screen.queryByRole("button", { name: /see the full site/ }),
+    ).not.toBeInTheDocument();
   });
 
   it("previews a question's scene on hover", () => {
