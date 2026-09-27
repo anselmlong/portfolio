@@ -43,13 +43,16 @@ export function anchors(used: Group[]) {
   return out;
 }
 
+/** Bigger means more people use it: GitHub stars or real user counts, whichever says more. */
 export function radius(n: MapNode) {
-  const r =
-    8 +
-    3.2 * Math.log2(1 + n.stars) +
-    (n.users ? 4 : 0) +
-    (n.status === "live" ? 3 : 0);
-  return Math.min(24, r);
+  const users = Number(
+    /[\d,]+/.exec(n.users ?? "")?.[0]?.replace(/,/g, "") ?? 0,
+  );
+  const reach = Math.max(
+    3.2 * Math.log2(1 + n.stars),
+    1.4 * Math.log2(1 + users),
+  );
+  return Math.min(24, 8 + reach + (n.status === "live" ? 3 : 0));
 }
 
 export function makeBodies(nodes: MapNode[]): Body[] {

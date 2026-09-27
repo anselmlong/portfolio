@@ -160,6 +160,7 @@ export const projects: Project[] = [
   // telegram bots
   {
     id: "67bot",
+    users: "274 users in 82 group chats",
     name: "67 bot",
     repo: "six-seven-bot",
     status: "live",
@@ -169,6 +170,7 @@ export const projects: Project[] = [
   },
   {
     id: "aircon",
+    users: "452 users",
     name: "Aircon checker",
     repo: "nus-aircon-checker",
     status: "live",
@@ -180,6 +182,7 @@ export const projects: Project[] = [
   },
   {
     id: "gospel",
+    users: "197 users",
     name: "Gospel bot",
     repo: "catholic-bot",
     status: "live",
@@ -255,6 +258,7 @@ export const projects: Project[] = [
   // for fun
   {
     id: "kopitype",
+    users: "142 players",
     name: "Kopitype",
     repo: "kopitype",
     status: "live",
