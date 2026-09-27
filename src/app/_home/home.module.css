@@ -1080,6 +1080,47 @@
   border-radius: 999px;
   padding: 7px 13px;
   font: 600 12px var(--mono) !important;
+  min-width: 11ch;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+}
+.mail button:hover {
+  border-color: var(--accent);
+}
+/* Copied: the button flashes chilli for a beat, then goes back to "copy". */
+.mail button[data-state="copied"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  animation: copied 0.45s cubic-bezier(0.2, 1.6, 0.35, 1);
+}
+.mail button[data-state="selected"] {
+  border-color: var(--accent);
+}
+@keyframes copied {
+  40% {
+    transform: scale(1.12);
+  }
+}
+/* Beats `.root button`, which would otherwise reset the mono label. */
+.outro .backUp {
+  font: 500 11px/1.4 var(--mono);
+  color: var(--dim);
+  background: none;
+  border: 0;
+  padding: 12px 8px;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 4px;
+  transition:
+    color 0.2s,
+    text-decoration-color 0.2s;
+}
+.outro .backUp:hover {
+  color: var(--paper);
+  text-decoration-color: var(--accent);
 }
 
 /* Reduced motion, or a host that won't let the page scroll itself: a plain page. */
