@@ -3,15 +3,31 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./home.module.css";
 
-const roll = 36; // exposures on a roll of film
-const mine = "vf-shots";
+const mine = "vf-cookies";
+const milestones: Record<number, string> = {
+  10: "10 cookies. warming up.",
+  100: "100 cookies! you're a regular now.",
+  500: "500 cookies. the oven is tired.",
+  1000: "1,000 cookies. absolute legend.",
+};
+// Where the chocolate chips sit on the cookie (in a 100×100 box).
+const chips = [
+  [32, 30, 6],
+  [60, 26, 5],
+  [72, 50, 6.5],
+  [45, 52, 5.5],
+  [28, 62, 5],
+  [56, 72, 6],
+  [38, 80, 4],
+  [78, 70, 4],
+];
 
 /**
- * A tiny clicker: press the shutter, take a shot. Everyone who visits adds to
+ * A tiny cookie clicker: click the cookie, bake a cookie. Everyone who visits adds to
  * the same count. Presses are batched and sent about once a second, and the
  * number on screen is the server's total plus whatever hasn't been sent yet.
  */
-export function Shutter() {
+export function Cookie() {
   const [total, setTotal] = useState<number | null>(null);
   const [queued, setQueued] = useState(0);
   const [you, setYou] = useState(0);
@@ -20,7 +36,6 @@ export function Shutter() {
   const pending = useRef(0);
   const sending = useRef(false);
   const box = useRef<HTMLDivElement>(null);
-  const flash = useRef<HTMLSpanElement>(null);
   const nextBurst = useRef(0);
   const count = useRef(0);
 
@@ -51,12 +66,12 @@ export function Shutter() {
         setTotal(body.total);
         setNote("");
       } else if (res.status === 429)
-        setNote("easy on the shutter, it needs a breather.");
+        setNote("easy, the oven needs a breather.");
       else throw new Error(String(res.status));
     } catch {
       pending.current += n;
       setNote(
-        "couldn't reach the counter; your shots will send when it's back.",
+        "couldn't reach the counter; your cookies will send when it's back.",
       );
     } finally {
       sending.current = false;
@@ -91,10 +106,10 @@ export function Shutter() {
       window.clearInterval(poll);
       removeEventListener("pagehide", bye);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- send only touches refs and setters
+     
   }, []);
 
-  function shoot(e: React.MouseEvent<HTMLButtonElement>) {
+  function bake(e: React.MouseEvent<HTMLButtonElement>) {
     pending.current += 1;
     setQueued(pending.current);
     const next = ++count.current;
@@ -104,13 +119,8 @@ export function Shutter() {
     } catch {
       // Not saved; the global count still gets it.
     }
-    if (next % roll === 0)
-      setNote(`roll ${next / roll} done: ${roll} exposures.`);
+    if (milestones[next]) setNote(milestones[next]);
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    flash.current?.animate([{ opacity: 0.9 }, { opacity: 0 }], {
-      duration: 260,
-      easing: "ease-out",
-    });
     const r = e.currentTarget.getBoundingClientRect();
     const x = e.clientX ? e.clientX - r.left - r.width / 2 : 0;
     const id = nextBurst.current++;
@@ -125,19 +135,39 @@ export function Shutter() {
 
   return (
     <div ref={box} className={styles.clicker}>
-      <span ref={flash} className={styles.flash} aria-hidden="true" />
       <button
         type="button"
-        className={styles.release}
-        onClick={shoot}
-        aria-label="Press the shutter to add a shot to everyone's count"
-        data-label="SHOOT"
+        className={styles.cookie}
+        onClick={bake}
+        aria-label="Click the cookie to add one to everyone's count"
+        data-label="BAKE"
       >
-        <span className={styles.blades} aria-hidden="true">
-          {Array.from({ length: 6 }, (_, i) => (
-            <i key={i} style={{ rotate: `${i * 60}deg` }} />
+        <svg viewBox="0 0 100 100" aria-hidden="true">
+          <defs>
+            <radialGradient id="cookie-dough" cx="38%" cy="34%" r="70%">
+              <stop offset="0%" stopColor="#f3c27a" />
+              <stop offset="70%" stopColor="#d99a4e" />
+              <stop offset="100%" stopColor="#b8773a" />
+            </radialGradient>
+          </defs>
+          <path
+            d="M50 4c9 0 13 5 20 7s12 3 16 10 2 12 5 19 6 11 3 19-9 10-12 16-6 13-14 16-13 0-19 3-11 5-19 2-9-9-15-12-12-6-14-14 2-12 0-19-5-12-1-19 10-8 15-12 6-10 13-13 13-3 22-3Z"
+            fill="url(#cookie-dough)"
+            stroke="#9c6230"
+            strokeWidth="1.5"
+          />
+          {chips.map(([x, y, r]) => (
+            <ellipse
+              key={`${x}-${y}`}
+              cx={x}
+              cy={y}
+              rx={r}
+              ry={r! * 0.8}
+              fill="#4a2a18"
+              transform={`rotate(${x! * 7} ${x} ${y})`}
+            />
           ))}
-        </span>
+        </svg>
         {bursts.map((b) => (
           <em
             key={b.id}
@@ -152,14 +182,13 @@ export function Shutter() {
       <div className={styles.tally}>
         <b>{shown === null ? "…" : shown.toLocaleString("en-SG")}</b>
         <span className={styles.mono}>
-          shots taken by everyone who&apos;s visited
+          cookies baked by everyone who&apos;s visited
         </span>
         <span className={styles.mono}>
-          you: {you.toLocaleString("en-SG")} · roll {Math.floor(you / roll) + 1}
-          , frame {(you % roll) + 1}/{roll}
+          you&apos;ve baked {you.toLocaleString("en-SG")}
         </span>
         {note && (
-          <span className={styles.shutterNote} role="status">
+          <span className={styles.cookieNote} role="status">
             {note}
           </span>
         )}
