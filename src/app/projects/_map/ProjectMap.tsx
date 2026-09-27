@@ -52,6 +52,8 @@ export function ProjectMap({
   const nodeEls = useRef(new Map<string, SVGGElement>());
   const edgeEls = useRef<(SVGGElement | null)[]>([]);
   const groupEls = useRef(new Map<string, SVGTextElement>());
+  const labelEls = useRef(new Map<string, { el: SVGTextElement; w: number }>());
+  const visible = useRef(new Set<string>());
   const bodies = useRef<Body[]>(
     placed.map((p) => ({ ...p, vx: 0, vy: 0, fx: null, fy: null })),
   );
@@ -93,6 +95,59 @@ export function ProjectMap({
   );
 
   // Draw: move every node and edge to where the simulation has it.
+  // Each name tries below its dot, then above, right and left, and takes the
+  // first spot that clears every dot and every name already placed. Bigger
+  // projects choose first. A name with nowhere to go waits for hover or focus.
+  function placeLabels() {
+    const bodiesNow = bodies.current.filter((b) => visible.current.has(b.id));
+    type Box = { x0: number; y0: number; x1: number; y1: number };
+    const hit = (a: Box, b: Box) =>
+      a.x0 < b.x1 && b.x0 < a.x1 && a.y0 < b.y1 && b.y0 < a.y1;
+    const taken: Box[] = bodiesNow.map((b) => ({
+      x0: b.x - b.r,
+      y0: b.y - b.r,
+      x1: b.x + b.r,
+      y1: b.y + b.r,
+    }));
+    for (const b of [...bodiesNow].sort((p, q) => q.r - p.r)) {
+      let entry = labelEls.current.get(b.id);
+      if (!entry) {
+        const el = nodeEls.current
+          .get(b.id)
+          ?.querySelector<SVGTextElement>(`.${styles.label}`);
+        if (!el) continue;
+        entry = { el, w: el.getComputedTextLength() || b.name.length * 7.2 };
+        labelEls.current.set(b.id, entry);
+      }
+      const { el, w } = entry;
+      const spots = [
+        { dx: 0, dy: b.r + 16, anchor: "middle", x0: -w / 2, y0: b.r + 5 },
+        { dx: 0, dy: -b.r - 8, anchor: "middle", x0: -w / 2, y0: -b.r - 19 },
+        { dx: b.r + 7, dy: 4, anchor: "start", x0: b.r + 5, y0: -7 },
+        { dx: -b.r - 7, dy: 4, anchor: "end", x0: -b.r - 9 - w, y0: -7 },
+      ];
+      const own = (s: (typeof spots)[number]): Box => ({
+        x0: b.x + s.x0,
+        y0: b.y + s.y0,
+        x1: b.x + s.x0 + w + 4,
+        y1: b.y + s.y0 + 14,
+      });
+      const self = taken.findIndex(
+        (t) => t.x0 === b.x - b.r && t.y0 === b.y - b.r,
+      );
+      const spot = spots.find((s) => {
+        const box = own(s);
+        return !taken.some((t, i) => i !== self && hit(box, t));
+      });
+      const use = spot ?? spots[0]!;
+      el.setAttribute("x", String(use.dx));
+      el.setAttribute("y", String(use.dy));
+      el.setAttribute("text-anchor", use.anchor);
+      el.toggleAttribute("data-tucked", !spot);
+      if (spot) taken.push(own(spot));
+    }
+  }
+
   const draw = useCallback(() => {
     const c = cam.current;
     world.current?.setAttribute(
@@ -116,6 +171,7 @@ export function ProjectMap({
       el.setAttribute("x", x.toFixed(1));
       el.setAttribute("y", (y - 34).toFixed(1));
     }
+    placeLabels();
     links.forEach((l, i) => {
       const a = at.get(l.source),
         b = at.get(l.target),
@@ -203,6 +259,9 @@ export function ProjectMap({
     setCutoff(-1);
     setPlaying(true);
   }, [draw]);
+
+  // Projects appearing or being filtered out free up (or claim) label room.
+  useEffect(() => draw(), [cutoff, off, draw]);
 
   // A new layout re-forms the sky and pulls the camera back to see all of it.
   const firstLayout = useRef(true);
@@ -381,6 +440,7 @@ export function ProjectMap({
   }, []);
 
   const shown = (p: Placed) => !off.has(p.status) && p.t <= cutoff;
+  visible.current = new Set(placed.filter(shown).map((p) => p.id));
   const sel = picked ? byId.get(picked) : null;
   const used = (Object.keys(groups) as (keyof typeof groups)[]).filter((g) =>
     placed.some((p) => p.group === g),
