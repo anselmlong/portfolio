@@ -438,32 +438,24 @@ export const intentTopics: Partial<Record<string, TopicKey>> = {
   contact: "contact",
 };
 
-export const roles = [
-  {
-    when: "Aug 2026 – now",
-    name: "OGP",
-    what: "Software engineer intern on the Maps team at Open Government Products, shipping features to production and building an enhanced ingestion feature.",
-  },
-  {
-    when: "May 2026",
-    name: "Visa",
-    what: "Software engineering intern. Built a retrieval-augmented assistant for incident investigation, and met z/TPF.",
-  },
-  {
-    when: "Jan – Mar 2026",
-    name: "Project Aegis",
-    what: "Lead developer of a guarded AI-access platform for 80 CTF players at the National Cybersecurity Olympiad. 316 PRs in two months.",
-  },
-  {
-    when: "May – Aug 2025",
-    name: "IMDA · ML",
-    what: "Built an ML pipeline to classify malicious SSL/TLS certificates, reaching 0.994 F1, with LIME explanations.",
-  },
-  {
-    when: "May – Aug 2024",
-    name: "IMDA · SDP",
-    what: "Ran GenAI workshops with Microsoft and AWS; 30+ companies started GenAI projects after them.",
-  },
+export type Role = {
+  org: string;
+  title: string;
+  when: string;
+  /** Short label on the dial's ring. */
+  ring: string;
+  current?: boolean;
+  /** Official logo, shown in the dial's centre; Project Aegis uses a drawn shield. */
+  logo?: string;
+  what: string;
+};
+
+export const roles: Role[] = [
+  { org: "Open Government Products", title: "Software Engineer Intern · Maps", when: "Aug 2026 – Feb 2027", ring: "AUG '26", current: true, logo: "/home/logos/ogp.svg", what: "Shipping features to production and building an enhanced ingestion feature." },
+  { org: "Visa", title: "Software Engineering Intern", when: "May – Aug 2026", ring: "MAY '26", logo: "/home/logos/visa.svg", what: "Built SAGE, a retrieval-augmented assistant for incident investigation, and met z/TPF." },
+  { org: "Project Aegis", title: "Lead Developer · National Cybersecurity Olympiad", when: "Jan – Mar 2026", ring: "JAN '26", what: "A guarded AI-access platform for 80 CTF players. 316 PRs in two months." },
+  { org: "IMDA", title: "Machine Learning Intern", when: "May – Aug 2025", ring: "MAY '25", logo: "/home/logos/imda.svg", what: "An ML pipeline classifying malicious SSL/TLS certificates, reaching 0.994 F1, with LIME explanations." },
+  { org: "IMDA", title: "Strategic Digital Projects Intern", when: "May – Aug 2024", ring: "MAY '24", logo: "/home/logos/imda.svg", what: "Ran GenAI workshops with Microsoft and AWS; 30+ companies started GenAI projects after them." },
 ];
 
 export type ReelFrame = {

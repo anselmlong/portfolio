@@ -548,25 +548,6 @@
   color: var(--dim);
   margin: 0;
 }
-.nudge {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid var(--accent);
-  border-radius: 14px;
-  padding: 10px 12px 10px 14px;
-  animation: up 0.45s both;
-}
-.nudge button {
-  border: 0;
-  background: var(--accent);
-  color: var(--accent-ink) !important;
-  border-radius: 999px;
-  padding: 6px 12px;
-  font: 600 12px var(--mono) !important;
-}
 
 /* pinned, scroll-driven sections */
 .pin {
@@ -1367,4 +1348,67 @@
   .root[data-chatting] .stage {
     height: clamp(200px, 56vw, 320px);
   }
+}
+
+/* Experience dial: the active role's logo sits in the ring's centre. */
+.dial {
+  position: relative;
+}
+.dialLogo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 58%;
+  height: 21%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  animation: swap 0.5s cubic-bezier(0.2, 1, 0.3, 1) both;
+}
+.dialLogo img {
+  /* Fill the box: some logo files declare a small fixed width and height. */
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Every logo in the site's off-white, so none clash with the accent. */
+  filter: brightness(0) invert(0.94);
+}
+/* More specific than `.dial svg`, which sizes the dial itself. */
+.dialLogo .shield {
+  width: 30%;
+  height: auto;
+  color: var(--paper);
+}
+.dial text.ringOn {
+  fill: var(--paper);
+}
+.activeArc {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.role {
+  position: relative;
+}
+.ghostIndex {
+  position: absolute;
+  right: 0;
+  top: -0.35em;
+  font: 900 clamp(90px, 12vw, 180px)/0.8 var(--display);
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(241, 239, 232, 0.12);
+  pointer-events: none;
+}
+.roleTitle {
+  font: 500 16px/1.3 var(--body);
+  color: var(--paper);
+}
+.nowPill {
+  margin-left: 10px;
+  padding: 2px 8px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  font-size: 10px;
+  vertical-align: 1px;
 }

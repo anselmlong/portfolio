@@ -38,14 +38,12 @@ export function HomeChat({
   onTopic,
   onPeek,
   onType,
-  onSeeAll,
   onStart,
 }: {
   still: boolean;
   onTopic: (topic: TopicKey | null) => void;
   onPeek: (topic: TopicKey | null) => void;
   onType: () => void;
-  onSeeAll: () => void;
   /** Called once, when the first question is asked. */
   onStart?: () => void;
 }) {
@@ -54,12 +52,10 @@ export function HomeChat({
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [nudge, setNudge] = useState(false);
   const [placeholder, setPlaceholder] = useState(
     "ask me about kopitype, OGP, the aircon bot…",
   );
   const asked = useRef(new Set<TopicKey>());
-  const exchanges = useRef(0);
   const nextId = useRef(1);
   const abort = useRef<AbortController | null>(null);
   const log = useRef<HTMLDivElement>(null);
@@ -71,7 +67,7 @@ export function HomeChat({
       top: log.current.scrollHeight,
       behavior: still ? "auto" : "smooth",
     });
-  }, [messages, nudge, still]);
+  }, [messages, still]);
 
   // While the box is idle, the placeholder types out example questions.
   useEffect(() => {
@@ -185,8 +181,6 @@ export function HomeChat({
       await streamAnswer(history, query, request.signal, (answer) =>
         update(replyId, { text: answer, pending: false }),
       );
-      exchanges.current++;
-      if (exchanges.current >= 2) setNudge(true);
       const next = (chosen ? topics[chosen].next : starters).filter(
         (k) => !asked.current.has(k),
       );
@@ -238,16 +232,6 @@ export function HomeChat({
             )}
           </div>
         ))}
-        {nudge && (
-          <div className={styles.nudge}>
-            <span>
-              everything else is laid out below, whenever you want it.
-            </span>
-            <button type="button" onClick={onSeeAll} data-label="SCROLL">
-              see the full site ↓
-            </button>
-          </div>
-        )}
       </div>
       <div
         className={`${styles.chips} ${busy ? styles.leaving : ""}`}
