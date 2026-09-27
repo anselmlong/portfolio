@@ -639,6 +639,30 @@
   padding: 5px 9px;
   border-radius: 8px;
 }
+.reelVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.sound {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  font: 500 11px var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #f1efe8;
+  background: rgba(13, 10, 10, 0.72);
+  border: 1px solid rgba(241, 239, 232, 0.18);
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.sound:hover {
+  background: rgba(13, 10, 10, 0.9);
+}
 .typeShot {
   display: grid;
   place-items: center;

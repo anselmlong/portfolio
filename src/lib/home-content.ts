@@ -464,6 +464,8 @@ export type ReelFrame = {
   label: "OPEN" | "PLAY" | "CODE";
   body: string;
   tech: string;
+  /** Launch video; when set it replaces the visual in the reel. */
+  video?: { src: string; poster: string };
   visual:
     | {
         kind: "image";
@@ -484,6 +486,10 @@ export const reel: ReelFrame[] = [
     label: "OPEN",
     body: "A desktop AI assistant that can see and operate your computer, inside explicit security boundaries, shipped through a signed-app release workflow.",
     tech: "TypeScript · desktop automation · local AI",
+    video: {
+      src: "/videos/launch/computah.mp4",
+      poster: "/videos/launch/computah.jpg",
+    },
     visual: {
       kind: "image",
       src: "/home/s-computah.jpg",
@@ -496,6 +502,7 @@ export const reel: ReelFrame[] = [
     label: "CODE",
     body: "My personal agent. She runs on Hermes Agent on my own VPS, talks to me on Telegram, and has GitHub and Vercel access, so a lot of what I build starts as a message to her.",
     tech: "Hermes Agent · self-hosted VPS · GitHub + Vercel · Telegram",
+    video: { src: "/videos/launch/ava.mp4", poster: "/videos/launch/ava.jpg" },
     visual: { kind: "ava" },
   },
   {
@@ -504,6 +511,10 @@ export const reel: ReelFrame[] = [
     label: "OPEN",
     body: "A Darwinian code optimiser: 10+ parallel agents propose changes, and only the ones that beat your benchmark survive, generation after generation. Marshall Wace prize at Hack & Roll 2026.",
     tech: "Multi-agent · Git-tracked evolution · live dashboard",
+    video: {
+      src: "/videos/launch/optifiner.mp4",
+      poster: "/videos/launch/optifiner.jpg",
+    },
     visual: {
       kind: "image",
       src: "/home/s-optifiner.jpg",
@@ -516,6 +527,10 @@ export const reel: ReelFrame[] = [
     label: "OPEN",
     body: "NUS confessions, on the web. Then 72,000 of them embedded and mapped, and Qwen 2.5 7B fine-tuned to write new ones.",
     tech: "Next.js · Supabase · embeddings · Qwen fine-tune",
+    video: {
+      src: "/videos/launch/confessit.mp4",
+      poster: "/videos/launch/confessit.jpg",
+    },
     visual: {
       kind: "image",
       src: "/home/s-confessit-umap.jpg",
@@ -529,6 +544,10 @@ export const reel: ReelFrame[] = [
     label: "OPEN",
     body: "I fine-tuned a 7B model on my own Telegram replies to see if it could text like me, then measured how people rated it against the real thing.",
     tech: "Telethon · Axolotl · QLoRA · Mistral-7B",
+    video: {
+      src: "/videos/launch/almost-anselm.mp4",
+      poster: "/videos/launch/almost-anselm.jpg",
+    },
     visual: {
       kind: "image",
       src: "/home/s-almost.jpg",
@@ -543,6 +562,10 @@ export const reel: ReelFrame[] = [
     label: "PLAY",
     body: "Monkeytype, but Singaporean. Singlish, MRT stations, xmm texting, and a mode you have to confirm you asked for.",
     tech: "Next.js · static corpora · leaderboard",
+    video: {
+      src: "/videos/launch/kopitype.mp4",
+      poster: "/videos/launch/kopitype.jpg",
+    },
     visual: {
       kind: "image",
       src: "/home/s-kopitype.jpg",
@@ -555,6 +578,10 @@ export const reel: ReelFrame[] = [
     label: "CODE",
     body: "Add it to a group chat and it spots the number 67 in every photo, video and telebubble, then keeps a leaderboard. Possibly my stupidest bot.",
     tech: "EasyOCR · vision-model fallback · SQLite",
+    video: {
+      src: "/videos/launch/sixseven.mp4",
+      poster: "/videos/launch/sixseven.jpg",
+    },
     visual: { kind: "sixseven" },
   },
   {
@@ -563,6 +590,10 @@ export const reel: ReelFrame[] = [
     label: "OPEN",
     body: "One warns you before your aircon credits run out, from a reverse-engineered portal. The other sends the day's readings at the hour you choose.",
     tech: "TypeScript · Python · Telegram",
+    video: {
+      src: "/videos/launch/bots.mp4",
+      poster: "/videos/launch/bots.jpg",
+    },
     visual: {
       kind: "image",
       src: "/home/s-bots.jpg",
@@ -575,6 +606,10 @@ export const reel: ReelFrame[] = [
     label: "OPEN",
     body: "A 3-hour prototype that became a daily tool: syncs course files, skips the 2 GB recordings, and emails what's new.",
     tech: "Python · Canvas API · GitHub Actions",
+    video: {
+      src: "/videos/launch/canvas.mp4",
+      poster: "/videos/launch/canvas.jpg",
+    },
     visual: {
       kind: "image",
       src: "/home/s-canvas.jpg",
@@ -587,6 +622,10 @@ export const reel: ReelFrame[] = [
     label: "OPEN",
     body: "Give it a topic, get six comedic LinkedIn posts, from tech-bro earnest to Singapore uncle.",
     tech: "Next.js · Gemini · OpenRouter",
+    video: {
+      src: "/videos/launch/shitpost.mp4",
+      poster: "/videos/launch/shitpost.jpg",
+    },
     visual: { kind: "shitpost" },
   },
 ];
