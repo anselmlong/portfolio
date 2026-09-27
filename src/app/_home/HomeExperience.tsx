@@ -19,6 +19,7 @@ import {
 import { startCursor } from "./cursor-engine";
 import { startHero, type HeroHandle } from "./hero-engine";
 import { HomeChat } from "./HomeChat";
+import { Portrait } from "./Portrait";
 import { measureViewport, startScroll } from "./scroll-engine";
 import styles from "./home.module.css";
 
@@ -582,20 +583,23 @@ export default function HomeExperience({
 
       <div className={styles.wrap}>
         <section className={styles.outro} aria-label="Say hi">
-          <div ref={shy} className={styles.hi} aria-label="Say hi">
-            {"SAY HI".split("").map((c, i) => (
-              <span key={i}>{c === " " ? " " : c}</span>
-            ))}
+          <Portrait />
+          <div className={styles.outroText}>
+            <div ref={shy} className={styles.hi} aria-label="Say hi">
+              {"SAY HI".split("").map((c, i) => (
+                <span key={i}>{c === " " ? " " : c}</span>
+              ))}
+            </div>
+            <CopyEmail />
+            <button
+              type="button"
+              className={`${styles.mono} ${styles.backUp}`}
+              onClick={toChat}
+              data-label="ASK"
+            >
+              or keep asking the chat, it&apos;s still up there ↑
+            </button>
           </div>
-          <CopyEmail />
-          <button
-            type="button"
-            className={`${styles.mono} ${styles.backUp}`}
-            onClick={toChat}
-            data-label="ASK"
-          >
-            or keep asking the chat, it&apos;s still up there ↑
-          </button>
         </section>
       </div>
 
