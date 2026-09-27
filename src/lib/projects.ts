@@ -364,6 +364,17 @@ export const projects: Project[] = [
     blurb: "My first software engineering project, for CS2103T.",
   },
 
+  {
+    id: "massgowhere",
+    name: "MassGoWhere",
+    repo: "massgowhere",
+    status: "building",
+    group: "tools",
+    url: "https://mass.anselmlong.com",
+    blurb:
+      "A map of Singapore's 32 Catholic parishes: the nearest church, the next Mass by time or distance, and directions.",
+  },
+
   // my sites
   {
     id: "portfolio",
@@ -458,6 +469,7 @@ export const links: [string, string, string][] = [
   ["aircon", "gospel", "both on bot.anselmlong.com"],
   ["aircon", "laundry", "hall life"],
   ["gospel", "prayer", "faith bots"],
+  ["massgowhere", "gospel", "for catholics in singapore"],
   ["routes", "67bot", "telegram bots"],
   ["routes", "betaview", "climbing"],
   ["canvas", "cheatsheets", "surviving modules"],
