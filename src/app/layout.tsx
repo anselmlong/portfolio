@@ -17,7 +17,6 @@ export const metadata: Metadata = {
     template: "%s — anselm long",
   },
   description: "my projects, thoughts, and more!",
-  icons: [{ rel: "icon", url: "/favicon.png" }],
   metadataBase: new URL("https://anselmlong.com"),
   openGraph: {
     type: "website",
