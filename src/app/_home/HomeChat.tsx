@@ -25,6 +25,12 @@ const tidy = (text: string) =>
     .replace(/__(.+?)__/g, "$1")
     .replace(/^#{1,6}\s+/gm, "");
 
+/** The answer admits it doesn't know, so no card should suggest otherwise. */
+const unsure = (answer: string) =>
+  /not sure|don't know|do not know|email me|anselmpius@gmail/i.test(
+    answer.slice(0, 400),
+  );
+
 const examples = [
   "what did you build at visa?",
   "how does the aircon bot work?",
@@ -95,46 +101,46 @@ export function HomeChat({
       all.map((m) => (m.id === id ? { ...m, ...patch } : m)),
     );
 
-  // The tapped chip flies into the conversation and becomes your message.
+  // The tapped chip flies into the conversation and becomes your message. The
+  // copy is styled as the bubble and lives inside the page's root (so it keeps
+  // the site's fonts), and it chases the bubble's position every frame, so it
+  // lands right even while the log scrolls.
   function fly(from: HTMLElement | null, userId: number) {
     if (still || !from) return;
     const a = from.getBoundingClientRect();
+    const host = from.closest(`.${styles.root}`) ?? document.body;
     requestAnimationFrame(() => {
       const bubble = log.current?.querySelector<HTMLElement>(
         `[data-id="${userId}"]`,
       );
       if (!bubble) return;
-      const b = bubble.getBoundingClientRect();
-      const ghost = from.cloneNode(true) as HTMLElement;
-      ghost.className = `${styles.chip} ${styles.flying}`;
-      Object.assign(ghost.style, {
-        left: `${a.left}px`,
-        top: `${a.top}px`,
-        width: `${a.width}px`,
-        height: `${a.height}px`,
-        translate: "",
-        rotate: "",
-      });
-      document.body.append(ghost);
+      const ghost = document.createElement("div");
+      ghost.className = `${styles.msg} ${styles.me} ${styles.flying}`;
+      ghost.textContent = bubble.textContent;
+      ghost.setAttribute("aria-hidden", "true");
+      host.append(ghost);
       bubble.style.visibility = "hidden";
-      ghost.animate(
-        [
-          { transform: "translate(0,0) scale(1)" },
-          {
-            transform: `translate(${(b.left - a.left) * 0.5}px,${(b.top - a.top) * 0.5 - 40}px) scale(1.06) rotate(-2deg)`,
-            offset: 0.55,
-          },
-          {
-            transform: `translate(${b.left - a.left}px,${b.top - a.top}px) scale(1)`,
-            width: `${b.width}px`,
-            height: `${b.height}px`,
-          },
-        ],
-        { duration: 560, easing: "cubic-bezier(.3,.7,.2,1)" },
-      ).onfinish = () => {
-        ghost.remove();
-        bubble.style.visibility = "";
+      const start = performance.now();
+      const ease = (t: number) => 1 - (1 - t) ** 3;
+      const frame = (now: number) => {
+        const t = Math.min(1, (now - start) / 620),
+          e = ease(t);
+        const b = bubble.getBoundingClientRect();
+        const lift = Math.sin(t * Math.PI) * 36;
+        Object.assign(ghost.style, {
+          left: `${a.left + (b.left - a.left) * e}px`,
+          top: `${a.top + (b.top - a.top) * e - lift}px`,
+          width: `${a.width + (b.width - a.width) * e}px`,
+          height: `${a.height + (b.height - a.height) * e}px`,
+          rotate: `${Math.sin(t * Math.PI) * -2}deg`,
+        });
+        if (t < 1) requestAnimationFrame(frame);
+        else {
+          ghost.remove();
+          bubble.style.visibility = "";
+        }
       };
+      requestAnimationFrame(frame);
     });
   }
 
@@ -163,24 +169,45 @@ export function HomeChat({
       { id: userId, role: "user", text: question },
       { id: replyId, role: "assistant", text: "", pending: true },
     ]);
-    fly(from, userId);
+    // On the first question the whole page morphs instead.
+    if (history.length) fly(from, userId);
 
-    // A chip knows its card; free text asks Jev, in parallel with the answer.
+    // A chip knows its card. For free text, Jev picks one once it can see the
+    // start of the answer, so the card matches what was actually said; until
+    // then, the last answer's card is cleared.
     let chosen: TopicKey | null = topic;
-    if (topic) onTopic(topic);
-    else
-      void pickTopic(history, question, request.signal).then((picked) => {
-        if (picked && !request.signal.aborted) {
-          chosen = picked;
-          onTopic(picked);
-        }
-      });
+    let asking = false;
+    const reveal = (answer: string) => {
+      if (topic || asking) return;
+      asking = true;
+      if (unsure(answer)) return;
+      void pickTopic(history, question, request.signal, answer).then(
+        (picked) => {
+          if (picked && !request.signal.aborted) {
+            chosen = picked;
+            onTopic(picked);
+          }
+        },
+      );
+    };
+    onTopic(topic);
 
     try {
       const query = topic ? (topics[topic].ask ?? question) : question;
-      await streamAnswer(history, query, request.signal, (answer) =>
-        update(replyId, { text: answer, pending: false }),
+      const answer = await streamAnswer(
+        history,
+        query,
+        request.signal,
+        (text) => {
+          update(replyId, { text, pending: false });
+          if (text.length >= 180) reveal(text);
+        },
       );
+      reveal(answer);
+      if (!topic && unsure(answer)) {
+        chosen = null;
+        onTopic(null);
+      }
       const next = (chosen ? topics[chosen].next : starters).filter(
         (k) => !asked.current.has(k),
       );

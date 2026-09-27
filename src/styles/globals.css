@@ -1073,3 +1073,54 @@ body {
   min-height: 1.5em;
   display: inline-block;
 }
+
+/* The homepage's first question morphs the hero into a conversation. */
+::view-transition-group(vf-stage),
+::view-transition-group(vf-chat),
+::view-transition-group(vf-intro) {
+  animation-duration: 0.65s;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+/* The frame changes shape, so crop the snapshots instead of stretching them. */
+::view-transition-old(vf-stage),
+::view-transition-new(vf-stage) {
+  height: 100%;
+  object-fit: cover;
+}
+::view-transition-old(vf-chat),
+::view-transition-new(vf-chat) {
+  height: 100%;
+  object-fit: none;
+  object-position: top left;
+}
+/* The intro changes size a lot, so it swaps rather than morphs. */
+::view-transition-old(vf-intro) {
+  animation: vf-out 0.18s ease-in both;
+}
+::view-transition-new(vf-intro) {
+  animation: vf-in 0.35s 0.3s ease-out both;
+  height: 100%;
+  object-fit: none;
+  object-position: top left;
+}
+@keyframes vf-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vf-in {
+  from {
+    opacity: 0;
+  }
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

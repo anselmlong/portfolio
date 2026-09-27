@@ -497,12 +497,12 @@
   margin: 0;
   z-index: 40;
   pointer-events: none;
-  background: var(--paper, #f1efe8);
-  color: #0d0a0a;
-  border-color: #f1efe8;
-  white-space: nowrap;
+  max-width: none;
+  box-sizing: border-box;
   overflow: hidden;
+  white-space: nowrap;
   animation: none;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
 }
 .composer {
   display: flex;
@@ -1351,24 +1351,24 @@
   }
 }
 
-/* Chatting: once the first question is asked, the frame eases down to about half
-   the screen, the intro folds into one line, and the chat takes the full width. */
+/* Chatting: the first question turns the hero into a conversation. On wide
+   screens the frame moves to the left and the chat fills the right, one screen
+   tall, like a messaging app; on phones the frame shrinks and the chat grows.
+   The morph itself is a view transition (see globals.css). */
+.stage,
+.chatbox,
+.intro {
+  view-transition-name: var(--vt);
+}
 .stage {
-  transition:
-    transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
-    height 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --vt: vf-stage;
+}
+.chatbox {
+  --vt: vf-chat;
 }
 .intro {
+  --vt: vf-intro;
   display: grid;
-  transition: opacity 0.4s;
-}
-.root[data-chatting] .stage {
-  height: clamp(280px, calc(var(--vh, 100vh) * 0.46), 520px);
-}
-.root[data-chatting] .talk {
-  grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
-  padding-top: 18px;
 }
 .root[data-chatting] .say {
   font-size: 15px;
@@ -1378,14 +1378,75 @@
   display: none;
 }
 .root[data-chatting] .log {
-  max-height: max(260px, calc(var(--vh, 100vh) * 0.42));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 4px;
+}
+.root[data-chatting] .log > :first-child {
+  margin-top: auto;
 }
 .root[data-chatting] .msg {
-  max-width: min(92%, 760px);
+  max-width: min(88%, 720px);
+  font-size: 17px;
+  line-height: 1.55;
+  padding: 12px 16px;
 }
-@media (max-width: 640px) {
+.root[data-chatting] .msg.me {
+  align-self: flex-end;
+}
+@media (min-width: 900px) {
+  .root[data-chatting] .heroWrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    column-gap: clamp(20px, 3vw, 40px);
+  }
+  .root[data-chatting] .heroWrap > header {
+    grid-column: 1 / -1;
+  }
+  .root[data-chatting] .stageWrap {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .root[data-chatting] .stage,
+  .root[data-chatting] .talk {
+    height: max(520px, calc(var(--vh, 100vh) - 110px));
+  }
+  .root[data-chatting] .talk {
+    grid-column: 2;
+    grid-row: 2;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    align-items: stretch;
+    gap: 12px;
+    padding: 0;
+  }
+  .root[data-chatting] .talk > div:last-child {
+    min-height: 0;
+    display: grid;
+  }
+  .root[data-chatting] .chatbox {
+    grid-template-rows: minmax(0, 1fr) auto auto auto auto;
+    min-height: 0;
+  }
+  .root[data-chatting] .log {
+    max-height: none;
+    min-height: 0;
+    padding: 6px 4px 6px 0;
+  }
+}
+@media (max-width: 899px) {
   .root[data-chatting] .stage {
-    height: clamp(200px, 56vw, 320px);
+    height: clamp(250px, 66vw, 360px);
+  }
+  .root[data-chatting] .talk {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding-top: 14px;
+  }
+  .root[data-chatting] .log {
+    max-height: max(300px, calc(var(--vh, 100vh) - 380px));
   }
 }
 

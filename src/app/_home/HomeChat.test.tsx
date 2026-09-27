@@ -91,6 +91,36 @@ describe("homepage chat", () => {
     expect(screen.queryByText("injected")).not.toBeInTheDocument();
   });
 
+  it("clears the old card, and asks Jev with the answer so the card matches it", async () => {
+    const fetcher = stubFetch(async (url) =>
+      url === "/api/reveal"
+        ? Response.json({ intent: "photos", projects: [] })
+        : new Response("i shoot on a fuji and edit in lightroom."),
+    );
+    const props = setup();
+    send("what camera do you use?");
+    expect(props.onTopic).toHaveBeenCalledWith(null);
+    await waitFor(() => expect(props.onTopic).toHaveBeenCalledWith("life"));
+    const reveal = fetcher.mock.calls.find(([url]) => url === "/api/reveal")!;
+    const body = JSON.parse(reveal[1].body as string) as { answer?: string };
+    expect(body.answer).toBe("i shoot on a fuji and edit in lightroom.");
+  });
+
+  it("shows no card when the answer says it isn't sure", async () => {
+    const fetcher = stubFetch(async (url) =>
+      url === "/api/reveal"
+        ? Response.json({ intent: "work", projects: ["Kopitype"] })
+        : new Response(
+            "i'm not sure about that one. email me at anselmpius@gmail.com!",
+          ),
+    );
+    const props = setup();
+    send("what's your favourite colour?");
+    expect(await screen.findByText(/not sure/)).toBeInTheDocument();
+    expect(fetcher.mock.calls.map(([url]) => url)).toEqual(["/api/chat"]);
+    expect(props.onTopic).not.toHaveBeenCalledWith(expect.any(String));
+  });
+
   it("names the failing phase and puts the question back when the backend errors", async () => {
     stubFetch(async (url) =>
       url === "/api/reveal"

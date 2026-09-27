@@ -1,9 +1,5 @@
 import { isIntent } from "~/lib/conversation";
-import {
-  intentTopics,
-  projectTopics,
-  type TopicKey,
-} from "~/lib/home-content";
+import { intentTopics, projectTopics, type TopicKey } from "~/lib/home-content";
 
 export type Turn = { role: "user" | "assistant"; content: string };
 
@@ -106,6 +102,7 @@ export async function pickTopic(
   history: Turn[],
   question: string,
   signal: AbortSignal,
+  answer = "",
 ): Promise<TopicKey | null> {
   try {
     const response = await fetch("/api/reveal", {
@@ -116,6 +113,7 @@ export async function pickTopic(
         messages: [...history.slice(-8), { role: "user", content: question }]
           .filter((m) => m.content.trim())
           .map((m) => ({ role: m.role, content: m.content.slice(0, 1200) })),
+        ...(answer.trim() ? { answer: answer.slice(0, 1200) } : {}),
       }),
     });
     if (!response.ok) {

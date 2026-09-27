@@ -72,6 +72,20 @@ describe("preview reveal endpoint", () => {
     });
   });
 
+  it("gives Jev the start of the answer so the card matches it", async () => {
+    const fetcher = vi.fn(async () => decision("photos", "none"));
+    vi.stubGlobal("fetch", fetcher);
+    await POST(request({ ...valid, answer: "i shoot on a fuji." }));
+    const sent = JSON.parse(
+      (fetcher.mock.calls[0] as unknown as [string, RequestInit])[1]
+        .body as string,
+    ) as { state: { answer: string } };
+    expect(sent.state.answer).toBe("i shoot on a fuji.");
+    expect(
+      (await POST(request({ ...valid, answer: "x".repeat(1201) }))).status,
+    ).toBe(400);
+  });
+
   it("drops unknown choices, low confidence, and project-less work reveals", async () => {
     for (const reply of [
       decision("<script>", "none"),
