@@ -814,10 +814,22 @@
     grid-template-columns: 1fr;
   }
 }
+.expHead {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 10px;
+  padding-inline: 16px;
+}
+.expHead h2 {
+  margin: 0;
+  font: 900 clamp(34px, 4.6vw, 60px)/0.9 var(--display);
+  text-transform: uppercase;
+}
 .dial {
   position: relative;
   aspect-ratio: 1;
-  width: min(100%, 520px);
+  /* Leaves room for the heading on short screens. */
+  width: min(100%, 520px, calc(var(--vh, 100vh) - 230px));
   max-width: 100%;
   justify-self: center;
 }
@@ -1522,7 +1534,7 @@
 
 /* Commit log: a year of GitHub contributions that develops like film. */
 .git {
-  margin-top: clamp(64px, 9vw, 120px);
+  margin-top: 8px;
   border-block: 1px solid var(--line);
 }
 /* Closed, it is one quiet line. */
@@ -1685,13 +1697,23 @@
 .gitGrid i.gitPad {
   visibility: hidden;
 }
-.gitGrid i[data-l="1"] { background: rgba(255, 111, 85, 0.28); }
-.gitGrid i[data-l="2"] { background: rgba(255, 111, 85, 0.5); }
-.gitGrid i[data-l="3"] { background: rgba(255, 111, 85, 0.75); }
-.gitGrid i[data-l="4"] { background: var(--accent); }
+.gitGrid i[data-l="1"] {
+  background: rgba(255, 111, 85, 0.28);
+}
+.gitGrid i[data-l="2"] {
+  background: rgba(255, 111, 85, 0.5);
+}
+.gitGrid i[data-l="3"] {
+  background: rgba(255, 111, 85, 0.75);
+}
+.gitGrid i[data-l="4"] {
+  background: var(--accent);
+}
 .gitGrid i[data-l]:hover {
   transform: scale(1.6);
-  box-shadow: 0 0 0 1px var(--night), 0 0 14px rgba(255, 111, 85, 0.6);
+  box-shadow:
+    0 0 0 1px var(--night),
+    0 0 14px rgba(255, 111, 85, 0.6);
   position: relative;
   z-index: 1;
 }
@@ -1851,5 +1873,140 @@
   }
   to {
     clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Scenes: each section opens with a clapperboard label, and a slim index on
+   the right edge shows where you are in the story. */
+.slate {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 11px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 10px;
+}
+.slate i {
+  width: 22px;
+  height: 9px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--paper) 0 3px,
+    var(--night) 3px 6px
+  );
+  transform-origin: 0 100%;
+}
+.slate b {
+  color: var(--accent);
+  font-weight: 600;
+}
+.kicker > div {
+  display: grid;
+}
+.sheetHead {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  translate: -50% 0;
+  width: min(100% - 32px, 1100px);
+  z-index: 1;
+}
+.outro .slate {
+  margin-bottom: 0;
+}
+.rail {
+  position: fixed;
+  right: 18px;
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+.rail[data-on] {
+  opacity: 1;
+  pointer-events: auto;
+}
+.rail ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.rail a {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+  text-decoration: none;
+  font: 500 10px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.rail a b {
+  font-weight: 600;
+  width: 20px;
+  text-align: right;
+}
+.rail a b::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 1px;
+  margin-right: 6px;
+  vertical-align: middle;
+  background: currentColor;
+  transition: width 0.3s;
+}
+.rail a span {
+  opacity: 0;
+  translate: 6px 0;
+  transition:
+    opacity 0.25s,
+    translate 0.25s;
+  white-space: nowrap;
+}
+.rail a[data-past] {
+  color: #6b6462;
+}
+.rail a[aria-current] {
+  color: var(--accent);
+}
+.rail a[aria-current] b::before {
+  width: 22px;
+}
+.rail:hover a span,
+.rail a:focus-visible span {
+  opacity: 1;
+  translate: 0 0;
+}
+.rail:hover a span {
+  color: var(--paper);
+}
+@media (max-width: 1099px), (pointer: coarse) {
+  .rail {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .slate i {
+    animation: clap 0.9s cubic-bezier(0.3, 1.6, 0.5, 1) both;
+    animation-timeline: view();
+    animation-range: entry 20% entry 80%;
+  }
+}
+@keyframes clap {
+  from {
+    transform: rotate(-24deg);
+  }
+  to {
+    transform: rotate(0deg);
   }
 }
