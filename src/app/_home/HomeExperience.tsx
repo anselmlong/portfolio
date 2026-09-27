@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import {
   clips,
   contactEmail,
@@ -72,6 +73,7 @@ export default function HomeExperience({
   const [role, setRole] = useState(0);
   // Once a conversation starts, the frame eases down and the chat takes the full width.
   const [chatting, setChatting] = useState(false);
+  const started = useRef(false);
 
   useEffect(() => {
     const el = root.current,
@@ -182,6 +184,16 @@ export default function HomeExperience({
     };
   }, []);
 
+  // The first question morphs the page into a conversation: the frame moves
+  // to the left and the chat takes the right, as one smooth view transition.
+  function startChat() {
+    if (started.current) return;
+    started.current = true;
+    const go = () => flushSync(() => setChatting(true));
+    if (still || typeof document.startViewTransition !== "function") go();
+    else document.startViewTransition(go);
+  }
+
   function showTopic(key: TopicKey | null) {
     setTopic(key);
     hero.current?.setScene(key ? scenes[topics[key].scene] : null);
@@ -224,7 +236,7 @@ export default function HomeExperience({
 
       <SceneRail />
 
-      <div className={styles.wrap}>
+      <div className={`${styles.wrap} ${styles.heroWrap}`}>
         <header className={styles.top}>
           <Link href="/" className={styles.wordmark}>
             Anselm Long
@@ -310,7 +322,7 @@ export default function HomeExperience({
               onTopic={showTopic}
               onPeek={peek}
               onType={() => hero.current?.bump()}
-              onStart={() => setChatting(true)}
+              onStart={startChat}
             />
           </div>
         </section>
