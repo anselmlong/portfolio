@@ -1,4 +1,4 @@
-@import "tailwindcss/preflight";
+@import "tailwindcss/preflight.css" layer(base);
 
 /* Every page draws its own design (see the CSS modules next to each route);
    this file only sets the page backdrop, scrollbars and view transitions. */
