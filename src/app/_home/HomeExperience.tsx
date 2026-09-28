@@ -690,7 +690,12 @@ export default function HomeExperience({
                   alt={p.alt}
                   width={900}
                   height={600}
-                  sizes="(max-width: 800px) 33vw, 360px"
+                  // The focus shot ends up filling the screen, so fetch it at that size.
+                  sizes={
+                    i === heroPhotoIndex
+                      ? "100vw"
+                      : "(max-width: 800px) 33vw, 360px"
+                  }
                 />
                 <figcaption>
                   {String(i + 1).padStart(2, "0")} · {p.caption}

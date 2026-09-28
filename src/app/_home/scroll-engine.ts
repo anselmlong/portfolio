@@ -142,8 +142,14 @@ export function startScroll(p: ScrollParts): () => void {
     });
   }
 
+  // While zooming, the sheet is a GPU layer; once it settles the hint goes, so
+  // the browser repaints the photo sharp at its zoomed size instead of stretching it.
+  let settle = 0;
   function sheet(k: number) {
     const { sheet: s, focus, caption } = p.sheet;
+    s.style.willChange = "transform";
+    clearTimeout(settle);
+    settle = window.setTimeout(() => (s.style.willChange = "auto"), 160);
     s.style.transform = "none";
     const r = focus.getBoundingClientRect(),
       b = s.getBoundingClientRect();
@@ -158,6 +164,8 @@ export function startScroll(p: ScrollParts): () => void {
       if (f !== focus) f.style.opacity = String(1 - ee);
     const fc = focus.querySelector<HTMLElement>("figcaption");
     if (fc) fc.style.opacity = String(1 - ee);
+    // The outline would scale up with the photo; let it go as the photo takes over.
+    focus.style.setProperty("--zoom", ee.toFixed(3));
     caption.style.opacity = String(clamp((k - 0.8) / 0.15));
   }
 
@@ -191,5 +199,8 @@ export function startScroll(p: ScrollParts): () => void {
     raf = requestAnimationFrame(tick);
   }
   raf = requestAnimationFrame(tick);
-  return () => cancelAnimationFrame(raf);
+  return () => {
+    cancelAnimationFrame(raf);
+    clearTimeout(settle);
+  };
 }

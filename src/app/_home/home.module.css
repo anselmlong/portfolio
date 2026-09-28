@@ -1028,7 +1028,7 @@
   text-transform: uppercase;
 }
 .focusShot img {
-  outline: 2px solid var(--accent);
+  outline: 2px solid rgb(255 111 85 / calc(1 - var(--zoom, 0)));
   outline-offset: 3px;
 }
 .overlayCap {
@@ -1291,6 +1291,7 @@
 }
 .root[data-flat="true"] .overlayCap {
   position: static;
+  margin-top: 36px;
   opacity: 1 !important;
 }
 .root[data-flat="true"] .overlayCap b {
