@@ -138,7 +138,11 @@ The disk was at 80%. Clearing package caches (npm, bun, pip, uv), stale Next.js 
 - **Memory is tight.** No swap, and the 67 bot's vision pipeline alone holds over 1 GB.
 - **Vercel blocks deploys** from commits whose email isn't linked to my GitHub account. I hit it while shipping the new bot pages. I should fix my git email.
 
-Next step: turn this pass into one of Ava's cron jobs, so it reports restart loops and failing renewals before they're three weeks old.
+### Now it runs itself
+
+The pass is now a small script on a 10-minute cron. It checks every service and container, whether each API answers, whether each bot is keeping up with its Telegram messages, restart loops, certificate expiry, disk and memory. If something stays broken for two checks in a row, Ava messages me on Telegram, and again when it recovers. So restart loops and failing renewals show up in ten minutes, not three weeks.
+
+It also publishes a public status page: [bot.anselmlong.com/status](https://bot.anselmlong.com/status).
 
 ## Is it perfect?
 
