@@ -58,6 +58,23 @@
 .tag[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .tag[aria-pressed="true"] small { color: inherit; opacity: 0.85; }
 .count { margin-left: auto; }
+/* Phones: search and count share a row, the topics swipe underneath, so the bar stays short. */
+@media (max-width: 720px) {
+  .bar { gap: 10px 12px; padding-block: 10px; flex-wrap: wrap; }
+  .search { flex: 1 1 0; min-width: 0; max-width: none; }
+  .count { white-space: nowrap; }
+  .tags {
+    position: relative; order: 1; flex: 1 0 100%; flex-wrap: nowrap; gap: 8px;
+    overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; scroll-padding-inline: 40px;
+    margin: -4px -16px; padding: 6px 16px; /* room for the focus ring inside the scroller */
+    --fade-start: 0px; --fade-end: 0px;
+    mask-image: linear-gradient(to right, transparent, #000 var(--fade-start), #000 calc(100% - var(--fade-end)), transparent);
+  }
+  .tags::-webkit-scrollbar { display: none; }
+  .tags[data-more-start] { --fade-start: 36px; }
+  .tags[data-more-end] { --fade-end: 36px; }
+  .tag { flex: none; min-height: 34px; padding-inline: 13px; }
+}
 .year { display: grid; grid-template-columns: minmax(0, 180px) minmax(0, 1fr); gap: clamp(12px, 3vw, 40px); padding-top: 34px; }
 @media (max-width: 720px) { .year { grid-template-columns: 1fr; } }
 .year h3 { margin: 0; font: 900 clamp(44px, 5.5vw, 76px)/0.8 var(--display); color: transparent; -webkit-text-stroke: 1px rgba(241, 239, 232, 0.35); position: sticky; top: 78px; align-self: start; }

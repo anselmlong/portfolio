@@ -24,6 +24,9 @@ export default function BlogIndex({
   const mast = useRef<HTMLHeadingElement>(null);
   const list = useRef<HTMLDivElement>(null);
   const peek = useRef<HTMLDivElement>(null);
+  const bar = useRef<HTMLDivElement>(null);
+  const strip = useRef<HTMLDivElement>(null);
+  const filtered = useRef(false);
   const [cover, setCover] = useState<string | null>(null);
 
   const tags = useMemo(() => {
@@ -39,6 +42,37 @@ export default function BlogIndex({
     return inTag && inText;
   });
   const years = [...new Set(shown.map((p) => p.date.slice(0, 4)))];
+
+  // On phones the topics are one swipeable row: fade whichever edge has more to see.
+  const edges = () => {
+    const el = strip.current;
+    if (!el) return;
+    el.toggleAttribute("data-more-start", el.scrollLeft > 2);
+    el.toggleAttribute("data-more-end", el.scrollLeft + el.clientWidth < el.scrollWidth - 2);
+  };
+  useEffect(() => {
+    edges();
+    addEventListener("resize", edges);
+    return () => removeEventListener("resize", edges);
+  }, []);
+
+  // When the filter changes from deep in the list, start the results just under the bar,
+  // and keep the chosen topic in view on the strip.
+  useEffect(() => {
+    if (!filtered.current) {
+      filtered.current = true;
+      return;
+    }
+    const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const top = (list.current?.getBoundingClientRect().top ?? 0) - (bar.current?.offsetHeight ?? 0);
+    if (top < 0) scrollTo({ top: scrollY + top, behavior: smooth ? "smooth" : "auto" });
+    const el = strip.current;
+    const chip = el?.querySelector<HTMLElement>('[aria-pressed="true"]');
+    if (el && chip && el.scrollWidth > el.clientWidth) {
+      const left = chip.offsetLeft - (el.clientWidth - chip.offsetWidth) / 2;
+      el.scrollTo({ left, behavior: smooth ? "smooth" : "auto" });
+    }
+  }, [active, term]);
 
   useEffect(() => {
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -109,12 +143,12 @@ export default function BlogIndex({
         </Link>
       )}
 
-      <div className={styles.bar} role="search">
+      <div ref={bar} className={styles.bar} role="search">
         <label className={styles.search}>
           <span className={styles.mono} aria-hidden="true">⌕</span>
           <input type="search" placeholder="search posts" aria-label="Search posts" value={term} onChange={(e) => setTerm(e.target.value)} />
         </label>
-        <div className={styles.tags} aria-label="Filter by topic">
+        <div ref={strip} className={styles.tags} role="group" aria-label="Filter by topic" onScroll={edges}>
           {[["all", posts.length] as const, ...tags].map(([t, n]) => (
             <button key={t} type="button" className={styles.tag} aria-pressed={active === t} onClick={() => setActive(t)}>
               {t}<small>{n}</small>
