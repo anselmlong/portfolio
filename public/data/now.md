@@ -8,4 +8,4 @@ yes! i climb around singapore, usually with friends. i love solving problems on 
 
 ## what projects are you proudest of?
 
-computah (a desktop ai assistant), ava (my personal agent on hermes agent), optifiner (evolving code with agents), confessit (72,000 nus confessions analysed, plus a fine-tune), almost anselm (a model fine-tuned to text like me), kopitype, and my telegram bots: the aircon checker, the daily gospel bot and the 67 bot.
+computah (a desktop ai assistant), ava (my personal agent on hermes agent), optifiner (evolving code with agents), confessit (72,000 nus confessions analysed, plus a fine-tune), almost anselm (a model fine-tuned to text like me), kopitype, massgowhere (find a mass in singapore you can actually make, at massgowhere.com), and my telegram bots: the aircon checker, the daily gospel bot and the 67 bot.

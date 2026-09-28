@@ -58,6 +58,7 @@ export const projects = [
   { name: "67 bot (Telegram bot that spots the number 67)", description: "a Telegram bot that spots the number 67 in group chat photos and videos and keeps a leaderboard." },
   { name: "Aircon checker bot", description: "a Telegram bot that checks NUS aircon credits from a reverse-engineered portal." },
   { name: "Daily gospel bot", description: "a Telegram bot that sends the daily mass readings at a chosen hour." },
+  { name: "MassGoWhere (find a Mass in Singapore you can make)", description: "a mobile site and Telegram bot that picks the Catholic Mass in Singapore you can still reach, with live routes and a leave-by time." },
   { name: "Canvas scraper", description: "syncs Canvas course files daily and emails a digest of what's new." },
   { name: "LinkedIn shitpost generator", description: "a satirical generator of LinkedIn posts in six comedic personas." },
 ];
