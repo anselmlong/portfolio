@@ -57,7 +57,7 @@ export const projects: Project[] = [
     group: "agents",
     users: "just me",
     blurb:
-      "My personal agent on Telegram, running on Hermes Agent on my VPS, with GitHub and Vercel access. A lot of what I build starts as a message to her.",
+      "My personal agent on Telegram, running on Hermes Agent on my VPS, with GitHub and Vercel access. A lot of what I build starts as a message to it.",
   },
   {
     id: "computah",
@@ -368,11 +368,11 @@ export const projects: Project[] = [
     id: "massgowhere",
     name: "MassGoWhere",
     repo: "massgowhere",
-    status: "building",
+    status: "live",
     group: "tools",
-    url: "https://mass.anselmlong.com",
+    url: "https://massgowhere.com",
     blurb:
-      "A map of Singapore's 32 Catholic parishes: the nearest church, the next Mass by time or distance, and directions.",
+      "The Mass in Singapore you can still make: 32 parishes' times, live bus and MRT routes, and when to leave. Also @massgowherebot on Telegram.",
   },
 
   // my sites
