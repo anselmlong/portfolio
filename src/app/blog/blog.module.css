@@ -88,7 +88,7 @@
 .cover { position: relative; aspect-ratio: 21/9; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); }
 .cover img { will-change: transform; }
 .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: clamp(24px, 5vw, 80px); margin-top: 48px; }
-@media (max-width: 980px) { .layout { grid-template-columns: 1fr; } .toc { display: none !important; } }
+@media (max-width: 980px) { .layout { grid-template-columns: minmax(0, 1fr); } .toc { display: none !important; } }
 .toc { position: sticky; top: 32px; align-self: start; display: grid; gap: 4px; }
 .toc > span { margin-bottom: 6px; }
 .toc a, .tocList a { display: grid; grid-template-columns: 18px 1fr; gap: 6px; text-decoration: none; color: var(--dim); font-size: 14px; padding: 5px 0; transition: color 0.2s; }

@@ -77,8 +77,17 @@ export function PostReader() {
       phone.querySelector("summary")?.focus();
     };
     const onAway = (e: PointerEvent) => { if (phone?.open && !phone.contains(e.target as Node)) fold(); };
+    // A long list opens at the section you're reading, not back at the top.
+    const onOpen = () => {
+      const list = phone?.querySelector<HTMLElement>("[data-toc]");
+      const on = list?.querySelector<HTMLElement>("a[data-on]");
+      if (!phone?.open || !list || !on) return;
+      const l = list.getBoundingClientRect(), a = on.getBoundingClientRect();
+      list.scrollTop += a.top - l.top - (l.height - a.height) / 2;
+    };
     phone?.addEventListener("click", onPick);
     phone?.addEventListener("keydown", onEsc);
+    phone?.addEventListener("toggle", onOpen);
     document.addEventListener("pointerdown", onAway);
 
     const buttons = [...article.querySelectorAll("pre")].map((pre) => {
@@ -125,6 +134,7 @@ export function PostReader() {
       removeEventListener("scroll", onScroll);
       phone?.removeEventListener("click", onPick);
       phone?.removeEventListener("keydown", onEsc);
+      phone?.removeEventListener("toggle", onOpen);
       document.removeEventListener("pointerdown", onAway);
       article.removeEventListener("click", onClick);
       article.removeEventListener("keydown", onKey);

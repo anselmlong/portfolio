@@ -186,7 +186,28 @@ export async function renderPostMarkdown(markdown: string): Promise<string> {
     used.set(base, n + 1);
     return n ? `${base}-${n + 1}` : base;
   };
+  const block = (text: string, lang?: string) => {
+    const language = lang && hljs.getLanguage(lang) ? lang : undefined;
+    const body = language
+      ? hljs.highlight(text, { language, ignoreIllegals: true }).value
+      : escapeHtml(text);
+    return `<pre><code class="hljs${language ? ` language-${language}` : ""}">${body}</code></pre>\n`;
+  };
   const renderer = new Marked({
+    // Display maths ($$...$$) stays one block, shown as its LaTeX source.
+    // Left to Markdown, a line of "=" inside it turns the equation into a heading.
+    extensions: [
+      {
+        name: "displayMath",
+        level: "block",
+        start: (src) => /^\$\$/m.exec(src)?.index,
+        tokenizer(src) {
+          const m = /^\$\$([\s\S]+?)\$\$[^\S\n]*(?:\n+|$)/.exec(src);
+          if (m) return { type: "displayMath", raw: m[0], text: m[1]!.trim() };
+        },
+        renderer: (token) => block(String(token.text), "latex"),
+      },
+    ],
     renderer: {
       heading({ tokens, depth }) {
         const html = this.parser.parseInline(tokens);
@@ -194,11 +215,7 @@ export async function renderPostMarkdown(markdown: string): Promise<string> {
         return `<h${level} id="${idFor(html)}">${html}</h${level}>\n`;
       },
       code({ text, lang }) {
-        const language = lang && hljs.getLanguage(lang) ? lang : undefined;
-        const body = language
-          ? hljs.highlight(text, { language, ignoreIllegals: true }).value
-          : escapeHtml(text);
-        return `<pre><code class="hljs${language ? ` language-${language}` : ""}">${body}</code></pre>\n`;
+        return block(text, lang);
       },
     },
   });

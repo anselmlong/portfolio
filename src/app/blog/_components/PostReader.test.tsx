@@ -100,6 +100,18 @@ describe("PostReader contents", () => {
     expect(document.querySelector("[data-toc-now]")).toHaveTextContent("Two");
   });
 
+  it("opens the phone list scrolled to the current section", () => {
+    withContents();
+    const list = strip().querySelector<HTMLElement>("[data-toc]")!;
+    const [, current] = screen.getAllByRole("link", { name: "Two" });
+    const box = (top: number, height: number) => () => ({ top, height }) as DOMRect;
+    list.getBoundingClientRect = box(100, 200);
+    current!.getBoundingClientRect = box(500, 40);
+    strip().dispatchEvent(new Event("toggle"));
+    // 400px below the list's top, less (200 - 40) / 2 to centre it.
+    expect(list.scrollTop).toBe(320);
+  });
+
   it("folds the phone strip after a jump, on Escape, and on a tap elsewhere", () => {
     withContents();
     const [, phoneLink] = screen.getAllByRole("link", { name: "One" });
