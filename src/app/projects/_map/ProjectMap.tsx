@@ -449,7 +449,7 @@ export function ProjectMap({
   const year = monthName(Math.max(0, Math.min(span, cutoff)), t0);
 
   return (
-    <div
+    <main
       className={styles.root}
       data-layout={layout}
       data-focus={focus ? "" : undefined}
@@ -889,6 +889,6 @@ export function ProjectMap({
           </>
         )}
       </aside>
-    </div>
+    </main>
   );
 }
