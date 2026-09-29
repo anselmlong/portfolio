@@ -169,6 +169,13 @@
 .nav a:hover {
   color: var(--paper);
 }
+/* Bigger touch targets without moving anything. */
+@media (pointer: coarse) {
+  .nav a:not(.resume) {
+    padding-block: 10px;
+    margin-block: -10px;
+  }
+}
 .exit {
   border: 1px solid var(--paper);
   background: transparent;
@@ -740,7 +747,7 @@
   color: #666;
 }
 .shit .illus {
-  color: #777;
+  color: #666;
 }
 .cap {
   display: grid;
@@ -2030,7 +2037,7 @@
   white-space: nowrap;
 }
 .rail a[data-past] {
-  color: #6b6462;
+  color: #857d7b;
 }
 .rail a[aria-current] {
   color: var(--accent);
