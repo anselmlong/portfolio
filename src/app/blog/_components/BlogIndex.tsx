@@ -177,7 +177,26 @@ export default function BlogIndex({
             </div>
           </section>
         ))}
-        {!shown.length && <p className={styles.empty}>Nothing matches that. Try another word or topic.</p>}
+        {!shown.length && (
+          <div className={styles.empty}>
+            <p>
+              Nothing matches{term.trim() && <> &ldquo;{term.trim()}&rdquo;</>}
+              {active !== "all" && <> in <span className={styles.emptyTag}>{active}</span></>}.
+            </p>
+            {/* One tap back to every post; focus lands on "all" so it isn't lost when this goes. */}
+            <button
+              type="button"
+              className={styles.go}
+              onClick={() => {
+                setTerm("");
+                setActive("all");
+                strip.current?.querySelector("button")?.focus({ preventScroll: true });
+              }}
+            >
+              Show all {posts.length} posts
+            </button>
+          </div>
+        )}
       </div>
 
       <div ref={peek} className={`${styles.peek} ${cover ? styles.peekOn : ""}`} aria-hidden="true">

@@ -60,6 +60,11 @@
 .tag[aria-pressed="true"] small { color: inherit; opacity: 0.85; }
 @media (pointer: coarse) { .tag { padding-block: 9px; } }
 .count { margin-left: auto; }
+.empty { padding-block: 48px 24px; }
+.empty p { margin: 0; color: var(--paper); font: 900 clamp(26px, 3vw, 36px)/1 var(--display); text-transform: uppercase; text-wrap: balance; overflow-wrap: anywhere; }
+.emptyTag { color: var(--accent); }
+.emptyTag::before { content: "#"; }
+.empty .go { border: 0; cursor: pointer; }
 /* Phones: search and count share a row, the topics swipe underneath, so the bar stays short. */
 @media (max-width: 720px) {
   .bar { gap: 10px 12px; padding-block: 10px; flex-wrap: wrap; }
