@@ -7,7 +7,7 @@ export default function NotFound() {
     <div className={`${viewfinderFonts} ${styles.root}`}>
       <main className={`${styles.wrap} ${styles.mast}`}>
         <span className={styles.mono}>404 · nothing in frame</span>
-        <h1 aria-label="Not found">
+        <h1 className={styles.lost} aria-label="Not found">
           {"LOST".split("").map((c, i) => (
             <span key={i} aria-hidden="true">
               {c}
@@ -21,7 +21,7 @@ export default function NotFound() {
           That page doesn&apos;t exist, or it moved. Try the chat, or the
           writing.
         </p>
-        <p>
+        <p className={styles.lostLinks}>
           <Link className={styles.go} href="/">
             Back to the chat →
           </Link>{" "}

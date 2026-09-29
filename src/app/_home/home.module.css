@@ -169,6 +169,13 @@
 .nav a:hover {
   color: var(--paper);
 }
+/* Bigger touch targets without moving anything. */
+@media (pointer: coarse) {
+  .nav a:not(.resume) {
+    padding-block: 10px;
+    margin-block: -10px;
+  }
+}
 .exit {
   border: 1px solid var(--paper);
   background: transparent;
@@ -251,11 +258,15 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(241, 239, 232, 0.72);
+  /* Keeps the labels legible over bright footage and live sites. */
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
   pointer-events: none;
 }
 .tl {
   top: 16px;
   left: 18px;
+  /* Long labels (live site URLs) wrap instead of running into "shot by me". */
+  max-width: calc(100% - 150px);
 }
 .tr {
   top: 16px;
@@ -740,7 +751,7 @@
   color: #666;
 }
 .shit .illus {
-  color: #777;
+  color: #666;
 }
 .cap {
   display: grid;
@@ -2030,7 +2041,7 @@
   white-space: nowrap;
 }
 .rail a[data-past] {
-  color: #6b6462;
+  color: #857d7b;
 }
 .rail a[aria-current] {
   color: var(--accent);
