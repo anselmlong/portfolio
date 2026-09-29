@@ -77,6 +77,18 @@
 .peekOn { opacity: 1; }
 @media (pointer: coarse) { .peek { display: none; } }
 .foot { padding-block: 80px 20px; }
+/* 404: the lens hunts for something to focus on, locks, and the dot blinks twice to confirm. */
+.lost { animation: hunt 1.5s linear both; }
+.lost .dot { animation: lock 0.5s 1.35s steps(1) 2; }
+@keyframes hunt {
+  0% { filter: blur(16px); opacity: 0.4; transform: scale(1.04); }
+  38% { filter: blur(0); opacity: 1; transform: none; }
+  55% { filter: blur(5px); }
+  78% { filter: blur(0); }
+  88% { filter: blur(1.5px); }
+  100% { filter: blur(0); }
+}
+@keyframes lock { 50% { opacity: 0.15; } }
 .lostLinks { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-top: 12px !important; }
 .lostLinks .go { margin-top: 0; }
 .lostLinks .mono { padding-block: 12px; text-decoration: none; }
@@ -125,6 +137,8 @@
 .article pre code { display: block; background: none; border: 0; padding: 18px; font: 400 14px/1.6 var(--mono); color: #dcdad2; white-space: pre; }
 .copy { position: absolute; top: 8px; right: 8px; border: 1px solid var(--line); background: #1b1716; border-radius: 8px; padding: 3px 9px; font: 600 10px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim); cursor: pointer; opacity: 0; transition: opacity 0.2s; }
 .article pre:hover .copy, .copy:focus-visible { opacity: 1; }
+.copy[data-state="copied"] { opacity: 1; color: var(--accent-ink); background: var(--accent); border-color: var(--accent); animation: copied 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes copied { from { transform: scale(0.9); } }
 /* No hover on touch screens, so the copy button just stays visible. */
 @media (hover: none) { .copy { opacity: 1; } }
 .article img { display: block; max-width: 100%; height: auto; margin: 1.6em auto 0.5em; border-radius: 12px; border: 1px solid var(--line); cursor: zoom-in; }

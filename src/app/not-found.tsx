@@ -7,7 +7,7 @@ export default function NotFound() {
     <div className={`${viewfinderFonts} ${styles.root}`}>
       <main className={`${styles.wrap} ${styles.mast}`}>
         <span className={styles.mono}>404 · nothing in frame</span>
-        <h1 aria-label="Not found">
+        <h1 className={styles.lost} aria-label="Not found">
           {"LOST".split("").map((c, i) => (
             <span key={i} aria-hidden="true">
               {c}

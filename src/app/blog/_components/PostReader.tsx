@@ -66,7 +66,12 @@ export function PostReader() {
       b.textContent = "copy";
       b.addEventListener("click", () => {
         void navigator.clipboard.writeText(pre.querySelector("code")?.textContent ?? "").then(
-          () => { b.textContent = "copied"; },
+          () => {
+            b.textContent = "copied ✓";
+            b.dataset.state = "copied";
+            clearTimeout(Number(b.dataset.timer));
+            b.dataset.timer = String(setTimeout(() => { b.textContent = "copy"; delete b.dataset.state; }, 1800));
+          },
           () => { b.textContent = "select & copy"; },
         );
       });
