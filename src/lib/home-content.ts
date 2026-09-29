@@ -11,6 +11,7 @@ export type SceneKey =
   | "almost"
   | "kopi"
   | "bots"
+  | "mass"
   | "canvas"
   | "photos";
 
@@ -106,6 +107,11 @@ export const scenes: Record<SceneKey, Scene> = {
     src: "/home/s-bots.jpg",
     label: "bot.anselmlong.com, live",
   },
+  mass: {
+    kind: "pan",
+    src: "/home/s-massgowhere.jpg",
+    label: "massgowhere.com, live",
+  },
   canvas: {
     kind: "pan",
     src: "/home/s-canvas.jpg",
@@ -142,6 +148,7 @@ export type TopicKey =
   | "canvas"
   | "shitpost"
   | "aircon"
+  | "mass"
   | "sixseven"
   | "visa"
   | "aegis"
@@ -164,7 +171,7 @@ export type Topic = {
 export const topics: Record<TopicKey, Topic> = {
   shipped: {
     question: "what have you shipped?",
-    ask: "what projects have you shipped? talk about computah, ava, optifiner, kopitype and your telegram bots.",
+    ask: "what projects have you shipped? talk about computah, ava, optifiner, kopitype, massgowhere and your telegram bots.",
     scene: "computah",
     next: ["technical", "ava", "sixseven"],
     card: {
@@ -297,6 +304,19 @@ export const topics: Record<TopicKey, Topic> = {
       link: { href: "https://bot.anselmlong.com/aircon", label: "try it" },
     },
   },
+  mass: {
+    question: "what's massgowhere?",
+    ask: "what is massgowhere? how does it pick the mass you can make, and where do the mass times come from?",
+    scene: "mass",
+    next: ["aircon", "technical", "life"],
+    card: {
+      kind: "text",
+      kicker: "for catholics in singapore",
+      title: "MassGoWhere",
+      body: "Mass times at 32 parishes plus live OneMap routes: one tap tells you the Mass you can still make, and when to leave.",
+      link: { href: "https://massgowhere.com", label: "try it" },
+    },
+  },
   sixseven: {
     question: "what's the 67 bot?",
     scene: "sf",
@@ -426,6 +446,7 @@ export const projectTopics: Record<string, TopicKey> = {
   "67 bot (Telegram bot that spots the number 67)": "sixseven",
   "Aircon checker bot": "aircon",
   "Daily gospel bot": "aircon",
+  "MassGoWhere (find a Mass in Singapore you can make)": "mass",
   "Canvas scraper": "canvas",
   "LinkedIn shitpost generator": "shitpost",
 };
@@ -634,6 +655,22 @@ export const reel: ReelFrame[] = [
       kind: "image",
       src: "/home/s-bots.jpg",
       alt: "Landing pages for the gospel and aircon bots",
+    },
+  },
+  {
+    name: "MassGoWhere",
+    href: "https://massgowhere.com",
+    label: "OPEN",
+    body: "Which Mass can you still make? Mass times at Singapore's 32 parishes plus live bus and MRT routes, so one tap gives you the Mass and when to leave.",
+    tech: "Vanilla JS · Vercel · OneMap · Telegram bot",
+    video: {
+      src: "/videos/launch/massgowhere.mp4",
+      poster: "/videos/launch/massgowhere.jpg",
+    },
+    visual: {
+      kind: "image",
+      src: "/home/s-massgowhere.jpg",
+      alt: "MassGoWhere answer: 6:15pm at Church of Our Lady of Lourdes, leave by 6:04pm",
     },
   },
   {

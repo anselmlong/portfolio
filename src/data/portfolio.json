@@ -105,6 +105,15 @@
       "highlight": true
     },
     {
+      "title": "MassGoWhere",
+      "position": "Personal project",
+      "description": "Finds the Catholic Mass in Singapore you can actually make from where you are, and when to leave. Ranks Mass times at all 32 parishes (myCatholicSG, checked monthly against each parish's own website) by live OneMap bus/MRT, driving or walking routes, behind one /api/next endpoint shared by the website (massgowhere.com), @massgowherebot on Telegram, and the daily gospel bot.",
+      "tech": ["JavaScript", "Vercel", "OneMap API", "MapLibre", "Python", "Telegram Bot API"],
+      "href": "https://massgowhere.com",
+      "repo": "https://github.com/anselmlong/massgowhere",
+      "highlight": true
+    },
+    {
       "title": "Catholic Daily Gospel Bot",
       "position": "Personal project",
       "description": "A Telegram bot (@sg_daily_gospel_bot) that delivers the daily Catholic gospel, readings, and reflections. Caches Universalis readings and runs 24/7 behind a static landing page.",
