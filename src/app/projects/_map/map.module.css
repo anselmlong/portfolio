@@ -273,6 +273,17 @@
   stroke-width: 4px;
   pointer-events: none;
 }
+.label {
+  transition: opacity 0.2s;
+}
+.label[data-tucked] {
+  opacity: 0;
+}
+.node:hover .label[data-tucked],
+.node:focus-visible .label[data-tucked],
+.node[data-picked] .label[data-tucked] {
+  opacity: 1;
+}
 .node[data-status="shelved"] .label,
 .node[data-status="unsorted"] .label {
   fill: #857d7b;
@@ -592,19 +603,41 @@
 
 @media (max-width: 700px) {
   .top {
-    padding: 14px 16px 6px;
+    padding: 12px 16px 6px;
+    gap: 10px;
+  }
+  .title h1 {
+    font-size: 36px;
+    margin-top: 2px;
   }
   .title p {
     font-size: 13px;
+    line-height: 1.4;
+  }
+  .controls {
+    width: 100%;
+    flex-wrap: nowrap;
+  }
+  .seg button {
+    padding: 6px 9px;
+  }
+  .search {
+    flex: 1;
+    min-width: 0;
+    padding-inline: 10px;
   }
   .search input {
-    width: 110px;
+    width: 100%;
+  }
+  .hint {
+    display: none;
+  }
+  .title {
+    min-width: 0;
+    width: 100%;
   }
   .bottom {
     padding: 8px 16px 14px;
-  }
-  .hint {
-    left: 16px;
   }
   .label {
     font-size: 17px;

@@ -1,13 +1,6 @@
 import "~/styles/globals.css";
 
-import { ConditionalTopNav } from "./_components/ConditionalTopNav";
 import { type Metadata } from "next";
-import {
-  Geist,
-  Bricolage_Grotesque,
-  Source_Serif_4,
-  Playfair_Display,
-} from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { TRPCReactProvider } from "~/trpc/react";
 
@@ -35,41 +28,14 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", images: ["/og.png"] },
 };
 
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-geist-sans",
-});
-
-const bricolageGrotesque = Bricolage_Grotesque({
-  subsets: ["latin"],
-  variable: "--font-bg-sans",
-});
-
-const sourceSerif = Source_Serif_4({
-  subsets: ["latin"],
-  variable: "--font-serif",
-  display: "swap",
-  axes: ["opsz"],
-});
-
-const playfairDisplay = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
-});
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geist.variable} ${bricolageGrotesque.variable} ${sourceSerif.variable} ${playfairDisplay.variable}`}
-    >
-      <body className="bg-background text-foreground min-h-screen antialiased">
-        <ConditionalTopNav />
+    <html lang="en">
+      <body>
         <TRPCReactProvider>{children}</TRPCReactProvider>
         <Analytics />
       </body>

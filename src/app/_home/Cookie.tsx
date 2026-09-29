@@ -106,7 +106,6 @@ export function Cookie() {
       window.clearInterval(poll);
       removeEventListener("pagehide", bye);
     };
-     
   }, []);
 
   function bake(e: React.MouseEvent<HTMLButtonElement>) {

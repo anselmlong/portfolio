@@ -166,3 +166,9 @@
 @media (prefers-reduced-motion: reduce) {
   .root *, .root *::before, .root *::after { animation: none !important; transition: none !important; }
 }
+
+/* The live view count in a post's header. */
+.views { display: inline-flex; align-items: center; gap: 8px; animation: countIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.views i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+@keyframes countIn { from { opacity: 0; transform: translateY(4px) scale(0.96); } }
+@media (prefers-reduced-motion: reduce) { .views { animation: none; } }

@@ -57,7 +57,7 @@ export const projects: Project[] = [
     group: "agents",
     users: "just me",
     blurb:
-      "My personal agent on Telegram, running on Hermes Agent on my VPS, with GitHub and Vercel access. A lot of what I build starts as a message to her.",
+      "My personal agent on Telegram, running on Hermes Agent on my VPS, with GitHub and Vercel access. A lot of what I build starts as a message to it.",
   },
   {
     id: "computah",
@@ -364,6 +364,17 @@ export const projects: Project[] = [
     blurb: "My first software engineering project, for CS2103T.",
   },
 
+  {
+    id: "massgowhere",
+    name: "MassGoWhere",
+    repo: "massgowhere",
+    status: "live",
+    group: "tools",
+    url: "https://massgowhere.com",
+    blurb:
+      "The Mass in Singapore you can still make: 32 parishes' times, live bus and MRT routes, and when to leave. Also @massgowherebot on Telegram.",
+  },
+
   // my sites
   {
     id: "portfolio",
@@ -458,6 +469,7 @@ export const links: [string, string, string][] = [
   ["aircon", "gospel", "both on bot.anselmlong.com"],
   ["aircon", "laundry", "hall life"],
   ["gospel", "prayer", "faith bots"],
+  ["massgowhere", "gospel", "for catholics in singapore"],
   ["routes", "67bot", "telegram bots"],
   ["routes", "betaview", "climbing"],
   ["canvas", "cheatsheets", "surviving modules"],
