@@ -258,11 +258,15 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(241, 239, 232, 0.72);
+  /* Keeps the labels legible over bright footage and live sites. */
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
   pointer-events: none;
 }
 .tl {
   top: 16px;
   left: 18px;
+  /* Long labels (live site URLs) wrap instead of running into "shot by me". */
+  max-width: calc(100% - 150px);
 }
 .tr {
   top: 16px;

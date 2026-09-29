@@ -21,7 +21,7 @@ export default function NotFound() {
           That page doesn&apos;t exist, or it moved. Try the chat, or the
           writing.
         </p>
-        <p>
+        <p className={styles.lostLinks}>
           <Link className={styles.go} href="/">
             Back to the chat →
           </Link>{" "}
