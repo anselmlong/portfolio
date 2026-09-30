@@ -166,7 +166,10 @@ export function startScroll(p: ScrollParts): () => void {
     if (fc) fc.style.opacity = String(1 - ee);
     // The outline would scale up with the photo; let it go as the photo takes over.
     focus.style.setProperty("--zoom", ee.toFixed(3));
-    caption.style.opacity = String(clamp((k - 0.8) / 0.15));
+    const shown = clamp((k - 0.8) / 0.15);
+    caption.style.opacity = String(shown);
+    // The link only takes clicks once you can actually see it.
+    caption.dataset.live = String(shown > 0.5);
   }
 
   const parts: [HTMLElement, (k: number) => void][] = [

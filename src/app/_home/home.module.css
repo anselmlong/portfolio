@@ -1054,6 +1054,13 @@
   pointer-events: none;
   opacity: 0;
 }
+/* Tabbing to the link brings the caption up with it, even before the zoom does. */
+.overlayCap:focus-within {
+  opacity: 1 !important;
+}
+.overlayCap:not([data-live="true"]):not(:focus-within) a {
+  pointer-events: none;
+}
 .overlayCap b {
   font: 900 clamp(32px, 5vw, 68px)/0.9 var(--display);
   text-transform: uppercase;
@@ -1304,6 +1311,9 @@
   position: static;
   margin-top: 36px;
   opacity: 1 !important;
+}
+.root[data-flat="true"] .overlayCap a {
+  pointer-events: auto;
 }
 .root[data-flat="true"] .overlayCap b {
   font-size: 40px;
