@@ -27,13 +27,20 @@ export default function BlogIndex({
   const bar = useRef<HTMLDivElement>(null);
   const strip = useRef<HTMLDivElement>(null);
   const filtered = useRef(false);
+  const arrived = useRef(false);
   const [cover, setCover] = useState<string | null>(null);
 
-  const tags = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const p of posts) for (const t of p.tags ?? []) counts.set(t.toLowerCase(), (counts.get(t.toLowerCase()) ?? 0) + 1);
-    return [...counts].sort((a, b) => b[1] - a[1]).slice(0, 9);
+  const counts = useMemo(() => {
+    const c = new Map<string, number>();
+    for (const p of posts) for (const t of p.tags ?? []) c.set(t.toLowerCase(), (c.get(t.toLowerCase()) ?? 0) + 1);
+    return c;
   }, [posts]);
+  // The nine biggest topics, plus the chosen one if it's smaller, so it always shows as pressed.
+  const tags = useMemo(() => {
+    const top = [...counts].sort((a, b) => b[1] - a[1]).slice(0, 9);
+    const extra = counts.get(active);
+    return extra && !top.some(([t]) => t === active) ? [...top, [active, extra] as const] : top;
+  }, [counts, active]);
 
   const shown = posts.filter((p) => {
     const inTag = active === "all" || (p.tags ?? []).some((t) => t.toLowerCase() === active);
@@ -56,22 +63,37 @@ export default function BlogIndex({
     return () => removeEventListener("resize", edges);
   }, []);
 
-  // When the filter changes from deep in the list, start the results just under the bar,
-  // and keep the chosen topic in view on the strip.
+  // A topic in the address (?topic=…, where the tags on each post point) opens the list filtered.
+  useEffect(() => {
+    const t = new URLSearchParams(location.search).get("topic")?.toLowerCase();
+    if (!t || !counts.has(t)) return;
+    arrived.current = true;
+    setActive(t);
+  }, [counts]);
+
+  // When the filter changes from deep in the list, or you arrive on a topic, start the results
+  // just under the bar, keep the chosen topic in view on the strip, and keep the address shareable.
   useEffect(() => {
     if (!filtered.current) {
       filtered.current = true;
       return;
     }
+    const url = new URL(location.href);
+    if (active === "all") url.searchParams.delete("topic");
+    else url.searchParams.set("topic", active);
+    if (url.href !== location.href) history.replaceState(null, "", url);
+
     const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
     const top = (list.current?.getBoundingClientRect().top ?? 0) - (bar.current?.offsetHeight ?? 0);
-    if (top < 0) scrollTo({ top: scrollY + top, behavior: smooth ? "smooth" : "auto" });
+    if (top < 0 || arrived.current) scrollTo({ top: scrollY + top, behavior: smooth ? "smooth" : "auto" });
+    arrived.current = false;
     const el = strip.current;
     const chip = el?.querySelector<HTMLElement>('[aria-pressed="true"]');
     if (el && chip && el.scrollWidth > el.clientWidth) {
       const left = chip.offsetLeft - (el.clientWidth - chip.offsetWidth) / 2;
       el.scrollTo({ left, behavior: smooth ? "smooth" : "auto" });
     }
+    edges(); // a small topic's chip may have just come or gone
   }, [active, term]);
 
   useEffect(() => {

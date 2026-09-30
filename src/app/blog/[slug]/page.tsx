@@ -100,9 +100,14 @@ export default async function BlogPostPage({
               initialViewCount={post.viewCount}
             />
             {(post.tags ?? []).map((t) => (
-              <span key={t} className={styles.hash}>
+              <Link
+                key={t}
+                className={styles.hash}
+                href={`/blog?topic=${encodeURIComponent(t.toLowerCase())}`}
+                aria-label={`More posts on ${t}`}
+              >
                 {t}
-              </span>
+              </Link>
             ))}
           </div>
         </header>

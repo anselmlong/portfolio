@@ -94,7 +94,6 @@
 .tg { grid-column: 1; display: flex; flex-wrap: wrap; gap: 4px 10px; }
 .tg span { font: 500 11px var(--mono); color: var(--dim); }
 .tg span::before { content: "#"; color: var(--accent); }
-.empty { padding: 40px 0; color: var(--dim); }
 .peek { position: fixed; left: 0; top: 0; width: 300px; aspect-ratio: 16/10; border-radius: 12px; overflow: hidden; pointer-events: none; z-index: 20; opacity: 0; transition: opacity 0.2s; box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.9); background: var(--panel); }
 .peekOn { opacity: 1; }
 @media (pointer: coarse) { .peek { display: none; } }
@@ -125,6 +124,9 @@
 .dek { margin: 0; font: italic 400 clamp(20px, 2.3vw, 26px)/1.4 var(--read); color: #d7d5ce; max-width: 46ch; }
 .metaRow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; }
 .hash::before { content: "#"; color: var(--accent); }
+a.hash { text-decoration: none; transition: color 0.2s; }
+a.hash:hover { color: var(--accent); }
+@media (pointer: coarse) { a.hash { padding-block: 8px; } }
 .cover { position: relative; aspect-ratio: 21/9; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); }
 .cover img { will-change: transform; }
 .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: clamp(24px, 5vw, 80px); margin-top: 48px; }
