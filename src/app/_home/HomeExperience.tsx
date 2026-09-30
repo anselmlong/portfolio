@@ -31,6 +31,9 @@ import styles from "./home.module.css";
 
 export type PostTeaser = { slug: string; title: string; date: string };
 
+// Server and browser trig can differ in the last digit, which breaks hydration.
+const fix = (n: number) => Math.round(n * 100) / 100;
+
 const month = (d: string) =>
   new Date(`${d}T00:00:00`).toLocaleDateString("en-SG", {
     month: "short",
@@ -46,14 +49,14 @@ export default function HomeExperience({
   totalPosts: number;
   github?: GithubActivity | null;
 }) {
-  const root = useRef<HTMLDivElement>(null);
+  const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
   const hero = useRef<HeroHandle | null>(null);
   const reticle = useRef<HTMLDivElement>(null);
   const reticleLabel = useRef<HTMLElement>(null);
-  const shy = useRef<HTMLDivElement>(null);
+  const shy = useRef<HTMLHeadingElement>(null);
   const work = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
   const ghost = useRef<HTMLDivElement>(null);
@@ -216,7 +219,7 @@ export default function HomeExperience({
   };
 
   return (
-    <div
+    <main
       ref={root}
       className={styles.root}
       data-chatting={chatting || undefined}
@@ -361,10 +364,10 @@ export default function HomeExperience({
                   return (
                     <line
                       key={i}
-                      x1={Math.sin(a) * 210}
-                      y1={-Math.cos(a) * 210}
-                      x2={Math.sin(a) * r2}
-                      y2={-Math.cos(a) * r2}
+                      x1={fix(Math.sin(a) * 210)}
+                      y1={fix(-Math.cos(a) * 210)}
+                      x2={fix(Math.sin(a) * r2)}
+                      y2={fix(-Math.cos(a) * r2)}
                       stroke={long ? "#f1efe8" : "#4a4e59"}
                       strokeWidth={long ? 2 : 1}
                       data-r2={r2}
@@ -376,8 +379,8 @@ export default function HomeExperience({
                   return (
                     <text
                       key={r.ring}
-                      x={Math.sin(a) * 162}
-                      y={-Math.cos(a) * 162 + 4}
+                      x={fix(Math.sin(a) * 162)}
+                      y={fix(-Math.cos(a) * 162 + 4)}
                       textAnchor="middle"
                       className={i === role ? styles.ringOn : ""}
                     >
@@ -715,11 +718,13 @@ export default function HomeExperience({
       <div className={styles.wrap}>
         <section id="say-hi" className={styles.outro} aria-label="Say hi">
           <Slate n={5} />
-          <div ref={shy} className={styles.hi} aria-label="Say hi">
+          <h2 ref={shy} className={styles.hi} aria-label="Say hi">
             {"SAY HI".split("").map((c, i) => (
-              <span key={i}>{c === " " ? " " : c}</span>
+              <span key={i} aria-hidden="true">
+                {c === " " ? " " : c}
+              </span>
             ))}
-          </div>
+          </h2>
           <CopyEmail />
           <Cookie />
           <button
@@ -748,6 +753,6 @@ export default function HomeExperience({
           hidden
         />
       ))}
-    </div>
+    </main>
   );
 }

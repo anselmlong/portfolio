@@ -32,6 +32,7 @@
 .nav .resume { border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 2px 11px; font: 600 12px/1.6 var(--mono); letter-spacing: 0.04em; }
 .nav .resume:hover { background: var(--accent); color: var(--accent-ink); }
 .nav a[aria-current] { color: var(--paper); box-shadow: 0 2px 0 var(--accent); }
+@media (pointer: coarse) { .nav a:not(.resume) { padding-block: 10px; margin-block: -10px; } .nav a[aria-current] { box-shadow: none; text-decoration: underline 2px var(--accent); text-underline-offset: 7px; } }
 
 /* index */
 .mast { padding-block: clamp(40px, 8vw, 110px) 28px; display: grid; gap: 14px; }
@@ -57,6 +58,7 @@
 .tag small { color: var(--dim); margin-left: 4px; }
 .tag[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .tag[aria-pressed="true"] small { color: inherit; opacity: 0.85; }
+@media (pointer: coarse) { .tag { padding-block: 9px; } }
 .count { margin-left: auto; }
 .year { display: grid; grid-template-columns: minmax(0, 180px) minmax(0, 1fr); gap: clamp(12px, 3vw, 40px); padding-top: 34px; }
 @media (max-width: 720px) { .year { grid-template-columns: 1fr; } }
@@ -66,7 +68,7 @@
 .row b { font: 700 clamp(17px, 1.7vw, 22px)/1.25 var(--body); letter-spacing: -0.005em; transition: color 0.2s, transform 0.35s cubic-bezier(0.2, 1.2, 0.3, 1); }
 .row:hover b { color: var(--accent); transform: translateX(8px); }
 .ex { grid-column: 1; color: var(--dim); font-size: 15px; max-width: 70ch; }
-.meta { grid-column: 2; grid-row: 1 / 3; display: grid; justify-items: end; align-content: start; gap: 4px; text-align: right; }
+.meta { font-variant-numeric: tabular-nums; grid-column: 2; grid-row: 1 / 3; display: grid; justify-items: end; align-content: start; gap: 4px; text-align: right; }
 .tg { grid-column: 1; display: flex; flex-wrap: wrap; gap: 4px 10px; }
 .tg span { font: 500 11px var(--mono); color: var(--dim); }
 .tg span::before { content: "#"; color: var(--accent); }
@@ -75,6 +77,22 @@
 .peekOn { opacity: 1; }
 @media (pointer: coarse) { .peek { display: none; } }
 .foot { padding-block: 80px 20px; }
+/* 404: the lens hunts for something to focus on, locks, and the dot blinks twice to confirm. */
+.lost { animation: hunt 1.5s linear both; }
+.lost .dot { animation: lock 0.5s 1.35s steps(1) 2; }
+@keyframes hunt {
+  0% { filter: blur(16px); opacity: 0.4; transform: scale(1.04); }
+  38% { filter: blur(0); opacity: 1; transform: none; }
+  55% { filter: blur(5px); }
+  78% { filter: blur(0); }
+  88% { filter: blur(1.5px); }
+  100% { filter: blur(0); }
+}
+@keyframes lock { 50% { opacity: 0.15; } }
+.lostLinks { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-top: 12px !important; }
+.lostLinks .go { margin-top: 0; }
+.lostLinks .mono { padding-block: 12px; text-decoration: none; }
+.lostLinks .mono:hover { color: var(--accent); }
 
 /* post */
 .progress { position: fixed; left: 0; right: 0; top: 0; height: 3px; z-index: 30; background: var(--accent); transform-origin: left; transform: scaleX(0); }
@@ -102,11 +120,15 @@
 .article h2, .article h3, .article h4 { font-family: var(--display); text-transform: uppercase; line-height: 0.95; color: var(--paper); scroll-margin-top: 24px; margin: 2.1em 0 0.6em; text-wrap: balance; }
 .article h2 { font-size: clamp(28px, 3vw, 38px); font-weight: 900; }
 .article h3 { font-size: clamp(22px, 2.3vw, 28px); font-weight: 800; }
-.article h4 { font-size: 24px; font-weight: 800; }
+.article h4 { font-size: clamp(19px, 1.8vw, 22px); font-weight: 800; }
 .article a { color: var(--paper); text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 3px; }
 .article a:hover { color: var(--accent); }
 .article strong { color: var(--paper); }
 .article ul, .article ol { padding-left: 1.2em; margin: 0 0 1.2em; }
+/* Preflight strips list markers; posts need them back. */
+.article ul { list-style: disc; }
+.article ol { list-style: decimal; }
+.article li > ul { list-style: circle; margin-bottom: 0; }
 .article li { margin: 0.25em 0; }
 .article li::marker { color: var(--accent); }
 .article blockquote { margin: 1.6em 0; padding: 0.2em 0 0.2em 1.1em; border-left: 3px solid var(--accent); font-style: italic; color: #d7d5ce; }
@@ -115,6 +137,10 @@
 .article pre code { display: block; background: none; border: 0; padding: 18px; font: 400 14px/1.6 var(--mono); color: #dcdad2; white-space: pre; }
 .copy { position: absolute; top: 8px; right: 8px; border: 1px solid var(--line); background: #1b1716; border-radius: 8px; padding: 3px 9px; font: 600 10px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim); cursor: pointer; opacity: 0; transition: opacity 0.2s; }
 .article pre:hover .copy, .copy:focus-visible { opacity: 1; }
+.copy[data-state="copied"] { opacity: 1; color: var(--accent-ink); background: var(--accent); border-color: var(--accent); animation: copied 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes copied { from { transform: scale(0.9); } }
+/* No hover on touch screens, so the copy button just stays visible. */
+@media (hover: none) { .copy { opacity: 1; } }
 .article img { display: block; max-width: 100%; height: auto; margin: 1.6em auto 0.5em; border-radius: 12px; border: 1px solid var(--line); cursor: zoom-in; }
 .article video { display: block; width: 100%; max-width: 100%; height: auto; margin: 1.6em auto 0.5em; border-radius: 12px; border: 1px solid var(--line); background: #000; }
 .article figure { margin: 1.6em 0; }
