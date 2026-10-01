@@ -159,13 +159,16 @@ export function startScroll(p: ScrollParts): () => void {
     s.style.transformOrigin = `${r.left + r.width / 2 - b.left}px ${r.top + r.height / 2 - b.top}px`;
     const dx = (innerWidth / 2 - (r.left + r.width / 2)) * ee;
     const dy = (vh() / 2 - (r.top + r.height / 2)) * ee;
-    s.style.transform = `translate(${dx}px,${dy}px) scale(${1 + (target - 1) * ee})`;
+    const scale = 1 + (target - 1) * ee;
+    s.style.transform = `translate(${dx}px,${dy}px) scale(${scale})`;
     for (const f of s.children as HTMLCollectionOf<HTMLElement>)
       if (f !== focus) f.style.opacity = String(1 - ee);
     const fc = focus.querySelector<HTMLElement>("figcaption");
     if (fc) fc.style.opacity = String(1 - ee);
     // The outline would scale up with the photo; let it go as the photo takes over.
     focus.style.setProperty("--zoom", ee.toFixed(3));
+    // Counter the zoom so the frame and corners stay the size they are on the sheet.
+    focus.style.setProperty("--scale", scale.toFixed(3));
     const shown = clamp((k - 0.8) / 0.15);
     caption.style.opacity = String(shown);
     // The link only takes clicks once you can actually see it.

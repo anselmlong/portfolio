@@ -1039,8 +1039,11 @@
   text-transform: uppercase;
 }
 .focusShot img {
-  outline: 2px solid rgb(255 111 85 / calc(1 - var(--zoom, 0)));
-  outline-offset: 3px;
+  /* Divided by the zoom, so a 2px hairline and 6px corners at any size. */
+  outline: calc(2px / var(--scale, 1)) solid
+    rgb(255 111 85 / calc(1 - var(--zoom, 0)));
+  outline-offset: calc(3px / var(--scale, 1));
+  border-radius: calc(6px / var(--scale, 1));
 }
 .overlayCap {
   position: absolute;
