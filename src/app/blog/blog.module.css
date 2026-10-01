@@ -118,7 +118,6 @@
 .tocPhone { display: none; }
 @media (max-width: 980px) {
   .tocPhone { display: block; position: sticky; top: 0; z-index: 6; margin: 0 -16px 28px; background: color-mix(in srgb, var(--night) 90%, transparent); backdrop-filter: blur(10px); border-block: 1px solid var(--line); }
-  .article h2, .article h3, .article h4 { scroll-margin-top: 72px; }
 }
 .tocPhone summary { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 8px 16px; cursor: pointer; list-style: none; }
 .tocPhone summary::-webkit-details-marker { display: none; }
@@ -127,13 +126,17 @@
 .tocPhone summary::after { content: ""; flex: none; width: 7px; height: 7px; margin-right: 4px; border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: translateY(-2px) rotate(45deg); transition: transform 0.25s; }
 .tocPhone[open] summary::after { transform: translateY(2px) rotate(-135deg); }
 .tocPhone summary:focus-visible { outline-offset: -4px; }
-.tocList { display: grid; gap: 0; padding: 0 16px 12px; max-height: min(60vh, 420px); overflow-y: auto; overscroll-behavior: contain; }
+/* The list drops over the article rather than pushing it down, so the text you were reading stays put (iOS Safari has no scroll anchoring to hide a shove). */
+.tocList { position: absolute; top: calc(100% + 1px); left: 0; right: 0; display: grid; gap: 0; padding: 0 16px 12px; max-height: min(60vh, 420px); overflow-y: auto; overscroll-behavior: contain; background: var(--night); border-bottom: 1px solid var(--line); box-shadow: 0 24px 40px -24px rgba(0, 0, 0, 0.9); transform-origin: top; animation: tocDrop 0.22s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes tocDrop { from { opacity: 0; transform: translateY(-6px) scaleY(0.96); } }
 .tocList a { padding: 9px 0; font-size: 15px; }
 .tocList a.sub { font-size: 14px; }
 
 .article { max-width: 70ch; font: 400 20px/1.72 var(--read); color: #e6e3da; }
 .article p { margin: 0 0 1.15em; }
 .article h2, .article h3, .article h4 { font-family: var(--display); text-transform: uppercase; line-height: 0.95; color: var(--paper); scroll-margin-top: 24px; margin: 2.1em 0 0.6em; text-wrap: balance; }
+/* Clear the sticky contents strip on phones after a jump. */
+@media (max-width: 980px) { .article h2, .article h3, .article h4 { scroll-margin-top: 72px; } }
 .article h2 { font-size: clamp(28px, 3vw, 38px); font-weight: 900; }
 .article h3 { font-size: clamp(22px, 2.3vw, 28px); font-weight: 800; }
 .article h4 { font-size: clamp(19px, 1.8vw, 22px); font-weight: 800; }
