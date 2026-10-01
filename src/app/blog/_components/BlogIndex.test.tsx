@@ -56,3 +56,21 @@ describe("BlogIndex topics", () => {
     expect(location.search).toBe("");
   });
 });
+
+describe("BlogIndex rows", () => {
+  it("marks where the search term appears", () => {
+    const { container } = render(
+      <BlogIndex posts={[{ ...post("x", []), title: "Fine-tuning on my texts", excerpt: "More tuning." }]} featured={null} />,
+    );
+    fireEvent.change(screen.getByRole("searchbox"), { target: { value: " TUN " } });
+    expect([...container.querySelectorAll("mark")].map((m) => m.textContent)).toEqual(["tun", "tun"]);
+  });
+
+  it("leads with the chosen topic, even one past the first four", () => {
+    history.replaceState(null, "", "/blog?topic=e");
+    const { container } = render(<BlogIndex posts={[post("x", ["a", "b", "c", "d", "E"])]} featured={null} />);
+    const on = container.querySelector("[data-on]");
+    expect(on?.textContent).toBe("E");
+    expect(on?.parentElement?.firstElementChild).toBe(on);
+  });
+});

@@ -94,6 +94,9 @@
 .tg { grid-column: 1; display: flex; flex-wrap: wrap; gap: 4px 10px; }
 .tg span { font: 500 11px var(--mono); color: var(--dim); }
 .tg span::before { content: "#"; color: var(--accent); }
+.tg span[data-on] { color: var(--paper); }
+/* Search matches: an underline in the accent, so titles keep their own colour and weight. */
+.hit { background: none; color: inherit; text-decoration: underline 2px var(--accent); text-underline-offset: 3px; text-decoration-skip-ink: none; }
 .peek { position: fixed; left: 0; top: 0; width: 300px; aspect-ratio: 16/10; border-radius: 12px; overflow: hidden; pointer-events: none; z-index: 20; opacity: 0; transition: opacity 0.2s; box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.9); background: var(--panel); }
 .peekOn { opacity: 1; }
 @media (pointer: coarse) { .peek { display: none; } }

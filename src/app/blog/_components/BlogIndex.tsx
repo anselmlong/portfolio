@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import type { BlogPostMetadata } from "~/lib/blog";
 import styles from "../blog.module.css";
 
@@ -11,6 +11,21 @@ const day = (d: string) =>
 const monthYear = (d: string) =>
   new Date(`${d}T00:00:00`).toLocaleDateString("en-SG", { month: "short", year: "numeric" }).toLowerCase();
 const minutes = (r: string) => r.replace(" read", "");
+
+/** Marks each place the search term appears, so a filtered row shows why it's there. */
+function marked(text: string, q: string) {
+  if (!q) return text;
+  const at = text.toLowerCase();
+  const out: ReactNode[] = [];
+  let from = 0;
+  for (let i = at.indexOf(q); i !== -1; i = at.indexOf(q, from)) {
+    if (i > from) out.push(text.slice(from, i));
+    out.push(<mark key={i} className={styles.hit}>{text.slice(i, i + q.length)}</mark>);
+    from = i + q.length;
+  }
+  out.push(text.slice(from));
+  return out;
+}
 
 export default function BlogIndex({
   posts,
@@ -42,9 +57,9 @@ export default function BlogIndex({
     return extra && !top.some(([t]) => t === active) ? [...top, [active, extra] as const] : top;
   }, [counts, active]);
 
+  const q = term.trim().toLowerCase();
   const shown = posts.filter((p) => {
     const inTag = active === "all" || (p.tags ?? []).some((t) => t.toLowerCase() === active);
-    const q = term.trim().toLowerCase();
     const inText = !q || `${p.title} ${p.excerpt} ${(p.tags ?? []).join(" ")}`.toLowerCase().includes(q);
     return inTag && inText;
   });
@@ -187,13 +202,23 @@ export default function BlogIndex({
             <div>
               {shown.filter((p) => p.date.startsWith(y)).map((p) => (
                 <Link key={p.slug} href={`/blog/${p.slug}`} className={styles.row} onPointerEnter={() => setCover(p.image ?? null)}>
-                  <b>{p.title}</b>
+                  <b>{marked(p.title, q)}</b>
                   <div className={styles.meta}>
                     <span className={styles.mono}>{day(p.date)}</span>
                     <span className={styles.mono}>{minutes(p.readingTime)}</span>
                   </div>
-                  {p.excerpt && <span className={styles.ex}>{p.excerpt}</span>}
-                  <span className={styles.tg}>{(p.tags ?? []).slice(0, 4).map((t) => <span key={t}>{t}</span>)}</span>
+                  {p.excerpt && <span className={styles.ex}>{marked(p.excerpt, q)}</span>}
+                  <span className={styles.tg}>
+                    {/* The chosen topic leads and lights up, even when it's past the first four. */}
+                    {[...(p.tags ?? [])]
+                      .sort((a, b) => Number(b.toLowerCase() === active) - Number(a.toLowerCase() === active))
+                      .slice(0, 4)
+                      .map((t) => (
+                        <span key={t} data-on={t.toLowerCase() === active || undefined}>
+                          {marked(t, q)}
+                        </span>
+                      ))}
+                  </span>
                 </Link>
               ))}
             </div>
