@@ -100,6 +100,16 @@
   background: var(--paper);
   color: var(--night);
 }
+@media (hover: hover) {
+  .seg button:not([aria-pressed="true"]):hover,
+  .hint button:hover {
+    color: var(--paper);
+  }
+  .hint button:hover,
+  .legend button:hover {
+    border-color: #4a4140;
+  }
+}
 .search {
   display: flex;
   align-items: center;
@@ -320,6 +330,9 @@
   padding: 4px 10px;
   font: inherit;
   color: var(--dim);
+  transition:
+    color 0.2s,
+    border-color 0.2s;
 }
 
 /* Footer: legend and the timeline */
@@ -351,7 +364,9 @@
   font: 500 11px/1 var(--mono);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  transition: opacity 0.2s;
+  transition:
+    opacity 0.2s,
+    border-color 0.2s;
 }
 .legend button[aria-pressed="false"] {
   opacity: 0.4;

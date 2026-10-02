@@ -145,7 +145,11 @@ export default async function BlogPostPage({
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
             {next && next.slug !== post.slug && (
-              <Link className={styles.next} href={`/blog/${next.slug}`}>
+              <Link
+                className={styles.next}
+                href={`/blog/${next.slug}`}
+                data-next
+              >
                 <div>
                   <span className={styles.mono}>next up</span>
                   <b>{next.title}</b>

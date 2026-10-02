@@ -238,8 +238,6 @@ export default function HomeExperience({
         <em ref={reticleLabel} />
       </div>
 
-      <SceneRail />
-
       <div className={`${styles.wrap} ${styles.heroWrap}`}>
         <header className={styles.top}>
           <Link href="/" className={styles.wordmark}>
@@ -331,6 +329,9 @@ export default function HomeExperience({
           </div>
         </section>
       </div>
+
+      {/* After the hero in tab order, so keyboard users meet the site nav first. */}
+      <SceneRail />
 
       <div className={styles.wrap}>
         <AboutCover />
@@ -728,7 +729,7 @@ export default function HomeExperience({
             onClick={toChat}
             data-label="ASK"
           >
-            or keep asking the chat, it&apos;s still up there ↑
+            or keep asking the chat, it&apos;s still up there&nbsp;↑
           </button>
         </section>
       </div>
