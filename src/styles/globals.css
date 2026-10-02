@@ -1,7 +1,8 @@
 @import "tailwindcss/preflight.css" layer(base);
 
 /* Every page draws its own design (see the CSS modules next to each route);
-   this file only sets the page backdrop, scrollbars and view transitions. */
+   this file only sets the page backdrop, selection, caret, scrollbars and
+   view transitions. */
 :root {
   color-scheme: dark;
   --scrollbar-thumb: rgba(241, 239, 232, 0.28);
@@ -23,6 +24,10 @@ body {
 ::selection {
   background: #ff6f55;
   color: #120b0a;
+}
+input,
+textarea {
+  caret-color: #ff6f55;
 }
 ::-webkit-scrollbar {
   width: 6px;

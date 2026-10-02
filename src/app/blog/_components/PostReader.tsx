@@ -26,8 +26,9 @@ const onScreen = (el: Element) => {
 
 /**
  * Reading aids for a post: a progress bar, the current section lit in the
- * contents rail (and named in the phone strip), copy buttons on code, and images that grow out of the page
- * into a full-screen view (by click, Enter or Space) and settle back on close.
+ * contents rail (and named in the phone strip), the next post racking into focus when you finish, copy
+ * buttons on code, and images that grow out of the page into a full-screen view (by click, Enter or Space)
+ * and settle back on close.
  */
 export function PostReader() {
   const bar = useRef<HTMLDivElement>(null);
@@ -49,11 +50,14 @@ export function PostReader() {
     const phone = document.querySelector<HTMLDetailsElement>("[data-toc-phone]");
     const now = phone?.querySelector("[data-toc-now]");
     const cover = document.querySelector<HTMLElement>("[data-cover]");
+    const next = document.querySelector<HTMLElement>("[data-next]");
 
     const onScroll = () => {
       const r = article.getBoundingClientRect();
       const k = Math.min(1, Math.max(0, -r.top / (r.height - innerHeight)));
       if (bar.current) bar.current.style.transform = `scaleX(${k})`;
+      // Reaching the end racks the next post into focus, once.
+      if (k > 0.98 && next && !next.hasAttribute("data-arrived")) next.setAttribute("data-arrived", "");
       let cur = 0;
       heads.forEach((h, i) => { if (h.getBoundingClientRect().top < innerHeight * 0.3) cur = i; });
       navs.forEach((links) => links.forEach((a, i) => {

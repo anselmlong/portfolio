@@ -1994,7 +1994,8 @@
   pointer-events: none;
   transition: opacity 0.4s;
 }
-.rail[data-on] {
+.rail[data-on],
+.rail:focus-within {
   opacity: 1;
   pointer-events: auto;
 }
