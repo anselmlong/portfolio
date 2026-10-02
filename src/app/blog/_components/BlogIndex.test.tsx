@@ -47,6 +47,19 @@ describe("BlogIndex topics", () => {
     expect(screen.getByText("10 of 10")).toBeInTheDocument();
   });
 
+  it("glides to the results on a fresh arrival, but keeps your place when you come back", () => {
+    history.replaceState(null, "", "/blog?topic=solo");
+    const first = index();
+    expect(scrollTo).toHaveBeenCalledTimes(1);
+    first.unmount();
+
+    // The entry is now marked as shown, as it is after the back button or a reload.
+    vi.mocked(scrollTo).mockClear();
+    index();
+    expect(chip(/^solo/)).toHaveAttribute("aria-pressed", "true");
+    expect(scrollTo).not.toHaveBeenCalled();
+  });
+
   it("keeps the address in step with the chosen topic", () => {
     history.replaceState(null, "", "/blog");
     index();

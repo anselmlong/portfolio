@@ -11,6 +11,8 @@ const day = (d: string) =>
 const monthYear = (d: string) =>
   new Date(`${d}T00:00:00`).toLocaleDateString("en-SG", { month: "short", year: "numeric" }).toLowerCase();
 const minutes = (r: string) => r.replace(" read", "");
+// Set on a history entry once its filtered list has been shown, so returning to it doesn't move you.
+const settled = () => (history.state as { blogSettled?: boolean } | null)?.blogSettled === true;
 
 /** Marks each place the search term appears, so a filtered row shows why it's there. */
 function marked(text: string, q: string) {
@@ -42,7 +44,7 @@ export default function BlogIndex({
   const bar = useRef<HTMLDivElement>(null);
   const strip = useRef<HTMLDivElement>(null);
   const filtered = useRef(false);
-  const arrived = useRef(false);
+  const arrival = useRef<"glide" | "stay" | null>(null);
   const [cover, setCover] = useState<string | null>(null);
 
   const counts = useMemo(() => {
@@ -82,7 +84,8 @@ export default function BlogIndex({
   useEffect(() => {
     const t = new URLSearchParams(location.search).get("topic")?.toLowerCase();
     if (!t || !counts.has(t)) return;
-    arrived.current = true;
+    // A fresh arrival glides to the results; coming back (back button, reload) keeps your place.
+    arrival.current = settled() ? "stay" : "glide";
     setActive(t);
   }, [counts]);
 
@@ -96,12 +99,14 @@ export default function BlogIndex({
     const url = new URL(location.href);
     if (active === "all") url.searchParams.delete("topic");
     else url.searchParams.set("topic", active);
-    if (url.href !== location.href) history.replaceState(null, "", url);
+    // Next copies its own router state in alongside ours.
+    if (url.href !== location.href || !settled()) history.replaceState({ blogSettled: true }, "", url);
 
     const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
     const top = (list.current?.getBoundingClientRect().top ?? 0) - (bar.current?.offsetHeight ?? 0);
-    if (top < 0 || arrived.current) scrollTo({ top: scrollY + top, behavior: smooth ? "smooth" : "auto" });
-    arrived.current = false;
+    if (arrival.current ? arrival.current === "glide" : top < 0)
+      scrollTo({ top: scrollY + top, behavior: smooth ? "smooth" : "auto" });
+    arrival.current = null;
     const el = strip.current;
     const chip = el?.querySelector<HTMLElement>('[aria-pressed="true"]');
     if (el && chip && el.scrollWidth > el.clientWidth) {
