@@ -100,6 +100,48 @@ describe("PostReader contents", () => {
     expect(document.querySelector("[data-toc-now]")).toHaveTextContent("Two");
   });
 
+  it("rolls the new section name in from the way you're reading, unless motion is reduced", () => {
+    vi.stubGlobal("matchMedia", () => ({ matches: false }));
+    const animate = vi.fn<Element["animate"]>();
+    Element.prototype.animate = animate;
+    const { unmount } = withContents();
+    // The first reading on load names the section without a flourish.
+    expect(animate).not.toHaveBeenCalled();
+    const [one, two] = [...document.querySelectorAll<HTMLElement>("article h2")];
+    const at = (top: number) => () => ({ top }) as DOMRect;
+
+    one!.getBoundingClientRect = at(0);
+    two!.getBoundingClientRect = at(2000);
+    fireEvent.scroll(window);
+    expect(document.querySelector("[data-toc-now]")).toHaveTextContent("One");
+    expect(animate).toHaveBeenLastCalledWith(
+      [{ opacity: 0, transform: "translateY(-0.6em)" }, { opacity: 1, transform: "none" }],
+      expect.objectContaining({ duration: 280 }),
+    );
+
+    two!.getBoundingClientRect = at(0);
+    fireEvent.scroll(window);
+    expect(document.querySelector("[data-toc-now]")).toHaveTextContent("Two");
+    expect((animate.mock.lastCall![0] as Keyframe[])[0]!.transform).toBe("translateY(0.6em)");
+    expect(animate).toHaveBeenCalledTimes(2);
+
+    // Scrolling within a section doesn't replay it.
+    fireEvent.scroll(window);
+    expect(animate).toHaveBeenCalledTimes(2);
+
+    // Under reduced motion the name just changes.
+    unmount();
+    vi.stubGlobal("matchMedia", () => ({ matches: true }));
+    withContents();
+    const [first, second] = [...document.querySelectorAll<HTMLElement>("article h2")];
+    first!.getBoundingClientRect = at(0);
+    second!.getBoundingClientRect = at(2000);
+    fireEvent.scroll(window);
+    expect(document.querySelector("[data-toc-now]")).toHaveTextContent("One");
+    expect(animate).toHaveBeenCalledTimes(2);
+    delete (Element.prototype as Partial<Element>).animate;
+  });
+
   it("opens the phone list scrolled to the current section", () => {
     withContents();
     const list = strip().querySelector<HTMLElement>("[data-toc]")!;

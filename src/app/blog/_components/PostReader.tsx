@@ -51,6 +51,7 @@ export function PostReader() {
     const now = phone?.querySelector("[data-toc-now]");
     const cover = document.querySelector<HTMLElement>("[data-cover]");
     const next = document.querySelector<HTMLElement>("[data-next]");
+    let shown = -1;
 
     const onScroll = () => {
       const r = article.getBoundingClientRect();
@@ -66,7 +67,15 @@ export function PostReader() {
         else a.removeAttribute("aria-current");
       }));
       const label = phone?.querySelectorAll("a")[cur]?.textContent;
-      if (now && label && now.textContent !== label) now.textContent = label;
+      if (now && label && now.textContent !== label) {
+        now.textContent = label;
+        // The new name rolls in from the way you're reading: up from below going on, down from above going back.
+        if (shown >= 0 && !still.current) {
+          const y = cur > shown ? "0.6em" : "-0.6em";
+          now.animate([{ opacity: 0, transform: `translateY(${y})` }, { opacity: 1, transform: "none" }], { duration: 280, easing: ease });
+        }
+      }
+      shown = cur;
       if (cover && !still.current) cover.style.transform = `translateY(${Math.min(120, scrollY * 0.18)}px) scale(1.08)`;
     };
     addEventListener("scroll", onScroll, { passive: true });
