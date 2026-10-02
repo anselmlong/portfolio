@@ -26,7 +26,7 @@ const onScreen = (el: Element) => {
 
 /**
  * Reading aids for a post: a progress bar, the current section lit in the
- * contents rail, copy buttons on code, and images that grow out of the page
+ * contents rail, the next post racking into focus when you finish, copy buttons on code, and images that grow out of the page
  * into a full-screen view (by click, Enter or Space) and settle back on close.
  */
 export function PostReader() {
@@ -46,11 +46,14 @@ export function PostReader() {
     const heads = [...article.querySelectorAll<HTMLElement>("h2[id],h3[id]")];
     const links = [...document.querySelectorAll<HTMLAnchorElement>("[data-toc] a")];
     const cover = document.querySelector<HTMLElement>("[data-cover]");
+    const next = document.querySelector<HTMLElement>("[data-next]");
 
     const onScroll = () => {
       const r = article.getBoundingClientRect();
       const k = Math.min(1, Math.max(0, -r.top / (r.height - innerHeight)));
       if (bar.current) bar.current.style.transform = `scaleX(${k})`;
+      // Reaching the end racks the next post into focus, once.
+      if (k > 0.98 && next && !next.hasAttribute("data-arrived")) next.setAttribute("data-arrived", "");
       let cur = 0;
       heads.forEach((h, i) => { if (h.getBoundingClientRect().top < innerHeight * 0.3) cur = i; });
       links.forEach((a, i) => a.toggleAttribute("data-on", i === cur));
