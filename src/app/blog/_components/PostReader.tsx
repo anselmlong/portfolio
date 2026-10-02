@@ -26,8 +26,9 @@ const onScreen = (el: Element) => {
 
 /**
  * Reading aids for a post: a progress bar, the current section lit in the
- * contents rail, the next post racking into focus when you finish, copy buttons on code, and images that grow out of the page
- * into a full-screen view (by click, Enter or Space) and settle back on close.
+ * contents rail (and named in the phone strip), the next post racking into focus when you finish, copy
+ * buttons on code, and images that grow out of the page into a full-screen view (by click, Enter or Space)
+ * and settle back on close.
  */
 export function PostReader() {
   const bar = useRef<HTMLDivElement>(null);
@@ -44,9 +45,13 @@ export function PostReader() {
     if (!article) return;
     still.current = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const heads = [...article.querySelectorAll<HTMLElement>("h2[id],h3[id]")];
-    const links = [...document.querySelectorAll<HTMLAnchorElement>("[data-toc] a")];
+    // The desktop rail and the phone strip each list the same headings, in order.
+    const navs = [...document.querySelectorAll("[data-toc]")].map((n) => [...n.querySelectorAll("a")]);
+    const phone = document.querySelector<HTMLDetailsElement>("[data-toc-phone]");
+    const now = phone?.querySelector("[data-toc-now]");
     const cover = document.querySelector<HTMLElement>("[data-cover]");
     const next = document.querySelector<HTMLElement>("[data-next]");
+    let shown = -1;
 
     const onScroll = () => {
       const r = article.getBoundingClientRect();
@@ -56,11 +61,47 @@ export function PostReader() {
       if (k > 0.98 && next && !next.hasAttribute("data-arrived")) next.setAttribute("data-arrived", "");
       let cur = 0;
       heads.forEach((h, i) => { if (h.getBoundingClientRect().top < innerHeight * 0.3) cur = i; });
-      links.forEach((a, i) => a.toggleAttribute("data-on", i === cur));
+      navs.forEach((links) => links.forEach((a, i) => {
+        a.toggleAttribute("data-on", i === cur);
+        if (i === cur) a.setAttribute("aria-current", "location");
+        else a.removeAttribute("aria-current");
+      }));
+      const label = phone?.querySelectorAll("a")[cur]?.textContent;
+      if (now && label && now.textContent !== label) {
+        now.textContent = label;
+        // The new name rolls in from the way you're reading: up from below going on, down from above going back.
+        if (shown >= 0 && !still.current) {
+          const y = cur > shown ? "0.6em" : "-0.6em";
+          now.animate([{ opacity: 0, transform: `translateY(${y})` }, { opacity: 1, transform: "none" }], { duration: 280, easing: ease });
+        }
+      }
+      shown = cur;
       if (cover && !still.current) cover.style.transform = `translateY(${Math.min(120, scrollY * 0.18)}px) scale(1.08)`;
     };
     addEventListener("scroll", onScroll, { passive: true });
     onScroll();
+
+    // The phone contents fold away after a jump, on Escape, or on a tap elsewhere.
+    const fold = () => { if (phone) phone.open = false; };
+    const onPick = (e: MouseEvent) => { if ((e.target as Element).closest("a")) fold(); };
+    const onEsc = (e: KeyboardEvent) => {
+      if (e.key !== "Escape" || !phone?.open) return;
+      fold();
+      phone.querySelector("summary")?.focus();
+    };
+    const onAway = (e: PointerEvent) => { if (phone?.open && !phone.contains(e.target as Node)) fold(); };
+    // A long list opens at the section you're reading, not back at the top.
+    const onOpen = () => {
+      const list = phone?.querySelector<HTMLElement>("[data-toc]");
+      const on = list?.querySelector<HTMLElement>("a[data-on]");
+      if (!phone?.open || !list || !on) return;
+      const l = list.getBoundingClientRect(), a = on.getBoundingClientRect();
+      list.scrollTop += a.top - l.top - (l.height - a.height) / 2;
+    };
+    phone?.addEventListener("click", onPick);
+    phone?.addEventListener("keydown", onEsc);
+    phone?.addEventListener("toggle", onOpen);
+    document.addEventListener("pointerdown", onAway);
 
     const buttons = [...article.querySelectorAll("pre")].map((pre) => {
       const b = document.createElement("button");
@@ -109,6 +150,10 @@ export function PostReader() {
 
     return () => {
       removeEventListener("scroll", onScroll);
+      phone?.removeEventListener("click", onPick);
+      phone?.removeEventListener("keydown", onEsc);
+      phone?.removeEventListener("toggle", onOpen);
+      document.removeEventListener("pointerdown", onAway);
       article.removeEventListener("click", onClick);
       article.removeEventListener("keydown", onKey);
       buttons.forEach((b) => b.remove());
