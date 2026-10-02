@@ -706,8 +706,10 @@ export function ProjectMap({
           </g>
         </svg>
 
-        <p className={styles.hint} aria-hidden="true">
-          drag anything · scroll or pinch to zoom · click a project
+        <p className={styles.hint}>
+          <span aria-hidden="true">
+            drag anything · scroll or pinch to zoom · click a project
+          </span>
           <button type="button" onClick={fit}>
             reset view
           </button>

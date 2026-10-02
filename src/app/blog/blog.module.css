@@ -91,6 +91,8 @@
 @keyframes lock { 50% { opacity: 0.15; } }
 .lostLinks { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-top: 12px !important; }
 .lostLinks .go { margin-top: 0; }
+/* .root a inherits paper; the chilli pill keeps its dark ink. */
+.root a.go { color: var(--accent-ink); }
 .lostLinks .mono { padding-block: 12px; text-decoration: none; }
 .lostLinks .mono:hover { color: var(--accent); }
 

@@ -168,11 +168,16 @@ const escapeHtml = (s: string) =>
   s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
 
 /**
- * Posts use "#" for their own sections, so every heading drops one level under
- * the page title and gets an id the contents rail can link to. Fenced code with
+ * Posts open their sections with "#" or "##", so headings shift until the
+ * shallowest one sits at h2 under the page title, and each gets an id the
+ * contents rail can link to. Fenced code with
  * a known language is highlighted on the server.
  */
 export async function renderPostMarkdown(markdown: string): Promise<string> {
+  const depths = new Marked()
+    .lexer(markdown)
+    .flatMap((t) => (t.type === "heading" ? [t.depth as number] : []));
+  const shift = 2 - (depths.length ? Math.min(...depths) : 1);
   const used = new Map<string, number>();
   const idFor = (text: string) => {
     const base =
@@ -190,7 +195,7 @@ export async function renderPostMarkdown(markdown: string): Promise<string> {
     renderer: {
       heading({ tokens, depth }) {
         const html = this.parser.parseInline(tokens);
-        const level = Math.min(6, depth + 1);
+        const level = Math.min(6, depth + shift);
         return `<h${level} id="${idFor(html)}">${html}</h${level}>\n`;
       },
       code({ text, lang }) {
