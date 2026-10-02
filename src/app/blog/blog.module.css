@@ -117,8 +117,10 @@
 .toc a[data-on] i { background: var(--accent); transform: none; }
 .toc a.sub { padding-left: 14px; font-size: 13px; }
 
-.article { max-width: 70ch; font: 400 20px/1.72 var(--read); color: #e6e3da; }
+.article { max-width: 70ch; font: 400 clamp(18px, 14px + 1.1vw, 20px)/1.72 var(--read); color: #e6e3da; }
 .article p { margin: 0 0 1.15em; }
+/* The layout already spaces the article from the cover; an opening heading adds no more. */
+.article > :first-child { margin-top: 0; }
 .article h2, .article h3, .article h4 { font-family: var(--display); text-transform: uppercase; line-height: 0.95; color: var(--paper); scroll-margin-top: 24px; margin: 2.1em 0 0.6em; text-wrap: balance; }
 .article h2 { font-size: clamp(28px, 3vw, 38px); font-weight: 900; }
 .article h3 { font-size: clamp(22px, 2.3vw, 28px); font-weight: 800; }

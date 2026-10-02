@@ -729,7 +729,7 @@ export default function HomeExperience({
             onClick={toChat}
             data-label="ASK"
           >
-            or keep asking the chat, it&apos;s still up there ↑
+            or keep asking the chat, it&apos;s still up there&nbsp;↑
           </button>
         </section>
       </div>
