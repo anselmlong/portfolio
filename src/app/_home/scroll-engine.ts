@@ -151,9 +151,13 @@ export function startScroll(p: ScrollParts): () => void {
     clearTimeout(settle);
     settle = window.setTimeout(() => (s.style.willChange = "auto"), 160);
     s.style.transform = "none";
-    const r = focus.getBoundingClientRect(),
+    // Aim at the photo, not its figure: the label below would pull it off centre.
+    const r = (focus.querySelector("img") ?? focus).getBoundingClientRect(),
       b = s.getBoundingClientRect();
-    const target = Math.min(innerWidth / r.width, vh() / r.height) * 1.02;
+    // Bleed just past the top and bottom, but stop at the page gutters at the
+    // sides, so a phone shows the whole frame with its corners.
+    const room = s.parentElement?.clientWidth ?? innerWidth;
+    const target = Math.min(room / r.width, (vh() * 1.02) / r.height);
     const e = k < 0.15 ? 0 : clamp((k - 0.15) / 0.7);
     const ee = e * e * (3 - 2 * e);
     s.style.transformOrigin = `${r.left + r.width / 2 - b.left}px ${r.top + r.height / 2 - b.top}px`;
