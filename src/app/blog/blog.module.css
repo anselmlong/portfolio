@@ -53,6 +53,10 @@
 .search:focus-within { border-color: var(--accent); }
 .search input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--paper); font: 15px var(--body); }
 .search input:focus { outline: none; }
+/* The "/" shortcut, shown only where there's a keyboard to press it, and gone once you're typing. */
+.slash { font: 500 11px/1 var(--mono); color: var(--dim); border: 1px solid var(--line); border-radius: 6px; padding: 3px 7px; transition: opacity 0.2s; }
+.search:focus-within .slash { opacity: 0; }
+@media (pointer: coarse), (hover: none) { .slash { display: none; } }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .tag { border: 1px solid var(--line); background: transparent; color: var(--paper); border-radius: 999px; padding: 5px 11px; font: 500 12px var(--mono); cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s; }
 .tag small { color: var(--dim); margin-left: 4px; }
@@ -60,6 +64,28 @@
 .tag[aria-pressed="true"] small { color: inherit; opacity: 0.85; }
 @media (pointer: coarse) { .tag { padding-block: 9px; } }
 .count { margin-left: auto; }
+.empty { padding-block: 48px 24px; }
+.empty p { margin: 0; color: var(--paper); font: 900 clamp(26px, 3vw, 36px)/1 var(--display); text-transform: uppercase; text-wrap: balance; overflow-wrap: anywhere; }
+.emptyTag { color: var(--accent); }
+.emptyTag::before { content: "#"; }
+.empty .go { border: 0; cursor: pointer; }
+/* Phones: search and count share a row, the topics swipe underneath, so the bar stays short. */
+@media (max-width: 720px) {
+  .bar { gap: 10px 12px; padding-block: 10px; flex-wrap: wrap; }
+  .search { flex: 1 1 0; min-width: 0; max-width: none; }
+  .count { white-space: nowrap; }
+  .tags {
+    position: relative; order: 1; flex: 1 0 100%; flex-wrap: nowrap; gap: 8px;
+    overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; scroll-padding-inline: 40px;
+    margin: -4px -16px; padding: 6px 16px; /* room for the focus ring inside the scroller */
+    --fade-start: 0px; --fade-end: 0px;
+    mask-image: linear-gradient(to right, transparent, #000 var(--fade-start), #000 calc(100% - var(--fade-end)), transparent);
+  }
+  .tags::-webkit-scrollbar { display: none; }
+  .tags[data-more-start] { --fade-start: 36px; }
+  .tags[data-more-end] { --fade-end: 36px; }
+  .tag { flex: none; min-height: 34px; padding-inline: 13px; }
+}
 .year { display: grid; grid-template-columns: minmax(0, 180px) minmax(0, 1fr); gap: clamp(12px, 3vw, 40px); padding-top: 34px; }
 @media (max-width: 720px) { .year { grid-template-columns: 1fr; } }
 .year h3 { margin: 0; font: 900 clamp(44px, 5.5vw, 76px)/0.8 var(--display); color: transparent; -webkit-text-stroke: 1px rgba(241, 239, 232, 0.35); position: sticky; top: 78px; align-self: start; }
@@ -72,7 +98,9 @@
 .tg { grid-column: 1; display: flex; flex-wrap: wrap; gap: 4px 10px; }
 .tg span { font: 500 11px var(--mono); color: var(--dim); }
 .tg span::before { content: "#"; color: var(--accent); }
-.empty { padding: 40px 0; color: var(--dim); }
+.tg span[data-on] { color: var(--paper); }
+/* Search matches: an underline in the accent, so titles keep their own colour and weight. */
+.hit { background: none; color: inherit; text-decoration: underline 2px var(--accent); text-underline-offset: 3px; text-decoration-skip-ink: none; }
 .peek { position: fixed; left: 0; top: 0; width: 300px; aspect-ratio: 16/10; border-radius: 12px; overflow: hidden; pointer-events: none; z-index: 20; opacity: 0; transition: opacity 0.2s; box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.9); background: var(--panel); }
 .peekOn { opacity: 1; }
 @media (pointer: coarse) { .peek { display: none; } }
@@ -105,6 +133,9 @@
 .dek { margin: 0; font: italic 400 clamp(20px, 2.3vw, 26px)/1.4 var(--read); color: #d7d5ce; max-width: 46ch; }
 .metaRow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; }
 .hash::before { content: "#"; color: var(--accent); }
+a.hash { text-decoration: none; transition: color 0.2s; }
+a.hash:hover { color: var(--accent); }
+@media (pointer: coarse) { a.hash { padding-block: 8px; } }
 .cover { position: relative; aspect-ratio: 21/9; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); }
 .cover img { will-change: transform; }
 .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: clamp(24px, 5vw, 80px); margin-top: 48px; }
