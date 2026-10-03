@@ -87,3 +87,30 @@ describe("BlogIndex rows", () => {
     expect(on?.parentElement?.firstElementChild).toBe(on);
   });
 });
+
+describe("BlogIndex search shortcut", () => {
+  it("jumps to search on /, but leaves a / typed into a field alone", () => {
+    index();
+    const box = screen.getByRole("searchbox");
+    fireEvent.keyDown(chip(/^big/), { key: "/" });
+    expect(box).toHaveFocus();
+
+    const other = document.body.appendChild(document.createElement("textarea"));
+    other.focus();
+    expect(fireEvent.keyDown(other, { key: "/" })).toBe(true);
+    expect(other).toHaveFocus();
+    other.remove();
+  });
+
+  it("clears on Esc, then lets go of the keyboard on a second Esc", () => {
+    index();
+    const box = screen.getByRole("searchbox");
+    box.focus();
+    fireEvent.change(box, { target: { value: "tun" } });
+    fireEvent.keyDown(box, { key: "Escape" });
+    expect(box).toHaveValue("");
+    expect(box).toHaveFocus();
+    fireEvent.keyDown(box, { key: "Escape" });
+    expect(box).not.toHaveFocus();
+  });
+});

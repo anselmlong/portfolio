@@ -53,6 +53,10 @@
 .search:focus-within { border-color: var(--accent); }
 .search input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--paper); font: 15px var(--body); }
 .search input:focus { outline: none; }
+/* The "/" shortcut, shown only where there's a keyboard to press it, and gone once you're typing. */
+.slash { font: 500 11px/1 var(--mono); color: var(--dim); border: 1px solid var(--line); border-radius: 6px; padding: 3px 7px; transition: opacity 0.2s; }
+.search:focus-within .slash { opacity: 0; }
+@media (pointer: coarse), (hover: none) { .slash { display: none; } }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .tag { border: 1px solid var(--line); background: transparent; color: var(--paper); border-radius: 999px; padding: 5px 11px; font: 500 12px var(--mono); cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s; }
 .tag small { color: var(--dim); margin-left: 4px; }

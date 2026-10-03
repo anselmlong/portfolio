@@ -43,6 +43,7 @@ export default function BlogIndex({
   const peek = useRef<HTMLDivElement>(null);
   const bar = useRef<HTMLDivElement>(null);
   const strip = useRef<HTMLDivElement>(null);
+  const field = useRef<HTMLInputElement>(null);
   const filtered = useRef(false);
   const arrival = useRef<"glide" | "stay" | null>(null);
   const [cover, setCover] = useState<string | null>(null);
@@ -116,6 +117,24 @@ export default function BlogIndex({
     edges(); // a small topic's chip may have just come or gone
   }, [active, term]);
 
+  // "/" jumps to search from anywhere on the page, bringing the bar up first if it's still below.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "/" || e.metaKey || e.ctrlKey || e.altKey || e.defaultPrevented) return;
+      const t = e.target as HTMLElement | null;
+      if (t?.closest("input, textarea, select, [contenteditable]:not([contenteditable=false])")) return;
+      e.preventDefault();
+      const top = bar.current?.getBoundingClientRect().top ?? 0;
+      if (top > 0) {
+        const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+        scrollTo({ top: scrollY + top, behavior: smooth ? "smooth" : "auto" });
+      }
+      field.current?.focus({ preventScroll: true });
+    };
+    addEventListener("keydown", onKey);
+    return () => removeEventListener("keydown", onKey);
+  }, []);
+
   useEffect(() => {
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const letters = [...(mast.current?.querySelectorAll<HTMLElement>("span") ?? [])];
@@ -188,7 +207,23 @@ export default function BlogIndex({
       <div ref={bar} className={styles.bar} role="search">
         <label className={styles.search}>
           <span className={styles.mono} aria-hidden="true">⌕</span>
-          <input type="search" placeholder="search posts" aria-label="Search posts" value={term} onChange={(e) => setTerm(e.target.value)} />
+          <input
+            ref={field}
+            type="search"
+            placeholder="search posts"
+            aria-label="Search posts"
+            aria-keyshortcuts="/"
+            value={term}
+            onChange={(e) => setTerm(e.target.value)}
+            onKeyDown={(e) => {
+              // Esc clears the search first, then a second press hands the keyboard back to the page.
+              if (e.key !== "Escape") return;
+              e.preventDefault();
+              if (term) setTerm("");
+              else e.currentTarget.blur();
+            }}
+          />
+          {!term && <kbd className={styles.slash} aria-hidden="true">/</kbd>}
         </label>
         <div ref={strip} className={styles.tags} role="group" aria-label="Filter by topic" onScroll={edges}>
           {[["all", posts.length] as const, ...tags].map(([t, n]) => (
