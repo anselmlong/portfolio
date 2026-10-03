@@ -8,6 +8,7 @@ import {
 } from "~/server/blog-views";
 import {
   getAllBlogPosts,
+  getAllBlogSlugs,
   getBlogPost,
   type BlogPost,
   type BlogPostMetadata,
@@ -66,6 +67,10 @@ export const blogRouter = createTRPCRouter({
   recordView: publicProcedure
     .input(blogSlugInput)
     .mutation(async ({ input }) => {
+      // Only count real posts, so a script can't mint counters for made-up slugs.
+      if (!getAllBlogSlugs().includes(input.slug)) {
+        return { viewCount: null };
+      }
       const viewCount = await recordBlogView(input.slug);
       return {
         viewCount,
