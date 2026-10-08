@@ -1039,8 +1039,11 @@
   text-transform: uppercase;
 }
 .focusShot img {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
+  /* Divided by the zoom, so a 2px hairline and 6px corners at any size. */
+  outline: calc(2px / var(--scale, 1)) solid
+    rgb(255 111 85 / calc(1 - var(--zoom, 0)));
+  outline-offset: calc(3px / var(--scale, 1));
+  border-radius: calc(6px / var(--scale, 1));
 }
 .overlayCap {
   position: absolute;
@@ -1053,6 +1056,13 @@
   justify-items: center;
   pointer-events: none;
   opacity: 0;
+}
+/* Tabbing to the link brings the caption up with it, even before the zoom does. */
+.overlayCap:focus-within {
+  opacity: 1 !important;
+}
+.overlayCap:not([data-live="true"]):not(:focus-within) a {
+  pointer-events: none;
 }
 .overlayCap b {
   font: 900 clamp(32px, 5vw, 68px)/0.9 var(--display);
@@ -1302,7 +1312,11 @@
 }
 .root[data-flat="true"] .overlayCap {
   position: static;
+  margin-top: 36px;
   opacity: 1 !important;
+}
+.root[data-flat="true"] .overlayCap a {
+  pointer-events: auto;
 }
 .root[data-flat="true"] .overlayCap b {
   font-size: 40px;

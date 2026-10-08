@@ -142,23 +142,41 @@ export function startScroll(p: ScrollParts): () => void {
     });
   }
 
+  // While zooming, the sheet is a GPU layer; once it settles the hint goes, so
+  // the browser repaints the photo sharp at its zoomed size instead of stretching it.
+  let settle = 0;
   function sheet(k: number) {
     const { sheet: s, focus, caption } = p.sheet;
+    s.style.willChange = "transform";
+    clearTimeout(settle);
+    settle = window.setTimeout(() => (s.style.willChange = "auto"), 160);
     s.style.transform = "none";
-    const r = focus.getBoundingClientRect(),
+    // Aim at the photo, not its figure: the label below would pull it off centre.
+    const r = (focus.querySelector("img") ?? focus).getBoundingClientRect(),
       b = s.getBoundingClientRect();
-    const target = Math.min(innerWidth / r.width, vh() / r.height) * 1.02;
+    // Bleed just past the top and bottom, but stop at the page gutters at the
+    // sides, so a phone shows the whole frame with its corners.
+    const room = s.parentElement?.clientWidth ?? innerWidth;
+    const target = Math.min(room / r.width, (vh() * 1.02) / r.height);
     const e = k < 0.15 ? 0 : clamp((k - 0.15) / 0.7);
     const ee = e * e * (3 - 2 * e);
     s.style.transformOrigin = `${r.left + r.width / 2 - b.left}px ${r.top + r.height / 2 - b.top}px`;
     const dx = (innerWidth / 2 - (r.left + r.width / 2)) * ee;
     const dy = (vh() / 2 - (r.top + r.height / 2)) * ee;
-    s.style.transform = `translate(${dx}px,${dy}px) scale(${1 + (target - 1) * ee})`;
+    const scale = 1 + (target - 1) * ee;
+    s.style.transform = `translate(${dx}px,${dy}px) scale(${scale})`;
     for (const f of s.children as HTMLCollectionOf<HTMLElement>)
       if (f !== focus) f.style.opacity = String(1 - ee);
     const fc = focus.querySelector<HTMLElement>("figcaption");
     if (fc) fc.style.opacity = String(1 - ee);
-    caption.style.opacity = String(clamp((k - 0.8) / 0.15));
+    // The outline would scale up with the photo; let it go as the photo takes over.
+    focus.style.setProperty("--zoom", ee.toFixed(3));
+    // Counter the zoom so the frame and corners stay the size they are on the sheet.
+    focus.style.setProperty("--scale", scale.toFixed(3));
+    const shown = clamp((k - 0.8) / 0.15);
+    caption.style.opacity = String(shown);
+    // The link only takes clicks once you can actually see it.
+    caption.dataset.live = String(shown > 0.5);
   }
 
   const parts: [HTMLElement, (k: number) => void][] = [
@@ -191,5 +209,8 @@ export function startScroll(p: ScrollParts): () => void {
     raf = requestAnimationFrame(tick);
   }
   raf = requestAnimationFrame(tick);
-  return () => cancelAnimationFrame(raf);
+  return () => {
+    cancelAnimationFrame(raf);
+    clearTimeout(settle);
+  };
 }
