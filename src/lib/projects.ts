@@ -382,7 +382,6 @@ export const projects: Project[] = [
     status: "live",
     group: "tools",
     url: "https://fiat.anselmlong.com",
-    post: "/blog/fiat",
     blurb:
       "Built for the FIAT Catholic Hackathon 2026: give an hour, a skill, a prayer or an invite to Catholic organisations in Singapore, vetted by the Catholic Foundation. Each act brings a saint's holy card to your collection.",
   },
