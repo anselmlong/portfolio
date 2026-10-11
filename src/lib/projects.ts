@@ -374,6 +374,18 @@ export const projects: Project[] = [
     blurb:
       "The Mass in Singapore you can still make: 32 parishes' times, live bus and MRT routes, and when to leave. Also @massgowherebot on Telegram.",
   },
+  {
+    id: "fiat",
+    name: "Fiat",
+    repo: "fiatsg",
+    started: "2026-10",
+    status: "live",
+    group: "tools",
+    url: "https://fiat.anselmlong.com",
+    post: "/blog/fiat",
+    blurb:
+      "Built for the FIAT Catholic Hackathon 2026: give an hour, a skill, a prayer or an invite to Catholic organisations in Singapore, vetted by the Catholic Foundation. Each act brings a saint's holy card to your collection.",
+  },
 
   // my sites
   {
@@ -470,6 +482,8 @@ export const links: [string, string, string][] = [
   ["aircon", "laundry", "hall life"],
   ["gospel", "prayer", "faith bots"],
   ["massgowhere", "gospel", "for catholics in singapore"],
+  ["fiat", "massgowhere", "for catholics in singapore"],
+  ["fiat", "prayer", "praying for others"],
   ["routes", "67bot", "telegram bots"],
   ["routes", "betaview", "climbing"],
   ["canvas", "cheatsheets", "surviving modules"],
