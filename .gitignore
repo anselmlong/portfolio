@@ -55,3 +55,6 @@ yarn-error.log*
 # Cross-post exports
 cross-post-output/
 .omo/
+
+# local index cache
+.venv-index/
