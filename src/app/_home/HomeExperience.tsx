@@ -736,6 +736,15 @@ export default function HomeExperience({
           >
             or keep asking the chat, it&apos;s still up there&nbsp;↑
           </button>
+          <a
+            href="https://ko-fi.com/anselmlong"
+            target="_blank"
+            rel="noopener"
+            className={`${styles.mono} ${styles.backUp}`}
+            data-label="KO-FI"
+          >
+            ☕ support me on ko-fi&nbsp;↗
+          </a>
         </section>
       </div>
 
