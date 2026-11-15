@@ -327,6 +327,17 @@ export const projects: Project[] = [
     blurb:
       "Upload a bouldering video, get technique feedback like a coach in your pocket.",
   },
+  {
+    id: "topout",
+    name: "Topout",
+    repo: "topout",
+    started: "2026-09",
+    status: "live",
+    group: "climbing",
+    url: "https://topout.anselmlong.com",
+    blurb:
+      "A daily route-setting puzzle: set a boulder problem on grade with as few holds as you can, and a 3D climber tests it. A prototype I stopped at, since grading a climb from its holds has no ground truth to converge on.",
+  },
 
   // tools
   {
@@ -485,6 +496,8 @@ export const links: [string, string, string][] = [
   ["fiat", "prayer", "praying for others"],
   ["routes", "67bot", "telegram bots"],
   ["routes", "betaview", "climbing"],
+  ["topout", "betaview", "climbing"],
+  ["topout", "routes", "route setting"],
   ["canvas", "cheatsheets", "surviving modules"],
   ["canvas", "nusphere", "tools for nus students"],
   ["confessit", "nusphere", "nus on the web"],

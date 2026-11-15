@@ -448,6 +448,7 @@ export const projectTopics: Record<string, TopicKey> = {
   "Daily gospel bot": "aircon",
   "MassGoWhere (find a Mass in Singapore you can make)": "mass",
   "Fiat (Catholic volunteering and saint collection)": "mass",
+  "Topout (daily route-setting puzzle)": "climb",
   "Canvas scraper": "canvas",
   "LinkedIn shitpost generator": "shitpost",
 };
