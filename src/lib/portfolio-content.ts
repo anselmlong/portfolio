@@ -60,6 +60,7 @@ export const projects = [
   { name: "Daily gospel bot", description: "a Telegram bot that sends the daily mass readings at a chosen hour." },
   { name: "MassGoWhere (find a Mass in Singapore you can make)", description: "a mobile site and Telegram bot that picks the Catholic Mass in Singapore you can still reach, with live routes and a leave-by time." },
   { name: "Fiat (Catholic volunteering and saint collection)", description: "built for the FIAT Catholic Hackathon 2026: connects Catholics in Singapore with vetted Catholic organisations to give an hour, a skill, a prayer or an invite, and each act brings a saint's holy card to their collection." },
+  { name: "Topout (daily route-setting puzzle)", description: "a daily route-setting puzzle in the browser: set a boulder problem on grade with as few holds as you can, and a solver-driven 3D climber tests it. A prototype, stopped on purpose." },
   { name: "Canvas scraper", description: "syncs Canvas course files daily and emails a digest of what's new." },
   { name: "LinkedIn shitpost generator", description: "a satirical generator of LinkedIn posts in six comedic personas." },
 ];
