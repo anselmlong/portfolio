@@ -198,6 +198,16 @@ export const projects: Project[] = [
     group: "bots",
   },
   {
+    id: "petition",
+    name: "Petition bot",
+    repo: "petition-bot",
+    started: "2026-10",
+    status: "building",
+    group: "bots",
+    blurb:
+      "Send a prayer request privately, anonymous if you like, and hear back each time someone prays for it. An AI screen flags misuse to an admin, and closed requests are purged.",
+  },
+  {
     id: "laundry",
     name: "Laundry bot",
     repo: "laundry_bot",
@@ -236,6 +246,17 @@ export const projects: Project[] = [
     post: "/blog/canvas-scraper",
     blurb:
       "Syncs your course files daily, skips the 2 GB recordings, and emails what's new. Runs free on GitHub Actions.",
+  },
+  {
+    id: "edurec",
+    name: "Better EduRec",
+    repo: "better-edurec",
+    started: "2026-10",
+    status: "live",
+    group: "nus",
+    url: "https://edurec.anselmlong.com",
+    blurb:
+      "A Chrome extension that redesigns NUS EduRec in your browser: an overview with your GPA, degree progress and timetable, ⌘K search, vim keys and 19 themes. Read-only, and nothing leaves the browser.",
   },
   {
     id: "cheatsheets",
@@ -277,6 +298,16 @@ export const projects: Project[] = [
     post: "/blog/shitpost",
     blurb:
       "Give it a topic, get six comedic LinkedIn posts, from tech-bro earnest to Singapore uncle.",
+  },
+  {
+    id: "scallion",
+    name: "Scallion",
+    started: "2026-10",
+    status: "live",
+    group: "play",
+    url: "https://scallion.io",
+    blurb:
+      "A daily climb of seven prompts: name one thing in 25 seconds, and rarer answers float your lantern higher. Asian-flavoured pixel art, with party rooms.",
   },
   {
     id: "freakcha",
@@ -514,5 +545,11 @@ export const links: [string, string, string][] = [
   ["sequence", "optifiner", "january 2026 hackathons"],
   ["sequence", "photos", "i film things"],
   ["distance", "almost-anselm", "bots for my own chats"],
+  ["edurec", "canvas", "fixing nus annoyances"],
+  ["edurec", "aircon", "reworking nus portals"],
+  ["petition", "prayer", "praying for others"],
+  ["petition", "gospel", "faith bots"],
+  ["scallion", "kopitype", "asian-flavoured games"],
+  ["scallion", "topout", "daily puzzles"],
   ["vbook", "nusphere", "first team projects"],
 ];
