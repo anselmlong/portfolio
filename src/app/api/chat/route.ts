@@ -54,8 +54,30 @@ let llmSingleton: ChatOpenAI | null = null;
 let embeddingsSingleton: OpenAIEmbeddings | null = null;
 let vectorStoreSingleton: PGVectorStore | null = null;
 
+// Only this site's own pages may spend the shared daily chat budget.
+function isSameOrigin(req: Request): boolean {
+  const origin = req.headers.get("origin");
+  if (!origin) return false;
+  let originHost: string;
+  try {
+    originHost = new URL(origin).host;
+  } catch {
+    return false;
+  }
+  const hosts = [
+    new URL(req.url).host,
+    req.headers.get("x-forwarded-host")?.split(",")[0]?.trim(),
+    req.headers.get("host"),
+  ];
+  return hosts.some((host) => host === originHost);
+}
+
 // POST Endpoint -> Takes in AI SDK messages format
 export async function POST(req: NextRequest) {
+  if (!isSameOrigin(req))
+    return Response.json({ error: "Invalid request origin" }, { status: 403 });
+  if (!req.headers.get("content-type")?.includes("application/json"))
+    return Response.json({ error: "JSON required" }, { status: 415 });
   try {
     const body = await readChatRequest(req);
     const { messages } = body;
@@ -198,10 +220,10 @@ export async function POST(req: NextRequest) {
     if (needsRewrite) {
       const tRewriteStart = Date.now();
       try {
-        rewrittenQuestion = await rewriteChain.invoke({
-          input: question,
-          history: historyMessages,
-        });
+        rewrittenQuestion = await rewriteChain.invoke(
+          { input: question, history: historyMessages },
+          { signal: req.signal },
+        );
       } catch (error) {
         return phaseError("rewrite", error);
       }
@@ -243,7 +265,12 @@ export async function POST(req: NextRequest) {
 
     // Create a streaming response
     const encoder = new TextEncoder();
+    // Stop generating (and billing tokens) once the visitor goes away.
+    const generation = new AbortController();
+    const stopGenerating = () => generation.abort();
+    req.signal.addEventListener("abort", stopGenerating, { once: true });
     const stream = new ReadableStream({
+      cancel: stopGenerating,
       async start(controller) {
         try {
           // --- Timing: LLM phase ---
@@ -254,11 +281,10 @@ export async function POST(req: NextRequest) {
             .pipe(new StringOutputParser());
 
           // Actual streaming of the answer
-          const answerStream = await answerChain.stream({
-            context,
-            history: historyMessages,
-            input: question,
-          });
+          const answerStream = await answerChain.stream(
+            { context, history: historyMessages, input: question },
+            { signal: generation.signal },
+          );
 
           let firstTokenMs = 0;
           let firstChunk = true;
@@ -280,9 +306,12 @@ export async function POST(req: NextRequest) {
             `[RAG Timing] Total: ${t4 - t0}ms | Init: ${t1 - t0}ms | Rewrite: ${rewriteMs}ms | Retrieval: ${retrievalMs}ms | LLM first token: ${firstTokenMs}ms | LLM total: ${t4 - tLLMStart}ms`,
           );
         } catch (error) {
+          if (generation.signal.aborted) return;
           // Abort the stream so the client sees a failure, not a partial answer.
           console.error("[RAG] stream failed", error);
           controller.error(error);
+        } finally {
+          req.signal.removeEventListener("abort", stopGenerating);
         }
       },
     });

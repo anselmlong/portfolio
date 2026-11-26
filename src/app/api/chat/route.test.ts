@@ -37,10 +37,19 @@ const text = (role: "user" | "assistant", value: string) => ({
   role,
   parts: [{ type: "text", text: value }],
 });
-const post = (messages: unknown[]) =>
+const post = (
+  messages: unknown[],
+  headers: Record<string, string> = {
+    origin: "https://portfolio.example",
+    "content-type": "application/json",
+  },
+  signal?: AbortSignal,
+) =>
   new Request("https://portfolio.example/api/chat", {
     method: "POST",
+    headers,
     body: JSON.stringify({ messages }),
+    signal,
   });
 async function* tokens(...chunks: string[]) {
   for (const chunk of chunks) yield chunk;
@@ -117,6 +126,114 @@ describe("chat route failure phases", () => {
     )(post([text("user", "hello")]) as never);
     expect(response.status).toBe(200);
     await expect(response.text()).rejects.toThrow();
+  });
+});
+
+describe("chat route request guards", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+    vi.spyOn(console, "log").mockImplementation(() => undefined);
+    mocks.initialize.mockResolvedValue({
+      asRetriever: () => ({ invoke: mocks.retrieve }),
+    });
+    mocks.retrieve.mockResolvedValue([{ pageContent: "notes" }]);
+  });
+
+  it.each([
+    ["missing", { "content-type": "application/json" }],
+    [
+      "cross-site",
+      { origin: "https://evil.example", "content-type": "application/json" },
+    ],
+  ])("rejects a %s Origin before spending budget", async (_, headers) => {
+    const { reserveChatRequest } = await import("~/server/chat-budget");
+    const response = await (
+      await route()
+    )(post([text("user", "hello")], headers) as never);
+    expect(response.status).toBe(403);
+    expect(reserveChatRequest).not.toHaveBeenCalled();
+  });
+
+  it("accepts an Origin matching the forwarded host", async () => {
+    mocks.stream.mockResolvedValue(tokens("ok"));
+    const response = await (
+      await route()
+    )(
+      post([text("user", "hello")], {
+        origin: "https://anselmlong.com",
+        "x-forwarded-host": "anselmlong.com",
+        "content-type": "application/json",
+      }) as never,
+    );
+    expect(response.status).toBe(200);
+  });
+
+  it("rejects non-JSON bodies with 415", async () => {
+    const response = await (
+      await route()
+    )(
+      post([text("user", "hello")], {
+        origin: "https://portfolio.example",
+        "content-type": "text/plain",
+      }) as never,
+    );
+    expect(response.status).toBe(415);
+  });
+
+  it("aborts generation when the client cancels the stream", async () => {
+    let signal: AbortSignal | undefined;
+    mocks.stream.mockImplementation(
+      async (_input: unknown, options: { signal: AbortSignal }) => {
+        signal = options.signal;
+        return (async function* () {
+          yield "first";
+          await new Promise((resolve) =>
+            options.signal.addEventListener("abort", resolve),
+          );
+          throw new Error("aborted");
+        })();
+      },
+    );
+    const response = await (
+      await route()
+    )(post([text("user", "hello")]) as never);
+    const reader = response.body!.getReader();
+    await reader.read();
+    await reader.cancel();
+    expect(signal?.aborted).toBe(true);
+  });
+
+  it("aborts generation when the request signal fires", async () => {
+    let signal: AbortSignal | undefined;
+    mocks.stream.mockImplementation(
+      async (_input: unknown, options: { signal: AbortSignal }) => {
+        signal = options.signal;
+        return (async function* () {
+          await new Promise((resolve) =>
+            options.signal.addEventListener("abort", resolve),
+          );
+          yield "late";
+        })();
+      },
+    );
+    const client = new AbortController();
+    const response = await (
+      await route()
+    )(
+      post(
+        [text("user", "hello")],
+        {
+          origin: "https://portfolio.example",
+          "content-type": "application/json",
+        },
+        client.signal,
+      ) as never,
+    );
+    expect(response.status).toBe(200);
+    await vi.waitFor(() => expect(signal).toBeDefined());
+    client.abort();
+    expect(signal?.aborted).toBe(true);
   });
 });
 
